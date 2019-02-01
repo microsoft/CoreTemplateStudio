@@ -1,8 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\..\..\StyleCop.json" Link="StyleCop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.TemplateEngine.Abstractions" Version="1.0.0-beta2-20170518-234" />
@@ -10,6 +18,10 @@
     <PackageReference Include="Microsoft.TemplateEngine.Edge" Version="1.0.0-beta2-20170518-234" />
     <PackageReference Include="Microsoft.TemplateEngine.Orchestrator.RunnableProjects" Version="1.0.0-beta2-20170518-234" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta009">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0-preview.19073.11" />
   </ItemGroup>
 
