@@ -17,7 +17,7 @@ namespace CoreTemplateStudio.Api.Models
 
         public string ImagePath { get; set; } = @"C:\Some\Dummy\Path";
 
-        public HashSet<ShortProjectType> ProjectTypes;
+        public HashSet<ShortProjectType> ProjectTypes { get; internal set; }
 
         public FrameworkItem(ShortFramework framework, FrameworkType frameworkType, params ShortProjectType[] projects)
         {
