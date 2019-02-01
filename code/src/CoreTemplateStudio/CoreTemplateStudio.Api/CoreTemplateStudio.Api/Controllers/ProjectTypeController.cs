@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CoreTemplateStudio.Api.Models;
+using CoreTemplateStudio.Api.Enumerables;
 
 namespace CoreTemplateStudio.Api.Controllers
 {
@@ -14,27 +15,26 @@ namespace CoreTemplateStudio.Api.Controllers
     public class ProjectTypeController : Controller
     {
 
-        private readonly ProjectTypeContext _context;
+        private readonly IDictionary<ShortProjectType, ProjectTypeItem> projectTypeStore;
 
-        public ProjectTypeController(ProjectTypeContext context)
+        public ProjectTypeController()
         {
-            _context = context;
+            projectTypeStore = new Dictionary<ShortProjectType, ProjectTypeItem>();
 
-            _context.ProjectTypeItems.Add(new ProjectTypeItem { Name = "Single Page Full Stack Application", ShortProjectType = "SPAFS", Description = "A single page web application with a connected backend"});
-            _context.ProjectTypeItems.Add(new ProjectTypeItem { Name = "Multi Page Full Stack Application", ShortProjectType = "MPAFS", Description = "A multi page web application with a connected backend" });
-            _context.ProjectTypeItems.Add(new ProjectTypeItem { Name = "Single Page Frontend", ShortProjectType = "SPFE", Description = "A single page frontend only application" });
-            _context.ProjectTypeItems.Add(new ProjectTypeItem { Name = "Multi Page Frontend", ShortProjectType = "MPFE", Description = "A multi page frontend only application" });
-            _context.ProjectTypeItems.Add(new ProjectTypeItem { Name = "RESTFul API", ShortProjectType = "REST", Description = "A REST Application programming interface backend only" });
+            projectTypeStore.Add(ShortProjectType.SPAFS, new ProjectTypeItem(ShortProjectType.SPAFS));
+            projectTypeStore.Add(ShortProjectType.MPAFS, new ProjectTypeItem(ShortProjectType.MPAFS));
+            projectTypeStore.Add(ShortProjectType.SPFE, new ProjectTypeItem(ShortProjectType.SPFE));
+            projectTypeStore.Add(ShortProjectType.MPFE, new ProjectTypeItem(ShortProjectType.MPFE));
+            projectTypeStore.Add(ShortProjectType.REST, new ProjectTypeItem(ShortProjectType.REST));
 
-            _context.SaveChanges();
         }
 
         // GET: api/projectType 
         // returns all project types matching the given platform and language as JSON
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProjectTypeItem>>> GetProjectTypes([FromQuery(Name = "platform")] string platform, [FromQuery(Name = "language")] string language)
+        public JsonResult GetProjectTypes(string platform, string language)
         {
-            return await _context.ProjectTypeItems.ToListAsync();
+            return Json(projectTypeStore);
         }
 
     }

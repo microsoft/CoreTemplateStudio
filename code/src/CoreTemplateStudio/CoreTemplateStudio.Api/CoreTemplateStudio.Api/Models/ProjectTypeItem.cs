@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreTemplateStudio.Api.Enumerables;
 
 namespace CoreTemplateStudio.Api.Models
 {
     public class ProjectTypeItem
-    {   
-        public long Id { get; set; }
+    {
         public string Name { get; set; }
-        public string ShortProjectType { get; set; }
         public string Description { get; set; }
-        public string ImagePath { get; set; } = @"C:\Program File (x86)\VSCode\Extensions\Web Template Studio\Templates\Projects\";
+        public string ImagePath { get; set; } = @"C:\Some\Dummy\Path";
+
+        public ProjectTypeItem(ShortProjectType type)
+        {
+            this.Name = EnumerablesHelper.GetDisplayName(type);
+            this.Description = EnumerablesHelper.GetDescription(type);
+        }
     }
 }
