@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\..\..\..\StyleCop.json" Link="StyleCop.json" />
+    <AdditionalFiles Include="..\..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    <Compile Include="..\..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +27,6 @@
 
 
   <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\..\..\WtsRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\..\WtsRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 </Project>
