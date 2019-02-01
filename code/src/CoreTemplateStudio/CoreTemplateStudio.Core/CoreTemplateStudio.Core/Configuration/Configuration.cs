@@ -106,7 +106,7 @@ namespace Microsoft.Templates.Core
 
             if (!string.IsNullOrWhiteSpace(jsonFilePath) && File.Exists(jsonFilePath))
             {
-                loadedConfig = DeserializeConfiguration (jsonFilePath);
+                loadedConfig = DeserializeConfiguration(jsonFilePath);
             }
             else
             {
