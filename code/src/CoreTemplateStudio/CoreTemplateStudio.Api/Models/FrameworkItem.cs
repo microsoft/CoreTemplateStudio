@@ -17,20 +17,25 @@ namespace CoreTemplateStudio.Api.Models
 
         public string ImagePath { get; set; } = @"C:\Some\Dummy\Path";
 
-        public HashSet<ShortProjectType> ProjectTypes { get; internal set; }
+        private readonly HashSet<ProjectType> projectTypes;
 
-        public FrameworkItem(ShortFramework framework, FrameworkType frameworkType, params ShortProjectType[] projects)
+        public FrameworkItem(Framework framework, FrameworkType frameworkType, params ProjectType[] projects)
         {
             this.Name = EnumerablesHelper.GetDisplayName(framework);
             this.Description = EnumerablesHelper.GetDescription(framework);
             this.FrameworkType = EnumerablesHelper.GetDisplayName(frameworkType);
 
-            this.ProjectTypes = new HashSet<ShortProjectType>();
+            this.projectTypes = new HashSet<ProjectType>();
 
-            foreach (ShortProjectType spt in projects)
+            foreach (ProjectType project in projects)
             {
-                this.ProjectTypes.Add(spt);
+                this.projectTypes.Add(project);
             }
+        }
+
+        public bool HasProjectType(ProjectType projectType)
+        {
+            return this.projectTypes.Contains(projectType);
         }
     }
 }

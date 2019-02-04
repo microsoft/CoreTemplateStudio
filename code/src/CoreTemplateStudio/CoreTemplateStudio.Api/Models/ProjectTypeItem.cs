@@ -14,10 +14,27 @@ namespace CoreTemplateStudio.Api.Models
 
         public string ImagePath { get; set; } = @"C:\Some\Dummy\Path";
 
-        public ProjectTypeItem(ShortProjectType type)
+        private readonly Platform platform;
+
+        private readonly Language language;
+
+        public ProjectTypeItem(ProjectType type, Platform platform, Language language = Language.Any)
         {
             this.Name = EnumerablesHelper.GetDisplayName(type);
             this.Description = EnumerablesHelper.GetDescription(type);
+
+            this.platform = platform;
+            this.language = language;
+        }
+
+        public bool IsPlatform(Platform pform)
+        {
+            return this.platform == pform;
+        }
+
+        public bool IsLanguage(Language lang)
+        {
+            return this.language == lang;
         }
     }
 }
