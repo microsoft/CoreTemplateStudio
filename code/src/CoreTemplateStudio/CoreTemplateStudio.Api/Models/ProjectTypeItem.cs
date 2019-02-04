@@ -12,12 +12,29 @@ namespace CoreTemplateStudio.Api.Models
 
         public string Description { get; set; }
 
-        public string ImagePath { get; set; } = @"C:\Some\Dummy\Path";
+        public string ImagePath { get; set; } = @"/icon.png";
 
-        public ProjectTypeItem(ShortProjectType type)
+        private readonly Platform platform;
+
+        private readonly Language language;
+
+        public ProjectTypeItem(ProjectType type, Platform platform, Language language = Language.Any)
         {
             this.Name = EnumerablesHelper.GetDisplayName(type);
             this.Description = EnumerablesHelper.GetDescription(type);
+
+            this.platform = platform;
+            this.language = language;
+        }
+
+        public bool IsPlatform(Platform pform)
+        {
+            return this.platform.Equals(pform);
+        }
+
+        public bool IsLanguage(Language lang)
+        {
+            return this.language.Equals(lang);
         }
     }
 }

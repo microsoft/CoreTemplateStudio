@@ -14,19 +14,24 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class FrameworkController : Controller
     {
-        private readonly IDictionary<ShortFramework, FrameworkItem> frameworkStore;
+        private readonly IDictionary<Framework, FrameworkItem> frameworkStore;
 
         public FrameworkController()
         {
-            frameworkStore = new Dictionary<ShortFramework, FrameworkItem>
+            frameworkStore = new Dictionary<Framework, FrameworkItem>
             {
-                { ShortFramework.RJS, new FrameworkItem(ShortFramework.RJS, FrameworkType.Frontend, ShortProjectType.SPFE, ShortProjectType.MPFE, ShortProjectType.MPAFS, ShortProjectType.SPAFS) },
-                { ShortFramework.VJS, new FrameworkItem(ShortFramework.VJS, FrameworkType.Frontend, ShortProjectType.SPFE, ShortProjectType.MPFE, ShortProjectType.MPAFS, ShortProjectType.SPAFS) },
-                { ShortFramework.AJS, new FrameworkItem(ShortFramework.AJS, FrameworkType.Frontend, ShortProjectType.SPFE, ShortProjectType.MPFE, ShortProjectType.MPAFS, ShortProjectType.SPAFS) },
-                { ShortFramework.NJS, new FrameworkItem(ShortFramework.NJS, FrameworkType.Backend, ShortProjectType.SPFE, ShortProjectType.MPFE, ShortProjectType.MPAFS, ShortProjectType.SPAFS, ShortProjectType.REST) },
-                { ShortFramework.DJG, new FrameworkItem(ShortFramework.DJG, FrameworkType.Backend, ShortProjectType.SPFE, ShortProjectType.MPFE, ShortProjectType.MPAFS, ShortProjectType.SPAFS, ShortProjectType.REST) },
-                { ShortFramework.MPJS, new FrameworkItem(ShortFramework.MPJS, FrameworkType.Frontend, ShortProjectType.MPFE, ShortProjectType.MPAFS) },
-                { ShortFramework.SPJS, new FrameworkItem(ShortFramework.SPJS, FrameworkType.Frontend, ShortProjectType.SPFE, ShortProjectType.SPAFS) },
+                { Framework.ReactJS, new FrameworkItem(Framework.ReactJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
+                { Framework.VueJS, new FrameworkItem(Framework.VueJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
+                { Framework.AngularJS, new FrameworkItem(Framework.AngularJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
+                { Framework.NodeJS, new FrameworkItem(Framework.NodeJS, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
+                { Framework.Django, new FrameworkItem(Framework.Django, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
+                { Framework.MultiPageJS, new FrameworkItem(Framework.MultiPageJS, FrameworkType.Frontend, ProjectType.MultiPageFront, ProjectType.MultiPageFull) },
+                { Framework.SinglePageJS, new FrameworkItem(Framework.SinglePageJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.SinglePageFull) },
+                { Framework.CodeBehind, new FrameworkItem(Framework.CodeBehind, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.MVVMBasic, new FrameworkItem(Framework.MVVMBasic, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.MVVMLight, new FrameworkItem(Framework.MVVMLight, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.Prism, new FrameworkItem(Framework.Prism, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.CaliburnMicro, new FrameworkItem(Framework.CaliburnMicro, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
             };
         }
 
@@ -35,53 +40,63 @@ namespace CoreTemplateStudio.Api.Controllers
         [HttpGet]
         public JsonResult GetFrameworks(string projectType)
         {
-            IDictionary<ShortFramework, FrameworkItem> validFrameworks = new Dictionary<ShortFramework, FrameworkItem>();
+            if (projectType == null)
+            {
+                return Json(BadRequest(new { message = "please specify a valid projectType" }));
+            }
+
+            IDictionary<Framework, FrameworkItem> validFrameworks = new Dictionary<Framework, FrameworkItem>();
             foreach (var item in frameworkStore)
             {
-                Enum.TryParse(projectType, out ShortProjectType shortProjectType);
-                if (item.Value.ProjectTypes.Contains(shortProjectType))
+                if (Enum.TryParse(projectType, true, out ProjectType parsedProjectType))
                 {
-                    validFrameworks.Add(item.Key, item.Value);
+                    if (item.Value.HasProjectType(parsedProjectType))
+                    {
+                        validFrameworks.Add(item);
+                    }
+                }
+                else
+                {
+                    return Json(BadRequest(new { message = "please specify a valid projectType" }));
                 }
             }
 
-            return Json(validFrameworks);
+            return Json(Ok(validFrameworks));
         }
 
-        // GET: api/framework/frontend?projectType=
-        // returns all frontend frameworks matching a given projectType Code
-        [HttpGet("frontend")]
-        public JsonResult GetFrontendFrameworks(string projectType)
+        // GET: api/framework/{frameworkType}?projectType=
+        // {frameworkType} is either frontend/backend/uwpDesign
+        // returns all frontend/backend frameworks matching a given projectType Code
+        [HttpGet("{frameworkType}")]
+        public JsonResult GetFrameworksOfType(string frameworkType, string projectType)
         {
-            IDictionary<ShortFramework, FrameworkItem> validFrameworks = new Dictionary<ShortFramework, FrameworkItem>();
+            if (projectType == null)
+            {
+                return Json(BadRequest(new { message = "please specify a valid projectType" }));
+            }
+
+            if (!frameworkType.Equals("frontend", StringComparison.OrdinalIgnoreCase) && !frameworkType.Equals("backend", StringComparison.OrdinalIgnoreCase) && !frameworkType.Equals("uwpdesign", StringComparison.OrdinalIgnoreCase))
+            {
+                return Json(BadRequest(new { message = "invalid framework type" }));
+            }
+
+            IDictionary<Framework, FrameworkItem> validFrameworks = new Dictionary<Framework, FrameworkItem>();
             foreach (var item in frameworkStore)
             {
-                Enum.TryParse(projectType, out ShortProjectType shortProjectType);
-                if (item.Value.FrameworkType.ToLower() == "frontend" && item.Value.ProjectTypes.Contains(shortProjectType))
+                if (Enum.TryParse(projectType, true, out ProjectType parsedProjectType))
                 {
-                    validFrameworks.Add(item.Key, item.Value);
+                    if (item.Value.FrameworkType.Equals(frameworkType, StringComparison.OrdinalIgnoreCase) && item.Value.HasProjectType(parsedProjectType))
+                    {
+                        validFrameworks.Add(item);
+                    }
+                }
+                else
+                {
+                    return Json(BadRequest(new { message = "please specify a valid projectType" }));
                 }
             }
 
-            return Json(validFrameworks);
-        }
-
-        // GET: api/framework/backend?projectType=
-        // returns all backend frameworks matching a given projectType Code
-        [HttpGet("backend")]
-        public JsonResult GetBackendFrameworks(string projectType)
-        {
-            IDictionary<ShortFramework, FrameworkItem> validFrameworks = new Dictionary<ShortFramework, FrameworkItem>();
-            foreach (var item in frameworkStore)
-            {
-                Enum.TryParse(projectType, out ShortProjectType shortProjectType);
-                if (item.Value.FrameworkType.ToLower() == "backend" && item.Value.ProjectTypes.Contains(shortProjectType))
-                {
-                    validFrameworks.Add(item.Key, item.Value);
-                }
-            }
-
-            return Json(validFrameworks);
+            return Json(Ok(validFrameworks));
         }
     }
 }
