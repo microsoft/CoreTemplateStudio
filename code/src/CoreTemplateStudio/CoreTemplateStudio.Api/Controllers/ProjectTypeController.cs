@@ -20,17 +20,17 @@ namespace CoreTemplateStudio.Api.Controllers
         {
             projectTypeStore = new Dictionary<ProjectType, ProjectTypeItem>
             {
-                { ProjectType.SPAFS, new ProjectTypeItem(ProjectType.SPAFS, Platform.Web) },
-                { ProjectType.MPAFS, new ProjectTypeItem(ProjectType.MPAFS, Platform.Web) },
-                { ProjectType.SPFE, new ProjectTypeItem(ProjectType.SPFE, Platform.Web) },
-                { ProjectType.MPFE, new ProjectTypeItem(ProjectType.MPFE, Platform.Web) },
-                { ProjectType.REST, new ProjectTypeItem(ProjectType.REST, Platform.Web) },
-                { ProjectType.NAVCS, new ProjectTypeItem(ProjectType.NAVCS, Platform.Uwp, Language.CSharp) },
-                { ProjectType.NAVVB, new ProjectTypeItem(ProjectType.NAVVB, Platform.Uwp, Language.VB) },
-                { ProjectType.BCS, new ProjectTypeItem(ProjectType.BCS, Platform.Uwp, Language.CSharp) },
-                { ProjectType.BVB, new ProjectTypeItem(ProjectType.BVB, Platform.Uwp, Language.VB) },
-                { ProjectType.PTCS, new ProjectTypeItem(ProjectType.PTCS, Platform.Uwp, Language.CSharp) },
-                { ProjectType.PTVB, new ProjectTypeItem(ProjectType.PTVB, Platform.Uwp, Language.VB) },
+                { ProjectType.SinglePageFull, new ProjectTypeItem(ProjectType.SinglePageFull, Platform.Web) },
+                { ProjectType.MultiPageFull, new ProjectTypeItem(ProjectType.MultiPageFull, Platform.Web) },
+                { ProjectType.SinglePageFront, new ProjectTypeItem(ProjectType.SinglePageFront, Platform.Web) },
+                { ProjectType.MultiPageFront, new ProjectTypeItem(ProjectType.MultiPageFront, Platform.Web) },
+                { ProjectType.RESTAPI, new ProjectTypeItem(ProjectType.RESTAPI, Platform.Web) },
+                { ProjectType.NavPaneCSharp, new ProjectTypeItem(ProjectType.NavPaneCSharp, Platform.Uwp, Language.CSharp) },
+                { ProjectType.NavPaneVB, new ProjectTypeItem(ProjectType.NavPaneVB, Platform.Uwp, Language.VB) },
+                { ProjectType.BlankCSharp, new ProjectTypeItem(ProjectType.BlankCSharp, Platform.Uwp, Language.CSharp) },
+                { ProjectType.BlankVB, new ProjectTypeItem(ProjectType.BlankVB, Platform.Uwp, Language.VB) },
+                { ProjectType.PivotTabCSharp, new ProjectTypeItem(ProjectType.PivotTabCSharp, Platform.Uwp, Language.CSharp) },
+                { ProjectType.PivotTabVB, new ProjectTypeItem(ProjectType.PivotTabVB, Platform.Uwp, Language.VB) },
             };
         }
 
@@ -40,19 +40,16 @@ namespace CoreTemplateStudio.Api.Controllers
         [HttpGet]
         public JsonResult GetProjectTypes(string platform = "", string language = "")
         {
-            platform = platform.ToLower();
-            language = language.ToLower();
-
             // these are temporary, will be using data from the engine (language and platform classes)
             // directly and not random string comparisons.
-            if (platform != "uwp" && platform != "web")
+            if (!platform.Equals("uwp", StringComparison.OrdinalIgnoreCase) && !platform.Equals("web", StringComparison.OrdinalIgnoreCase))
             {
                 return Json(BadRequest(new { message = "invalid platform" }));
             }
 
-            if (platform == "uwp")
+            if (platform.Equals("uwp", StringComparison.OrdinalIgnoreCase))
             {
-                if (language != "csharp" && language != "vb")
+                if (!language.Equals("csharp", StringComparison.OrdinalIgnoreCase) && !language.Equals("vb", StringComparison.OrdinalIgnoreCase))
                 {
                     return Json(BadRequest(new { message = "invalid language for platform: uwp" }));
                 }

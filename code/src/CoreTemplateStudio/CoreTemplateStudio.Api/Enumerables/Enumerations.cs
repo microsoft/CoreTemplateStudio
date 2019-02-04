@@ -38,76 +38,76 @@ namespace CoreTemplateStudio.Api.Enumerables
     {
         [DisplayName("Single Page Full Stack Application")]
         [Description("A single page web application with a connected backend")]
-        SPAFS,
+        SinglePageFull,
         [DisplayName("Multi Page Full Stack Application")]
         [Description("A multi page web application with a connected backend")]
-        MPAFS,
+        MultiPageFull,
         [DisplayName("Single Page Frontend")]
         [Description("A single page frontend only application")]
-        SPFE,
+        SinglePageFront,
         [DisplayName("Multi Page Frontend")]
         [Description("A multi page frontend only application")]
-        MPFE,
+        MultiPageFront,
         [DisplayName("RESTful API")]
         [Description("A REST Application programming interface backend only")]
-        REST,
+        RESTAPI,
         [DisplayName("Navigation Pane")]
         [Description("A navigation pane is included for navigation between pages")]
-        NAVCS,
+        NavPaneCSharp,
         [DisplayName("Blank")]
         [Description("The basic project is a blank canvas")]
-        BCS,
+        BlankCSharp,
         [DisplayName("Pivots and Tabs")]
         [Description("Tabs across the top for quickly navigating between pages")]
-        PTCS,
+        PivotTabCSharp,
         [DisplayName("Navigation Pane")]
         [Description("A navigation pane is included for navigation between pages")]
-        NAVVB,
+        NavPaneVB,
         [DisplayName("Blank")]
         [Description("The basic project is a blank canvas")]
-        BVB,
+        BlankVB,
         [DisplayName("Pivots and Tabs")]
         [Description("Tabs across the top for quickly navigating between pages")]
-        PTVB,
+        PivotTabVB,
     }
 
     public enum Framework
     {
         [DisplayName("ReactJS")]
         [Description("React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers.")]
-        RJS,
+        ReactJS,
         [DisplayName("VueJS")]
         [Description("Vue.js is an open-source JavaScript framework for building user interfaces and single-page applications.")]
-        VJS,
+        VueJS,
         [DisplayName("AngularJS")]
         [Description("AngularJS is a JavaScript - based open - source front - end web application framework mainly maintained by Google and by a community of individuals and corporations.")]
-        AJS,
+        AngularJS,
         [DisplayName("NodeJS")]
         [Description("Node.js is an open-source, cross-platform JavaScript run-time environment that executes JavaScript code outside of a browser.")]
-        NJS,
+        NodeJS,
         [DisplayName("Django")]
         [Description("Django is a Python-based free and open-source web framework, which follows the model-view-template architectural pattern. It is maintained by the Django Software Foundation.")]
-        DJG,
+        Django,
         [DisplayName("SinglePageJS")]
         [Description("A JavaScript framework that supports only singlepage websites.")]
-        SPJS,
+        SinglePageJS,
         [DisplayName("MultiPageJS")]
         [Description("A JavaScript framework that supports only multipage websites.")]
-        MPJS,
+        MultiPageJS,
         [DisplayName("Code Behind")]
         [Description("This is the traditional model for an application where logic is handled in the code-behind.")]
-        CBH,
+        CodeBehind,
         [DisplayName("MVVM Light")]
         [Description("MVVM Light is a popular, 3rd party framework based on the Model - View - ViewModel pattern.")]
-        MVVML,
+        MVVMLight,
         [DisplayName("Caliburn.Micro")]
         [Description("Caliburn.Micro is a popular MVVM framework emphasising conventions and composability.")]
-        CBM,
+        CaliburnMicro,
         [DisplayName("MVVM Basic")]
         [Description("This is a generic version of a MVVM pattern.The Model - View - ViewModel pattern can be used on all XAML platforms.")]
-        MVVMB,
+        MVVMBasic,
         [DisplayName("Prism")]
         [Description("Prism is a framework for building loosely coupled, maintainable, and testable XAML applications.")]
-        PRSM,
+        Prism,
     }
 }

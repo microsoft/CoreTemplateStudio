@@ -15,7 +15,7 @@ namespace CoreTemplateStudio.Api.Models
 
         public string FrameworkType { get; set; }
 
-        public string ImagePath { get; set; } = @"C:\Some\Dummy\Path";
+        public string ImagePath { get; set; } = @"/icon.png";
 
         private readonly HashSet<ProjectType> projectTypes;
 

@@ -20,12 +20,13 @@ namespace CoreTemplateStudio.Api.Controllers
         {
             // actual logic to be written once CDN is setup and the engine supports
             // syncing. This is just scaffolding to get started
-            if (platform.ToLower() != "web" && platform.ToLower() != "uwp")
+            if (!platform.Equals("uwp", StringComparison.OrdinalIgnoreCase) && !platform.Equals("web", StringComparison.OrdinalIgnoreCase))
             {
                 return Json(BadRequest(new { message = "invalid platform" }));
             }
 
             Enum.TryParse(platform, out Platform pform);
+
             SyncItem syncHelper = new SyncItem(pform);
             syncHelper.Sync();
 

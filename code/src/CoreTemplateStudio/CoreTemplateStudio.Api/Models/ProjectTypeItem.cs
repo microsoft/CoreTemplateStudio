@@ -12,7 +12,7 @@ namespace CoreTemplateStudio.Api.Models
 
         public string Description { get; set; }
 
-        public string ImagePath { get; set; } = @"C:\Some\Dummy\Path";
+        public string ImagePath { get; set; } = @"/icon.png";
 
         private readonly Platform platform;
 
@@ -29,12 +29,12 @@ namespace CoreTemplateStudio.Api.Models
 
         public bool IsPlatform(Platform pform)
         {
-            return this.platform == pform;
+            return this.platform.Equals(pform);
         }
 
         public bool IsLanguage(Language lang)
         {
-            return this.language == lang;
+            return this.language.Equals(lang);
         }
     }
 }
