@@ -13,6 +13,6 @@ namespace Microsoft.Templates.Core.Test.Locations
     {
         public override string Id => "UnitTest" + GetAgentName();
 
-        protected override string Origin => $@"..\..\TestData\{TemplatesFolderName}";
+        protected override string Origin => $@"..\..\..\TestData\{TemplatesFolderName}";
     }
 }
