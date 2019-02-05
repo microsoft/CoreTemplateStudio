@@ -1,0 +1,256 @@
+openapi: "3.0.0"
+info:
+  description: "This document contains information about the endpoints exposed by CoreTemplateStudio's Engine 
+  API. This API is used to expose functionality provided by the engine to other applications that will be built
+  on top of this, including Windows Template Studio (WinTS) and Web Template Studio (WebTS)"
+  version: "1.0.0"
+  title: "CoreTemplateStudio Engine API"
+  contact:
+    email: "t-dadua@microsoft.com"
+servers:
+- url: "http://localhost:5000/api"
+  description: "local server to connect with the engine"
+tags:
+- name: "project type"
+  description: "Information about available project types"
+- name: "framework"
+  description: "Information about available frameworks"
+- name: "sync"
+  description: "Enpoints to sync templates with CDN"
+paths:
+  /projectType:
+    get:
+      tags:
+      - "project type"
+      summary: "Get project type for given platform and language"
+      description: "This returns all the project types for given platform and language. For Web, language doesn't need to be specified and is ignored. Both platform and language are
+      required for UWP"
+      operationId: "GetProjectType"
+      parameters:
+      - in: "query"
+        name: "platform"
+        description: "Platform can be either uwp or web. Lanuage is also required with uwp."
+        required: true
+        schema:
+          type: "string"
+          enum:
+          - "uwp"
+          - "web"
+      - in: "query"
+        name: "language"
+        description: "Language for project types. Required when platform is uwp"
+        required: true
+        schema:
+          type: "string"
+          enum:
+          - "csharp"
+          - "vb"
+      responses:
+        200:
+          $ref: '#/components/responses/ProjectTypeResponse'
+        400:
+          $ref: '#/components/responses/ErrorResponse'
+  /sync/{platform}:
+    post:
+      tags:
+      - "sync"
+      summary: "Syncs cache with CDN for the given platform"
+      description: "Sync cached local templates with the updated templates for given platform. Use 'uwp' as 
+      platform to sync for WinTS and 'web' for WebTS."
+      operationId: "SyncTemplates"
+      parameters:
+      - in: "path"
+        name: "platform"
+        description: "Which platform to sync for. Can be either uwp (for WinTS) or web (for WebTS)."
+        required: true
+        schema:
+          type: "string"
+          enum:
+          - "uwp"
+          - "web"
+      responses:
+        200:
+          $ref: '#/components/responses/SyncResponse'
+        400:
+          $ref: '#/components/responses/ErrorResponse'
+  /framework:
+    get:
+      tags:
+      - "framework"
+      summary: "Get all frameworks for given projectType "
+      description: "Returns frameworks for given projectType as a query parameter. ProjectType must be selected
+      from the GET /projectType endpoint"
+      operationId: "GetFrameworks"
+      parameters:
+      - in: "query"
+        name: "projectType"
+        description: "Project Type to display frameworks for."
+        required: true
+        schema:
+          type: "string"
+          example: "SinglePageFull"
+      responses:
+        200:
+          $ref: '#/components/responses/FrameworksResponse'
+        400:
+          $ref: '#/components/responses/ErrorResponse'
+  /framework/{frameworkType}:
+    get:
+      tags:
+      - "framework"
+      summary: "Get all frameworks matching the frameworkType for given projectType."
+      description: "Returns frameworks of given frameworkType for given projectType as a query parameter. 
+      ProjectType must be selected from the GET /projectType endpoint."
+      operationId: "GetFrameworksOfType"
+      parameters:
+      - in: "query"
+        name: "projectType"
+        description: "Project Type to display frameworks for."
+        required: true
+        schema:
+          type: "string"
+          example: "SinglePageFull"
+      - in: "path"
+        name: "frameworkType"
+        description: "Framework Type to display matching frameworks for. Can be frontend or backend for WebTS and
+        uwpDesign for WinTS. Case-insensitive."
+        required: true
+        schema:
+          type: "string"
+          enum:
+          - "frontend"
+          - "backend"
+          - "uwpDesign"
+      responses:
+        200:
+          $ref: '#/components/responses/FrameworksResponse'
+        400:
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  responses:
+    SyncResponse:
+      description: "Success response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "object"
+                properties:
+                  wasUpdated:
+                    type: "boolean"
+              statusCode:
+                type: "integer"
+                example: 200
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
+    ProjectTypeResponse:
+      description: "Success response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "array"
+                items:
+                  type: "object"
+                  example: 
+                    "SinglePageFull": {
+                      "name": "Single Page Full Stack Application",
+                      "description":"A single page web application with a connected backend",
+                      "imagePath": "/icon.png"
+                    }
+                    "MultiPageFront": {
+                      "name": "Multi Page Frontend",
+                      "description":"A multi page frontend only application",
+                      "imagePath": "/icon.png"
+                    }
+              statusCode:
+                type: "integer"
+                example: 200
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
+    FrameworksResponse:
+      description: "Success response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "array"
+                items:
+                  type: "object"
+                  example: 
+                    "ReactJS": {
+                      "name": "ReactJS",
+                      "description":"React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers.",
+                      "frameworkType": "frontend",
+                      "imagePath": "/icon.png"
+                    }
+                    "Django": {
+                      "name": "Django",
+                      "description":"Django is a Python-based free and open-source web framework, which follows the model-view-template architectural pattern. It is maintained by the Django Software Foundation.",
+                      "frameworkType": "backend",
+                      "imagePath": "/icon.png"
+                    }
+              statusCode:
+                type: "integer"
+                example: 200
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
+    ErrorResponse:
+      description: "Error response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    example: "Invalid input"
+              statusCode:
+                type: "integer"
+                example: 400
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
+externalDocs:
+  description: "Core Template Studio Engine API documentation"
+  url: "https://github.com/Microsoft/CoreTemplateStudio/blob/dev/code/src/CoreTemplateStudio/CoreTemplateStudio.Api/README.md"
