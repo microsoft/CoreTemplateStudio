@@ -456,13 +456,13 @@ namespace Microsoft.Templates.Core.Test
                 {
                     Assert.Equal("Item1", e1.Name);
                     Assert.Equal("Microsoft.UWPTemplates.Test.ProjectTemplate", e1.TemplateGroupIdentity);
-                    Assert.Equal(true, e1.Readonly);
+                    Assert.True(e1.Readonly);
                 },
                 e2 =>
                 {
                     Assert.Equal("Item2", e2.Name);
                     Assert.Equal("Microsoft.UWPTemplates.Test.PageTemplate", e2.TemplateGroupIdentity);
-                    Assert.Equal(false, e2.Readonly);
+                    Assert.False(e2.Readonly);
                 });
         }
 
@@ -499,7 +499,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("RightClickTemplate");
             var result = target.GetRightClickEnabled();
 
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -510,7 +510,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByIdentity("Microsoft.UWPTemplates.Test.FeatureTemplate.CSharp");
             var result = target.GetRightClickEnabled();
 
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -521,7 +521,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("HiddenTemplate");
             var result = target.GetIsHidden();
 
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -532,7 +532,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByIdentity("Microsoft.UWPTemplates.Test.FeatureTemplate.CSharp");
             var result = target.GetIsHidden();
 
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -543,7 +543,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("PageTemplate");
             var result = target.GetMultipleInstance();
 
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -554,7 +554,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("FeatureTemplate");
             var result = target.GetMultipleInstance();
 
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -565,7 +565,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("PageTemplate");
             var result = target.GetItemNameEditable();
 
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -576,7 +576,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("FeatureTemplate");
             var result = target.GetItemNameEditable();
 
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -587,7 +587,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("OutputToParentTemplate");
             var result = target.GetOutputToParent();
 
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -598,7 +598,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("PageTemplate");
             var result = target.GetOutputToParent();
 
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
 
         [Fact]
