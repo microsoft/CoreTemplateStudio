@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.PostActions.Catalog;
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
-using Microsoft.Templates.Fakes;
+using Microsoft.Templates.Core.Test.TestFakes;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.PostActions.Catalog
@@ -39,7 +39,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var destPath = Path.GetFullPath(@".\DestinationPath");
             var expectedFile = Path.GetFullPath(@".\TestData\GenerationSummary_expected.md");
 
-            GenContext.Current = new FakeContextProvider()
+            GenContext.Current = new TestContextProvider()
             {
                 DestinationPath = destPath,
                 GenerationOutputPath = outputPath,
@@ -91,7 +91,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var destPath = Path.GetFullPath(@".\DestinationPath");
             var expectedFile = Path.GetFullPath(@".\TestData\Steps to include new item generation_expected.md");
 
-            GenContext.Current = new FakeContextProvider()
+            GenContext.Current = new TestContextProvider()
             {
                 DestinationPath = destPath,
                 GenerationOutputPath = outputPath,
