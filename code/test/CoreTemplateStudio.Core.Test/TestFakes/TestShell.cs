@@ -32,7 +32,7 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 
         public override string CreateCertificate(string publisherName)
         {
-            throw new NotImplementedException();
+            return TestCertificateService.Instance.CreateCertificate(publisherName);
         }
 
         public override string GetActiveProjectGuid()

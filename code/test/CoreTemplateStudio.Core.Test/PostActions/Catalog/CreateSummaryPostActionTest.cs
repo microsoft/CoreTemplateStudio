@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.PostActions.Catalog;
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
@@ -17,7 +15,7 @@ using Xunit;
 namespace Microsoft.Templates.Core.Test.PostActions.Catalog
 {
     [Trait("ExecutionSet", "Minimum")]
-    public class CreateSummaryPostActionTest
+    public class CreateSummaryPostActionTest : IDisposable
     {
         private CultureInfo cultureInfo;
 
