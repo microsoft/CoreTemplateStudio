@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\description.md" />
+    <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.description.md" />
+
     <Content Include="TestData\Templates\CompositionTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\CompositionTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\Dependencies.FeatureTemplateVB\.template.config\template.json" />
@@ -35,6 +38,9 @@
     <Content Include="TestData\Templates\TelemetryName.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\UnspecifiedTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\UnspecifiedTemplate\.template.config\template.json" />
+    <Content Include="TestData\TestProject\Test.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -98,6 +104,16 @@
     <Compile Include="Composition\CompositionQueryTest.cs" />
     <Compile Include="TestFakes\TestContextProvider.cs" />
     <Compile Include="TestFakes\TestShell.cs" />
+    <Compile Include="PostActions\Catalog\MergeResourceDictionaryPostactionTest.cs" />
+    <Compile Include="PostActions\Catalog\AddNugetReferenceToContextPostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\AddProjectReferenceToContextPostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\AddSdkReferenceToContextPostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\GenerateMergeInfoPostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\MergePostactionTest.cs" />
+    <Compile Include="PostActions\Catalog\SearchAndReplacePostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\CreateSummaryPostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\CopyFilesToProjectPostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\GetMergeFilesFromProjectPostActionTest.cs" />
 
     <None Include="TestData\Merge\Source_expectedWithOptionalContextLines.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -173,5 +189,45 @@
     <Content Include="TestData\Templates\_catalog\projectTypes\es-ES.TestProjectType.md" />
     <Content Include="TestData\Templates\_catalog\projectTypes\TestProjectType.md" />
     <Content Include="TestData\Templates\Hidden.FeatureTemplate\.template.config\template.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TestData\Merge\Style.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestData\Merge\Style_postaction.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestData\Merge\Style_expected.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestData\Merge\Style_fail_postaction.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+  <None Update="xunit.runner.json"> 
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
+  <ItemGroup>
+    <None Include="TestData\Merge\Style_fail.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
 </Project>
