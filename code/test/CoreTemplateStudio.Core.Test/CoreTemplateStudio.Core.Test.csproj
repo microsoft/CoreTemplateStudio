@@ -104,6 +104,7 @@
     <Compile Include="Composition\CompositionQueryTest.cs" />
     <Compile Include="TestFakes\TestContextProvider.cs" />
     <Compile Include="TestFakes\TestShell.cs" />
+    <Compile Include="TestFakes\TestCertificateService.cs" />
     <Compile Include="PostActions\Catalog\MergeResourceDictionaryPostactionTest.cs" />
     <Compile Include="PostActions\Catalog\AddNugetReferenceToContextPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\AddProjectReferenceToContextPostActionTest.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="PostActions\Catalog\CreateSummaryPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\CopyFilesToProjectPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\GetMergeFilesFromProjectPostActionTest.cs" />
+    <Compile Include="PostActions\Catalog\GenerateTestCertificatePostActionTest.cs" />
 
     <None Include="TestData\Merge\Source_expectedWithOptionalContextLines.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

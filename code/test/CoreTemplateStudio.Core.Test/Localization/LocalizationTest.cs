@@ -4,7 +4,7 @@
 
 using System.Globalization;
 using System.Linq;
-
+using System;
 using Microsoft.Templates.Core.Gen;
 
 using Xunit;
@@ -13,7 +13,7 @@ namespace Microsoft.Templates.Core.Test
 {
     [Collection("Unit Test Templates")]
     [Trait("ExecutionSet", "Minimum")]
-    public class LocalizationTest
+    public class LocalizationTest : IDisposable
     {
         private TemplatesFixture _fixture;
 
