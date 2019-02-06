@@ -27,7 +27,7 @@ namespace CoreTemplateStudio.Api.Controllers
 
             Enum.TryParse(platform, out Platform pform);
 
-            SyncItem syncHelper = new SyncItem(pform);
+            SyncModel syncHelper = new SyncModel(pform);
             syncHelper.Sync();
 
             return Json(Ok(syncHelper));

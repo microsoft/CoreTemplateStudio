@@ -14,24 +14,24 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class FrameworkController : Controller
     {
-        private readonly IDictionary<Framework, FrameworkItem> frameworkStore;
+        private readonly IDictionary<Framework, FrameworkModel> frameworkStore;
 
         public FrameworkController()
         {
-            frameworkStore = new Dictionary<Framework, FrameworkItem>
+            frameworkStore = new Dictionary<Framework, FrameworkModel>
             {
-                { Framework.ReactJS, new FrameworkItem(Framework.ReactJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
-                { Framework.VueJS, new FrameworkItem(Framework.VueJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
-                { Framework.AngularJS, new FrameworkItem(Framework.AngularJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
-                { Framework.NodeJS, new FrameworkItem(Framework.NodeJS, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
-                { Framework.Django, new FrameworkItem(Framework.Django, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
-                { Framework.MultiPageJS, new FrameworkItem(Framework.MultiPageJS, FrameworkType.Frontend, ProjectType.MultiPageFront, ProjectType.MultiPageFull) },
-                { Framework.SinglePageJS, new FrameworkItem(Framework.SinglePageJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.SinglePageFull) },
-                { Framework.CodeBehind, new FrameworkItem(Framework.CodeBehind, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.MVVMBasic, new FrameworkItem(Framework.MVVMBasic, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.MVVMLight, new FrameworkItem(Framework.MVVMLight, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.Prism, new FrameworkItem(Framework.Prism, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.CaliburnMicro, new FrameworkItem(Framework.CaliburnMicro, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.ReactJS, new FrameworkModel(Framework.ReactJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
+                { Framework.VueJS, new FrameworkModel(Framework.VueJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
+                { Framework.AngularJS, new FrameworkModel(Framework.AngularJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
+                { Framework.NodeJS, new FrameworkModel(Framework.NodeJS, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
+                { Framework.Django, new FrameworkModel(Framework.Django, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
+                { Framework.MultiPageJS, new FrameworkModel(Framework.MultiPageJS, FrameworkType.Frontend, ProjectType.MultiPageFront, ProjectType.MultiPageFull) },
+                { Framework.SinglePageJS, new FrameworkModel(Framework.SinglePageJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.SinglePageFull) },
+                { Framework.CodeBehind, new FrameworkModel(Framework.CodeBehind, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.MVVMBasic, new FrameworkModel(Framework.MVVMBasic, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.MVVMLight, new FrameworkModel(Framework.MVVMLight, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.Prism, new FrameworkModel(Framework.Prism, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
+                { Framework.CaliburnMicro, new FrameworkModel(Framework.CaliburnMicro, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
             };
         }
 
@@ -45,7 +45,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 return Json(BadRequest(new { message = "please specify a valid projectType" }));
             }
 
-            IDictionary<Framework, FrameworkItem> validFrameworks = new Dictionary<Framework, FrameworkItem>();
+            IDictionary<Framework, FrameworkModel> validFrameworks = new Dictionary<Framework, FrameworkModel>();
             foreach (var item in frameworkStore)
             {
                 if (Enum.TryParse(projectType, true, out ProjectType parsedProjectType))
@@ -80,7 +80,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 return Json(BadRequest(new { message = "invalid framework type" }));
             }
 
-            IDictionary<Framework, FrameworkItem> validFrameworks = new Dictionary<Framework, FrameworkItem>();
+            IDictionary<Framework, FrameworkModel> validFrameworks = new Dictionary<Framework, FrameworkModel>();
             foreach (var item in frameworkStore)
             {
                 if (Enum.TryParse(projectType, true, out ProjectType parsedProjectType))
