@@ -103,6 +103,7 @@
     <Compile Include="Naming\SuggestedDirectoryNameValidatorTests.cs" />
     <Compile Include="Composition\CompositionQueryTest.cs" />
     <Compile Include="TestFakes\TestContextProvider.cs" />
+    <Compile Include="TestFakes\TestDigitalSignatureService.cs" />
     <Compile Include="TestFakes\TestShell.cs" />
     <Compile Include="TestFakes\TestCertificateService.cs" />
     <Compile Include="PostActions\Catalog\MergeResourceDictionaryPostactionTest.cs" />
@@ -116,6 +117,17 @@
     <Compile Include="PostActions\Catalog\CopyFilesToProjectPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\GetMergeFilesFromProjectPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\GenerateTestCertificatePostActionTest.cs" />
+    <Compile Include="Packaging\TemplatePackageTests.cs" />
+    <Compile Include="Locations\RemoteTemplateSourceTests.cs" />
+
+
+    <Content Include="..\..\TestCert.pfx">
+      <Link>Packaging\TestCert.pfx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Packaging\SampleContent.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
 
     <None Include="TestData\Merge\Source_expectedWithOptionalContextLines.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

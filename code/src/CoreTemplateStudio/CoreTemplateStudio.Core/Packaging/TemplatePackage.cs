@@ -179,8 +179,7 @@ namespace Microsoft.Templates.Core.Packaging
 
         public X509Certificate2 LoadCert(string filePath, SecureString password)
         {
-            var cert = new X509Certificate2();
-            cert.Import(filePath, password, X509KeyStorageFlags.DefaultKeySet);
+            var cert = new X509Certificate2(File.ReadAllBytes(filePath), password, X509KeyStorageFlags.DefaultKeySet);
 
             return cert;
         }
