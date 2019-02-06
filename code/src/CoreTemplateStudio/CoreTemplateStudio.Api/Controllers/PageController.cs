@@ -48,7 +48,7 @@ namespace CoreTemplateStudio.Api.Controllers
             };
         }
 
-        // GET api/feature?page=<>&page=<>
+        // GET api/feature?frameworks=<>&frameworks=<>
         // returns a list of pages matching given frameworks
         [HttpGet]
         public JsonResult GetPagesForFrameworks(string[] frameworks)
