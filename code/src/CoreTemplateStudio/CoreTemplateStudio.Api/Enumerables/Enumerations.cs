@@ -110,4 +110,114 @@ namespace CoreTemplateStudio.Api.Enumerables
         [Description("Prism is a framework for building loosely coupled, maintainable, and testable XAML applications.")]
         Prism,
     }
+
+    public enum Page
+    {
+        [DisplayName("Blank")]
+        [Description("A blank page for UWP Applications")]
+        BlankUwp,
+        [DisplayName("Camera")]
+        [Description("A camera page for UWP Applications")]
+        Camera,
+        [DisplayName("Chart")]
+        [Description("A chart page for UWP Applications")]
+        Chart,
+        [DisplayName("Content Grid")]
+        [Description("A content grid page for UWP Applications")]
+        ContentGrid,
+        [DisplayName("Data Grid")]
+        [Description("A data grid page for UWP Applications")]
+        DataGrid,
+        [DisplayName("Grid")]
+        [Description("A grid page for UWP Applications")]
+        Grid,
+        [DisplayName("Image Gallery")]
+        [Description("An image gallery page for UWP Applications")]
+        ImageGallery,
+        [DisplayName("Ink Draw")]
+        [Description("An ink draw page for UWP Applications")]
+        InkDraw,
+        [DisplayName("Ink Smart Canvas")]
+        [Description("An ink smart canvas page for UWP Applications")]
+        InkSmartCanvas,
+        [DisplayName("Map")]
+        [Description("A map page for UWP Applications")]
+        Map,
+        [DisplayName("Master Detail")]
+        [Description("A master detail for UWP Applications")]
+        MasterDetail,
+        [DisplayName("Media Player")]
+        [Description("A media player page for UWP Applications")]
+        MediaPlayer,
+        [DisplayName("Settings")]
+        [Description("A settings page for UWP Applications")]
+        Settings,
+        [DisplayName("Tabbed Pivot")]
+        [Description("A tabbed pivot page for UWP Applications")]
+        TabbedPivot,
+        [DisplayName("Web View")]
+        [Description("A web view page for UWP Applications")]
+        WebView,
+        [DisplayName("Blank")]
+        [Description("A blank page for Web Applications")]
+        BlankWeb,
+        [DisplayName("Blog")]
+        [Description("A blog page for Web Applications")]
+        Blog,
+        [DisplayName("Contact")]
+        [Description("A contact page for Web Applications")]
+        Contact,
+        [DisplayName("Home")]
+        [Description("A home page for Web Applications")]
+        Home,
+        [DisplayName("News")]
+        [Description("A news page for Web Applications")]
+        News,
+        [DisplayName("FAQ")]
+        [Description("An FAQ page for Web Applications")]
+        FAQs,
+    }
+
+    public enum Feature
+    {
+        [DisplayName("ThreeDLauncher")]
+        [Description("A 3D launcher feature for UWP Applications")]
+        ThreeDLauncher,
+        [DisplayName("Background Task")]
+        [Description("A background task feature for UWP Applications")]
+        BackgroundTask,
+        [DisplayName("Drag and Drop")]
+        [Description("A drag and drop feature for UWP Applications")]
+        DragAndDrop,
+        [DisplayName("Feedback Hub")]
+        [Description("A feedback hub feature for UWP Applications")]
+        FeedbackHub,
+        [DisplayName("First Use Prompt")]
+        [Description("A first use prompt feature for UWP Applications")]
+        FirstUsePrompt,
+        [DisplayName("Live Tile")]
+        [Description("A live tile feature for UWP Applications")]
+        LiveTile,
+        [DisplayName("Hub Notifications")]
+        [Description("A hub notifications feature for UWP Applications")]
+        HubNotifications,
+        [DisplayName("Toast Notifications")]
+        [Description("A toast notifications feature for UWP Applications")]
+        ToastNotifications,
+        [DisplayName("What's New Prompt")]
+        [Description("A what's new prompt feature for UWP Applications")]
+        WhatsNewPrompt,
+        [DisplayName("Azure Database")]
+        [Description("An Azure database feature for Web Applications")]
+        AzureDatabase,
+        [DisplayName("Azure Identity")]
+        [Description("An Azure identity feature for Web Applications")]
+        AzureIdentity,
+        [DisplayName("Azure Functions")]
+        [Description("An Azure functions feature for Web Applications")]
+        AzureFunctions,
+        [DisplayName("Azure Key Vault")]
+        [Description("An Azure key vault feature for Web Applications")]
+        AzureKeyVault,
+    }
 }

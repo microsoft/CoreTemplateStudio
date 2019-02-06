@@ -7,7 +7,7 @@ using CoreTemplateStudio.Api.Enumerables;
 
 namespace CoreTemplateStudio.Api.Models
 {
-    public class FrameworkItem
+    public class FrameworkModel
     {
         public string Name { get; set; }
 
@@ -19,7 +19,7 @@ namespace CoreTemplateStudio.Api.Models
 
         private readonly HashSet<ProjectType> projectTypes;
 
-        public FrameworkItem(Framework framework, FrameworkType frameworkType, params ProjectType[] projects)
+        public FrameworkModel(Framework framework, FrameworkType frameworkType, params ProjectType[] projects)
         {
             this.Name = EnumerablesHelper.GetDisplayName(framework);
             this.Description = EnumerablesHelper.GetDescription(framework);

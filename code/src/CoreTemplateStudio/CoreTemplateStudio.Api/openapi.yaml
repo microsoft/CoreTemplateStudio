@@ -17,6 +17,10 @@ tags:
   description: "Information about available frameworks"
 - name: "sync"
   description: "Enpoints to sync templates with CDN"
+- name: "feature"
+  description: "Information about available features"
+- name: "page"
+  description: "Information about available pages"
 paths:
   /projectType:
     get:
@@ -94,6 +98,8 @@ paths:
           $ref: '#/components/responses/FrameworksResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
+        404:
+          $ref: '#/components/responses/ErrorResponse'
   /framework/{frameworkType}:
     get:
       tags:
@@ -126,8 +132,135 @@ paths:
           $ref: '#/components/responses/FrameworksResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
+        404:
+          $ref: '#/components/responses/ErrorResponse'
+  /page:
+    get:
+      tags:
+      - "page"
+      summary: "Get all valid pages for given frameworks "
+      description: "Returns valid pages for multiple frameworks passed in query"
+      operationId: "GetPagesForFrameworks"
+      parameters:
+      - in: "query"
+        name: "frameworks"
+        description: "Frameworks to return matching pages for. Provide both frontend and backend framework
+        for web. This can be done as *`?frameworks=ReactJS&frameworks=NodeJS`*"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            example: "ReactJS"
+      responses:
+        200:
+          $ref: '#/components/responses/FrameworksResponse'
+        400:
+          $ref: '#/components/responses/ErrorResponse'
+        404:
+          $ref: '#/components/responses/ErrorResponse'
+  /feature:
+    get:
+      tags:
+      - "feature"
+      summary: "Get all valid features for given frameworks "
+      description: "Returns valid feature for multiple frameworks passed in query"
+      operationId: "GetFeaturesForFrameworks"
+      parameters:
+      - in: "query"
+        name: "frameworks"
+        description: "Frameworks to return matching features for. Provide both frontend and backend framework
+        for web. This can be done as *`?frameworks=ReactJS&frameworks=NodeJS`*"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            example: "ReactJS"
+      responses:
+        200:
+          $ref: '#/components/responses/FrameworksResponse'
+        400:
+          $ref: '#/components/responses/ErrorResponse'
+        404:
+          $ref: '#/components/responses/ErrorResponse'
 components:
   responses:
+    FeatureResponse:
+      description: "Success response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "array"
+                items:
+                  type: "object"
+                  example: 
+                    "AzureDatabase": {
+                      "name": "Azure Database",
+                      "description":"An Azure database feature for Web Applications",
+                      "imagePath": "/icon.png"
+                    }
+                    "AzureKeyVault": {
+                      "name": "Azure Key Vault",
+                      "description":"An Azure key vault feature for Web Applications",
+                      "imagePath": "/icon.png"
+                    }
+              statusCode:
+                type: "integer"
+                example: 200
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
+    PageResponse:
+      description: "Success response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "array"
+                items:
+                  type: "object"
+                  example: 
+                    "BlankWeb": {
+                      "name": "Blank",
+                      "description":"A blank page for Web Applications",
+                      "imagePath": "/icon.png"
+                    }
+                    "Home": {
+                      "name": "Home",
+                      "description":"A home page for Web Applications",
+                      "imagePath": "/icon.png"
+                    }
+                    "News": {
+                      "name": "News",
+                      "description":"A news page for Web Applications",
+                      "imagePath": "/icon.png"
+                    }
+              statusCode:
+                type: "integer"
+                example: 200
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
     SyncResponse:
       description: "Success response"
       content:

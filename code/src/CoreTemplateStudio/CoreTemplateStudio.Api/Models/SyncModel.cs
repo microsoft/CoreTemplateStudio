@@ -8,13 +8,13 @@ namespace CoreTemplateStudio.Api.Models
 {
     // just a base implementation for the API scaffolding,
     // can't provide working logic until the engine is done.
-    public class SyncItem
+    public class SyncModel
     {
         private readonly Platform platform;
 
         public bool WasUpdated { get; set; }
 
-        public SyncItem(Platform platform)
+        public SyncModel(Platform platform)
         {
             this.platform = platform;
         }

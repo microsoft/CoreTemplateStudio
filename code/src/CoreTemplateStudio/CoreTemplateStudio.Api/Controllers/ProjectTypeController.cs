@@ -14,23 +14,23 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class ProjectTypeController : Controller
     {
-        private readonly IDictionary<ProjectType, ProjectTypeItem> projectTypeStore;
+        private readonly IDictionary<ProjectType, ProjectTypeModel> projectTypeStore;
 
         public ProjectTypeController()
         {
-            projectTypeStore = new Dictionary<ProjectType, ProjectTypeItem>
+            projectTypeStore = new Dictionary<ProjectType, ProjectTypeModel>
             {
-                { ProjectType.SinglePageFull, new ProjectTypeItem(ProjectType.SinglePageFull, Platform.Web) },
-                { ProjectType.MultiPageFull, new ProjectTypeItem(ProjectType.MultiPageFull, Platform.Web) },
-                { ProjectType.SinglePageFront, new ProjectTypeItem(ProjectType.SinglePageFront, Platform.Web) },
-                { ProjectType.MultiPageFront, new ProjectTypeItem(ProjectType.MultiPageFront, Platform.Web) },
-                { ProjectType.RESTAPI, new ProjectTypeItem(ProjectType.RESTAPI, Platform.Web) },
-                { ProjectType.NavPaneCSharp, new ProjectTypeItem(ProjectType.NavPaneCSharp, Platform.Uwp, Language.CSharp) },
-                { ProjectType.NavPaneVB, new ProjectTypeItem(ProjectType.NavPaneVB, Platform.Uwp, Language.VB) },
-                { ProjectType.BlankCSharp, new ProjectTypeItem(ProjectType.BlankCSharp, Platform.Uwp, Language.CSharp) },
-                { ProjectType.BlankVB, new ProjectTypeItem(ProjectType.BlankVB, Platform.Uwp, Language.VB) },
-                { ProjectType.PivotTabCSharp, new ProjectTypeItem(ProjectType.PivotTabCSharp, Platform.Uwp, Language.CSharp) },
-                { ProjectType.PivotTabVB, new ProjectTypeItem(ProjectType.PivotTabVB, Platform.Uwp, Language.VB) },
+                { ProjectType.SinglePageFull, new ProjectTypeModel(ProjectType.SinglePageFull, Platform.Web) },
+                { ProjectType.MultiPageFull, new ProjectTypeModel(ProjectType.MultiPageFull, Platform.Web) },
+                { ProjectType.SinglePageFront, new ProjectTypeModel(ProjectType.SinglePageFront, Platform.Web) },
+                { ProjectType.MultiPageFront, new ProjectTypeModel(ProjectType.MultiPageFront, Platform.Web) },
+                { ProjectType.RESTAPI, new ProjectTypeModel(ProjectType.RESTAPI, Platform.Web) },
+                { ProjectType.NavPaneCSharp, new ProjectTypeModel(ProjectType.NavPaneCSharp, Platform.Uwp, Language.CSharp) },
+                { ProjectType.NavPaneVB, new ProjectTypeModel(ProjectType.NavPaneVB, Platform.Uwp, Language.VB) },
+                { ProjectType.BlankCSharp, new ProjectTypeModel(ProjectType.BlankCSharp, Platform.Uwp, Language.CSharp) },
+                { ProjectType.BlankVB, new ProjectTypeModel(ProjectType.BlankVB, Platform.Uwp, Language.VB) },
+                { ProjectType.PivotTabCSharp, new ProjectTypeModel(ProjectType.PivotTabCSharp, Platform.Uwp, Language.CSharp) },
+                { ProjectType.PivotTabVB, new ProjectTypeModel(ProjectType.PivotTabVB, Platform.Uwp, Language.VB) },
             };
         }
 
@@ -58,7 +58,7 @@ namespace CoreTemplateStudio.Api.Controllers
             Enum.TryParse(platform, true, out Platform pform);
             Enum.TryParse(language, true, out Language lang);
 
-            IDictionary<ProjectType, ProjectTypeItem> validProjects = new Dictionary<ProjectType, ProjectTypeItem>();
+            IDictionary<ProjectType, ProjectTypeModel> validProjects = new Dictionary<ProjectType, ProjectTypeModel>();
             foreach (var item in projectTypeStore)
             {
                 if (item.Value.IsPlatform(pform) && item.Value.IsLanguage(lang))

@@ -6,7 +6,7 @@ using CoreTemplateStudio.Api.Enumerables;
 
 namespace CoreTemplateStudio.Api.Models
 {
-    public class ProjectTypeItem
+    public class ProjectTypeModel
     {
         public string Name { get; set; }
 
@@ -18,7 +18,7 @@ namespace CoreTemplateStudio.Api.Models
 
         private readonly Language language;
 
-        public ProjectTypeItem(ProjectType type, Platform platform, Language language = Language.Any)
+        public ProjectTypeModel(ProjectType type, Platform platform, Language language = Language.Any)
         {
             this.Name = EnumerablesHelper.GetDisplayName(type);
             this.Description = EnumerablesHelper.GetDescription(type);
