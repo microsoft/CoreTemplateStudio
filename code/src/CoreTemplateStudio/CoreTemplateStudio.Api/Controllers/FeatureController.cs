@@ -58,7 +58,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 }
                 else
                 {
-                    return Json(BadRequest(new { message = "please specify valid frameworks" }));
+                    return Json(NotFound(new { message = "framework not found" }));
                 }
             }
 

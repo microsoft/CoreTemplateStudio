@@ -57,7 +57,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 }
                 else
                 {
-                    return Json(BadRequest(new { message = "please specify a valid projectType" }));
+                    return Json(NotFound(new { message = "projectType not found" }));
                 }
             }
 
@@ -77,7 +77,7 @@ namespace CoreTemplateStudio.Api.Controllers
 
             if (!frameworkType.Equals("frontend", StringComparison.OrdinalIgnoreCase) && !frameworkType.Equals("backend", StringComparison.OrdinalIgnoreCase) && !frameworkType.Equals("uwpdesign", StringComparison.OrdinalIgnoreCase))
             {
-                return Json(BadRequest(new { message = "invalid framework type" }));
+                return Json(BadRequest(new { message = "frameworkType can only be frontend/backend/uwpdesign" }));
             }
 
             IDictionary<Framework, FrameworkModel> validFrameworks = new Dictionary<Framework, FrameworkModel>();
@@ -92,7 +92,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 }
                 else
                 {
-                    return Json(BadRequest(new { message = "please specify a valid projectType" }));
+                    return Json(NotFound(new { message = "projectType not found" }));
                 }
             }
 
