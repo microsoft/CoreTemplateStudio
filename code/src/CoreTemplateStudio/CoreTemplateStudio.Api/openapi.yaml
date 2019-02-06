@@ -98,7 +98,7 @@ paths:
           $ref: '#/components/responses/FrameworksResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
-		404:
+        404:
           $ref: '#/components/responses/ErrorResponse'
   /framework/{frameworkType}:
     get:
@@ -132,7 +132,7 @@ paths:
           $ref: '#/components/responses/FrameworksResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
-		404:
+        404:
           $ref: '#/components/responses/ErrorResponse'
   /page:
     get:
@@ -157,7 +157,7 @@ paths:
           $ref: '#/components/responses/FrameworksResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
-		404:
+        404:
           $ref: '#/components/responses/ErrorResponse'
   /feature:
     get:
@@ -182,7 +182,7 @@ paths:
           $ref: '#/components/responses/FrameworksResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
-		404:
+        404:
           $ref: '#/components/responses/ErrorResponse'
 components:
   responses:
