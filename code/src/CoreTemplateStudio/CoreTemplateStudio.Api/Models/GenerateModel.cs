@@ -25,7 +25,7 @@ namespace CoreTemplateStudio.Api.Models
         {
             if (Frontend != null && (Pages == null || Pages.Count == 0))
             {
-                return (false, "specify atleast one page if frontend framework is specified");
+                return (false, "specify at least one page if frontend framework is specified");
             }
 
             return (true, string.Empty);
