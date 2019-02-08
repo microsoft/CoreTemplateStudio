@@ -21,7 +21,32 @@ tags:
   description: "Information about available features"
 - name: "page"
   description: "Information about available pages"
+- name: "generate"
+  description: "Endpoints to generate templates"
 paths:
+  /generate:
+    post:
+      tags:
+      - "generate"
+      summary: "Generate templates from user selections"
+      description: "This endpoint parses and validates a JSON of user selections 
+      from the request body and generates the templates accordingly"
+      operationId: "generate"
+      requestBody:
+        description: "User selection as JSON. The selections are the keys 
+        returned from other (information/detail) endpoints. Note that the
+        backend/frontend can be *null* depending on the project. The selections
+        are *case-insensitive*"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSelection'
+      responses:
+        200:
+          $ref: '#/components/responses/GenerateResponse'
+        400:
+          $ref: '#/components/responses/ErrorResponse'
   /projectType:
     get:
       tags:
@@ -185,6 +210,35 @@ paths:
         404:
           $ref: '#/components/responses/ErrorResponse'
 components:
+  schemas:
+    UserSelection:
+      type: "object"
+      properties:
+        platform:
+          type: "string"
+        projectType:
+          type: "string"
+        frontend:
+          type: "string"
+        backend:
+          type: "string"
+        pages:
+          type: "array"
+          items:
+            type: "string"
+        features:
+          type: "array"
+          items:
+            type: "string"
+      example:
+        {
+          "platform": "Web",
+          "projectType": "MultiPageFull",
+          "frontend": "ReactJS",
+          "backend": "NodeJS",
+          "pages": ["blankWeb", "blog"],
+          "features": ["azureDatabase", "azureFunctions"]
+        }
   responses:
     FeatureResponse:
       description: "Success response"
@@ -272,6 +326,31 @@ components:
                 type: "object"
                 properties:
                   wasUpdated:
+                    type: "boolean"
+              statusCode:
+                type: "integer"
+                example: 200
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
+    GenerateResponse:
+      description: "Success response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "object"
+                properties:
+                  wasGenerated:
                     type: "boolean"
               statusCode:
                 type: "integer"
