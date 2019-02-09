@@ -44,29 +44,6 @@ namespace Microsoft.Templates.Core.Test.TestFakes
         public X509ChainStatusFlags VerifyCertificate(X509Certificate cert)
         {
             return X509ChainStatusFlags.NoError;
-            /*
-            if (cert == null)
-            {
-                throw new ArgumentNullException("cert");
-            }
-
-            X509ChainStatusFlags status = X509ChainStatusFlags.NoError;
-            
-            X509Chain chain = new X509Chain();
-
-            chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
-            bool isValid = chain.Build(new X509Certificate2(cert.Handle));
-            if (!isValid)
-            {
-                foreach (var chainStat in chain.ChainStatus)
-                {
-                    status |= chainStat.Status;
-                }
-            }
-
-            return status;
-            */
-            
         }
 
         public bool VerifySignatures(Package package)
