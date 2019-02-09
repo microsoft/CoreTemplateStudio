@@ -26,6 +26,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CoreTemplateStudio.Core\CoreTemplateStudio.Core.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\..\WtsRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -33,6 +37,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
 </Project>
