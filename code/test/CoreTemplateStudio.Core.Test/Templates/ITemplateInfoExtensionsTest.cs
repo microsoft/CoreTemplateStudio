@@ -170,6 +170,9 @@ namespace Microsoft.Templates.Core.Test
             if (language == ProgrammingLanguages.VisualBasic)
             {
                 folderName += "VB";
+            } else if (language == ProgrammingLanguages.Any)
+            {
+                folderName += ProgrammingLanguages.Any;
             }
 
             var result = target.GetIcon();

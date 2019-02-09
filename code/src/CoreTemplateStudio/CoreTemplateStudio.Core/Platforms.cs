@@ -10,9 +10,12 @@ namespace Microsoft.Templates.Core
     {
         public const string Uwp = "Uwp";
 
+        public const string Web = "Web";
+
         public static IEnumerable<string> GetAllPlatforms()
         {
             yield return Platforms.Uwp;
+            yield return Platforms.Web;
         }
     }
 }

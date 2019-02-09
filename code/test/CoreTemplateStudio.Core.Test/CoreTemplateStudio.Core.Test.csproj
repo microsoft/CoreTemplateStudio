@@ -11,16 +11,22 @@
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.description.md" />
 
     <Content Include="TestData\Templates\CompositionTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\CompositionTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\CompositionTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\Dependencies.FeatureTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\Dependencies.FeatureTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\Dependencies.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.template.json" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\es-ES.template.json" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\FeatureTemplateAny\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\FeatureTemplateAny\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\FeatureTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\FeatureTemplate\.template.config\en-US.template.json" />
     <Content Include="TestData\Templates\FeatureTemplate\.template.config\es-ES.template.json" />
     <Content Include="TestData\Templates\FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\Hidden.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\Naming.DefaultNameTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\Naming.DefaultNameTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\Naming.DefaultNameTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\OutputToParent.FeatureTemplate\.template.config\template.json" />
@@ -28,6 +34,9 @@
     <Content Include="TestData\Templates\PageTemplate\.template.config\en-US.template.json" />
     <Content Include="TestData\Templates\PageTemplate\.template.config\es-ES.template.json" />
     <Content Include="TestData\Templates\PageTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\ProjectTemplateAny\.template.config\icon.png" />
+    <Content Include="TestData\Templates\ProjectTemplateAny\.template.config\Layout.json" />
+    <Content Include="TestData\Templates\ProjectTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\icon.png" />
     <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\Layout.json" />
     <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\template.json" />
@@ -189,6 +198,8 @@
     <None Include="Packaging\SampleConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="TestData\Templates\UnspecifiedTemplateAny\.template.config\template.json" />
+
     <Content Include="TestData\Templates\UnspecifiedTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\_catalog\en-US.frameworks.json" />
     <Content Include="TestData\Templates\_catalog\es-ES.frameworks.json" />

@@ -12,10 +12,13 @@ namespace Microsoft.Templates.Core
 
         public const string VisualBasic = "VisualBasic";
 
+        public const string Any = "Any";
+
         public static IEnumerable<string> GetAllLanguages()
         {
             yield return ProgrammingLanguages.CSharp;
             yield return ProgrammingLanguages.VisualBasic;
+            yield return ProgrammingLanguages.Any;
         }
 
         public static string GetShortProgrammingLanguage(string language)
