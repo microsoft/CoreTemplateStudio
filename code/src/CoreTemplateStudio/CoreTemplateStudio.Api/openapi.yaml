@@ -16,7 +16,7 @@ tags:
 - name: "framework"
   description: "Information about available frameworks"
 - name: "sync"
-  description: "Enpoints to sync templates with CDN"
+  description: "Endpoints to sync templates with CDN/vsix or local template folder"
 - name: "feature"
   description: "Information about available features"
 - name: "page"
@@ -79,16 +79,16 @@ paths:
           $ref: '#/components/responses/ProjectTypeResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
-  /sync/{platform}:
+  /sync:
     post:
       tags:
       - "sync"
-      summary: "Syncs cache with CDN for the given platform"
-      description: "Sync cached local templates with the updated templates for given platform. Use 'uwp' as 
+      summary: "Syncs templates with CDN/local vsix for the given platform"
+      description: "Sync local templates with the updated templates for given platform. Use 'uwp' as 
       platform to sync for WinTS and 'web' for WebTS."
       operationId: "SyncTemplates"
       parameters:
-      - in: "path"
+      - in: "query"
         name: "platform"
         description: "Which platform to sync for. Can be either uwp (for WinTS) or web (for WebTS)."
         required: true
@@ -97,6 +97,24 @@ paths:
           enum:
           - "uwp"
           - "web"
+      - in: query
+        name: path
+        description: >-
+          Path to the vsix or templates folder.
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: language
+        description: >-
+          Required for Uwp but not for Web.
+        required: false
+        schema:
+          type: string
+          enum:
+          - any
+          - C#
+          - VB
       responses:
         200:
           $ref: '#/components/responses/SyncResponse'
