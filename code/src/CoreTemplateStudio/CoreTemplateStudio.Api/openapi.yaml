@@ -104,6 +104,7 @@ paths:
         required: true
         schema:
           type: string
+        example: ../../../..
       - in: query
         name: language
         description: >-
