@@ -107,12 +107,11 @@ paths:
       - in: query
         name: language
         description: >-
-          Required for Uwp but not for Web.
+          Required for Uwp and ignored for Web.
         required: false
         schema:
           type: string
           enum:
-          - any
           - C#
           - VB
       responses:
