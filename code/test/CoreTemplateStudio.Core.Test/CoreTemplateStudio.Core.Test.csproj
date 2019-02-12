@@ -97,6 +97,7 @@
     <Compile Include="Diagnostics\TelemetryFixture.cs" />
     <Compile Include="Diagnostics\TelemetryServiceTest.cs" />
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Localization\LocalizationTest.cs" />
     <Compile Include="Locations\TemplateSourceConfigTests.cs" />
     <Compile Include="Locations\UnitTestsTemplatesSource.cs" />
