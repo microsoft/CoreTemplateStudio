@@ -12,7 +12,6 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 
         public string SafeProjectName => ProjectName.MakeSafeProjectName();
 
-
         public string GenerationOutputPath { get; set; }
 
         public string DestinationPath { get; set; }
