@@ -29,7 +29,7 @@ namespace Microsoft.Templates.Core
 
         private const string Catalog = "_catalog";
 
-        private static readonly string[] SupportedIconTypes = { ".jpg", ".jpeg", ".png", ".xaml" };
+        private static readonly string[] SupportedIconTypes = { ".jpg", ".jpeg", ".png", ".xaml", ".svg" };
 
         public string CurrentPlatform { get; set; }
 
@@ -134,7 +134,10 @@ namespace Microsoft.Templates.Core
 
         public IEnumerable<MetadataInfo> GetFrameworks(string platform)
         {
-            return GetFrameworks().Where(m => m.Platforms.Contains(platform));
+            // Essentially an ignore case contains on the platforms list
+            return GetFrameworks().Where(m => m.Platforms
+                                              .ToList()
+                                              .Any(item => item.Equals(platform, StringComparison.OrdinalIgnoreCase)));
         }
 
         private IEnumerable<MetadataInfo> GetMetadataInfo(string type)
@@ -174,8 +177,20 @@ namespace Microsoft.Templates.Core
             metadata.ForEach(m => SetMetadataIcon(m, folderName, type));
             metadata.ForEach(m => m.MetadataType = type == "projectTypes" ? MetadataType.ProjectType : MetadataType.Framework);
             metadata.ForEach(m => SetLicenseTerms(m));
-
+            metadata.ForEach(m => SetDefaultTags(m));
             return metadata.OrderBy(m => m.Order);
+        }
+
+        private void SetDefaultTags(MetadataInfo metadataInfo)
+        {
+            if (metadataInfo.Tags == null)
+            {
+                metadataInfo.Tags = new Dictionary<string, object> { { "enabled", true } };
+            }
+            else if (!metadataInfo.Tags.ContainsKey("enabled"))
+            {
+                metadataInfo.Tags.Add(new KeyValuePair<string, object>("enabled", true));
+            }
         }
 
         private void SetLicenseTerms(MetadataInfo metadataInfo)

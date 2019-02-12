@@ -11,12 +11,12 @@ servers:
 - url: "http://localhost:5000/api"
   description: "local server to connect with the engine"
 tags:
+- name: "sync"
+  description: "Endpoints to sync templates with CDN/vsix or local template folder, must be called before calling any other endpoints!"
 - name: "project type"
   description: "Information about available project types"
 - name: "framework"
   description: "Information about available frameworks"
-- name: "sync"
-  description: "Endpoints to sync templates with CDN/vsix or local template folder"
 - name: "feature"
   description: "Information about available features"
 - name: "page"
@@ -51,29 +51,9 @@ paths:
     get:
       tags:
       - "project type"
-      summary: "Get project type for given platform and language"
-      description: "This returns all the project types for given platform and language. For Web, language doesn't need to be specified and is ignored. Both platform and language are
-      required for UWP"
+      summary: "Gets available project types for the current platform and language"
+      description: "This returns all the project types for the current platform and language. The parameters defined in sync will be used."
       operationId: "GetProjectType"
-      parameters:
-      - in: "query"
-        name: "platform"
-        description: "Platform can be either uwp or web. Lanuage is also required with uwp."
-        required: true
-        schema:
-          type: "string"
-          enum:
-          - "uwp"
-          - "web"
-      - in: "query"
-        name: "language"
-        description: "Language for project types. Required when platform is uwp"
-        required: true
-        schema:
-          type: "string"
-          enum:
-          - "csharp"
-          - "vb"
       responses:
         200:
           $ref: '#/components/responses/ProjectTypeResponse'
@@ -124,18 +104,10 @@ paths:
     get:
       tags:
       - "framework"
-      summary: "Get all frameworks for given projectType "
-      description: "Returns frameworks for given projectType as a query parameter. ProjectType must be selected
-      from the GET /projectType endpoint"
+      summary: "Get all frameworks for the current platform "
+      description: "Returns frameworks for given current platform and language. Platform and language must first be defined
+      in the POST /sync endpoint"
       operationId: "GetFrameworks"
-      parameters:
-      - in: "query"
-        name: "projectType"
-        description: "Project Type to display frameworks for."
-        required: true
-        schema:
-          type: "string"
-          example: "SinglePageFull"
       responses:
         200:
           $ref: '#/components/responses/FrameworksResponse'
@@ -147,18 +119,11 @@ paths:
     get:
       tags:
       - "framework"
-      summary: "Get all frameworks matching the frameworkType for given projectType."
-      description: "Returns frameworks of given frameworkType for given projectType as a query parameter. 
-      ProjectType must be selected from the GET /projectType endpoint."
+      summary: "Get all frameworks matching the frameworkType for the current platform and language."
+      description: "Returns frameworks of given frameworkType for the current platform and language. Platform and Language must
+      first be defined in the POST /sync endpoint. WinTS should use /framework endpoint as there is only one type of framework in WinTS."
       operationId: "GetFrameworksOfType"
       parameters:
-      - in: "query"
-        name: "projectType"
-        description: "Project Type to display frameworks for."
-        required: true
-        schema:
-          type: "string"
-          example: "SinglePageFull"
       - in: "path"
         name: "frameworkType"
         description: "Framework Type to display matching frameworks for. Can be frontend or backend for WebTS and
@@ -172,7 +137,7 @@ paths:
           - "uwpDesign"
       responses:
         200:
-          $ref: '#/components/responses/FrameworksResponse'
+          $ref: '#/components/responses/FrameworksResponseSpecific'
         400:
           $ref: '#/components/responses/ErrorResponse'
         404:
@@ -394,17 +359,52 @@ components:
                 type: "array"
                 items:
                   type: "object"
-                  example: 
-                    "SinglePageFull": {
-                      "name": "Single Page Full Stack Application",
-                      "description":"A single page web application with a connected backend",
-                      "imagePath": "/icon.png"
-                    }
-                    "MultiPageFront": {
-                      "name": "Multi Page Frontend",
-                      "description":"A multi page frontend only application",
-                      "imagePath": "/icon.png"
-                    }
+                  example:
+                    "items": [
+                        {
+                          "name": "FullstackWebApp",
+                          "displayName": "Fullstack Web Application",
+                          "icon": "C:\\ProgramData\\CoreTemplateStudio\\Templates\\LocalEnv\\0.0.0.0\\_catalog\\projectTypes\\FullstackWebApp.xaml",
+                          "summary": "An end to end web application, which includes frontend (e.g. React) backend (e.g. Node) and database.",
+                          "description": "Fullstack Web Application project type details.",
+                          "author": "Microsoft",
+                          "order": 1,
+                          "metadataType": 0,
+                          "licenses": "",
+                          "licenseTerms": null,
+                          "platforms": [
+                              "Web"
+                          ],
+                          "languages": [
+                              "Any"
+                          ],
+                          "tags": {
+                            "enabled": true
+                          }
+                        },
+                        {
+                          "name": "RestAPI",
+                          "displayName": "Restful API",
+                          "icon": "C:\\ProgramData\\CoreTemplateStudio\\Templates\\LocalEnv\\0.0.0.0\\_catalog\\projectTypes\\RestAPI.xaml",
+                          "summary": "A Restful API is a collection of endpoints connected to a database implemented in a backend framework such as Node.JS",
+                          "description": "Restful API project type details.",
+                          "author": "Microsoft",
+                          "order": 2,
+                          "metadataType": 0,
+                          "licenses": "",
+                          "licenseTerms": null,
+                          "platforms": [
+                              "Web"
+                          ],
+                          "languages": [
+                              "Any"
+                          ],
+                          "tags": {
+                            "enabled": true
+                          }
+                        }
+                    ]
+
               statusCode:
                 type: "integer"
                 example: 200
@@ -430,18 +430,145 @@ components:
                 items:
                   type: "object"
                   example: 
-                    "ReactJS": {
-                      "name": "ReactJS",
-                      "description":"React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers.",
-                      "frameworkType": "frontend",
-                      "imagePath": "/icon.png"
-                    }
-                    "Django": {
-                      "name": "Django",
-                      "description":"Django is a Python-based free and open-source web framework, which follows the model-view-template architectural pattern. It is maintained by the Django Software Foundation.",
-                      "frameworkType": "backend",
-                      "imagePath": "/icon.png"
-                    }
+                    "items" : [
+                      {
+                          "name": "ReactJS",
+                          "displayName": "ReactJS",
+                          "icon": "C:\\ProgramData\\CoreTemplateStudio\\Templates\\LocalEnv\\0.0.0.0\\_catalog\\frameworks\\ReactJS.svg",
+                          "summary": "React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers.",
+                          "description": "ReactJS Framework details.",
+                          "author": "Microsoft",
+                          "order": 1,
+                          "metadataType": 1,
+                          "licenses": "",
+                          "licenseTerms": null,
+                          "platforms": [
+                              "Web"
+                          ],
+                          "languages": [
+                              "Any"
+                          ],
+                          "tags": {
+                              "type": "frontend",
+                              "enabled": true
+                          }
+                      },
+                      {
+                          "name": "NodeJS",
+                          "displayName": "NodeJS",
+                          "icon": "C:\\ProgramData\\CoreTemplateStudio\\Templates\\LocalEnv\\0.0.0.0\\_catalog\\frameworks\\NodeJS.svg",
+                          "summary": "Node.js is a highly efficient and scalable non-blocking I/O platform that was build on top of Google Chrome V8 engine and its ECMAScript.",
+                          "description": "ReactJS Framework details.",
+                          "author": "Microsoft",
+                          "order": 1,
+                          "metadataType": 1,
+                          "licenses": "",
+                          "licenseTerms": null,
+                          "platforms": [
+                              "Web"
+                          ],
+                          "languages": [
+                              "Any"
+                          ],
+                          "tags": {
+                              "type": "backend",
+                              "enabled": true
+                          }
+                      },
+                      {
+                          "name": "ASPNET",
+                          "displayName": "ASP.NET",
+                          "icon": "C:\\ProgramData\\CoreTemplateStudio\\Templates\\LocalEnv\\0.0.0.0\\_catalog\\frameworks\\ASPNET.svg",
+                          "summary": "ASP.NET is an open-source server-side web application framework designed for web development to produce dynamic web pages.",
+                          "description": "ASP.NET Framework details",
+                          "author": "Microsoft",
+                          "order": 2,
+                          "metadataType": 1,
+                          "licenses": "",
+                          "licenseTerms": null,
+                          "platforms": [
+                              "Web"
+                          ],
+                          "languages": [
+                              "Any"
+                          ],
+                          "tags": {
+                              "type": "backend",
+                              "enabled": false
+                          }
+                      } 
+                    ]
+              statusCode:
+                type: "integer"
+                example: 200
+              formatters:
+                type: "array"
+                items: 
+                  type: "string"
+              contentTypes:
+                type: "array"
+                items: 
+                  type: "string"
+              declaredType:
+                type: "string"
+    FrameworksResponseSpecific:
+      description: "Success response for frameworks/backend"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              value:
+                type: "array"
+                items:
+                  type: "object"
+                  example: 
+                    "items" : [
+                      {
+                          "name": "NodeJS",
+                          "displayName": "NodeJS",
+                          "icon": "C:\\ProgramData\\CoreTemplateStudio\\Templates\\LocalEnv\\0.0.0.0\\_catalog\\frameworks\\NodeJS.svg",
+                          "summary": "Node.js is a highly efficient and scalable non-blocking I/O platform that was build on top of Google Chrome V8 engine and its ECMAScript.",
+                          "description": "ReactJS Framework details.",
+                          "author": "Microsoft",
+                          "order": 1,
+                          "metadataType": 1,
+                          "licenses": "",
+                          "licenseTerms": null,
+                          "platforms": [
+                              "Web"
+                          ],
+                          "languages": [
+                              "Any"
+                          ],
+                          "tags": {
+                              "type": "backend",
+                              "enabled": true
+                          }
+                      },
+                      {
+                          "name": "ASPNET",
+                          "displayName": "ASP.NET",
+                          "icon": "C:\\ProgramData\\CoreTemplateStudio\\Templates\\LocalEnv\\0.0.0.0\\_catalog\\frameworks\\ASPNET.svg",
+                          "summary": "ASP.NET is an open-source server-side web application framework designed for web development to produce dynamic web pages.",
+                          "description": "ASP.NET Framework details",
+                          "author": "Microsoft",
+                          "order": 2,
+                          "metadataType": 1,
+                          "licenses": "",
+                          "licenseTerms": null,
+                          "platforms": [
+                              "Web"
+                          ],
+                          "languages": [
+                              "Any"
+                          ],
+                          "tags": {
+                              "type": "backend",
+                              "enabled": false
+                          }
+                      } 
+                    ]
               statusCode:
                 type: "integer"
                 example: 200
