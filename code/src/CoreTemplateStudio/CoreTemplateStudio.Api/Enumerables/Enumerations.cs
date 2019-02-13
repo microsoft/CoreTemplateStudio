@@ -34,43 +34,6 @@ namespace CoreTemplateStudio.Api.Enumerables
         UwpDesign,
     }
 
-    public enum ProjectType
-    {
-        [DisplayName("Single Page Full Stack Application")]
-        [Description("A single page web application with a connected backend")]
-        SinglePageFull,
-        [DisplayName("Multi Page Full Stack Application")]
-        [Description("A multi page web application with a connected backend")]
-        MultiPageFull,
-        [DisplayName("Single Page Frontend")]
-        [Description("A single page frontend only application")]
-        SinglePageFront,
-        [DisplayName("Multi Page Frontend")]
-        [Description("A multi page frontend only application")]
-        MultiPageFront,
-        [DisplayName("RESTful API")]
-        [Description("A REST Application programming interface backend only")]
-        RESTAPI,
-        [DisplayName("Navigation Pane")]
-        [Description("A navigation pane is included for navigation between pages")]
-        NavPaneCSharp,
-        [DisplayName("Blank")]
-        [Description("The basic project is a blank canvas")]
-        BlankCSharp,
-        [DisplayName("Pivots and Tabs")]
-        [Description("Tabs across the top for quickly navigating between pages")]
-        PivotTabCSharp,
-        [DisplayName("Navigation Pane")]
-        [Description("A navigation pane is included for navigation between pages")]
-        NavPaneVB,
-        [DisplayName("Blank")]
-        [Description("The basic project is a blank canvas")]
-        BlankVB,
-        [DisplayName("Pivots and Tabs")]
-        [Description("Tabs across the top for quickly navigating between pages")]
-        PivotTabVB,
-    }
-
     public enum Framework
     {
         [DisplayName("ReactJS")]

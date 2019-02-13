@@ -11,7 +11,7 @@ namespace CoreTemplateStudio.Api.Models
     {
         public Platform Platform { get; set; }
 
-        public ProjectType ProjectType { get; set; }
+       /* public ProjectType ProjectType { get; set; }*/
 
         public Framework? Frontend { get; set; }
 

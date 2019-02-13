@@ -4,9 +4,9 @@
 
 using System;
 using System.Collections.Generic;
-using CoreTemplateStudio.Api.Enumerables;
-using CoreTemplateStudio.Api.Models;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Templates.Core.Gen;
 
 namespace CoreTemplateStudio.Api.Controllers
 {
@@ -14,65 +14,35 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class FrameworkController : Controller
     {
-        private readonly IDictionary<Framework, FrameworkModel> frameworkStore;
-
-        public FrameworkController()
-        {
-            frameworkStore = new Dictionary<Framework, FrameworkModel>
-            {
-                { Framework.ReactJS, new FrameworkModel(Framework.ReactJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
-                { Framework.VueJS, new FrameworkModel(Framework.VueJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
-                { Framework.AngularJS, new FrameworkModel(Framework.AngularJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull) },
-                { Framework.NodeJS, new FrameworkModel(Framework.NodeJS, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
-                { Framework.Django, new FrameworkModel(Framework.Django, FrameworkType.Backend, ProjectType.SinglePageFront, ProjectType.MultiPageFront, ProjectType.MultiPageFull, ProjectType.SinglePageFull, ProjectType.RESTAPI) },
-                { Framework.MultiPageJS, new FrameworkModel(Framework.MultiPageJS, FrameworkType.Frontend, ProjectType.MultiPageFront, ProjectType.MultiPageFull) },
-                { Framework.SinglePageJS, new FrameworkModel(Framework.SinglePageJS, FrameworkType.Frontend, ProjectType.SinglePageFront, ProjectType.SinglePageFull) },
-                { Framework.CodeBehind, new FrameworkModel(Framework.CodeBehind, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.MVVMBasic, new FrameworkModel(Framework.MVVMBasic, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.MVVMLight, new FrameworkModel(Framework.MVVMLight, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.Prism, new FrameworkModel(Framework.Prism, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-                { Framework.CaliburnMicro, new FrameworkModel(Framework.CaliburnMicro, FrameworkType.UwpDesign, ProjectType.BlankVB, ProjectType.BlankCSharp, ProjectType.PivotTabCSharp, ProjectType.PivotTabVB, ProjectType.NavPaneCSharp, ProjectType.NavPaneVB) },
-            };
-        }
-
-        // GET: api/framework?projectType=
-        // returns all frameworks matching a given projectType Code
+        /// <summary>
+        /// GET: api/framework
+        /// Gets all frameworks available for the current platform and language.
+        /// </summary>
+        /// <returns>all frameworks for the current platform and language.</returns>
         [HttpGet]
-        public JsonResult GetFrameworks(string projectType)
+        public JsonResult GetFrameworks()
         {
-            if (projectType == null)
+            if (GenContext.ToolBox == null)
             {
-                return Json(BadRequest(new { message = "please specify a valid projectType" }));
+                return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
             }
 
-            IDictionary<Framework, FrameworkModel> validFrameworks = new Dictionary<Framework, FrameworkModel>();
-            foreach (var item in frameworkStore)
-            {
-                if (Enum.TryParse(projectType, true, out ProjectType parsedProjectType))
-                {
-                    if (item.Value.HasProjectType(parsedProjectType))
-                    {
-                        validFrameworks.Add(item);
-                    }
-                }
-                else
-                {
-                    return Json(NotFound(new { message = "projectType not found" }));
-                }
-            }
-
-            return Json(Ok(validFrameworks));
+            var result = GenContext.ToolBox.Repo.GetFrameworks(GenContext.CurrentPlatform);
+            return Json(Ok(new { items = result }));
         }
 
-        // GET: api/framework/{frameworkType}?projectType=
-        // {frameworkType} is either frontend/backend/uwpDesign
-        // returns all frontend/backend frameworks matching a given projectType Code
+        /// <summary>
+        /// GET: api/framework/{frameworkType}
+        /// Gets all frameworks available for the current platform and language for the framework type specified.
+        /// </summary>
+        /// <param name="frameworkType">The type of framework we would like.</param>
+        /// <returns>all frameworks for the current platform, framework type, and language.</returns>
         [HttpGet("{frameworkType}")]
-        public JsonResult GetFrameworksOfType(string frameworkType, string projectType)
+        public JsonResult GetFrameworksOfType(string frameworkType)
         {
-            if (projectType == null)
+            if (GenContext.ToolBox == null)
             {
-                return Json(BadRequest(new { message = "please specify a valid projectType" }));
+                return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
             }
 
             if (!frameworkType.Equals("frontend", StringComparison.OrdinalIgnoreCase) && !frameworkType.Equals("backend", StringComparison.OrdinalIgnoreCase) && !frameworkType.Equals("uwpdesign", StringComparison.OrdinalIgnoreCase))
@@ -80,23 +50,11 @@ namespace CoreTemplateStudio.Api.Controllers
                 return Json(BadRequest(new { message = "frameworkType can only be frontend/backend/uwpdesign" }));
             }
 
-            IDictionary<Framework, FrameworkModel> validFrameworks = new Dictionary<Framework, FrameworkModel>();
-            foreach (var item in frameworkStore)
-            {
-                if (Enum.TryParse(projectType, true, out ProjectType parsedProjectType))
-                {
-                    if (item.Value.FrameworkType.Equals(frameworkType, StringComparison.OrdinalIgnoreCase) && item.Value.HasProjectType(parsedProjectType))
-                    {
-                        validFrameworks.Add(item);
-                    }
-                }
-                else
-                {
-                    return Json(NotFound(new { message = "projectType not found" }));
-                }
-            }
+            var type = new KeyValuePair<string, object>("type", frameworkType);
+            var result = GenContext.ToolBox.Repo.GetFrameworks(GenContext.CurrentPlatform)
+                .Where(m => m.Tags != null && m.Tags.Contains(type)).ToList();
 
-            return Json(Ok(validFrameworks));
+            return Json(Ok(new { items = result }));
         }
     }
 }
