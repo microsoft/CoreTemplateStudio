@@ -22,6 +22,21 @@ namespace CoreTemplateStudio.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Adds Cors policy for swagger docs response, since this is a local server this should be fine.
+            services.AddCors(options =>
+             {
+                 options.AddPolicy(
+                     "AllowAll",
+                     builder =>
+                     {
+                         builder
+                         .AllowAnyOrigin()
+                         .AllowAnyMethod()
+                         .AllowAnyHeader()
+                         .AllowCredentials();
+                     });
+             });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -33,7 +48,7 @@ namespace CoreTemplateStudio.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseCors("AllowAll").UseMvc();
         }
     }
 }
