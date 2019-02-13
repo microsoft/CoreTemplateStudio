@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +30,8 @@
 
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\..\WtsRules.ruleset</CodeAnalysisRuleSet>
+    <AssemblyName>Microsoft.Templates.Core</AssemblyName>
+    <RootNamespace>Microsoft.Templates.Core</RootNamespace>
   </PropertyGroup>
 
 
