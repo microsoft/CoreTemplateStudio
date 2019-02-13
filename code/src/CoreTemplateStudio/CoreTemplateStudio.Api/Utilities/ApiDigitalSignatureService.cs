@@ -14,6 +14,8 @@ namespace Microsoft.Templates.Api.Utilities
 {
     public class ApiDigitalSignatureService : IDigitalSignatureService
     {
+        public bool CanVerifySignatures => false;
+
         public Dictionary<string, X509Certificate> GetPackageCertificates(Package package)
         {
             var packageCertificates = new Dictionary<string, X509Certificate>();
