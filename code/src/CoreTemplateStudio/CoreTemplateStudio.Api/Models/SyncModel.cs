@@ -76,7 +76,11 @@ namespace Microsoft.Templates.Api.Models
             bool isWebInvalidLanguage = _language != null ? _platform.Equals(Platforms.Web, StringComparison.OrdinalIgnoreCase)
                                         && !_language.Equals(ProgrammingLanguages.Any, StringComparison.OrdinalIgnoreCase)
                                         : true;
-            isValid &= !isUwpInvalidLanguage && !isWebInvalidLanguage;
+            if (isUwpInvalidLanguage || isWebInvalidLanguage)
+            {
+                // Validity is false if either are true since this is an invalid language + platform combo.
+                isValid = false;
+            }
 
             return isValid;
         }
@@ -102,7 +106,7 @@ namespace Microsoft.Templates.Api.Models
 #if DEBUG
             suffix = "/Templates";
 #else
-            suffix = "$"{_platform}.{_language}.Templates.mstx"
+            suffix = $"{_platform}.{_language}.Templates.mstx";
 #endif
             return _installedPackagePath != null
                 && suffix == "/Templates" ? Directory.Exists(_installedPackagePath + suffix)
