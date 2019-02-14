@@ -15,6 +15,7 @@ namespace Microsoft.Templates.Core.Test.TestFakes
             _platform = platform;
             _language = language;
         }
+
         public override void AddContextItemsToSolution(ProjectInfo projectInfo)
         {
 
