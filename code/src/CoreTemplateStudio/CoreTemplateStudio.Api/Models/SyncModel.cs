@@ -73,8 +73,10 @@ namespace Microsoft.Templates.Api.Models
             bool isUwpInvalidLanguage = _language != null ? _platform.Equals(Platforms.Uwp, StringComparison.OrdinalIgnoreCase)
                                         && _language.Equals(ProgrammingLanguages.Any, StringComparison.OrdinalIgnoreCase)
                                         : true;
-
-            isValid &= !isUwpInvalidLanguage;
+            bool isWebInvalidLanguage = _language != null ? _platform.Equals(Platforms.Web, StringComparison.OrdinalIgnoreCase)
+                                        && !_language.Equals(ProgrammingLanguages.Any, StringComparison.OrdinalIgnoreCase)
+                                        : true;
+            isValid &= !isUwpInvalidLanguage && !isWebInvalidLanguage;
 
             return isValid;
         }
@@ -96,8 +98,15 @@ namespace Microsoft.Templates.Api.Models
 
         public bool IsValidPath()
         {
+            string suffix = string.Empty;
+#if DEBUG
+            suffix = "/Templates";
+#else
+            suffix = "$"{_platform}.{_language}.Templates.mstx"
+#endif
             return _installedPackagePath != null
-                && Directory.Exists(_installedPackagePath);
+                && suffix == "/Templates" ? Directory.Exists(_installedPackagePath + suffix)
+                                          : File.Exists(_installedPackagePath + suffix);
         }
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
