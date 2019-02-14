@@ -24,7 +24,6 @@ namespace Microsoft.Templates.Api.Test.Controllers
             const string InvalidWeb = "VisualBasic";
             const string InvalidUwp = "Any";
 
-
             using (HttpClient client = new TestClientProvider().Client)
             {
                 // handle invalid platforms

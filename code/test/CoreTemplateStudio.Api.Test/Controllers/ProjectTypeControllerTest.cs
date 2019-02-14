@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -18,11 +19,20 @@ namespace Microsoft.Templates.Api.Test.Controllers
     [Trait("ExecutionSet", "Minimum")]
     public class ProjectTypeControllerTest
     {
+
+        public ProjectTypeControllerTest()
+        {
+            // set toolbox to null since it is a static variable and its state will affect tests in this class.
+            var field = typeof(GenContext).GetField("ToolBox", BindingFlags.Static | BindingFlags.Public);
+            if (field != null)
+            {
+                field.SetValue(null, 0);
+            }
+        }
+
         [Fact]
         public void TestProjectType_ShouldHandleInvalidInput()
         {
-
-
             using (HttpClient client = new TestClientProvider().Client)
             {
                 // Handle no sync

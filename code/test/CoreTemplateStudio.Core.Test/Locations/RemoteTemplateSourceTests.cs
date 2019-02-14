@@ -23,7 +23,6 @@ namespace Microsoft.Templates.Core.Test.Locations
 
     public class RemoteTemplateSourceTests
     {
-        
         [Fact]
         public async Task TestRemoteSource_AcquireAsync()
         {
