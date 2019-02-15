@@ -170,7 +170,8 @@ namespace Microsoft.Templates.Core.Test
             if (language == ProgrammingLanguages.VisualBasic)
             {
                 folderName += "VB";
-            } else if (language == ProgrammingLanguages.Any)
+            }
+            else if (language == ProgrammingLanguages.Any)
             {
                 folderName += ProgrammingLanguages.Any;
             }
@@ -285,7 +286,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("PageTemplate");
 
             var result = target.GetExports();
-            Assert.Collection(result, e1 => e1.Equals(("baseclass", "ViewModelBase") ), e2 => e2.Equals(("setter", "Set") ));
+            Assert.Collection(result, e1 => e1.Equals(("baseclass", "ViewModelBase")), e2 => e2.Equals(("setter", "Set")));
         }
 
         [Theory]

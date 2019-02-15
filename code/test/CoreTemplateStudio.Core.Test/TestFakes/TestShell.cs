@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Gen;
@@ -22,12 +26,10 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 
         public override void CancelWizard(bool back = true)
         {
-
         }
 
         public override void CloseSolution()
         {
-
         }
 
         public override string CreateCertificate(string publisherName)

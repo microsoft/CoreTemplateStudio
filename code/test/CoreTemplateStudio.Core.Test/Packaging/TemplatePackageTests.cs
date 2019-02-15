@@ -286,6 +286,7 @@ namespace Microsoft.Templates.Core.Test.Locations
             Directory.Delete(outDir1, true);
             Directory.Delete(outDir2, true);
         }
+
         // Might re-enable in dotnetcore 3.0 when the functionality is available.
         /**
         [Fact]

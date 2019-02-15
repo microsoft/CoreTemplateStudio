@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTemplateStudio.Api.Test", "CoreTemplateStudio.Api.Test\CoreTemplateStudio.Api.Test.csproj", "{7069C64F-65BA-4852-9EFD-9927AAFA3CA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreTemplateStudio.Api.Test", "CoreTemplateStudio.Api.Test\CoreTemplateStudio.Api.Test.csproj", "{7069C64F-65BA-4852-9EFD-9927AAFA3CA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreTemplateStudio.Core", "..\src\CoreTemplateStudio\CoreTemplateStudio.Core\CoreTemplateStudio.Core.csproj", "{F6E73B8E-8268-4956-8347-D61E5732EF7C}"
 EndProject
