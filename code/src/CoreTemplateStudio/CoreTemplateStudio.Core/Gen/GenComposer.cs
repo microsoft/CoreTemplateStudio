@@ -15,6 +15,9 @@ namespace Microsoft.Templates.Core.Gen
 {
     public class GenComposer
     {
+        private const string All = "all";
+        private const string None = "none";
+
         public static IEnumerable<string> GetSupportedProjectTypes(string platform)
         {
             return GenContext.ToolBox.Repo.GetAll()
@@ -24,6 +27,7 @@ namespace Microsoft.Templates.Core.Gen
                 .Distinct();
         }
 
+        [Obsolete("This method has been depricated due to the additional requirement of frontend and backend frameworks, please use GetAllSupportedFx instead.")]
         public static IEnumerable<string> GetSupportedFx(string projectType, string platform)
         {
             return GenContext.ToolBox.Repo.GetAll()
@@ -32,6 +36,50 @@ namespace Microsoft.Templates.Core.Gen
                                 && t.GetPlatform() == platform)
                 .SelectMany(t => t.GetFrameworkList())
                 .Distinct();
+        }
+
+        public static IEnumerable<string> GetAllSupportedFx(string projectType, string platform)
+        {
+            var filtered = GenContext.ToolBox.Repo.GetAll()
+                          .Where(t => t.GetTemplateType() == TemplateType.Project
+                          && (t.GetProjectTypeList().Contains(projectType) || !t.GetProjectTypeList().Any())
+                          && t.GetPlatform().Equals(platform, StringComparison.OrdinalIgnoreCase)).ToList();
+            var result = filtered.SelectMany(t => t.GetFrontEndFrameworkList()).ToList();
+            result.AddRange(filtered.SelectMany(t => t.GetBackEndFrameworkList()));
+            result = result.Distinct().ToList();
+
+            return result;
+        }
+
+        public static IEnumerable<ITemplateInfo> GetPages(string projectType, string platform, string frontEndFramework = null, string backEndFramework = null)
+        {
+            return GetTemplateTypeInfo(projectType, platform, TemplateType.Page, frontEndFramework, backEndFramework);
+        }
+
+        public static IEnumerable<ITemplateInfo> GetFeatures(string projectType, string platform, string frontEndFramework = null, string backEndFramework = null)
+        {
+            return GetTemplateTypeInfo(projectType, platform, TemplateType.Feature, frontEndFramework, backEndFramework);
+        }
+
+        private static IEnumerable<ITemplateInfo> GetTemplateTypeInfo(string projectType, string platform, TemplateType type, string frontEndFramework = null, string backEndFramework = null)
+        {
+            return GenContext.ToolBox.Repo.Get(t => t.GetTemplateType() == type
+               && (t.GetProjectTypeList().Contains(projectType) || !t.GetProjectTypeList().Any())
+               && t.GetPlatform().Equals(platform, StringComparison.OrdinalIgnoreCase)
+               && IsMatchFrontEnd(t, frontEndFramework)
+               && IsMatchBackEnd(t, backEndFramework)).ToList();
+        }
+
+        private static bool IsMatchFrontEnd(ITemplateInfo info, string frontEndFramework)
+        {
+            return frontEndFramework == null || info.GetFrontEndFrameworkList().Contains(frontEndFramework, StringComparer.OrdinalIgnoreCase)
+                                             || info.GetFrontEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static bool IsMatchBackEnd(ITemplateInfo info, string backEndFramework)
+        {
+            return backEndFramework == null || info.GetBackEndFrameworkList().Contains(backEndFramework, StringComparer.OrdinalIgnoreCase)
+                                            || info.GetBackEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
         }
 
         public static IEnumerable<LayoutInfo> GetLayoutTemplates(string projectType, string framework, string platform)

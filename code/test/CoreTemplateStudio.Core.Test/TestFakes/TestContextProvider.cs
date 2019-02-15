@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Collections.Generic;
 using CoreTemplateStudio.Core.Test.Extensions;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Gen;
@@ -6,7 +10,7 @@ using Microsoft.Templates.Core.PostActions.Catalog.Merge;
 
 namespace Microsoft.Templates.Core.Test.TestFakes
 {
-    class TestContextProvider : IContextProvider
+    internal class TestContextProvider : IContextProvider
     {
         public string ProjectName { get; set; }
 
@@ -26,5 +30,4 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 
         public Dictionary<ProjectMetricsEnum, double> ProjectMetrics { get; } = new Dictionary<ProjectMetricsEnum, double>();
     }
-    
 }

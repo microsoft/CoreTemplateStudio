@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using CoreTemplateStudio.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Templates.Core.Gen;
 
 namespace CoreTemplateStudio.Api.Controllers
 {
@@ -12,15 +12,9 @@ namespace CoreTemplateStudio.Api.Controllers
     public class GenerateController : Controller
     {
         [HttpPost]
-        public JsonResult Generate([FromBody]GenerateModel generationHelper)
+        public JsonResult Generate([FromBody]UserSelection userSelection)
         {
-            (bool valid, string error) = generationHelper.Validate();
-            if (!valid)
-            {
-                return Json(BadRequest(new { message = error }));
-            }
-
-            return Json(Ok(new { wasUpdated = generationHelper.Generate() }));
+            return Json(Ok(new { wasUpdated = "dummy data" }));
         }
     }
 }

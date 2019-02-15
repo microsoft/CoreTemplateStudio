@@ -11,7 +11,8 @@ namespace Microsoft.Templates.Core.Test.Locations
 {
     public sealed class UnitTestsTemplatesSource : LocalTemplatesSource
     {
-        public UnitTestsTemplatesSource(string installedPackagePath) : base(installedPackagePath)
+        public UnitTestsTemplatesSource(string installedPackagePath)
+            : base(installedPackagePath)
         {
         }
 
