@@ -30,7 +30,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
             }
 
-            if (!(frontEndFramework == null && backEndFramework == null))
+            if (frontEndFramework == null && backEndFramework == null)
             {
                 return Json(BadRequest(new { message = "You must specify a backend or frontend framework at the very least" }));
             }
