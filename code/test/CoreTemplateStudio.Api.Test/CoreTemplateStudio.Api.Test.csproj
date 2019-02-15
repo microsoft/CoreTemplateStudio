@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="templates\**" />
+    <EmbeddedResource Remove="templates\**" />
+    <None Remove="templates\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\WtsRulesTests.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningsAsErrors>NU1605;SA*</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
+
+    <AdditionalFiles Include="..\..\StyleCop.json">
+      <Link>StyleCop.json</Link>
+    </AdditionalFiles>
+
+    <None Update="xunit.runner.json"> 
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <None Include="templates\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+  
+    <ProjectReference Include="..\..\src\CoreTemplateStudio\CoreTemplateStudio.Api\CoreTemplateStudio.Api.csproj" />
+  
+    <ProjectReference Include="..\CoreTemplateStudio.Core.Test\CoreTemplateStudio.Core.Test.csproj" />
+  
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="templates\_catalog\projectTypes\FullstackWebApp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="templates\_catalog\projectTypes\RestAPI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="_catalog\projectTypes\FullstackWebApp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="_catalog\projectTypes\RestAPI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -38,5 +38,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1701;1702;0618</NoWarn>
   </PropertyGroup>
 </Project>

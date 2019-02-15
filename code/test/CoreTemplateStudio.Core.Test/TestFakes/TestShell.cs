@@ -9,15 +9,15 @@ namespace Microsoft.Templates.Core.Test.TestFakes
     {
         private string _platform;
         private string _language;
-        
+
         public TestShell(string platform, string language)
         {
             _platform = platform;
             _language = language;
         }
+
         public override void AddContextItemsToSolution(ProjectInfo projectInfo)
         {
-
         }
 
         public override void CancelWizard(bool back = true)
