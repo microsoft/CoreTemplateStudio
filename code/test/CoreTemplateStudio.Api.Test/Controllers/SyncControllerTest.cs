@@ -16,7 +16,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
     {
          
         [Fact]
-        public void TestSync_ShouldHandleInvalidInput()
+        public async void TestSync_ShouldHandleInvalidInput()
         {
             List<string> invalidPlatforms = new List<string>() { "uw", "we", "windows", null };
             List<string> invalidPaths = (new List<string>() { "../../", null, "test", "../../../test/CoreTemplateStudio.Api.Test/" });
@@ -29,7 +29,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
                 // handle invalid platforms
                 foreach (string plat in invalidPlatforms)
                 {
-                    ApiResponse response = GetResponseFromUrlPost(client, $"/api/sync?platform={plat}&path={ValidPath}").Result;
+                    ApiResponse response = await GetResponseFromUrlPost(client, $"/api/sync?platform={plat}&path={ValidPath}");
 
                     response.StatusCode.Should().Be(400, "The platforms are invalid so shouldn't be successful response.");
                     response.Value["message"].Should().Be("invalid platform", "The platform is invalid so the message should reflect that");
@@ -38,32 +38,32 @@ namespace Microsoft.Templates.Api.Test.Controllers
                 // handle invalid paths
                 foreach (string path in invalidPaths)
                 {
-                    ApiResponse response = GetResponseFromUrlPost(client, $"/api/sync?platform=web&path={path}").Result;
+                    ApiResponse response = await GetResponseFromUrlPost(client, $"/api/sync?platform=web&path={path}");
 
                     response.StatusCode.Should().Be(400, "The paths are invalid so shouldn't be successful response.");
                     response.Value["message"].Should().Be("invalid path", "The path is invalid so the message should reflect that");
                 }
 
                 // handle invalid platform + language combination
-                ApiResponse resp = GetResponseFromUrlPost(client, $"/api/sync/?platform=uwp&path={ValidPath}&language={InvalidUwp}").Result;
+                ApiResponse resp = await GetResponseFromUrlPost(client, $"/api/sync/?platform=uwp&path={ValidPath}&language={InvalidUwp}");
                 resp.StatusCode.Should().Be(400, "When passing the platform uwp, this language cannot be used.");
                 resp.Value["message"].Should().Be("invalid language for this platform.", "The language is invalid so the message should reflect that");
 
-                resp = GetResponseFromUrlPost(client, $"/api/sync/?platform=web&path={ValidPath}&language={InvalidWeb}").Result;
+                resp = await GetResponseFromUrlPost(client, $"/api/sync/?platform=web&path={ValidPath}&language={InvalidWeb}");
                 resp.StatusCode.Should().Be(400, "When passing the platform web, this language cannot be used.");
                 resp.Value["message"].Should().Be("invalid language for this platform.", "The language is invalid so the message should reflect that");
             }
         }
 
         [Fact]
-        public void TestSync_ShouldBeSuccessResponse()
+        public async void TestSync_ShouldBeSuccessResponse()
         {
             const string ValidPath = ".";
 
             using (HttpClient client = new TestClientProvider().Client)
             {
-                ApiResponse response = GetResponseFromUrlPost(client, $"/api/sync?platform=web&path={ValidPath}").Result;
-                ApiResponse response2 = GetResponseFromUrlPost(client, $"/api/sync?platform=uwp&path={ValidPath}&language=VisualBasic").Result;
+                ApiResponse response = await GetResponseFromUrlPost(client, $"/api/sync?platform=web&path={ValidPath}");
+                ApiResponse response2 = await GetResponseFromUrlPost(client, $"/api/sync?platform=uwp&path={ValidPath}&language=VisualBasic");
                 response.StatusCode.Should().Be(200, "The parameters passed are valid, so the response should be successful");
                 response2.StatusCode.Should().Be(200, "The parameters passed are valid, so the response should be successful");
             }

@@ -9,7 +9,7 @@ namespace Microsoft.Templates.Core.Test.TestFakes
     {
         private string _platform;
         private string _language;
-        
+
         public TestShell(string platform, string language)
         {
             _platform = platform;
