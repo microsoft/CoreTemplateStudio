@@ -18,7 +18,6 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 
         public override void AddContextItemsToSolution(ProjectInfo projectInfo)
         {
-
         }
 
         public override void CancelWizard(bool back = true)
