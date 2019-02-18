@@ -5,8 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoreTemplateStudio.Api.Enumerables;
-using CoreTemplateStudio.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Core.Gen;
 

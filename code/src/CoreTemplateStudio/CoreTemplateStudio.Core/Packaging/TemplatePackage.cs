@@ -107,7 +107,7 @@ namespace Microsoft.Templates.Core.Packaging
             }
         }
 
-        public async Task ExtractAsync(string signedFilePack, string targetDirectory, Action<int> reportProgress = null, CancellationToken ct = default(CancellationToken), bool verifySignatures = true)
+        public async Task ExtractAsync(string signedFilePack, string targetDirectory, Action<int> reportProgress = null, CancellationToken ct = default(CancellationToken))
         {
             string currentDir = Environment.CurrentDirectory;
             string inFilePack = Path.IsPathRooted(signedFilePack) ? signedFilePack : Path.Combine(currentDir, signedFilePack);
@@ -120,6 +120,7 @@ namespace Microsoft.Templates.Core.Packaging
                 using (Package package = Package.Open(inFilePack, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     bool isSignatureValid = false;
+                    bool verifySignatures = _digitalSignatureService.CanVerifySignatures;
 
                     if (verifySignatures)
                     {
@@ -249,16 +250,20 @@ namespace Microsoft.Templates.Core.Packaging
             }
         }
 
-        public List<(X509Certificate2 cert, string pin, X509ChainStatusFlags status)> GetCertsInfo(string signedPackageFilename)
+        public List<CertInfo> GetCertsInfo(string signedPackageFilename)
         {
             using (Package package = Package.Open(signedPackageFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var res = new List<(X509Certificate2 cert, string pin, X509ChainStatusFlags status)>();
+                var res = new List<CertInfo>();
                 var certs = _digitalSignatureService.GetX509Certificates(package);
                 foreach (X509Certificate cert in certs)
                 {
-                    (X509Certificate2 cert, string pin, X509ChainStatusFlags status) certInfo =
-                        (cert: new X509Certificate2(cert), pin: cert.GetPublicKeyString().ObfuscateSHA(), _digitalSignatureService.VerifyCertificate(cert));
+                    var certInfo = new CertInfo()
+                    {
+                           Cert = new X509Certificate2(cert),
+                           Pin = cert.GetPublicKeyString().ObfuscateSHA(),
+                           Status = _digitalSignatureService.VerifyCertificate(cert),
+                    };
 
                     res.Add(certInfo);
                 }

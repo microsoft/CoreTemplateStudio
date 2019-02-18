@@ -41,7 +41,7 @@ namespace Microsoft.Templates.Core.Test.Locations
 
             var config = TemplatesSourceConfig.LoadFromFile(configFile);
 
-             var package = config.ResolvePackage(new Version(1, 3), Platforms.Uwp, ProgrammingLanguages.GetShortProgrammingLanguage(ProgrammingLanguages.CSharp));
+            var package = config.ResolvePackage(new Version(1, 3), Platforms.Uwp, ProgrammingLanguages.GetShortProgrammingLanguage(ProgrammingLanguages.CSharp));
 
             Assert.Equal("UWP.CS.Templates_1.2.3.4.mstx", package.Name);
         }

@@ -143,19 +143,19 @@ namespace Microsoft.Templates.Core
             return properties;
         }
 
-        public static IEnumerable<(string name, string value)> GetExports(this ITemplateInfo ti)
+        public static IDictionary<string, string> GetExports(this ITemplateInfo ti)
         {
             if (ti == null || ti.Tags == null)
             {
-                return Enumerable.Empty<(string name, string value)>();
+                return new Dictionary<string, string>();
             }
 
             return ti.Tags
                         .Where(t => t.Key.Contains(TagPrefix + "export."))
-                        .Select(t => (t.Key.Replace(TagPrefix + "export.", string.Empty), t.Value.DefaultValue))
-                        .ToList();
+                        .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
         }
 
+        [Obsolete("This method has been deprecated due to the addition of frontend and backend frameworks, please use GetFrontEndFrameworkList or GetBackEndFramework instead.")]
         public static List<string> GetFrameworkList(this ITemplateInfo ti)
         {
             var frameworks = GetValueFromTag(ti, TagPrefix + "framework");
@@ -164,6 +164,34 @@ namespace Microsoft.Templates.Core
             if (!string.IsNullOrEmpty(frameworks))
             {
                 result.AddRange(frameworks.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
+        public static List<string> GetFrontEndFrameworkList(this ITemplateInfo ti)
+        {
+            var frontEndFrameworks = GetValueFromTag(ti, TagPrefix + "frontEndFramework");
+
+            var result = new List<string>();
+
+            if (!string.IsNullOrEmpty(frontEndFrameworks))
+            {
+                result.AddRange(frontEndFrameworks.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
+        public static List<string> GetBackEndFrameworkList(this ITemplateInfo ti)
+        {
+            var backEndFrameworks = GetValueFromTag(ti, TagPrefix + "backEndFramework");
+
+            var result = new List<string>();
+
+            if (!string.IsNullOrEmpty(backEndFrameworks))
+            {
+                result.AddRange(backEndFrameworks.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             }
 
             return result;

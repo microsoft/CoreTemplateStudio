@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.IO.Packaging;
 using System.Security.Cryptography;
@@ -10,6 +14,8 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 {
     public class TestDigitalSignatureService : IDigitalSignatureService
     {
+        public bool CanVerifySignatures => false;
+
         public Dictionary<string, X509Certificate> GetPackageCertificates(Package package)
         {
             var packageCertificates = new Dictionary<string, X509Certificate>();
@@ -29,17 +35,11 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 
         public void SignPackage(Package package, X509Certificate cert)
         {
-          
-          
         }
 
         private void SignUris(IEnumerable<Uri> uris, X509Certificate2 cert)
         {
-            
-
         }
-
-        
 
         public X509ChainStatusFlags VerifyCertificate(X509Certificate cert)
         {

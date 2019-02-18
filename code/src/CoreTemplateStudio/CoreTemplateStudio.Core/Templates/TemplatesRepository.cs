@@ -94,7 +94,7 @@ namespace Microsoft.Templates.Core
 
             return queryResult
                         .Where(r => r.IsMatch)
-                        .Where(r => r.Info.GetPlatform() == CurrentPlatform)
+                        .Where(r => r.Info.GetPlatform().Equals(CurrentPlatform, StringComparison.OrdinalIgnoreCase))
                         .Select(r => r.Info)
                         .ToList();
         }
@@ -127,9 +127,24 @@ namespace Microsoft.Templates.Core
             return GetProjectTypes().Where(m => m.Platforms.Contains(platform));
         }
 
+        [Obsolete("This method is depricated due to the new requirement of having frontend and backend frameworks, please use GetFrontEndFrameworks() or GetBackEndFrameworks() instead.")]
         public IEnumerable<MetadataInfo> GetFrameworks()
         {
             return GetMetadataInfo("frameworks");
+        }
+
+        public IEnumerable<MetadataInfo> GetFrontEndFrameworks()
+        {
+            IEnumerable<MetadataInfo> result = GetMetadataInfo("frontEndFramework");
+            result.ToList().ForEach(meta => meta.Tags["type"] = "frontend");
+            return result;
+        }
+
+        public IEnumerable<MetadataInfo> GetBackEndFrameworks()
+        {
+            IEnumerable<MetadataInfo> result = GetMetadataInfo("backEndFramework");
+            result.ToList().ForEach(meta => meta.Tags["type"] = "backend");
+            return result;
         }
 
         public IEnumerable<MetadataInfo> GetFrameworks(string platform)
