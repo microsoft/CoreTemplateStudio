@@ -5,8 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Templates;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
@@ -40,7 +40,7 @@ namespace CoreTemplateStudio.Api.Controllers
             var targetFrontEndFrameworks = GenContext.ToolBox
                                                      .Repo
                                                      .GetFrontEndFrameworks()
-                                                     .Where(tf => projectFrameworks.Where(framework => "frontend".Equals(framework.Type, StringComparison.OrdinalIgnoreCase))
+                                                     .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.FrontEnd)
                                                                   .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
                                                                                       || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))))
                                                      .ToList();
@@ -48,7 +48,7 @@ namespace CoreTemplateStudio.Api.Controllers
             var targetBackEndFrameworks = GenContext.ToolBox
                                                      .Repo
                                                      .GetBackEndFrameworks()
-                                                     .Where(tf => projectFrameworks.Where(framework => "backend".Equals(framework.Type, StringComparison.OrdinalIgnoreCase))
+                                                     .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.BackEnd)
                                                                   .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
                                                                                       || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))))
                                                      .ToList();

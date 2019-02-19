@@ -12,9 +12,9 @@ namespace Microsoft.Templates.Core.Gen
     {
         public string Name { get; internal set; }
 
-        public string Type { get; internal set; }
+        public FrameworkTypes Type { get; internal set; }
 
-        public SupportedFramework(string name, string type)
+        public SupportedFramework(string name, FrameworkTypes type)
         {
             Name = name;
             Type = type;

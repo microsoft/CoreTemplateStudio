@@ -46,8 +46,8 @@ namespace Microsoft.Templates.Core.Gen
                           && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
                           && t.GetPlatform().Equals(platform, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            var result = filtered.SelectMany(t => t.GetFrontEndFrameworkList()).Select(name => new SupportedFramework(name, "frontend")).ToList();
-            result.AddRange(filtered.SelectMany(t => t.GetBackEndFrameworkList()).Select(name => new SupportedFramework(name, "backend")));
+            var result = filtered.SelectMany(t => t.GetFrontEndFrameworkList()).Select(name => new SupportedFramework(name, FrameworkTypes.FrontEnd)).ToList();
+            result.AddRange(filtered.SelectMany(t => t.GetBackEndFrameworkList()).Select(name => new SupportedFramework(name, FrameworkTypes.BackEnd)));
             result = result.Distinct().ToList();
 
             return result;
@@ -551,12 +551,12 @@ namespace Microsoft.Templates.Core.Gen
 
             if (!string.IsNullOrEmpty(userSelection.FrontEndFramework))
             {
-                context.Add(new QueryableProperty("frontEndFramework", userSelection.FrontEndFramework + "|" + All));
+                context.Add(new QueryableProperty("frontEndFramework", userSelection.FrontEndFramework));
             }
 
             if (!string.IsNullOrEmpty(userSelection.BackEndFramework))
             {
-                context.Add(new QueryableProperty("backEndFramework", userSelection.BackEndFramework + "|" + All));
+                context.Add(new QueryableProperty("backEndFramework", userSelection.BackEndFramework));
             }
 
             var combinedQueue = new List<GenInfo>();
