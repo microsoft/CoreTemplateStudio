@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.TemplateEngine.Edge.Settings.TemplateInfoReaders;
+using Microsoft.Templates.Api.Extensions;
 using Microsoft.Templates.Core.Gen;
 
 using Newtonsoft.Json.Linq;
@@ -51,7 +52,7 @@ namespace Microsoft.Templates.Api.Utilities
 
                 TemplateInfo templateInfo = new TemplateInfo
                 {
-                    Name = item.ToString("name"),
+                    Name = item.ToString("name").MakeSafeProjectName(),
                     Template = TemplateInfoReaderVersion1_0_0_0.FromJObject(template),
                 };
 
