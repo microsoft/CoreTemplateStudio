@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+
 using Microsoft.Templates.Api.Extensions;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Gen;

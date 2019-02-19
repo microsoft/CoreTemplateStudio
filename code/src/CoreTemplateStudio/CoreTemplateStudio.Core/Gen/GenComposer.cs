@@ -545,6 +545,8 @@ namespace Microsoft.Templates.Core.Gen
             var context = new QueryablePropertyDictionary
             {
                 new QueryableProperty("projecttype", userSelection.ProjectType),
+                new QueryableProperty("page", string.Join("|", userSelection.Pages.Select(p => p.Template.Identity))),
+                new QueryableProperty("feature", string.Join("|", userSelection.Features.Select(p => p.Template.Identity))),
             };
 
             if (!string.IsNullOrEmpty(userSelection.FrontEndFramework))
