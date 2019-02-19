@@ -25,6 +25,7 @@ namespace Microsoft.Templates.Core.Gen
             PostactionFactory = new NewProjectPostActionFactory();
         }
 
+        [Obsolete("This method has been depricated due to the additional requirement of frontend and backend frameworks, please use UpdatedUnsafeGenerateProjectAsync instead.")]
         public async Task UnsafeGenerateProjectAsync(UserSelection userSelection)
         {
             VerifyGenContextPaths();
@@ -36,6 +37,21 @@ namespace Microsoft.Templates.Core.Gen
             chrono.Stop();
 
             TrackTelemetry(genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, userSelection.Framework, userSelection.Platform, userSelection.Language);
+        }
+
+        public async Task UpdatedUnsafeGenerateProjectAsync(UserSelection userSelection)
+        {
+            VerifyGenContextPaths();
+
+            var genItems = GenComposer.ComposeFromSelection(userSelection).ToList();
+
+            var chrono = Stopwatch.StartNew();
+            var genResults = await GenerateItemsAsync(genItems, false);
+            chrono.Stop();
+
+            // TODO: Adapt telemetry to properly handle backend
+            string appFx = userSelection.FrontEndFramework + (string.IsNullOrEmpty(userSelection.BackEndFramework) ? string.Empty : userSelection.BackEndFramework);
+            TrackTelemetry(genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, appFx, userSelection.Platform, userSelection.Language);
         }
 
         private static void TrackTelemetry(IEnumerable<GenInfo> genItems, Dictionary<string, TemplateCreationResult> genResults, double timeSpent, string appProjectType, string appFx, string appPlatform, string language)
