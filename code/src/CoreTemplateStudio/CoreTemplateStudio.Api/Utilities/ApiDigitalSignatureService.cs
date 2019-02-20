@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO.Packaging;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+
 using Microsoft.Templates.Core.Packaging;
 
 // Modify or replace this class when dotnet core 3.0 is released to properly test
