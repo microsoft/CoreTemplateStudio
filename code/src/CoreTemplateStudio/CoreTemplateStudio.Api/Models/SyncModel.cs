@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;

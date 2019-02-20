@@ -11,8 +11,8 @@ namespace Microsoft.Templates.Core.Test.TestFakes
 {
     public class TestShell : GenShell
     {
-        private string _platform;
-        private string _language;
+        private readonly string _platform;
+        private readonly string _language;
 
         public TestShell(string platform, string language)
         {

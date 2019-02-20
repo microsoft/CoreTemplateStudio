@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Models;
 using Microsoft.Templates.Core;
-using Microsoft.Templates.Core.Locations;
 
 namespace Microsoft.Templates.Api.Controllers
 {
