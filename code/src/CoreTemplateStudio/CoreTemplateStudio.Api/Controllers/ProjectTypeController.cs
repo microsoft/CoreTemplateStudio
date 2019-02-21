@@ -15,11 +15,6 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class ProjectTypeController : Controller
     {
-        /// <summary>
-        /// GET: api/projectType
-        /// Gets available project types for the current platform and language.
-        /// </summary>
-        /// <returns>all the project types for the current platform and language. The parameters defined in sync will be used.</returns>
         [HttpGet]
         public JsonResult GetProjectTypes()
         {

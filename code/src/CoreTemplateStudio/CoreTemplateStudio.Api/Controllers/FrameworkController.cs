@@ -17,12 +17,6 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class FrameworkController : Controller
     {
-        /// <summary>
-        /// GET: api/framework?projectType=<>
-        /// Gets all frameworks available for the current platform and language for the given projectType.
-        /// </summary>
-        /// <param name="projectType">Project Type that was selected by the user</param>
-        /// <returns>all frameworks for the current platform and language for that project type</returns>
         [HttpGet]
         public JsonResult GetFrameworks(string projectType)
         {

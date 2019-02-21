@@ -14,15 +14,6 @@ namespace Microsoft.Templates.Api.Controllers
     [ApiController]
     public class PageController : Controller
     {
-        /// <summary>
-        /// GET api/page?projectType=<>&frontEndFramework=<>&backEndFramework
-        /// Given a project type, and possibly either a frontend and backend framework
-        /// will return a list of pages supported by these filters.
-        /// </summary>
-        /// <param name="projectType">Project Type that was selected by the user</param>
-        /// <param name="frontEndFramework">The frontend framework that was selected by the user</param>
-        /// <param name="backEndFramework">The backend framework that was selected by the user</param>
-        /// <returns>A list of pages that match with the filters given.</returns>
         [HttpGet]
         public JsonResult GetPagesForFrameworks(string projectType, string frontEndFramework, string backEndFramework)
         {

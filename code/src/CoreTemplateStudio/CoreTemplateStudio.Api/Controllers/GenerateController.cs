@@ -16,15 +16,6 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class GenerateController : Controller
     {
-        /// <summary>
-        /// Post: UserSelection in PostBody /api/generate?projectName=<>&genPath=<>
-        /// Given a UserSelection object, project name and genpath generates a project using the given parameters,
-        /// at the specified generation path.
-        /// </summary>
-        /// <param name="userSelection">UserSelection object passed as json.</param>
-        /// <param name="projectName">Name of the project.</param>
-        /// <param name="genPath">The path the project should go to</param>
-        /// <returns>Context provider, or error message.</returns>
         [HttpPost]
         public async Task<JsonResult> Generate([FromBody]JObject userSelection, string projectName, string genPath)
         {
@@ -58,7 +49,7 @@ namespace CoreTemplateStudio.Api.Controllers
             GenContext.Current = provider;
 
             await NewProjectGenController.Instance.UpdatedUnsafeGenerateProjectAsync(selection);
-            return Json(Ok(new { wasUpdated = provider }));
+            return Json(Ok(new { result = provider }));
         }
     }
 }

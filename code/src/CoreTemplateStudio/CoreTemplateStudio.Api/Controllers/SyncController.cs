@@ -15,18 +15,6 @@ namespace Microsoft.Templates.Api.Controllers
     [ApiController]
     public class SyncController : Controller
     {
-        // POST: api/sync?platform={platform}&path={path}&language={language}
-        // platform is required (Web for WebTS and Uwp for WinTS), returns a 400 bad request otherwise
-
-        /// <summary>
-        /// POST: api/sync?platform=<>&path=<>&language=<>
-        /// API Endpoint to potentially sync templates used in generation with the cdn or local visx if release or templates folder
-        /// if debug for updates.
-        /// </summary>
-        /// <param name="platform">The platform the caller is generating for. Supports Uwp and Web for now.</param>
-        /// <param name="path">The path to the vsix or the template folder</param>
-        /// <param name="language">The language, which should be one of the ones defined in the engine.</param>
-        /// <returns>JSON result with whether there was a sync or not, and a message detailing error if failed response</returns>
         [HttpPost]
         public async Task<JsonResult> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
         {
