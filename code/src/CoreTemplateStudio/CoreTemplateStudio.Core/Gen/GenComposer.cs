@@ -17,7 +17,6 @@ namespace Microsoft.Templates.Core.Gen
     public class GenComposer
     {
         private const string All = "all";
-        private const string None = "none";
 
         public static IEnumerable<string> GetSupportedProjectTypes(string platform)
         {
@@ -43,10 +42,11 @@ namespace Microsoft.Templates.Core.Gen
         {
             var filtered = GenContext.ToolBox.Repo.GetAll()
                           .Where(t => t.GetTemplateType() == TemplateType.Project
-                          && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
+                          && t.GetProjectTypeList().Contains(projectType)
                           && t.GetPlatform().Equals(platform, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            var result = filtered.SelectMany(t => t.GetFrontEndFrameworkList()).Select(name => new SupportedFramework(name, FrameworkTypes.FrontEnd)).ToList();
+            var result = new List<SupportedFramework>();
+            result.AddRange(filtered.SelectMany(t => t.GetFrontEndFrameworkList()).Select(name => new SupportedFramework(name, FrameworkTypes.FrontEnd)).ToList());
             result.AddRange(filtered.SelectMany(t => t.GetBackEndFrameworkList()).Select(name => new SupportedFramework(name, FrameworkTypes.BackEnd)));
             result = result.Distinct().ToList();
 
@@ -74,14 +74,16 @@ namespace Microsoft.Templates.Core.Gen
 
         private static bool IsMatchFrontEnd(ITemplateInfo info, string frontEndFramework)
         {
-            return frontEndFramework == null || info.GetFrontEndFrameworkList().Contains(frontEndFramework, StringComparer.OrdinalIgnoreCase)
-                                             || info.GetFrontEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
+            return string.IsNullOrEmpty(frontEndFramework)
+                    || info.GetFrontEndFrameworkList().Contains(frontEndFramework, StringComparer.OrdinalIgnoreCase)
+                    || info.GetFrontEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
         }
 
         private static bool IsMatchBackEnd(ITemplateInfo info, string backEndFramework)
         {
-            return backEndFramework == null || info.GetBackEndFrameworkList().Contains(backEndFramework, StringComparer.OrdinalIgnoreCase)
-                                            || info.GetBackEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
+            return string.IsNullOrEmpty(backEndFramework)
+                    || info.GetBackEndFrameworkList().Contains(backEndFramework, StringComparer.OrdinalIgnoreCase)
+                    || info.GetBackEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
         }
 
         [Obsolete("This method has been depricated due to the additional requirement of frontend and backend frameworks, please use GetAllLayoutTemplates() instead.")]
@@ -551,12 +553,12 @@ namespace Microsoft.Templates.Core.Gen
 
             if (!string.IsNullOrEmpty(userSelection.FrontEndFramework))
             {
-                context.Add(new QueryableProperty("frontEndFramework", userSelection.FrontEndFramework));
+                context.Add(new QueryableProperty("frontendframework", userSelection.FrontEndFramework));
             }
 
             if (!string.IsNullOrEmpty(userSelection.BackEndFramework))
             {
-                context.Add(new QueryableProperty("backEndFramework", userSelection.BackEndFramework));
+                context.Add(new QueryableProperty("backendframework", userSelection.BackEndFramework));
             }
 
             var combinedQueue = new List<GenInfo>();

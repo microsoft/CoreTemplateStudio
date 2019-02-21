@@ -171,7 +171,7 @@ namespace Microsoft.Templates.Core
 
         public static List<string> GetFrontEndFrameworkList(this ITemplateInfo ti)
         {
-            var frontEndFrameworks = GetValueFromTag(ti, TagPrefix + "frontEndFramework");
+            var frontEndFrameworks = GetValueFromTag(ti, TagPrefix + "frontendframework");
 
             var result = new List<string>();
 
@@ -185,7 +185,7 @@ namespace Microsoft.Templates.Core
 
         public static List<string> GetBackEndFrameworkList(this ITemplateInfo ti)
         {
-            var backEndFrameworks = GetValueFromTag(ti, TagPrefix + "backEndFramework");
+            var backEndFrameworks = GetValueFromTag(ti, TagPrefix + "backendframework");
 
             var result = new List<string>();
 
