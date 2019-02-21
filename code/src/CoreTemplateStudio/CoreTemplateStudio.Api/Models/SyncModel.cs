@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core;
@@ -29,7 +30,7 @@ namespace Microsoft.Templates.Api.Models
             _installedPackagePath = installedPackagePath;
         }
 
-        public void Sync()
+        public async Task Sync()
         {
 #if DEBUG
             GenContext.Bootstrap(
@@ -37,7 +38,7 @@ namespace Microsoft.Templates.Api.Models
                     _installedPackagePath,
                     "1.0.0.0",
                     string.Empty),
-                new ApiShell(),
+                new ApiGenShell(),
                 new Version(1, 0, 0, 0),
                 _platform,
                 _language);
@@ -48,70 +49,13 @@ namespace Microsoft.Templates.Api.Models
                     _language,
                     _installedPackagePath,
                     new ApiDigitalSignatureService()),
-                new ApiShell(),
+                new ApiGenShell(),
                 new Version(1, 0, 0, 0),
                 _platform,
                 _language);
 #endif
             GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
-            GenContext.ToolBox.Repo.SynchronizeAsync(true).Wait();
-        }
-
-        public bool IsValidLanguage()
-        {
-            // TODO: Validity hard coded for now but will be updated.
-            bool isValid = false;
-
-            // Validate that the language inputted is valid.
-            foreach (string lang in ProgrammingLanguages.GetAllLanguages())
-            {
-                if (lang.Equals(_language, StringComparison.OrdinalIgnoreCase))
-                {
-                    isValid = true;
-                }
-            }
-
-            bool isUwpInvalidLanguage = _language != null ? _platform.Equals(Platforms.Uwp, StringComparison.OrdinalIgnoreCase)
-                                        && _language.Equals(ProgrammingLanguages.Any, StringComparison.OrdinalIgnoreCase)
-                                        : true;
-            bool isWebInvalidLanguage = _language != null ? _platform.Equals(Platforms.Web, StringComparison.OrdinalIgnoreCase)
-                                        && !_language.Equals(ProgrammingLanguages.Any, StringComparison.OrdinalIgnoreCase)
-                                        : true;
-            if (isUwpInvalidLanguage || isWebInvalidLanguage)
-            {
-                // Validity is false if either are true since this is an invalid language + platform combo.
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        public bool IsValidPlatform()
-        {
-            bool isValid = false;
-
-            foreach (string plat in Platforms.GetAllPlatforms())
-            {
-                if (plat.Equals(_platform, StringComparison.OrdinalIgnoreCase))
-                {
-                    isValid = true;
-                }
-            }
-
-            return isValid;
-        }
-
-        public bool IsValidPath()
-        {
-            string suffix = string.Empty;
-#if DEBUG
-            suffix = "/Templates";
-#else
-            suffix = $"{_platform}.{_language}.Templates.mstx";
-#endif
-            return _installedPackagePath != null
-                && suffix == "/Templates" ? Directory.Exists(_installedPackagePath + suffix)
-                                          : File.Exists(_installedPackagePath + suffix);
+            await GenContext.ToolBox.Repo.SynchronizeAsync(true);
         }
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)

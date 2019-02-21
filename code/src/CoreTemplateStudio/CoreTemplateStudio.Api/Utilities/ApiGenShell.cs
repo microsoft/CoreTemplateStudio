@@ -10,7 +10,7 @@ using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Api.Utilities
 {
-    public class ApiShell : GenShell
+    public class ApiGenShell : GenShell
     {
         public override void AddContextItemsToSolution(ProjectInfo projectInfo)
         {

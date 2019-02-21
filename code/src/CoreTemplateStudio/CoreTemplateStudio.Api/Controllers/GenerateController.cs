@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core.Gen;
@@ -24,7 +26,7 @@ namespace CoreTemplateStudio.Api.Controllers
         /// <param name="genPath">The path the project should go to</param>
         /// <returns>Context provider, or error message.</returns>
         [HttpPost]
-        public JsonResult Generate([FromBody]JObject userSelection, string projectName, string genPath)
+        public async Task<JsonResult> Generate([FromBody]JObject userSelection, string projectName, string genPath)
         {
             if (GenContext.ToolBox == null)
             {
@@ -55,7 +57,7 @@ namespace CoreTemplateStudio.Api.Controllers
 
             GenContext.Current = provider;
 
-            NewProjectGenController.Instance.UpdatedUnsafeGenerateProjectAsync(selection).Wait();
+            await NewProjectGenController.Instance.UpdatedUnsafeGenerateProjectAsync(selection);
             return Json(Ok(new { wasUpdated = provider }));
         }
     }

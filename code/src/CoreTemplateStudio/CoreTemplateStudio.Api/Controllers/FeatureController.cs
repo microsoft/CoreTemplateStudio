@@ -38,7 +38,12 @@ namespace CoreTemplateStudio.Api.Controllers
 
             string platform = GenContext.CurrentPlatform;
 
-            IEnumerable<ITemplateInfo> templates = GenComposer.GetFeatures(projectType, platform, frontEndFramework, backEndFramework);
+            IEnumerable<ITemplateInfo> templates = GenComposer.GetFeatures(
+                                                                           projectType,
+                                                                           platform,
+                                                                           frontEndFramework,
+                                                                           backEndFramework);
+
             return Json(Ok(new { items = templates }));
         }
     }

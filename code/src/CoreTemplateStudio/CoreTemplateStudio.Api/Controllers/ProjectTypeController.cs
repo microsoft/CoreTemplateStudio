@@ -2,9 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
 namespace CoreTemplateStudio.Api.Controllers
@@ -26,7 +28,9 @@ namespace CoreTemplateStudio.Api.Controllers
                 return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
             }
 
-            return Json(Ok(new { items = GenContext.ToolBox.Repo.GetProjectTypes().ToList() }));
+            IEnumerable<MetadataInfo> result = GenContext.ToolBox.Repo.GetProjectTypes();
+
+            return Json(Ok(new { items = result }));
         }
     }
 }
