@@ -6,7 +6,7 @@ info:
   version: "1.0.0"
   title: "CoreTemplateStudio Engine API"
   contact:
-    email: "t-dadua@microsoft.com"
+    email: "t-satara@microsoft.com"
 servers:
 - url: "http://localhost:5000/api"
   description: "local server to connect with the engine"
@@ -28,10 +28,25 @@ paths:
     post:
       tags:
       - "generate"
-      summary: "Generate templates from user selections"
+      summary: "Generate templates from user selections given a path and a project name."
       description: "This endpoint parses and validates a JSON of user selections 
-      from the request body and generates the templates accordingly"
+      from the request body and generates the templates to the gen path with the project name provided."
       operationId: "generate"
+      parameters:
+      - in: "query"
+        name: "projectName"
+        description: "The name of the project."
+        required: true
+        schema:
+          type: "string"
+          example: "Test"
+      - in: "query"
+        name: "genPath"
+        description: "The output folder for generation"
+        required: true
+        schema:
+          type: "string"
+          example: "./Output"
       requestBody:
         description: "User selection as JSON. The selections are the keys 
         returned from other (information/detail) endpoints. Note that the
@@ -212,26 +227,161 @@ components:
           type: "string"
         projectType:
           type: "string"
-        frontend:
+        frontEndFramework:
           type: "string"
-        backend:
+        backEndFramework:
+          type: "string"
+        language:
+          type: "string"
+        homeName:
           type: "string"
         pages:
           type: "array"
           items:
-            type: "string"
+            type: "object"
         features:
           type: "array"
           items:
-            type: "string"
+            type: "object"
       example:
         {
-          "platform": "Web",
-          "projectType": "MultiPageFull",
-          "frontend": "ReactJS",
-          "backend": "NodeJS",
-          "pages": ["blankWeb", "blog"],
-          "features": ["azureDatabase", "azureFunctions"]
+            "ProjectType": "FullStackWebApp",
+            "FrontEndFramework": "ReactJS",
+            "BackEndFramework": "NodeJS",
+            "Language": "Any",
+            "HomeName": "Test",
+            "Features": [],
+            "Platform": "Web",
+            "Pages":
+            [
+              {
+                "Name": "HomePageTest",
+                "Template": 
+                    {
+                        "configMountPointId": "a140f98f-6c53-43ef-8cfb-3dcb96360c03",
+                        "author": "Microsoft",
+                        "classifications": [
+                            "Universal"
+                        ],
+                        "defaultName": null,
+                        "description": "This is the most html basic page.",
+                        "identity": "wts.Page.Html.Blank",
+                        "generatorId": "0c434df7-e2cb-4dee-b216-d7c58c8eb4b3",
+                        "groupIdentity": "wts.Page.Html.Blank",
+                        "precedence": 0,
+                        "name": "Html Blank",
+                        "shortName": null,
+                        "tags": {
+                            "language": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "Any": ""
+                                },
+                                "defaultValue": "Any"
+                            },
+                            "type": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "item": ""
+                                },
+                                "defaultValue": "item"
+                            },
+                            "wts.type": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "page": ""
+                                },
+                                "defaultValue": "page"
+                            },
+                            "wts.platform": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "Web": ""
+                                },
+                                "defaultValue": "Web"
+                            },
+                            "wts.projecttype": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "FullStackWebApp": ""
+                                },
+                                "defaultValue": "FullStackWebApp"
+                            },
+                            "wts.frontEndFramework": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "all": ""
+                                },
+                                "defaultValue": "all"
+                            },
+                            "wts.backEndFramework": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "all": ""
+                                },
+                                "defaultValue": "all"
+                            },
+                            "wts.version": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "1.0.0": ""
+                                },
+                                "defaultValue": "1.0.0"
+                            },
+                            "wts.displayOrder": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "1": ""
+                                },
+                                "defaultValue": "1"
+                            },
+                            "wts.genGroup": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "0": ""
+                                },
+                                "defaultValue": "0"
+                            },
+                            "wts.rightClickEnabled": {
+                                "description": null,
+                                "choicesAndDescriptions": {
+                                    "true": ""
+                                },
+                                "defaultValue": "true"
+                            }
+                        },
+                        "cacheParameters": {
+                            "wts.rootNamespace": {
+                                "dataType": null,
+                                "defaultValue": null,
+                                "description": ""
+                            },
+                            "wts.itemNamespace": {
+                                "dataType": null,
+                                "defaultValue": null,
+                                "description": ""
+                            },
+                            "baseclass": {
+                                "dataType": null,
+                                "defaultValue": null,
+                                "description": ""
+                            },
+                            "setter": {
+                                "dataType": null,
+                                "defaultValue": null,
+                                "description": ""
+                            }
+                        },
+                        "configPlace": "/Web/Pages/Html.Blank/.template.config/template.json",
+                        "localeConfigMountPointId": "00000000-0000-0000-0000-000000000000",
+                        "localeConfigPlace": null,
+                        "hostConfigMountPointId": "00000000-0000-0000-0000-000000000000",
+                        "hostConfigPlace": null,
+                        "thirdPartyNotices": null,
+                        "baselineInfo": {}
+                    }
+              }
+            ]
         }
   responses:
     FeatureResponse:
@@ -453,9 +603,27 @@ components:
             properties:
               value:
                 type: "object"
-                properties:
-                  wasGenerated:
-                    type: "boolean"
+                example: 
+                  "response":
+                    {
+                      "projectName": "Test",
+                      "safeProjectName": "Test",
+                      "generationOutputPath": "./Output",
+                      "destinationPath": "./Output",
+                      "projectInfo": {
+                          "projects": [],
+                          "projectItems": [],
+                          "sdkReferences": [],
+                          "nugetReferences": [],
+                          "projectReferences": []
+                      },
+                      "filesToOpen": [],
+                      "failedMergePostActions": [],
+                      "mergeFilesFromProject": {},
+                      "projectMetrics": {
+                          "Generation": 0.2124428
+                      }
+                    }
               statusCode:
                 type: "integer"
                 example: 200
