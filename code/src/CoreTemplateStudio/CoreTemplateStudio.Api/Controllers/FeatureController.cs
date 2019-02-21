@@ -14,15 +14,6 @@ namespace CoreTemplateStudio.Api.Controllers
     [ApiController]
     public class FeatureController : Controller
     {
-        /// <summary>
-        /// GET api/feature?projectType=<>&frontEndFramework=<>&backEndFramework
-        /// Given a project type, and possibly either a frontend and backend framework
-        /// will return a list of features supported by these filters.
-        /// </summary>
-        /// <param name="projectType">Project Type that was selected by the user</param>
-        /// <param name="frontEndFramework">The frontend framework that was selected by the user</param>
-        /// <param name="backEndFramework">The backend framework that was selected by the user</param>
-        /// <returns>A list of features that match with the filters given.</returns>
         [HttpGet]
         public JsonResult GetFeaturesForFrameworks(string projectType, string frontEndFramework, string backEndFramework)
         {
