@@ -135,14 +135,14 @@ namespace Microsoft.Templates.Core
 
         public IEnumerable<MetadataInfo> GetFrontEndFrameworks()
         {
-            IEnumerable<MetadataInfo> result = GetMetadataInfo("frontEndFramework");
+            IEnumerable<MetadataInfo> result = GetMetadataInfo("frontendframeworks");
             result.ToList().ForEach(meta => meta.Tags["type"] = "frontend");
             return result;
         }
 
         public IEnumerable<MetadataInfo> GetBackEndFrameworks()
         {
-            IEnumerable<MetadataInfo> result = GetMetadataInfo("backEndFramework");
+            IEnumerable<MetadataInfo> result = GetMetadataInfo("backendframeworks");
             result.ToList().ForEach(meta => meta.Tags["type"] = "backend");
             return result;
         }
