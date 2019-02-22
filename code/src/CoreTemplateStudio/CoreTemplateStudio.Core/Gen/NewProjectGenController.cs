@@ -43,7 +43,7 @@ namespace Microsoft.Templates.Core.Gen
         {
             VerifyGenContextPaths();
 
-            var genItems = GenComposer.ComposeFromSelection(userSelection).ToList();
+            var genItems = GenComposer.Compose(userSelection).ToList();
 
             var chrono = Stopwatch.StartNew();
             var genResults = await GenerateItemsAsync(genItems, false);
