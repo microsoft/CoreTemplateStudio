@@ -2,8 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.TemplateEngine.Edge.Settings.TemplateInfoReaders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.Templates.Api.Extensions;
+using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
 using Newtonsoft.Json.Linq;
@@ -32,12 +37,12 @@ namespace Microsoft.Templates.Api.Utilities
                 HomeName = obj.ToString(nameof(UserSelection.HomeName)),
             };
 
-            AddTemplateInfo(userSelection, obj, nameof(UserSelection.Pages));
-            AddTemplateInfo(userSelection, obj, nameof(UserSelection.Features));
+            AddTemplateInfo(userSelection, obj, nameof(UserSelection.Pages), TemplateType.Page);
+            AddTemplateInfo(userSelection, obj, nameof(UserSelection.Features), TemplateType.Feature);
             return userSelection;
         }
 
-        private void AddTemplateInfo(UserSelection selection, JObject obj, string path)
+        private void AddTemplateInfo(UserSelection selection, JObject obj, string path, TemplateType type)
         {
             JArray items = obj.Get<JArray>(path);
 
@@ -46,14 +51,44 @@ namespace Microsoft.Templates.Api.Utilities
                 return;
             }
 
+            List<ITemplateInfo> allTemplatesOfType = new List<ITemplateInfo>();
+
+            if (type == TemplateType.Page)
+            {
+                allTemplatesOfType = GenComposer.GetPages(
+                                        selection.ProjectType,
+                                        selection.Platform,
+                                        selection.FrontEndFramework,
+                                        selection.BackEndFramework).ToList();
+            }
+            else if (type == TemplateType.Feature)
+            {
+                allTemplatesOfType = GenComposer.GetFeatures(
+                                        selection.ProjectType,
+                                        selection.Platform,
+                                        selection.FrontEndFramework,
+                                        selection.BackEndFramework).ToList();
+            }
+            else
+            {
+                return;
+            }
+
             foreach (JObject item in items)
             {
-                JObject template = item.Get<JObject>("Template");
+                string templateName = item.ToString("Template");
+
+                ITemplateInfo template = allTemplatesOfType.Where(t => t.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase))
+                                                           .First();
+                if (template == null)
+                {
+                    continue;
+                }
 
                 TemplateInfo templateInfo = new TemplateInfo
                 {
                     Name = item.ToString("name").MakeSafeProjectName(),
-                    Template = TemplateInfoReaderVersion1_0_0_0.FromJObject(template),
+                    Template = template,
                 };
 
                 selection.Add(templateInfo);
