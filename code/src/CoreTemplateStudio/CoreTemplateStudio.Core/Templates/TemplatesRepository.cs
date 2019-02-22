@@ -127,12 +127,6 @@ namespace Microsoft.Templates.Core
             return GetProjectTypes().Where(m => m.Platforms.Contains(platform));
         }
 
-        [Obsolete("This method is depricated due to the new requirement of having frontend and backend frameworks, please use GetFrontEndFrameworks() or GetBackEndFrameworks() instead.")]
-        public IEnumerable<MetadataInfo> GetFrameworks()
-        {
-            return GetMetadataInfo("frameworks");
-        }
-
         public IEnumerable<MetadataInfo> GetFrontEndFrameworks()
         {
             IEnumerable<MetadataInfo> result = GetMetadataInfo("frontendframeworks");
@@ -145,14 +139,6 @@ namespace Microsoft.Templates.Core
             IEnumerable<MetadataInfo> result = GetMetadataInfo("backendframeworks");
             result.ToList().ForEach(meta => meta.Tags["type"] = "backend");
             return result;
-        }
-
-        public IEnumerable<MetadataInfo> GetFrameworks(string platform)
-        {
-            // Essentially an ignore case contains on the platforms list
-            return GetFrameworks().Where(m => m.Platforms
-                                              .ToList()
-                                              .Any(item => item.Equals(platform, StringComparison.OrdinalIgnoreCase)));
         }
 
         private IEnumerable<MetadataInfo> GetMetadataInfo(string type)

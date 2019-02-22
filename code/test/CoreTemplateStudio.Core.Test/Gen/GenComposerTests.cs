@@ -39,7 +39,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var frameworks = GenComposer.GetAllSupportedFx("pt1", TestPlatform);
+            var frameworks = GenComposer.GetSupportedFx("pt1", TestPlatform);
 
             Assert.Collection(frameworks, e1 =>
             {
@@ -53,7 +53,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var frameworks = GenComposer.GetAllSupportedFx("pt3", TestPlatform);
+            var frameworks = GenComposer.GetSupportedFx("pt3", TestPlatform);
 
             Assert.Collection(
                 frameworks,

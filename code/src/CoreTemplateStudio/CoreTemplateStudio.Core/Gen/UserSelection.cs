@@ -21,20 +21,6 @@ namespace Microsoft.Templates.Core.Gen
 
     public class UserSelection
     {
-        [Obsolete("This constructor has been depricated due to the additional requirement of frontend and backend frameworks, please use the constructor that uses both frontend and backend frameworks.")]
-        public UserSelection(string projectType, string framework, string platform, string language)
-        {
-            if (string.IsNullOrWhiteSpace(language))
-            {
-                throw new ArgumentNullException(nameof(language));
-            }
-
-            ProjectType = projectType;
-            Framework = framework;
-            Platform = platform;
-            Language = language;
-        }
-
         public UserSelection(string projectType, string frontEndFramework, string backEndFramework, string platform, string language)
         {
             if (string.IsNullOrWhiteSpace(language))
@@ -50,9 +36,6 @@ namespace Microsoft.Templates.Core.Gen
         }
 
         public string ProjectType { get; set; }
-
-        [Obsolete("This property has been depricated due to the additional requirement of frontend and backend frameworks, please use FrontEndFramework and BackEndFramework instead.")]
-        public string Framework { get; set; }
 
         public string FrontEndFramework { get; set; }
 

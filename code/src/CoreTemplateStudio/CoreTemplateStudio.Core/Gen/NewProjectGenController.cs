@@ -25,21 +25,7 @@ namespace Microsoft.Templates.Core.Gen
             PostactionFactory = new NewProjectPostActionFactory();
         }
 
-        [Obsolete("This method has been depricated due to the additional requirement of frontend and backend frameworks, please use UpdatedUnsafeGenerateProjectAsync instead.")]
         public async Task UnsafeGenerateProjectAsync(UserSelection userSelection)
-        {
-            VerifyGenContextPaths();
-
-            var genItems = GenComposer.Compose(userSelection).ToList();
-
-            var chrono = Stopwatch.StartNew();
-            var genResults = await GenerateItemsAsync(genItems, false);
-            chrono.Stop();
-
-            TrackTelemetry(genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, userSelection.Framework, userSelection.Platform, userSelection.Language);
-        }
-
-        public async Task UpdatedUnsafeGenerateProjectAsync(UserSelection userSelection)
         {
             VerifyGenContextPaths();
 

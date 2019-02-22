@@ -155,20 +155,6 @@ namespace Microsoft.Templates.Core
                         .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
         }
 
-        [Obsolete("This method has been deprecated due to the addition of frontend and backend frameworks, please use GetFrontEndFrameworkList or GetBackEndFramework instead.")]
-        public static List<string> GetFrameworkList(this ITemplateInfo ti)
-        {
-            var frameworks = GetValueFromTag(ti, TagPrefix + "framework");
-            var result = new List<string>();
-
-            if (!string.IsNullOrEmpty(frameworks))
-            {
-                result.AddRange(frameworks.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-            }
-
-            return result;
-        }
-
         public static List<string> GetFrontEndFrameworkList(this ITemplateInfo ti)
         {
             var frontEndFrameworks = GetValueFromTag(ti, TagPrefix + "frontendframework");
