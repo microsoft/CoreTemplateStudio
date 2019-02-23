@@ -30,7 +30,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 return Json(BadRequest(new { message = "Invalid project type" }));
             }
 
-            var projectFrameworks = GenComposer.GetAllSupportedFx(projectType, GenContext.CurrentPlatform).ToList();
+            var projectFrameworks = GenComposer.GetSupportedFx(projectType, GenContext.CurrentPlatform).ToList();
 
             var targetFrontEndFrameworks = GenContext.ToolBox
                                                      .Repo

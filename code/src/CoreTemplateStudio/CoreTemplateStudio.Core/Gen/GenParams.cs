@@ -15,8 +15,6 @@ namespace Microsoft.Templates.Core.Gen
         public const string TemplatesVersion = "wts.templatesVersion";
         public const string HomePageName = "wts.homePageName";
         public const string ProjectType = "wts.generationProjectType";
-        [Obsolete("This attribute is depricated, please use FrontEndFramework and BackEndFramework")]
-        public const string Framework = "wts.generationFramework";
         public const string FrontEndFramework = "wts.generationFrontEndFramework";
         public const string BackEndFramework = "wts.generationBackEndFramework";
         public const string Platform = "wts.generationPlatform";

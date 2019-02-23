@@ -48,7 +48,7 @@ namespace CoreTemplateStudio.Api.Controllers
 
             GenContext.Current = provider;
 
-            await NewProjectGenController.Instance.UpdatedUnsafeGenerateProjectAsync(selection);
+            await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(selection);
             return Json(Ok(new { result = provider }));
         }
     }
