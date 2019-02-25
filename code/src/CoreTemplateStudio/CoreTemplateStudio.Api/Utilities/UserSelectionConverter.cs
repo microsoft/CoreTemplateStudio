@@ -76,9 +76,9 @@ namespace Microsoft.Templates.Api.Utilities
 
             foreach (JObject item in items)
             {
-                string templateName = item.ToString("Template");
+                string templateIdentity = item.ToString("Template");
 
-                ITemplateInfo template = allTemplatesOfType.Where(t => t.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase))
+                ITemplateInfo template = allTemplatesOfType.Where(t => t.Identity.Equals(templateIdentity, StringComparison.OrdinalIgnoreCase))
                                                            .First();
                 if (template == null)
                 {
