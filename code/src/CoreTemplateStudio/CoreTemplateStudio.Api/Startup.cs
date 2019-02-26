@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using CoreTemplateStudio.Api.Extensions.Filters;
+using CoreTemplateStudio.Api.Extensions.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +52,10 @@ namespace CoreTemplateStudio.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("AllowAll").UseMvc();
+            app
+              .UseMiddleware<ErrorHandlerMiddleware>()
+              .UseCors("AllowAll")
+              .UseMvc();
         }
     }
 }
