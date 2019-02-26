@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using CoreTemplateStudio.Api.Extensions.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,8 @@ namespace CoreTemplateStudio.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ValidateGenContextFilter>();
+
             // Adds Cors policy for swagger docs response, since this is a local server this should be fine.
             services.AddCors(options =>
              {

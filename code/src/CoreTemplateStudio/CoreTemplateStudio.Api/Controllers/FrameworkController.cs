@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using CoreTemplateStudio.Api.Extensions.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates;
 using Microsoft.Templates.Core;
@@ -15,16 +15,12 @@ namespace CoreTemplateStudio.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateGenContextFilter]
     public class FrameworkController : Controller
     {
         [HttpGet]
         public JsonResult GetFrameworks(string projectType)
         {
-            if (GenContext.ToolBox == null)
-            {
-                return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
-            }
-
             if (projectType == null)
             {
                 return Json(BadRequest(new { message = "Invalid project type" }));
