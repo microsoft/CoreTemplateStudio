@@ -18,21 +18,24 @@ namespace CoreTemplateStudio.Api.Controllers
     public class GenerateController : Controller
     {
         [HttpPost]
-        public async Task<JsonResult> Generate([FromBody]JObject userSelection, string projectName, string genPath)
+        public async Task<ActionResult<ContextProvider>> Generate([FromBody] JObject userSelection, string projectName, string genPath)
         {
             if (userSelection == null)
             {
-                return Json(BadRequest(new { message = "Invalid user selection" }));
-            }
-            else if (string.IsNullOrEmpty(projectName))
-            {
-                return Json(BadRequest(new { message = "Invalid project name" }));
-            }
-            else if (string.IsNullOrEmpty(genPath))
-            {
-                return Json(BadRequest(new { message = "Invalid generation path" }));
+                return BadRequest(new { message = "Invalid user selection" });
             }
 
+            if (string.IsNullOrEmpty(projectName))
+            {
+                return BadRequest(new { message = "Invalid project name" });
+            }
+
+            if (string.IsNullOrEmpty(genPath))
+            {
+                return BadRequest(new { message = "Invalid generation path" });
+            }
+
+            // TODO: User selection shold be obtained from params and delete UserSelectionConverter
             UserSelection selection = UserSelectionConverter.FromJObject(userSelection);
 
             ContextProvider provider = new ContextProvider()
@@ -45,7 +48,7 @@ namespace CoreTemplateStudio.Api.Controllers
             GenContext.Current = provider;
 
             await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(selection);
-            return Json(Ok(new { result = provider }));
+            return provider;
         }
     }
 }

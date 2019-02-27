@@ -17,11 +17,11 @@ namespace CoreTemplateStudio.Api.Controllers
     public class ProjectTypeController : Controller
     {
         [HttpGet]
-        public JsonResult GetProjectTypes()
+        public List<MetadataInfo> GetProjectTypes()
         {
-            IEnumerable<MetadataInfo> result = GenContext.ToolBox.Repo.GetProjectTypes();
+            var result = GenContext.ToolBox.Repo.GetProjectTypes();
 
-            return Json(Ok(new { items = result }));
+            return result.ToList();
         }
     }
 }

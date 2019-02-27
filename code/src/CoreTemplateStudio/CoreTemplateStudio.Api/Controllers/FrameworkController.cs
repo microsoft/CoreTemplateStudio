@@ -19,11 +19,11 @@ namespace CoreTemplateStudio.Api.Controllers
     public class FrameworkController : Controller
     {
         [HttpGet]
-        public JsonResult GetFrameworks(string projectType)
+        public ActionResult<List<MetadataInfo>> GetFrameworks(string projectType)
         {
             if (projectType == null)
             {
-                return Json(BadRequest(new { message = "Invalid project type" }));
+                return BadRequest(new { message = "Invalid project type" });
             }
 
             var projectFrameworks = GenComposer.GetSupportedFx(projectType, GenContext.CurrentPlatform).ToList();
@@ -33,24 +33,20 @@ namespace CoreTemplateStudio.Api.Controllers
                                                      .GetFrontEndFrameworks()
                                                      .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.FrontEnd)
                                                                   .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
-                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))))
-                                                     .ToList();
+                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))));
 
             var targetBackEndFrameworks = GenContext.ToolBox
                                                      .Repo
                                                      .GetBackEndFrameworks()
                                                      .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.BackEnd)
                                                                   .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
-                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))))
-                                                     .ToList();
+                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))));
 
             List<MetadataInfo> targetFrameworks = new List<MetadataInfo>();
-
             targetFrameworks.AddRange(targetFrontEndFrameworks);
-
             targetFrameworks.AddRange(targetBackEndFrameworks);
 
-            return Json(Ok(new { items = targetFrameworks }));
+            return targetFrameworks;
         }
     }
 }
