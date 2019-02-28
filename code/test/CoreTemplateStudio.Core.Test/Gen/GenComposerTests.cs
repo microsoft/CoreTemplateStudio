@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.Templates.Core.Gen;
+
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test

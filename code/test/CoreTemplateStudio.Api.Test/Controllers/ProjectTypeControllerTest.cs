@@ -1,17 +1,21 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+using FluentAssertions;
+
 using Microsoft.Templates.Api.Test.ResponseModels;
 using Microsoft.Templates.Api.Test.Utilities;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 using Microsoft.Templates.Core.Test.TestFakes;
+
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 using Xunit;
 
 namespace Microsoft.Templates.Api.Test.Controllers
