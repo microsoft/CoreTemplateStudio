@@ -42,6 +42,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 || !Enumerable.SequenceEqual(originalEncoding.GetPreamble(), otherEncoding.GetPreamble()))
             {
                 HandleMismatchedEncodings(originalFilePath, Config.FilePath, originalEncoding, otherEncoding);
+                return;
             }
 
             IEnumerable<string> result = source.Merge(merge, out string errorLine);
