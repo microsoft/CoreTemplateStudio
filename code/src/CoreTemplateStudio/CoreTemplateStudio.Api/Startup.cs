@@ -51,6 +51,9 @@ namespace CoreTemplateStudio.Api
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Disable automatic model validation to use ValidateModelStateFilter
+            services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,6 +4,7 @@
 
 using System.Threading.Tasks;
 using CoreTemplateStudio.Api.Extensions.Filters;
+using CoreTemplateStudio.Api.Models.Generation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core.Gen;
@@ -18,13 +19,9 @@ namespace CoreTemplateStudio.Api.Controllers
     public class GenerateController : Controller
     {
         [HttpPost]
-        public async Task<ActionResult<ContextProvider>> Generate([FromBody] JObject userSelection, string projectName, string genPath)
+        public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData, string projectName, string genPath)
         {
-            if (userSelection == null)
-            {
-                return BadRequest(new { message = "Invalid user selection" });
-            }
-
+            // TODO: Add projectName and genPath to Generation data, add validation and remove this ifs
             if (string.IsNullOrEmpty(projectName))
             {
                 return BadRequest(new { message = "Invalid project name" });
@@ -35,8 +32,7 @@ namespace CoreTemplateStudio.Api.Controllers
                 return BadRequest(new { message = "Invalid generation path" });
             }
 
-            // TODO: User selection shold be obtained from params and delete UserSelectionConverter
-            UserSelection selection = UserSelectionConverter.FromJObject(userSelection);
+            var userSelection = generationData.ToUserSelection();
 
             ContextProvider provider = new ContextProvider()
             {
@@ -47,7 +43,7 @@ namespace CoreTemplateStudio.Api.Controllers
 
             GenContext.Current = provider;
 
-            await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(selection);
+            await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(userSelection);
             return provider;
         }
     }

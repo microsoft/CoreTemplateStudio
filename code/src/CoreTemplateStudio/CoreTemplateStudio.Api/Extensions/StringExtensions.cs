@@ -5,7 +5,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace Microsoft.Templates.Api.Extensions
+namespace System
 {
     // TODO move to a Shared project of some kind (Look at tests too)
     internal static class StringExtensions
