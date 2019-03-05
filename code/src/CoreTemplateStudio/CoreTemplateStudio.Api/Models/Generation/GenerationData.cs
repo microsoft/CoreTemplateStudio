@@ -13,6 +13,12 @@ namespace CoreTemplateStudio.Api.Models.Generation
 {
     public class GenerationData
     {
+        [Required(ErrorMessage = "Invalid project name")]
+        public string ProjectName { get; set; }
+
+        [Required(ErrorMessage = "Invalid generation path")]
+        public string GenPath { get; set; }
+
         [Required]
         public string ProjectType { get; set; }
 

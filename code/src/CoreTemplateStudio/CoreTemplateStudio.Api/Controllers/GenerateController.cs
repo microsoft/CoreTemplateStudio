@@ -19,31 +19,21 @@ namespace CoreTemplateStudio.Api.Controllers
     public class GenerateController : Controller
     {
         [HttpPost]
-        public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData, string projectName, string genPath)
+        public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
-            // TODO: Add projectName and genPath to Generation data, add validation and remove this ifs
-            if (string.IsNullOrEmpty(projectName))
-            {
-                return BadRequest(new { message = "Invalid project name" });
-            }
-
-            if (string.IsNullOrEmpty(genPath))
-            {
-                return BadRequest(new { message = "Invalid generation path" });
-            }
-
-            var userSelection = generationData.ToUserSelection();
-
             ContextProvider provider = new ContextProvider()
             {
-                ProjectName = projectName,
-                GenerationOutputPath = genPath,
-                DestinationPath = genPath,
+                ProjectName = generationData.ProjectName,
+                GenerationOutputPath = generationData.GenPath,
+                DestinationPath = generationData.GenPath,
             };
 
             GenContext.Current = provider;
 
+            var userSelection = generationData.ToUserSelection();
             await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(userSelection);
+
+            // TODO: We should generationOutputPath??
             return provider;
         }
     }
