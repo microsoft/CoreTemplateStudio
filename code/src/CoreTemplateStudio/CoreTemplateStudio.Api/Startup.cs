@@ -25,7 +25,7 @@ namespace CoreTemplateStudio.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ValidateGenContextFilter>();
+            services.AddSingleton<ValidateGenContextFilter>();
 
             // Adds Cors policy for swagger docs response, since this is a local server this should be fine.
             services.AddCors(options =>
@@ -53,24 +53,7 @@ namespace CoreTemplateStudio.Api
             // Validation controller models
             services.Configure<ApiBehaviorOptions>(options =>
             {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    var problemDetails = new ValidationProblemDetails(context.ModelState)
-                    {
-                        Instance = context.HttpContext.Request.Path,
-                        Status = StatusCodes.Status400BadRequest,
-                        Type = $"https://httpstatuses.com/400",
-                        Detail = "Invalid input data. See additional details in 'errors' property.",
-                    };
-                    return new BadRequestObjectResult(problemDetails)
-                    {
-                        ContentTypes =
-                        {
-                            "application/problem+json",
-                            "application/problem+xml",
-                        },
-                    };
-                };
+                options.InvalidModelStateResponseFactory = context => GetValidationModelError(context);
             });
         }
 
@@ -86,6 +69,22 @@ namespace CoreTemplateStudio.Api
               .UseMiddleware<ErrorHandlerMiddleware>()
               .UseCors("AllowAll")
               .UseMvc();
+        }
+
+        public static BadRequestObjectResult GetValidationModelError(ActionContext context)
+        {
+            var problemDetails = new ValidationProblemDetails(context.ModelState)
+            {
+                Instance = context.HttpContext.Request.Path,
+                Status = StatusCodes.Status400BadRequest,
+                Type = $"https://httpstatuses.com/400",
+                Detail = "Invalid input data. See additional details in 'errors' property.",
+            };
+
+            return new BadRequestObjectResult(problemDetails)
+            {
+                ContentTypes = { "application/problem+json", "application/problem+xml" },
+            };
         }
     }
 }
