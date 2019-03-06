@@ -5,6 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoreTemplateStudio.Api.Extensions.Middlewares
 {
@@ -29,18 +30,34 @@ namespace CoreTemplateStudio.Api.Extensions.Middlewares
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
+            context.Response.ContentType = "application/problem+json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            var error = new HttpErrorMessage()
+            var problemDetailResult = GetError(context, exception);
+            await context.ExecuteResultAsync(problemDetailResult);
+        }
+
+        private static ObjectResult GetError(HttpContext context, Exception exception)
+        {
+            var problemDetails = new ProblemDetails
             {
-                StatusCode = context.Response.StatusCode,
-                UserMessage = $"Internal Server Error from the custom middleware. {exception.Message}",
+                Instance = context.Request.Path,
+                Status = context.Response.StatusCode,
+                Type = $"https://httpstatuses.com/{context.Response.StatusCode}",
+                Detail = $"Internal Server Error from the custom middleware. {exception.Message}",
             };
 
-            return context.Response.WriteAsync(error.ToString());
+            return new ObjectResult(problemDetails)
+            {
+                StatusCode = context.Response.StatusCode,
+                ContentTypes =
+                {
+                    "application/problem+json",
+                    "application/problem+xml",
+                },
+            };
         }
     }
 }

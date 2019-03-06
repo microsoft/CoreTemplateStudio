@@ -17,16 +17,34 @@ namespace CoreTemplateStudio.Api.Extensions.Filters
         {
             if (GenContext.ToolBox == null)
             {
-                var result = new ObjectResult("You must first sync templates before calling this endpoint")
-                {
-                    StatusCode = StatusCodes.Status500InternalServerError,
-                };
-
-                context.Result = result;
+                context.Result = GetError(context);
                 return;
             }
 
             await next();
+        }
+
+        private ObjectResult GetError(ActionExecutingContext context)
+        {
+            var statusCode = StatusCodes.Status403Forbidden;
+
+            var problemDetails = new ProblemDetails
+            {
+                Instance = context.HttpContext.Request.Path,
+                Status = statusCode,
+                Type = $"https://httpstatuses.com/{statusCode}",
+                Detail = "You must first sync templates before calling this endpoint.",
+            };
+
+            return new ObjectResult(problemDetails)
+            {
+                StatusCode = statusCode,
+                ContentTypes =
+                {
+                    "application/problem+json",
+                    "application/problem+xml",
+                },
+            };
         }
     }
 }

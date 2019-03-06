@@ -6,6 +6,7 @@ using CoreTemplateStudio.Api.Extensions.Filters;
 using CoreTemplateStudio.Api.Extensions.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,10 +42,7 @@ namespace CoreTemplateStudio.Api
                      });
              });
 
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(ValidateModelStateFilter));
-            })
+            services.AddMvc()
             .AddJsonOptions(options =>
             {
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
@@ -52,8 +50,28 @@ namespace CoreTemplateStudio.Api
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // Disable automatic model validation to use ValidateModelStateFilter
-            services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+            // Validation controller models
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var problemDetails = new ValidationProblemDetails(context.ModelState)
+                    {
+                        Instance = context.HttpContext.Request.Path,
+                        Status = StatusCodes.Status400BadRequest,
+                        Type = $"https://httpstatuses.com/400",
+                        Detail = "Invalid input data. See additional details in 'errors' property.",
+                    };
+                    return new BadRequestObjectResult(problemDetails)
+                    {
+                        ContentTypes =
+                        {
+                            "application/problem+json",
+                            "application/problem+xml",
+                        },
+                    };
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
