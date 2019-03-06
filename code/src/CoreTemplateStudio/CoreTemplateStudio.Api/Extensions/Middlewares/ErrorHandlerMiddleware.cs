@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CoreTemplateStudio.Api.Extensions.Middlewares
 {
@@ -36,10 +37,10 @@ namespace CoreTemplateStudio.Api.Extensions.Middlewares
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             var problemDetailResult = GetError(context, exception);
-            await context.ExecuteResultAsync(problemDetailResult);
+            await context.Response.WriteAsync(problemDetailResult);
         }
 
-        private static ObjectResult GetError(HttpContext context, Exception exception)
+        private static string GetError(HttpContext context, Exception exception)
         {
             var problemDetails = new ProblemDetails
             {
@@ -49,15 +50,7 @@ namespace CoreTemplateStudio.Api.Extensions.Middlewares
                 Detail = $"Internal Server Error from the custom middleware. {exception.Message}",
             };
 
-            return new ObjectResult(problemDetails)
-            {
-                StatusCode = context.Response.StatusCode,
-                ContentTypes =
-                {
-                    "application/problem+json",
-                    "application/problem+xml",
-                },
-            };
+            return JsonConvert.SerializeObject(problemDetails);
         }
     }
 }
