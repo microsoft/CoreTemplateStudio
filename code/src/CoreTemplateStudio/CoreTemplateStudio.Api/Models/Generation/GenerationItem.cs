@@ -10,7 +10,7 @@ namespace CoreTemplateStudio.Api.Models.Generation
     public class GenerationItem
     {
         [Required]
-        public string Template { get; set; }
+        public string TemplateId { get; set; }
 
         [Required]
         public string Name { get; set; }

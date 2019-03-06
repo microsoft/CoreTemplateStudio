@@ -83,7 +83,7 @@ namespace CoreTemplateStudio.Api.Models.Generation
         {
             foreach (var item in items)
             {
-                var template = templates.FirstOrDefault(t => t.Identity.Equals(item.Template, StringComparison.OrdinalIgnoreCase));
+                var template = templates.FirstOrDefault(t => t.Identity.Equals(item.TemplateId, StringComparison.OrdinalIgnoreCase));
 
                 if (template != null)
                 {
