@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Threading.Tasks;
-
+using CoreTemplateStudio.Api.Extensions.Filters;
+using CoreTemplateStudio.Api.Models.Generation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core.Gen;
@@ -14,42 +15,26 @@ namespace CoreTemplateStudio.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateGenContextFilter]
     public class GenerateController : Controller
     {
         [HttpPost]
-        public async Task<JsonResult> Generate([FromBody]JObject userSelection, string projectName, string genPath)
+        public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
-            if (GenContext.ToolBox == null)
-            {
-                return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
-            }
-
-            if (userSelection == null)
-            {
-                return Json(BadRequest(new { message = "Invalid user selection" }));
-            }
-            else if (string.IsNullOrEmpty(projectName))
-            {
-                return Json(BadRequest(new { message = "Invalid project name" }));
-            }
-            else if (string.IsNullOrEmpty(genPath))
-            {
-                return Json(BadRequest(new { message = "Invalid generation path" }));
-            }
-
-            UserSelection selection = UserSelectionConverter.FromJObject(userSelection);
-
             ContextProvider provider = new ContextProvider()
             {
-                ProjectName = projectName,
-                GenerationOutputPath = genPath,
-                DestinationPath = genPath,
+                ProjectName = generationData.ProjectName,
+                GenerationOutputPath = generationData.GenPath,
+                DestinationPath = generationData.GenPath,
             };
 
             GenContext.Current = provider;
 
-            await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(selection);
-            return Json(Ok(new { result = provider }));
+            var userSelection = generationData.ToUserSelection();
+            await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(userSelection);
+
+            // TODO: We should generationOutputPath??
+            return provider;
         }
     }
 }

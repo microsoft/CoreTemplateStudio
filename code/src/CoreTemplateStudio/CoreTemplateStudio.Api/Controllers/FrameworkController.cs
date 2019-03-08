@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using CoreTemplateStudio.Api.Extensions.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates;
 using Microsoft.Templates.Core;
@@ -15,19 +15,15 @@ namespace CoreTemplateStudio.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateGenContextFilter]
     public class FrameworkController : Controller
     {
         [HttpGet]
-        public JsonResult GetFrameworks(string projectType)
+        public ActionResult<List<MetadataInfo>> GetFrameworks(string projectType)
         {
-            if (GenContext.ToolBox == null)
-            {
-                return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
-            }
-
             if (projectType == null)
             {
-                return Json(BadRequest(new { message = "Invalid project type" }));
+                return BadRequest(new { message = "Invalid project type" });
             }
 
             var projectFrameworks = GenComposer.GetSupportedFx(projectType, GenContext.CurrentPlatform).ToList();
@@ -37,24 +33,20 @@ namespace CoreTemplateStudio.Api.Controllers
                                                      .GetFrontEndFrameworks()
                                                      .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.FrontEnd)
                                                                   .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
-                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))))
-                                                     .ToList();
+                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))));
 
             var targetBackEndFrameworks = GenContext.ToolBox
                                                      .Repo
                                                      .GetBackEndFrameworks()
                                                      .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.BackEnd)
                                                                   .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
-                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))))
-                                                     .ToList();
+                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))));
 
             List<MetadataInfo> targetFrameworks = new List<MetadataInfo>();
-
             targetFrameworks.AddRange(targetFrontEndFrameworks);
-
             targetFrameworks.AddRange(targetBackEndFrameworks);
 
-            return Json(Ok(new { items = targetFrameworks }));
+            return targetFrameworks;
         }
     }
 }

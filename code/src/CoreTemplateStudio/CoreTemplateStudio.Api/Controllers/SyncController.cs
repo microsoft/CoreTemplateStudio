@@ -16,26 +16,28 @@ namespace Microsoft.Templates.Api.Controllers
     public class SyncController : Controller
     {
         [HttpPost]
-        public async Task<JsonResult> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
+        public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
         {
             if (!Platforms.IsValidPlatform(platform))
             {
-                return Json(BadRequest(new { message = "invalid platform" }));
+                return BadRequest(new { message = "invalid platform" });
             }
-            else if (!IsValidPath(path))
+
+            if (!IsValidPath(path))
             {
-                return Json(BadRequest(new { message = "invalid path" }));
+                return BadRequest(new { message = "invalid path" });
             }
-            else if (!ProgrammingLanguages.IsValidLanguage(language, platform))
+
+            if (!ProgrammingLanguages.IsValidLanguage(language, platform))
             {
-                return Json(BadRequest(new { message = "invalid language for this platform." }));
+                return BadRequest(new { message = "invalid language for this platform." });
             }
 
             SyncModel syncHelper = new SyncModel(platform, language, path);
 
             await syncHelper.Sync();
 
-            return Json(Ok(syncHelper));
+            return syncHelper;
         }
 
         public bool IsValidPath(string path)

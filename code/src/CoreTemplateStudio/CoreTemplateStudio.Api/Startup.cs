@@ -2,8 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using CoreTemplateStudio.Api.Extensions.Filters;
+using CoreTemplateStudio.Api.Extensions.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +25,8 @@ namespace CoreTemplateStudio.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ValidateGenContextFilter>();
+
             // Adds Cors policy for swagger docs response, since this is a local server this should be fine.
             services.AddCors(options =>
              {
@@ -37,7 +42,19 @@ namespace CoreTemplateStudio.Api
                      });
              });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Validation controller models
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context => GetValidationModelError(context);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +65,26 @@ namespace CoreTemplateStudio.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("AllowAll").UseMvc();
+            app
+              .UseMiddleware<ErrorHandlerMiddleware>()
+              .UseCors("AllowAll")
+              .UseMvc();
+        }
+
+        public static BadRequestObjectResult GetValidationModelError(ActionContext context)
+        {
+            var problemDetails = new ValidationProblemDetails(context.ModelState)
+            {
+                Instance = context.HttpContext.Request.Path,
+                Status = StatusCodes.Status400BadRequest,
+                Type = $"https://httpstatuses.com/400",
+                Detail = "Invalid input data. See additional details in 'errors' property.",
+            };
+
+            return new BadRequestObjectResult(problemDetails)
+            {
+                ContentTypes = { "application/problem+json", "application/problem+xml" },
+            };
         }
     }
 }
