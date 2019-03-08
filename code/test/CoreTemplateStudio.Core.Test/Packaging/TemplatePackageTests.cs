@@ -250,6 +250,7 @@ namespace Microsoft.Templates.Core.Test.Locations
             Assert.True(File.Exists(Path.Combine(extractionDir, Path.GetFileName(inFile))));
 
             File.Delete(outFile);
+            File.Delete(inFile);
         }
 
         [Fact]
