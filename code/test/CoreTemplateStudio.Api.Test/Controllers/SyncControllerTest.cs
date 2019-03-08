@@ -1,13 +1,17 @@
-﻿using Microsoft.Templates.Api.Test.Utilities;
-using System;
-using System.IO;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
-using Xunit;
-using Newtonsoft.Json;
-using Microsoft.Templates.Api.Test.ResponseModels;
-using FluentAssertions;
 using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Microsoft.Templates.Api.Test.ResponseModels;
+using Microsoft.Templates.Api.Test.Utilities;
+
+using Newtonsoft.Json;
+
+using Xunit;
 
 namespace Microsoft.Templates.Api.Test.Controllers
 {

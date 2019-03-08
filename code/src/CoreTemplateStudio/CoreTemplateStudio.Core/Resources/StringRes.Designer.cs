@@ -266,7 +266,18 @@ namespace Microsoft.Templates.Core.Resources {
                 return ResourceManager.GetString("FailedMergePostActionLineNotFound", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to File `{0}` has encoding &apos;{1}&apos; while file `{2}` has encoding &apos;{3}&apos; please ensure both encodings are the same.
+        /// </summary>
+        public static string FailedMergePostActionMismatchedEncoding
+        {
+            get
+            {
+                return ResourceManager.GetString("FailedMergePostActionMismatchedEncoding", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot remove readonly protection from file {0}.
         /// </summary>

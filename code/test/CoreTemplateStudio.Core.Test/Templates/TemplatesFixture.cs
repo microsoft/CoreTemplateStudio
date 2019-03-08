@@ -3,9 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Test.Locations;
 using Microsoft.Templates.Core.Test.TestFakes;
+
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test
