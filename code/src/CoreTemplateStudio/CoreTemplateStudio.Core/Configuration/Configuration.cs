@@ -24,11 +24,11 @@ namespace Microsoft.Templates.Core
         // Set your Application Insights telemetry instrumentation key here (configure it in a WindowsTemplateStudio.config.json located in the working folder).
         public string RemoteTelemetryKey { get; set; } = "<SET_YOUR_OWN_KEY>";
 
-        public string LogFileFolderPath { get; set; } = @"CoreTemplateStudio\Logs";
+        public string LogFileFolderPath { get; set; } = @"CoreTemplateStudio/Logs";
 
         public string RepositoryFolderName { get; set; } = @"CoreTemplateStudio";
 
-        public string BackupFolderPath { get; set; } = @"CoreTemplateStudio\Backups";
+        public string BackupFolderPath { get; set; } = @"CoreTemplateStudio/Backups";
 
         public string TempGenerationFolderPath { get; set; } = "WTSTempGeneration";
 
