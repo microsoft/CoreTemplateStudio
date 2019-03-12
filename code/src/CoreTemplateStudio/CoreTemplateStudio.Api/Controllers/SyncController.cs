@@ -44,12 +44,12 @@ namespace Microsoft.Templates.Api.Controllers
         {
             string suffix = string.Empty;
 #if DEBUG
-            suffix = "/Templates";
+            suffix = "/templates";
 #else
             suffix = $"{_platform}.{_language}.Templates.mstx";
 #endif
             return path != null
-                && suffix == "/Templates" ? Directory.Exists(path + suffix)
+                && suffix == "/templates" ? Directory.Exists(path + suffix)
                                           : System.IO.File.Exists(path + suffix);
         }
     }
