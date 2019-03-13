@@ -7,6 +7,7 @@ using System.Linq;
 using CoreTemplateStudio.Api.Extensions.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.TemplateEngine.Abstractions;
+using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Api.Controllers
@@ -21,7 +22,7 @@ namespace Microsoft.Templates.Api.Controllers
         {
             if (frontEndFramework == null && backEndFramework == null)
             {
-                return BadRequest(new { message = "You must specify a backend or frontend framework at the very least" });
+                return BadRequest(new { message = StringRes.BadReqNoBackendOrFrontend });
             }
 
             string platform = GenContext.CurrentPlatform;

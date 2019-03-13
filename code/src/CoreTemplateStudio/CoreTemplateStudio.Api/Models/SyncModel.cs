@@ -13,8 +13,6 @@ using Microsoft.Templates.Core.Locations;
 
 namespace Microsoft.Templates.Api.Models
 {
-    // just a base implementation for the API scaffolding,
-    // can't provide working logic until the engine is done.
     public class SyncModel
     {
         private readonly string _platform;

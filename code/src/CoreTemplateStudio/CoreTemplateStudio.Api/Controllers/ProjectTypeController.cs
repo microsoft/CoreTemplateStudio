@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
-namespace CoreTemplateStudio.Api.Controllers
+namespace Microsoft.Templates.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

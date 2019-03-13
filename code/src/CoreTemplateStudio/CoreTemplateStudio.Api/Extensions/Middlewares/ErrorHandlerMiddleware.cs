@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Templates.Api.Resources;
 using Newtonsoft.Json;
 
 namespace CoreTemplateStudio.Api.Extensions.Middlewares
@@ -47,7 +48,7 @@ namespace CoreTemplateStudio.Api.Extensions.Middlewares
                 Instance = context.Request.Path,
                 Status = context.Response.StatusCode,
                 Type = $"https://httpstatuses.com/{context.Response.StatusCode}",
-                Detail = $"Internal Server Error from the custom middleware. {exception.Message}",
+                Detail = string.Format(StringRes.BadReqInternalServerError, exception.Message),
             };
 
             return JsonConvert.SerializeObject(problemDetails);
