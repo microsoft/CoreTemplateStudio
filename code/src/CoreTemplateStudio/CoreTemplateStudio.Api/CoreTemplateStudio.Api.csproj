@@ -31,8 +31,15 @@
     <ProjectReference Include="..\CoreTemplateStudio.Core\CoreTemplateStudio.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\StringRes.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\..\WtsRules.ruleset</CodeAnalysisRuleSet>
+    <RootNamespace>Microsoft.Templates.Api</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

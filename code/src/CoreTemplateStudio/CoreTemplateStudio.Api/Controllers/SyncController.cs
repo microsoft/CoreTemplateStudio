@@ -4,9 +4,9 @@
 
 using System.IO;
 using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Models;
+using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core;
 
 namespace Microsoft.Templates.Api.Controllers
@@ -20,17 +20,17 @@ namespace Microsoft.Templates.Api.Controllers
         {
             if (!Platforms.IsValidPlatform(platform))
             {
-                return BadRequest(new { message = "invalid platform" });
+                return BadRequest(new { message = StringRes.BadReqInvalidPlatform });
             }
 
             if (!IsValidPath(path))
             {
-                return BadRequest(new { message = "invalid path" });
+                return BadRequest(new { message = StringRes.BadReqInvalidPath });
             }
 
             if (!ProgrammingLanguages.IsValidLanguage(language, platform))
             {
-                return BadRequest(new { message = "invalid language for this platform." });
+                return BadRequest(new { message = StringRes.BadReqInvalidLanguage });
             }
 
             SyncModel syncHelper = new SyncModel(platform, language, path);
