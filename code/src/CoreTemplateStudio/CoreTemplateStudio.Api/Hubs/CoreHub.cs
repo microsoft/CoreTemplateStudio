@@ -5,42 +5,41 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Templates.Api.Models;
 using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core;
+using Microsoft.Templates.Core.Locations;
 
-namespace Microsoft.Templates.Api.Controllers
+namespace Microsoft.Templates.Api.Hubs
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SyncController : Controller
+    public class CoreHub : Hub
     {
-        [HttpPost]
         public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
         {
             if (!Platforms.IsValidPlatform(platform))
             {
-                return BadRequest(new { message = StringRes.BadReqInvalidPlatform });
+                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPlatform });
             }
 
             if (!IsValidPath(path))
             {
-                return BadRequest(new { message = StringRes.BadReqInvalidPath });
+                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPath });
             }
 
             if (!ProgrammingLanguages.IsValidLanguage(language, platform))
             {
-                return BadRequest(new { message = StringRes.BadReqInvalidLanguage });
+                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidLanguage });
             }
 
-            SyncModel syncHelper = new SyncModel(platform, language, path);
+            SyncModel syncHelper = new SyncModel(platform, language, path, SendMessageToClient);
 
             await syncHelper.Sync();
 
             return syncHelper;
         }
 
-        public bool IsValidPath(string path)
+        private bool IsValidPath(string path)
         {
             string suffix = string.Empty;
 #if DEBUG
@@ -50,7 +49,12 @@ namespace Microsoft.Templates.Api.Controllers
 #endif
             return path != null
                 && suffix == "/templates" ? Directory.Exists(path + suffix)
-                                          : System.IO.File.Exists(path + suffix);
+                                          : File.Exists(path + suffix);
+        }
+
+        private void SendMessageToClient(SyncStatus status)
+        {
+            Clients.Caller.SendAsync("syncMessage", status);
         }
     }
 }

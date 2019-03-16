@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Templates.Api.Hubs;
 
 namespace CoreTemplateStudio.Api
 {
@@ -55,6 +56,9 @@ namespace CoreTemplateStudio.Api
             {
                 options.InvalidModelStateResponseFactory = context => GetValidationModelError(context);
             });
+
+            // SignalR for live data.
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +72,11 @@ namespace CoreTemplateStudio.Api
             app
               .UseMiddleware<ErrorHandlerMiddleware>()
               .UseCors("AllowAll")
-              .UseMvc();
+              .UseMvc()
+              .UseSignalR(route =>
+              {
+                  route.MapHub<CoreHub>("/corehub");
+              });
         }
 
         public static BadRequestObjectResult GetValidationModelError(ActionContext context)
