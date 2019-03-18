@@ -8,10 +8,11 @@ using System.Linq;
 using CoreTemplateStudio.Api.Extensions.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates;
+using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
-namespace CoreTemplateStudio.Api.Controllers
+namespace Microsoft.Templates.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +24,7 @@ namespace CoreTemplateStudio.Api.Controllers
         {
             if (projectType == null)
             {
-                return BadRequest(new { message = "Invalid project type" });
+                return BadRequest(new { message = StringRes.BadReqInvalidProjectType });
             }
 
             var projectFrameworks = GenComposer.GetSupportedFx(projectType, GenContext.CurrentPlatform).ToList();

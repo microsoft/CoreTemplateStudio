@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core.Gen;
 
 namespace CoreTemplateStudio.Api.Extensions.Filters
@@ -33,7 +34,7 @@ namespace CoreTemplateStudio.Api.Extensions.Filters
                 Instance = context.HttpContext.Request.Path,
                 Status = statusCode,
                 Type = $"https://httpstatuses.com/{statusCode}",
-                Detail = "You must first sync templates before calling this endpoint.",
+                Detail = StringRes.BadReqNotSynced,
             };
 
             return new ObjectResult(problemDetails)
