@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Threading.Tasks;
+
 using CoreTemplateStudio.Api.Extensions.Filters;
 using CoreTemplateStudio.Api.Models.Generation;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core.Gen;

@@ -4,8 +4,10 @@
 
 using System.IO;
 using System.Threading.Tasks;
+
 using CoreTemplateStudio.Api.Extensions.Filters;
 using CoreTemplateStudio.Api.Models.Generation;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Templates.Api.HubHandlers;
@@ -22,7 +24,7 @@ namespace Microsoft.Templates.Api.Hubs
     {
         public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
         {
-            SyncHandler handler = new SyncHandler(platform, path, language, SendMessageToClient, SendProgressToClient);
+            SyncHandler handler = new SyncHandler(platform, path, language, SendMessageToClient);
 
             return await handler.AttemptSync();
         }
@@ -30,6 +32,9 @@ namespace Microsoft.Templates.Api.Hubs
         [ValidateGenContextFilter]
         public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
+            ApiGenShell shell = GenContext.ToolBox.Shell as ApiGenShell;
+            shell.SetMessageEventListener(SendProgressToClient);
+
             ContextProvider provider = new ContextProvider()
             {
                 ProjectName = generationData.ProjectName,
@@ -53,9 +58,7 @@ namespace Microsoft.Templates.Api.Hubs
 
         private void SendProgressToClient(object sender, string message)
         {
-            return;
-
-        // Clients.Caller.SendAsync("genMessage", message);
+            Clients.Caller.SendAsync("genMessage", message);
         }
     }
 }

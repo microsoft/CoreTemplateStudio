@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Models;
 using Microsoft.Templates.Api.Resources;
@@ -20,15 +21,13 @@ namespace Microsoft.Templates.Api.HubHandlers
         private readonly string _path;
         private readonly string _language;
         private readonly Action<SyncStatus> _statusListener;
-        private readonly StatusBarMessageHandler _progressMessageListener;
 
-        public SyncHandler(string platform, string path, string language, Action<SyncStatus> statusListener, StatusBarMessageHandler progressMessageListener)
+        public SyncHandler(string platform, string path, string language, Action<SyncStatus> statusListener)
         {
             _platform = platform;
             _path = path;
             _language = language;
             _statusListener = statusListener;
-            _progressMessageListener = progressMessageListener;
         }
 
         public async Task<ActionResult<SyncModel>> AttemptSync()
@@ -48,7 +47,7 @@ namespace Microsoft.Templates.Api.HubHandlers
                 return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidLanguage });
             }
 
-            SyncModel syncHelper = new SyncModel(_platform, _language, _path, _statusListener, _progressMessageListener);
+            SyncModel syncHelper = new SyncModel(_platform, _language, _path, _statusListener);
 
             await syncHelper.Sync();
 

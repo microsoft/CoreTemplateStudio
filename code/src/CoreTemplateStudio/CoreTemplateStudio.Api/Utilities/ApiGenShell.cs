@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Gen;
 
@@ -13,11 +14,14 @@ namespace Microsoft.Templates.Api.Utilities
 
     public class ApiGenShell : GenShell
     {
-        public event StatusBarMessageHandler MessageEventHandler;
+        private static StatusBarMessageHandler _messageEventHandler;
 
-        public ApiGenShell(StatusBarMessageHandler messageListener)
+        public void SetMessageEventListener(StatusBarMessageHandler messageEventHandler)
         {
-            MessageEventHandler += messageListener;
+            if (messageEventHandler != null)
+            {
+                _messageEventHandler = messageEventHandler;
+            }
         }
 
         public override void AddContextItemsToSolution(ProjectInfo projectInfo)
@@ -124,7 +128,7 @@ namespace Microsoft.Templates.Api.Utilities
 
         public override void ShowStatusBarMessage(string message)
         {
-            MessageEventHandler(this, message);
+            _messageEventHandler?.Invoke(this, message);
         }
 
         public override void ShowTaskList()

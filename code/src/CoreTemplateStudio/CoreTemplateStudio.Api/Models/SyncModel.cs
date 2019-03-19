@@ -19,17 +19,15 @@ namespace Microsoft.Templates.Api.Models
         private readonly string _language;
         private readonly string _installedPackagePath;
         private readonly Action<SyncStatus> _callback;
-        private readonly StatusBarMessageHandler _progressCallback;
 
         public bool WasUpdated { get; set; }
 
-        public SyncModel(string platform, string language, string installedPackagePath, Action<SyncStatus> callback, StatusBarMessageHandler progressCallback)
+        public SyncModel(string platform, string language, string installedPackagePath, Action<SyncStatus> callback)
         {
             _platform = platform;
             _language = language;
             _installedPackagePath = installedPackagePath;
             _callback = callback;
-            _progressCallback = progressCallback;
         }
 
         public async Task Sync()
@@ -40,7 +38,7 @@ namespace Microsoft.Templates.Api.Models
                     _installedPackagePath,
                     "1.0.0.0",
                     string.Empty),
-                new ApiGenShell(_progressCallback),
+                new ApiGenShell(),
                 new Version(1, 0, 0, 0),
                 _platform,
                 _language);
@@ -51,7 +49,7 @@ namespace Microsoft.Templates.Api.Models
                     _language,
                     _installedPackagePath,
                     new ApiDigitalSignatureService()),
-                new ApiGenShell(_progressCallback),
+                new ApiGenShell(),
                 new Version(1, 0, 0, 0),
                 _platform,
                 _language);
