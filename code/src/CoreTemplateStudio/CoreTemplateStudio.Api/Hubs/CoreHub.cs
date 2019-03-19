@@ -4,11 +4,16 @@
 
 using System.IO;
 using System.Threading.Tasks;
+using CoreTemplateStudio.Api.Extensions.Filters;
+using CoreTemplateStudio.Api.Models.Generation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Templates.Api.HubHandlers;
 using Microsoft.Templates.Api.Models;
 using Microsoft.Templates.Api.Resources;
+using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core;
+using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 
 namespace Microsoft.Templates.Api.Hubs
@@ -17,44 +22,40 @@ namespace Microsoft.Templates.Api.Hubs
     {
         public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
         {
-            if (!Platforms.IsValidPlatform(platform))
-            {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPlatform });
-            }
+            SyncHandler handler = new SyncHandler(platform, path, language, SendMessageToClient, SendProgressToClient);
 
-            if (!IsValidPath(path))
-            {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPath });
-            }
-
-            if (!ProgrammingLanguages.IsValidLanguage(language, platform))
-            {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidLanguage });
-            }
-
-            SyncModel syncHelper = new SyncModel(platform, language, path, SendMessageToClient);
-
-            await syncHelper.Sync();
-
-            return syncHelper;
+            return await handler.AttemptSync();
         }
 
-        private bool IsValidPath(string path)
+        [ValidateGenContextFilter]
+        public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
-            string suffix = string.Empty;
-#if DEBUG
-            suffix = "/templates";
-#else
-            suffix = $"{_platform}.{_language}.Templates.mstx";
-#endif
-            return path != null
-                && suffix == "/templates" ? Directory.Exists(path + suffix)
-                                          : File.Exists(path + suffix);
+            ContextProvider provider = new ContextProvider()
+            {
+                ProjectName = generationData.ProjectName,
+                GenerationOutputPath = generationData.GenPath,
+                DestinationPath = generationData.GenPath,
+            };
+
+            GenContext.Current = provider;
+
+            var userSelection = generationData.ToUserSelection();
+            await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(userSelection);
+
+            // TODO: We should generationOutputPath??
+            return provider;
         }
 
         private void SendMessageToClient(SyncStatus status)
         {
             Clients.Caller.SendAsync("syncMessage", status);
+        }
+
+        private void SendProgressToClient(object sender, string message)
+        {
+            return;
+
+        // Clients.Caller.SendAsync("genMessage", message);
         }
     }
 }
