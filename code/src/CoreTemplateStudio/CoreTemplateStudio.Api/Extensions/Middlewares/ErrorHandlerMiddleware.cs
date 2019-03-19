@@ -27,7 +27,7 @@ namespace CoreTemplateStudio.Api.Extensions.Middlewares
                 await _next(context);
             }
             catch (Exception exception)
-            {
+                {
                 await HandleExceptionAsync(context, exception);
             }
         }

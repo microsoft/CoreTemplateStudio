@@ -19,7 +19,8 @@ namespace Microsoft.Templates.Api.Controllers
         [HttpGet]
         public List<MetadataInfo> GetProjectTypes()
         {
-            var result = GenContext.ToolBox.Repo.GetProjectTypes();
+            var platform = GenContext.CurrentPlatform;
+            var result = GenContext.ToolBox.Repo.GetProjectTypes(platform);
 
             return result.ToList();
         }

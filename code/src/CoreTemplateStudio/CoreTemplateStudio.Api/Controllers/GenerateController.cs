@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core.Gen;
 
-using Newtonsoft.Json.Linq;
-
 namespace CoreTemplateStudio.Api.Controllers
 {
     [Route("api/[controller]")]
