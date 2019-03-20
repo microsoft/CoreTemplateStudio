@@ -168,12 +168,11 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(language);
 
-
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
                 new BadFormatValidator(),
-                new DefaultNamesValidator()
+                new DefaultNamesValidator(),
             };
             var result = Naming.Validate("LiveTile", validators);
 
@@ -272,7 +271,6 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void Validate_SuccessfullyIdentifies_ReservedProjectName()
         {
-
             var validators = new List<Validator>()
             {
                 new ProjectReservedNamesValidator(),
@@ -286,7 +284,6 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void Validate_SuccessfullyIdentifies_ProjectStartsWith()
         {
-
             var validators = new List<Validator>()
             {
                 new ProjectStartsWithValidator(),
@@ -300,7 +297,6 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void Validate_SuccessfullyIdentifies_ValidProjectName()
         {
-
             var validators = new List<Validator>()
             {
                 new ProjectReservedNamesValidator(),
