@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using CoreTemplateStudio.Api.Extensions.Filters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Templates;
 using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
@@ -27,25 +24,13 @@ namespace Microsoft.Templates.Api.Controllers
                 return BadRequest(new { message = StringRes.BadReqInvalidProjectType });
             }
 
-            var projectFrameworks = GenComposer.GetSupportedFx(projectType, GenContext.CurrentPlatform).ToList();
+            var platform = GenContext.CurrentPlatform;
+            var frontendFrameworks = GenContext.ToolBox.Repo.GetFrontEndFrameworks(platform, projectType);
+            var backendFrameworks = GenContext.ToolBox.Repo.GetBackEndFrameworks(platform, projectType);
 
-            var targetFrontEndFrameworks = GenContext.ToolBox
-                                                     .Repo
-                                                     .GetFrontEndFrameworks()
-                                                     .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.FrontEnd)
-                                                                  .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
-                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))));
-
-            var targetBackEndFrameworks = GenContext.ToolBox
-                                                     .Repo
-                                                     .GetBackEndFrameworks()
-                                                     .Where(tf => projectFrameworks.Where(framework => framework.Type == FrameworkTypes.BackEnd)
-                                                                  .Any(framework => (string.Equals(framework.Name, tf.Name, StringComparison.OrdinalIgnoreCase)
-                                                                                      || "all".Equals(framework.Name, StringComparison.OrdinalIgnoreCase))));
-
-            List<MetadataInfo> targetFrameworks = new List<MetadataInfo>();
-            targetFrameworks.AddRange(targetFrontEndFrameworks);
-            targetFrameworks.AddRange(targetBackEndFrameworks);
+            var targetFrameworks = new List<MetadataInfo>();
+            targetFrameworks.AddRange(frontendFrameworks);
+            targetFrameworks.AddRange(backendFrameworks);
 
             return targetFrameworks;
         }

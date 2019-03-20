@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CoreTemplateStudio.Api.Extensions.Filters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.Templates.Api.Resources;
+using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Api.Controllers
@@ -18,21 +18,22 @@ namespace Microsoft.Templates.Api.Controllers
     public class PageController : Controller
     {
         [HttpGet]
-        public ActionResult<List<ITemplateInfo>> GetPagesForFrameworks(string projectType, string frontEndFramework, string backEndFramework)
+        public ActionResult<List<TemplateInfo>> GetPagesForFrameworks(string projectType, string frontEndFramework, string backEndFramework)
         {
             if (frontEndFramework == null && backEndFramework == null)
             {
                 return BadRequest(new { message = StringRes.BadReqNoBackendOrFrontend });
             }
 
-            string platform = GenContext.CurrentPlatform;
+            var platform = GenContext.CurrentPlatform;
+            var pages = GenContext.ToolBox.Repo.GetTemplatesInfo(
+                                                                TemplateType.Page,
+                                                                platform,
+                                                                projectType,
+                                                                frontEndFramework,
+                                                                backEndFramework);
 
-            var templates = GenComposer.GetPages(
-                                                projectType,
-                                                platform,
-                                                frontEndFramework,
-                                                backEndFramework);
-            return templates.ToList();
+            return pages.ToList();
         }
     }
 }

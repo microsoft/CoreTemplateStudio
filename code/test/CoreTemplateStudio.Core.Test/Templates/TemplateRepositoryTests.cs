@@ -6,16 +6,17 @@ using Microsoft.Templates.Core.Gen;
 
 using Xunit;
 
-namespace Microsoft.Templates.Core.Test
+namespace Microsoft.Templates.Core.Test.Templates
 {
     [Collection("Unit Test Templates")]
     [Trait("ExecutionSet", "Minimum")]
-    public class GenComposerTests
+    public class TemplateRepositoryTests
     {
         private TemplatesFixture _fixture;
+        private TemplatesRepository _repo;
         private const string TestPlatform = "test";
 
-        public GenComposerTests(TemplatesFixture fixture)
+        public TemplateRepositoryTests(TemplatesFixture fixture)
         {
             _fixture = fixture;
         }
@@ -23,6 +24,7 @@ namespace Microsoft.Templates.Core.Test
         private void SetUpFixtureForTesting(string language)
         {
             _fixture.InitializeFixture(TestPlatform, language);
+            _repo = GenContext.ToolBox.Repo;
         }
 
         [Fact]
@@ -30,44 +32,37 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var projectTemplates = GenComposer.GetSupportedProjectTypes(TestPlatform);
+            var projectTemplates = _repo.GetProjectTypes(TestPlatform);
 
-            Assert.Collection(projectTemplates, e1 => e1.Equals("pt1"), e1 => e1.Equals("pt2"), e1 => e1.Equals("pt3"));
+            Assert.Collection(projectTemplates, e1 => e1.Equals("ProjectType"));
         }
 
         [Fact]
-        public void GetSupportedFrameworks()
+        public void GetFrontendFrameworks()
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var frameworks = GenComposer.GetSupportedFx("pt1", TestPlatform);
+            var frameworks = _repo.GetFrontEndFrameworks(TestPlatform, "pt1");
 
             Assert.Collection(frameworks, e1 =>
             {
-                Assert.Equal("fx1", e1.Name);
-                Assert.Equal(FrameworkTypes.FrontEnd, e1.Type);
+                Assert.Equal("TestFramework", e1.Name);
+                Assert.Equal(FrameworkTypes.FrontEnd.ToString().ToLower(), e1.Tags["type"]);
             });
         }
 
         [Fact]
-        public void GetSupportedFrameworks_FrontAndBackEndFramework()
+        public void GetBackendFrameworks()
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var frameworks = GenComposer.GetSupportedFx("pt3", TestPlatform);
+            var frameworks = _repo.GetBackEndFrameworks(TestPlatform, "pt3");
 
-            Assert.Collection(
-                frameworks,
-                e1 =>
-                {
-                    Assert.Equal("fx3", e1.Name);
-                    Assert.Equal(FrameworkTypes.FrontEnd, e1.Type);
-                },
-                e2 =>
-                {
-                    Assert.Equal("fx4", e2.Name);
-                    Assert.Equal(FrameworkTypes.BackEnd, e2.Type);
-                });
+            Assert.Collection(frameworks, e1 =>
+            {
+                Assert.Equal("TestFramework", e1.Name);
+                Assert.Equal(FrameworkTypes.BackEnd.ToString().ToLower(), e1.Tags["type"]);
+            });
         }
 
         [Fact]
@@ -75,7 +70,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var pages = GenComposer.GetPages("pt1", TestPlatform, "fx1");
+            var pages = _repo.GetTemplatesInfo(TemplateType.Page, TestPlatform, "pt1", "fx1");
 
             Assert.Collection(
                 pages,
@@ -90,7 +85,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var pages = GenComposer.GetPages("pt1", TestPlatform, "fx1", "fx3");
+            var pages = _repo.GetTemplatesInfo(TemplateType.Page, TestPlatform, "pt3", "fx1", "fx3");
 
             Assert.Collection(
                 pages,
@@ -105,7 +100,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var pages = GenComposer.GetPages("pt1", TestPlatform, "fx1", "fx4");
+            var pages = _repo.GetTemplatesInfo(TemplateType.Page, TestPlatform, "pt1", "fx1", "fx4");
 
             Assert.Empty(pages);
         }
@@ -115,7 +110,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var features = GenComposer.GetFeatures("pt1", TestPlatform, "fx1");
+            var features = _repo.GetTemplatesInfo(TemplateType.Feature, TestPlatform, "pt1", "fx1");
 
             Assert.Collection(
                 features,
@@ -130,7 +125,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var features = GenComposer.GetFeatures("pt1", TestPlatform, "fx1", "fx3");
+            var features = _repo.GetTemplatesInfo(TemplateType.Feature, TestPlatform, "pt3", "fx1", "fx3");
 
             Assert.Collection(
                 features,
@@ -145,7 +140,7 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
 
-            var features = GenComposer.GetFeatures("pt1", TestPlatform, "fx1", "fx4");
+            var features = _repo.GetTemplatesInfo(TemplateType.Feature, TestPlatform, "pt1", "fx1", "fx4");
 
             Assert.Empty(features);
         }
