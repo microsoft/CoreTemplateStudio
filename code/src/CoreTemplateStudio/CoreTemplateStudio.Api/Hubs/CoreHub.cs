@@ -29,7 +29,6 @@ namespace Microsoft.Templates.Api.Hubs
             return await handler.AttemptSync();
         }
 
-        [ValidateGenContextFilter]
         public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
             ApiGenShell shell = GenContext.ToolBox.Shell as ApiGenShell;
