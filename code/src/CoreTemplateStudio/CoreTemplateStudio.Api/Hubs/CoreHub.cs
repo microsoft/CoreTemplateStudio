@@ -35,7 +35,7 @@ namespace Microsoft.Templates.Api.Hubs
             ApiGenShell shell = GenContext.ToolBox.Shell as ApiGenShell;
             shell.SetMessageEventListener(SendProgressToClient);
 
-            var combinedPath = Path.Combine(generationData.GenPath, generationData.ProjectName.MakeSafeProjectName());
+            var combinedPath = $"{generationData.GenPath}/{generationData.ProjectName.MakeSafeProjectName()}";
 
             ContextProvider provider = new ContextProvider()
             {
