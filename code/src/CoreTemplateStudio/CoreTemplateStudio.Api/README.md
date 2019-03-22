@@ -1,7 +1,6 @@
 # **CoreTemplateStudio.Api**
 
-This document outlines run instructions and documentation for the engine API, which serves as the link between the CoreTemplateStudio Engine and
-other applications.
+This document outlines run instructions and documentation for the engine API, which serves as the link between the CoreTemplateStudio Engine and other applications.
 
 ## Getting Started
 
