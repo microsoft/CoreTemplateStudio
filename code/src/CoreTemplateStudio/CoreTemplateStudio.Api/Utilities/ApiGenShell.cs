@@ -10,8 +10,20 @@ using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Api.Utilities
 {
+    public delegate void StatusBarMessageHandler(object sender, string message);
+
     public class ApiGenShell : GenShell
     {
+        private static StatusBarMessageHandler _messageEventHandler;
+
+        public void SetMessageEventListener(StatusBarMessageHandler messageEventHandler)
+        {
+            if (messageEventHandler != null)
+            {
+                _messageEventHandler = messageEventHandler;
+            }
+        }
+
         public override void AddContextItemsToSolution(ProjectInfo projectInfo)
         {
         }
@@ -116,6 +128,7 @@ namespace Microsoft.Templates.Api.Utilities
 
         public override void ShowStatusBarMessage(string message)
         {
+            _messageEventHandler?.Invoke(this, message);
         }
 
         public override void ShowTaskList()

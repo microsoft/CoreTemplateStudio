@@ -18,14 +18,16 @@ namespace Microsoft.Templates.Api.Models
         private readonly string _platform;
         private readonly string _language;
         private readonly string _installedPackagePath;
+        private readonly Action<SyncStatus> _callback;
 
         public bool WasUpdated { get; set; }
 
-        public SyncModel(string platform, string language, string installedPackagePath)
+        public SyncModel(string platform, string language, string installedPackagePath, Action<SyncStatus> callback)
         {
             _platform = platform;
             _language = language;
             _installedPackagePath = installedPackagePath;
+            _callback = callback;
         }
 
         public async Task Sync()
@@ -58,6 +60,8 @@ namespace Microsoft.Templates.Api.Models
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
         {
+            _callback.Invoke(args.Status);
+
             if (args.Status.Equals(SyncStatus.Updated))
             {
                 WasUpdated = true;

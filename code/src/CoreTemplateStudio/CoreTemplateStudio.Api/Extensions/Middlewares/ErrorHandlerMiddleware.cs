@@ -4,9 +4,11 @@
 
 using System;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Resources;
+
 using Newtonsoft.Json;
 
 namespace CoreTemplateStudio.Api.Extensions.Middlewares

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 using Microsoft.Templates.Core.Gen;
 
 namespace CoreTemplateStudio.Api.Models.Generation

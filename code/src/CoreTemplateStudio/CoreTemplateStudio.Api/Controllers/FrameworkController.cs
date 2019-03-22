@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+
 using CoreTemplateStudio.Api.Extensions.Filters;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core;

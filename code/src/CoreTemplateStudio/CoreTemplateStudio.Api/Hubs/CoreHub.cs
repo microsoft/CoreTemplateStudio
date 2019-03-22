@@ -2,23 +2,38 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.IO;
 using System.Threading.Tasks;
+
 using CoreTemplateStudio.Api.Extensions.Filters;
 using CoreTemplateStudio.Api.Models.Generation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Templates.Api.Utilities;
-using Microsoft.Templates.Core.Gen;
 
-namespace CoreTemplateStudio.Api.Controllers
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Templates.Api.HubHandlers;
+using Microsoft.Templates.Api.Models;
+using Microsoft.Templates.Api.Resources;
+using Microsoft.Templates.Api.Utilities;
+using Microsoft.Templates.Core;
+using Microsoft.Templates.Core.Gen;
+using Microsoft.Templates.Core.Locations;
+
+namespace Microsoft.Templates.Api.Hubs
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [ValidateGenContextFilter]
-    public class GenerateController : Controller
+    public class CoreHub : Hub
     {
-        [HttpPost]
+        public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
+        {
+            SyncHandler handler = new SyncHandler(platform, path, language, SendMessageToClient);
+
+            return await handler.AttemptSync();
+        }
+
         public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
+            ApiGenShell shell = GenContext.ToolBox.Shell as ApiGenShell;
+            shell.SetMessageEventListener(SendProgressToClient);
+
             ContextProvider provider = new ContextProvider()
             {
                 ProjectName = generationData.ProjectName,
@@ -33,6 +48,16 @@ namespace CoreTemplateStudio.Api.Controllers
 
             // TODO: We should generationOutputPath??
             return provider;
+        }
+
+        private void SendMessageToClient(SyncStatus status)
+        {
+            Clients.Caller.SendAsync("syncMessage", status);
+        }
+
+        private void SendProgressToClient(object sender, string message)
+        {
+            Clients.Caller.SendAsync("genMessage", message);
         }
     }
 }
