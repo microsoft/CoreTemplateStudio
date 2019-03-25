@@ -53,9 +53,9 @@ namespace Microsoft.Templates.Api.Hubs
             return provider;
         }
 
-        private void SendMessageToClient(SyncStatus status)
+        private void SendMessageToClient(SyncStatus status, int progress)
         {
-            Clients.Caller.SendAsync("syncMessage", status);
+            Clients.Caller.SendAsync("syncMessage", status.ToString(), progress);
         }
 
         private void SendProgressToClient(object sender, string message)
