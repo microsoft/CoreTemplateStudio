@@ -20,9 +20,9 @@ namespace Microsoft.Templates.Api.HubHandlers
         private readonly string _platform;
         private readonly string _path;
         private readonly string _language;
-        private readonly Action<SyncStatus> _statusListener;
+        private readonly Action<SyncStatus, int> _statusListener;
 
-        public SyncHandler(string platform, string path, string language, Action<SyncStatus> statusListener)
+        public SyncHandler(string platform, string path, string language, Action<SyncStatus, int> statusListener)
         {
             _platform = platform;
             _path = path;

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -34,11 +35,13 @@ namespace Microsoft.Templates.Api.Hubs
             ApiGenShell shell = GenContext.ToolBox.Shell as ApiGenShell;
             shell.SetMessageEventListener(SendProgressToClient);
 
+            var combinedPath = Path.Combine(generationData.GenPath, generationData.ProjectName.MakeSafeProjectName());
+
             ContextProvider provider = new ContextProvider()
             {
                 ProjectName = generationData.ProjectName,
-                GenerationOutputPath = generationData.GenPath,
-                DestinationPath = generationData.GenPath,
+                GenerationOutputPath = combinedPath,
+                DestinationPath = combinedPath,
             };
 
             GenContext.Current = provider;
@@ -50,9 +53,9 @@ namespace Microsoft.Templates.Api.Hubs
             return provider;
         }
 
-        private void SendMessageToClient(SyncStatus status)
+        private void SendMessageToClient(SyncStatus status, int progress)
         {
-            Clients.Caller.SendAsync("syncMessage", status);
+            Clients.Caller.SendAsync("syncMessage", status.ToString(), progress);
         }
 
         private void SendProgressToClient(object sender, string message)
