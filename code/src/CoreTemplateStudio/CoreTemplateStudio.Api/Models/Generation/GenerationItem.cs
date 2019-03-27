@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.ComponentModel.DataAnnotations;
+
 using Microsoft.Templates.Core.Gen;
 
 namespace CoreTemplateStudio.Api.Models.Generation
@@ -15,6 +17,6 @@ namespace CoreTemplateStudio.Api.Models.Generation
         [Required]
         public string Name { get; set; }
 
-        public UserSelectionItem ToGenerationItem() => new UserSelectionItem { Name = this.Name, TemplateId = this.TemplateId };
+        public UserSelectionItem ToGenerationItem() => new UserSelectionItem { Name = this.Name.MakeSafeProjectName(), TemplateId = this.TemplateId };
     }
 }
