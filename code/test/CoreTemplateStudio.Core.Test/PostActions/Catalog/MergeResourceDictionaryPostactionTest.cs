@@ -30,6 +30,12 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
 
             var config = new MergeConfiguration(postaction, true);
 
+            GenContext.Current = new TestContextProvider()
+            {
+                GenerationOutputPath = Environment.CurrentDirectory,
+                DestinationPath = Environment.CurrentDirectory,
+            };
+
             var mergeResourceDictionaryPostAction = new MergeResourceDictionaryPostAction("Test", config);
             mergeResourceDictionaryPostAction.Execute();
 
