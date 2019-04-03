@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/platform-linux--64%20%7C%20win--64%20%7C%20osx--64%20-lightgrey.svg" alt="Platforms Supported: MacOSX, Linux, Windows"/> <a href="https://www.repostatus.org/#active"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed." /></a> <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: We are using the MIT License"></a> <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="We are welcoming PRS!"></a>
 
-Core Template Studio is a .NET Standard 2.1 project that handles all of the template merging and code generation for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)**. The project has two parts: an .NET Standard core and its corresponding API that exposes the core for non C# Projects.
+Core Template Studio is a .NET Standard 2.1 project that handles all of the template merging and code generation for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)**. The project has two parts: a .NET Standard core and its corresponding API that exposes the core for non C# Projects.
 
 ## Build Status
 
@@ -12,16 +12,16 @@ Core Template Studio is a .NET Standard 2.1 project that handles all of the temp
 | staging | [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=staging)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=staging) |
 | master  |  [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=master)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=master)  |
 
-# Getting Started
+# Documentation
 
-Have a look at [Getting started](./docs/getting-started-developers.md) to find out how to get started.
+- [Getting started with the codebase](./docs/getting-started-developers.md).
 
 ## Features
 
-- _Synchronizes Templates_: The core has the ability to synchronize with templates, either in debug as a templates folder or in release as a .mstx file. It also builds up and refreshes the templates cache.
-- _Provides information about available templates_: Given that you have synchronized the core will give information on the available project type, framework, page and feature templates.
-- _Generate using Templates_: Using the available templates the core can do compositions and postactions to create a C# or VB Project.
-- _Telemetry_: Handles a lot of the telemetry for Windows Template Studio including user selections and generation time.
+- _Synchronizes Templates_: The core has the ability to synchronize with templates, either in debug as a templates folder or in release as a .mstx file. It also builds and refreshes the template cache.
+- _Provides information about available templates_: Upon synchronization, the core will provide information on the available project type, framework, page and feature templates.
+- _Generate using Templates_: Using the available templates, the core can do compositions and postactions to create a C# or VB Project.
+- _Telemetry_: Performs the majority of telemetry for Windows Template Studio including user selections and generation time.
 
 ## Limitations
 
