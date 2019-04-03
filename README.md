@@ -12,6 +12,10 @@ Core Template Studio is a .NET Standard 2.1 project that handles all of the temp
 | staging | [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=staging)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=staging) |
 | master  |  [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=master)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=master)  |
 
+# Getting Started
+
+Have a look at [Getting started](./docs/getting-started-developers.md) to find out how to get started.
+
 ## Features
 
 - _Synchronizes Templates_: The core has the ability to synchronize with templates, either in debug as a templates folder or in release as a .mstx file. It also builds up and refreshes the templates cache.
@@ -29,7 +33,7 @@ Please use [GitHub issues](https://github.com/Microsoft/CoreTemplateStudio/issue
 
 If you have specific feature requests or would like to vote on what others are recommending, please go to the [GitHub issues](https://github.com/Microsoft/CoreTemplateStudio/issues) section as well. We would love to see what you are thinking.
 
-Here is what we're currently thinking in our [roadmap]().
+This project is a shared project and will change based on the needs of WindowsTemplateStudio. You can check out their [roadmap](https://github.com/Microsoft/WindowsTemplateStudio/tree/dev/docs/roadmap.md) for more information.
 
 ## Reporting Security Issues
 
