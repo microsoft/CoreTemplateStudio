@@ -1,6 +1,6 @@
 # Contributing to Core Template Studio
 
-**Core Template Studio** handles all of the template merging and code generation for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)**.
+**Core Template Studio** handles all of the template synchronization and code generation (composition, generation + postaction execution) for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)**.
 
 Pull Requests must be done against the **[dev branch](https://github.com/Microsoft/CoreTemplateStudio/tree/dev)**.
 
