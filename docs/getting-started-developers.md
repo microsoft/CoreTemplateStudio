@@ -17,18 +17,18 @@ Under the [code/test/](../code/test) folder, the repo has additional solutions r
 
 ## Dependencies
 
-This project depends on the .NET Core 2.1 SDK with ASP.NET Core, and nuget packages from [dotnet templating](https://github.com/dotnet/templating)
+This project depends on the .NET Core 2.1 SDK with ASP.NET Core, and nuget packages from [dotnet templating](https://github.com/dotnet/templating).
 
-The nuget packages can be installed by doing `dotnet restore` if it isn't done automatically, or you aren't using Visual Studio to develop.
+The nuget packages can be installed by doing `dotnet restore`. If you are using Visual Studio to develop, this should be done automatically. 
 
 ## Core project
 
 The core project is in charge of:
 
 - Checking for new template packages, download, extract and verify template packages and building up and refreshing the templates cache.
-- Providing information about available projecttypes, frameworks, page and feature templates
-- Composition of the generation queue
-- Generation and postaction execution
+- Providing information about available project type, framework, page and feature templates.
+- Composition of the generation queue.
+- Generation and postaction execution.
 
 During the generation the GenContext class provides access to:
 
@@ -41,14 +41,14 @@ During the generation the GenContext class provides access to:
   - The destination path (project Path for both New Project and New Item generations)
   - ProjectInfo: Information about projects to be added to the solution and items and references that will be added to the project once the generation finishes
 
-## Api Project
+## API Project
 
-The Api project is in charge of:
+The API project is in charge of:
 
 - Communicating between the core and the caller given queries or payloads.
 - Providing a more abstract layer between the core and the caller.
 
-The Api project also has the following characteristics:
+The API project also has the following characteristics:
 
 - Uses SignalR websocket endpoint for sync and generation.
 - Uses Rest endpoint for getting project types, pages and features.

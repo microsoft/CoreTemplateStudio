@@ -18,7 +18,7 @@ Every contribution has to come with:
 - Before starting coding, **you must open an issue** and start discussing with the community to see if the idea/feature is interesting enough.
 - A documentation page in the [documentation folder](https://github.com/Microsoft/CoreTemplateStudio/tree/dev/docs).
 - Unit tests (If applicable, or an explanation why they're not).
-- Your code shouldn't break cross platform compatibility. If adding a feature through linux or macOS be sure that it doesn't break windows 10, and vice versa.
+- Your code shouldn't break cross platform compatibility. If adding a feature through Linux or macOS be sure that it doesn't break Windows 10, and vice versa.
 - You've run all existing tests to make sure you've not broken anything.
 - PR has to target dev branch.
 
