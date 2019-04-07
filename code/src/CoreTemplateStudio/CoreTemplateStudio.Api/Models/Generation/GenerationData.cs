@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.Linq;
 using Microsoft.Templates.Core.Gen;
 
 namespace CoreTemplateStudio.Api.Models.Generation
@@ -43,13 +43,12 @@ namespace CoreTemplateStudio.Api.Models.Generation
 
         public UserSelection ToUserSelection()
         {
-            var userSelection = new UserSelection(ProjectType, FrontendFramework, BackendFramework, Platform, Language)
-            {
-                HomeName = this.HomeName,
-            };
+            var userSelection = new UserSelection(ProjectType, FrontendFramework, BackendFramework, Platform, Language);
 
             Pages.ForEach(p => userSelection.Pages.Add(p.ToGenerationItem()));
             Features.ForEach(p => userSelection.Features.Add(p.ToGenerationItem()));
+
+            userSelection.HomeName = userSelection.Pages.FirstOrDefault().Name;
 
             return userSelection;
         }
