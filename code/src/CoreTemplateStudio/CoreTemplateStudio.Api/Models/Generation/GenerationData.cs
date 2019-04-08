@@ -48,7 +48,10 @@ namespace CoreTemplateStudio.Api.Models.Generation
             Pages.ForEach(p => userSelection.Pages.Add(p.ToGenerationItem()));
             Features.ForEach(p => userSelection.Features.Add(p.ToGenerationItem()));
 
-            userSelection.HomeName = userSelection.Pages.FirstOrDefault().Name;
+            bool pagesExist = userSelection.Pages.Count > 0;
+
+            userSelection.HomeName = pagesExist ? userSelection.Pages.FirstOrDefault().Name
+                                                : string.Empty;
 
             return userSelection;
         }
