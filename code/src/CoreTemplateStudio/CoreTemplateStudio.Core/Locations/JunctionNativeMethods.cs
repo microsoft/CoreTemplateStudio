@@ -220,53 +220,63 @@ namespace Microsoft.Templates.Core.Locations
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Directory.CreateDirectory(Path.Combine(targetDir, ".."));
-                int i = Syscall.symlink(sourceDir, targetDir);
-                if (i == -1)
-                {
-                    Console.WriteLine(Stdlib.GetLastError());
-                }
+                CreateJuntionOtherPlatforms(sourceDir, targetDir);
             }
             else
             {
-                Directory.CreateDirectory(targetDir);
+                CreateJuntionWindows(sourceDir, targetDir);
+            }
+        }
 
-                using (SafeFileHandle handle = OpenReparsePoint(targetDir, EFileAccess.GenericWrite))
+        private static void CreateJuntionWindows(string sourceDir, string targetDir)
+        {
+            Directory.CreateDirectory(targetDir);
+
+            using (SafeFileHandle handle = OpenReparsePoint(targetDir, EFileAccess.GenericWrite))
+            {
+                byte[] sourceDirBytes = Encoding.Unicode.GetBytes(NonInterpretedPathPrefix + Path.GetFullPath(sourceDir));
+
+                REPARSE_DATA_BUFFER reparseDataBuffer = new REPARSE_DATA_BUFFER
                 {
-                    byte[] sourceDirBytes = Encoding.Unicode.GetBytes(NonInterpretedPathPrefix + Path.GetFullPath(sourceDir));
+                    ReparseTag = IO_REPARSE_TAG_MOUNT_POINT,
+                    ReparseDataLength = (ushort)(sourceDirBytes.Length + 12),
+                    SubstituteNameOffset = 0,
+                    SubstituteNameLength = (ushort)sourceDirBytes.Length,
+                    PrintNameOffset = (ushort)(sourceDirBytes.Length + 2),
+                    PrintNameLength = 0,
+                    PathBuffer = new byte[0x3ff0],
+                };
+                Array.Copy(sourceDirBytes, reparseDataBuffer.PathBuffer, sourceDirBytes.Length);
 
-                    REPARSE_DATA_BUFFER reparseDataBuffer = new REPARSE_DATA_BUFFER
+                int inBufferSize = Marshal.SizeOf(reparseDataBuffer);
+                IntPtr inBuffer = Marshal.AllocHGlobal(inBufferSize);
+
+                try
+                {
+                    Marshal.StructureToPtr(reparseDataBuffer, inBuffer, false);
+
+                    int bytesReturned;
+                    bool result = DeviceIoControl(handle.DangerousGetHandle(), FSCTL_SET_REPARSE_POINT, inBuffer: inBuffer, nInBufferSize: sourceDirBytes.Length + 20, outBuffer: IntPtr.Zero, nOutBufferSize: 0, pBytesReturned: out bytesReturned, lpOverlapped: IntPtr.Zero);
+
+                    if (!result)
                     {
-                        ReparseTag = IO_REPARSE_TAG_MOUNT_POINT,
-                        ReparseDataLength = (ushort)(sourceDirBytes.Length + 12),
-                        SubstituteNameOffset = 0,
-                        SubstituteNameLength = (ushort)sourceDirBytes.Length,
-                        PrintNameOffset = (ushort)(sourceDirBytes.Length + 2),
-                        PrintNameLength = 0,
-                        PathBuffer = new byte[0x3ff0],
-                    };
-                    Array.Copy(sourceDirBytes, reparseDataBuffer.PathBuffer, sourceDirBytes.Length);
-
-                    int inBufferSize = Marshal.SizeOf(reparseDataBuffer);
-                    IntPtr inBuffer = Marshal.AllocHGlobal(inBufferSize);
-
-                    try
-                    {
-                        Marshal.StructureToPtr(reparseDataBuffer, inBuffer, false);
-
-                        int bytesReturned;
-                        bool result = DeviceIoControl(handle.DangerousGetHandle(), FSCTL_SET_REPARSE_POINT, inBuffer: inBuffer, nInBufferSize: sourceDirBytes.Length + 20, outBuffer: IntPtr.Zero, nOutBufferSize: 0, pBytesReturned: out bytesReturned, lpOverlapped: IntPtr.Zero);
-
-                        if (!result)
-                        {
-                            ThrowLastWin32Error($"Unable to create junction point \'{sourceDir}\' -> \'{targetDir}\'.");
-                        }
-                    }
-                    finally
-                    {
-                        Marshal.FreeHGlobal(inBuffer);
+                        ThrowLastWin32Error($"Unable to create junction point \'{sourceDir}\' -> \'{targetDir}\'.");
                     }
                 }
+                finally
+                {
+                    Marshal.FreeHGlobal(inBuffer);
+                }
+            }
+        }
+
+        private static void CreateJuntionOtherPlatforms(string sourceDir, string targetDir)
+        {
+            Directory.CreateDirectory(Path.Combine(targetDir, ".."));
+            int i = Syscall.symlink(sourceDir, targetDir);
+            if (i == -1)
+            {
+                Console.WriteLine(Stdlib.GetLastError());
             }
         }
 
