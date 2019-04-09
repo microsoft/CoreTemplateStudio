@@ -6,11 +6,11 @@ Core Template Studio is a .NET Standard 2.1 project that handles all of the temp
 
 ## Build Status
 
-| Branch  |                                                                                                                                 Build Status                                                                                                                                  |
-| :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| dev     |     [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=dev)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=dev)     |
-| staging | [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=staging)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=staging) |
-| master  |  [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=master)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=master)  |
+| Branch  |                                                                                                                Build Status                                                                                                                |
+| :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| dev     |     [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=dev)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=dev)     |
+| staging | [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=staging)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=staging) |
+| master  |  [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=master)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=master)  |
 
 # Documentation
 
