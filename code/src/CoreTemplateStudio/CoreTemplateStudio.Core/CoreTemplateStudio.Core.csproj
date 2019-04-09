@@ -50,7 +50,7 @@
     <RootNamespace>Microsoft.Templates.Core</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>TestKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\..\TestKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
 
