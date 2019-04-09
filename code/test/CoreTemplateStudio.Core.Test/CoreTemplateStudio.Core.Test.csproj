@@ -1,10 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="TestData\NewFolder\**" />
+    <None Remove="TestData\NewFolder\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="TestData\Templates\_catalog\backendframeworks.json" />
@@ -18,7 +23,6 @@
   <ItemGroup>
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\description.md" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.description.md" />
-
     <Content Include="TestData\Templates\CompositionTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\CompositionTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\Dependencies.FeatureTemplateVB\.template.config\template.json" />
@@ -112,6 +116,7 @@
     <Compile Include="Diagnostics\TelemetryServiceTest.cs" />
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="PostActions\Catalog\AddJsonDictionaryItemPostActionTest.cs" />
     <Compile Include="Templates\TemplateRepositoryTests.cs" />
     <Compile Include="Localization\LocalizationTest.cs" />
     <Compile Include="Locations\TemplateSourceConfigTests.cs" />
@@ -194,6 +199,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
 
+    <None Include="TestData\TestJson\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    
     <AdditionalFiles Include="..\..\StyleCop.json">
       <Link>StyleCop.json</Link>
     </AdditionalFiles>
@@ -279,8 +288,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Gen\" />
   </ItemGroup>
 </Project>
