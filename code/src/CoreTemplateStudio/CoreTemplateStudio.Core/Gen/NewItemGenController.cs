@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using Microsoft.TemplateEngine.Edge.Template;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Extensions;
@@ -30,25 +31,11 @@ namespace Microsoft.Templates.Core.Gen
             PostactionFactory = new NewItemPostActionFactory();
         }
 
-        [Obsolete("This method has been depricated due to the additional requirement of frontend and backend frameworks, please use UpdatedUnsafeGenerateNewItemAsync instead.")]
         public async Task UnsafeGenerateNewItemAsync(TemplateType templateType, UserSelection userSelection)
         {
             VerifyGenContextPaths();
 
             var genItems = GenComposer.ComposeNewItem(userSelection).ToList();
-
-            var chrono = Stopwatch.StartNew();
-            var genResults = await GenerateItemsAsync(genItems, true);
-            chrono.Stop();
-
-            TrackTelemetry(templateType, genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, userSelection.Framework, userSelection.Platform);
-        }
-
-        public async Task UpdatedUnsafeGenerateNewItemAsync(TemplateType templateType, UserSelection userSelection)
-        {
-            VerifyGenContextPaths();
-
-            var genItems = GenComposer.ComposeNewItemFromSelection(userSelection).ToList();
 
             var chrono = Stopwatch.StartNew();
             var genResults = await GenerateItemsAsync(genItems, true);

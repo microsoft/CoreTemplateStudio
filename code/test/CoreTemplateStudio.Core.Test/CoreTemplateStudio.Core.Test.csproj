@@ -7,26 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestData\Templates\_catalog\backendframeworks.json" />
+    <None Remove="TestData\Templates\_catalog\en-US.backendframeworks.json" />
+    <None Remove="TestData\Templates\_catalog\es-ES.backendframeworks.json" />
+    <None Remove="TestData\Templates\_catalog\frontendframeworks\en-US.TestFramework.md" />
+    <None Remove="TestData\Templates\_catalog\frontendframeworks\es-ES.TestFramework.md" />
+    <None Remove="TestData\Templates\_catalog\frontendframeworks\TestFramework.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\description.md" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.description.md" />
 
     <Content Include="TestData\Templates\CompositionTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\CompositionTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\CompositionTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\Dependencies.FeatureTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\Dependencies.FeatureTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\Dependencies.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.template.json" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\es-ES.template.json" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\FeatureTemplateAny\.template.config\en-US.template.json" />
-    <Content Include="TestData\Templates\FeatureTemplateAny\.template.config\es-ES.template.json" />
-    <Content Include="TestData\Templates\FeatureTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\FeatureTemplate\.template.config\en-US.template.json" />
     <Content Include="TestData\Templates\FeatureTemplate\.template.config\es-ES.template.json" />
     <Content Include="TestData\Templates\FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\Hidden.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\Naming.DefaultNameTemplateAny\.template.config\template.json" />
     <Content Include="TestData\Templates\Naming.DefaultNameTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\Naming.DefaultNameTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\OutputToParent.FeatureTemplate\.template.config\template.json" />
@@ -34,9 +37,9 @@
     <Content Include="TestData\Templates\PageTemplate\.template.config\en-US.template.json" />
     <Content Include="TestData\Templates\PageTemplate\.template.config\es-ES.template.json" />
     <Content Include="TestData\Templates\PageTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\ProjectTemplateAny\.template.config\icon.png" />
-    <Content Include="TestData\Templates\ProjectTemplateAny\.template.config\Layout.json" />
-    <Content Include="TestData\Templates\ProjectTemplateAny\.template.config\template.json" />
+    <Content Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\icon.png" />
+    <Content Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\Layout.json" />
+    <Content Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\template.json" />
     <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\icon.png" />
     <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\Layout.json" />
     <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\template.json" />
@@ -47,6 +50,12 @@
     <Content Include="TestData\Templates\TelemetryName.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\UnspecifiedTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\UnspecifiedTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\_catalog\backendframeworks.json" />
+    <Content Include="TestData\Templates\_catalog\en-US.backendframeworks.json" />
+    <Content Include="TestData\Templates\_catalog\es-ES.backendframeworks.json" />
+    <Content Include="TestData\Templates\_catalog\frontendframeworks\en-US.TestFramework.md" />
+    <Content Include="TestData\Templates\_catalog\frontendframeworks\es-ES.TestFramework.md" />
+    <Content Include="TestData\Templates\_catalog\frontendframeworks\TestFramework.md" />
     <Content Include="TestData\TestProject\Test.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -103,6 +112,7 @@
     <Compile Include="Diagnostics\TelemetryServiceTest.cs" />
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Templates\TemplateRepositoryTests.cs" />
     <Compile Include="Localization\LocalizationTest.cs" />
     <Compile Include="Locations\TemplateSourceConfigTests.cs" />
     <Compile Include="Locations\UnitTestsTemplatesSource.cs" />
@@ -204,15 +214,14 @@
     <None Include="Packaging\SampleConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="TestData\Templates\UnspecifiedTemplateAny\.template.config\template.json" />
 
     <Content Include="TestData\Templates\UnspecifiedTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\_catalog\en-US.frameworks.json" />
-    <Content Include="TestData\Templates\_catalog\es-ES.frameworks.json" />
-    <Content Include="TestData\Templates\_catalog\frameworks.json" />
-    <Content Include="TestData\Templates\_catalog\frameworks\en-US.TestFramework.md" />
-    <Content Include="TestData\Templates\_catalog\frameworks\es-ES.TestFramework.md" />
-    <Content Include="TestData\Templates\_catalog\frameworks\TestFramework.md" />
+    <Content Include="TestData\Templates\_catalog\en-US.frontendframeworks.json" />
+    <Content Include="TestData\Templates\_catalog\es-ES.frontendframeworks.json" />
+    <Content Include="TestData\Templates\_catalog\frontendframeworks.json" />
+    <Content Include="TestData\Templates\_catalog\backendframeworks\en-US.TestFramework.md" />
+    <Content Include="TestData\Templates\_catalog\backendframeworks\es-ES.TestFramework.md" />
+    <Content Include="TestData\Templates\_catalog\backendframeworks\TestFramework.md" />
     <Content Include="TestData\Templates\_catalog\en-US.projectTypes.json" />
     <Content Include="TestData\Templates\_catalog\es-ES.projectTypes.json" />
     <Content Include="TestData\Templates\_catalog\projectTypes.json" />
@@ -248,6 +257,16 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestData\Templates\FeatureTemplateVB\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\FeatureTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\FeatureTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\FeatureTemplate\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\PageTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\PageTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\PageTemplate\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\description.md" />
+    <None Include="TestData\Templates\ProjectTemplateVB\.template.config\description.md" />
+    <None Include="TestData\Templates\ProjectTemplate\.template.config\description.md" />
   </ItemGroup>
   <ItemGroup>
   <None Update="xunit.runner.json"> 
@@ -260,5 +279,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Gen\" />
   </ItemGroup>
 </Project>

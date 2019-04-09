@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Templates.Core
@@ -32,6 +33,34 @@ namespace Microsoft.Templates.Core
                 default:
                     return language;
             }
+        }
+
+        public static bool IsValidLanguage(string language, string platform)
+        {
+            bool isValid = false;
+
+            // Validate that the language inputted is valid.
+            foreach (string lang in GetAllLanguages())
+            {
+                if (lang.Equals(language, StringComparison.OrdinalIgnoreCase))
+                {
+                    isValid = true;
+                }
+            }
+
+            bool isUwpInvalidLanguage = language != null ? platform.Equals(Platforms.Uwp, StringComparison.OrdinalIgnoreCase)
+                                        && language.Equals(Any, StringComparison.OrdinalIgnoreCase)
+                                        : true;
+            bool isWebInvalidLanguage = language != null ? platform.Equals(Platforms.Web, StringComparison.OrdinalIgnoreCase)
+                                        && !language.Equals(Any, StringComparison.OrdinalIgnoreCase)
+                                        : true;
+            if (isUwpInvalidLanguage || isWebInvalidLanguage)
+            {
+                // Validity is false if either are true since this is an invalid language + platform combo.
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
 }

@@ -2,31 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Linq;
 
+using CoreTemplateStudio.Api.Extensions.Filters;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
-namespace CoreTemplateStudio.Api.Controllers
+namespace Microsoft.Templates.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateGenContextFilter]
     public class ProjectTypeController : Controller
     {
-        /// <summary>
-        /// GET: api/projectType
-        /// Gets available project types for the current platform and language.
-        /// </summary>
-        /// <returns>all the project types for the current platform and language. The parameters defined in sync will be used.</returns>
         [HttpGet]
-        public JsonResult GetProjectTypes()
+        public List<MetadataInfo> GetProjectTypes()
         {
-            if (GenContext.ToolBox == null)
-            {
-                return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
-            }
+            var platform = GenContext.CurrentPlatform;
+            var result = GenContext.ToolBox.Repo.GetProjectTypes(platform);
 
-            return Json(Ok(new { items = GenContext.ToolBox.Repo.GetProjectTypes().ToList() }));
+            return result.ToList();
         }
     }
 }

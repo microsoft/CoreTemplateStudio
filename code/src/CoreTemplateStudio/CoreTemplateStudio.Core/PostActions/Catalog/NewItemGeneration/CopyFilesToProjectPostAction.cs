@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Helpers;
 
@@ -15,7 +16,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
 {
     public class CopyFilesToProjectPostAction : PostAction<TempGenerationResult>
     {
-        private List<string> excludeFromOpeningExtensions = new List<string>() { ".png", ".jpg", ".bmp", ".ico" };
+        private List<string> excludeFromOpeningExtensions = new List<string>() { ".png", ".jpg", ".bmp", ".ico", ".csproj", ".vbproj" };
 
         public CopyFilesToProjectPostAction(TempGenerationResult config)
             : base(config)

@@ -7,10 +7,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
 using Microsoft.Templates.Core.Resources;
 using Microsoft.Templates.Core.Test.TestFakes;
+
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.PostActions.Catalog
@@ -30,6 +32,12 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             Directory.CreateDirectory(path);
             File.Copy(Path.Combine(Environment.CurrentDirectory, $"TestData\\SearchReplace\\Source.cs"), sourceFile, true);
             File.Copy(Path.Combine(Environment.CurrentDirectory, $"TestData\\SearchReplace\\Source_searchreplace.cs"), mergeFile, true);
+
+            GenContext.Current = new TestContextProvider()
+            {
+                GenerationOutputPath = path,
+                DestinationPath = path,
+            };
 
             var mergePostAction = new SearchAndReplacePostAction(templateName, new MergeConfiguration(mergeFile, true));
             mergePostAction.Execute();

@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Abstractions.Mount;
 using Microsoft.Templates.Core.Composition;
-
+using Microsoft.Templates.Core.Gen;
 using Newtonsoft.Json;
 
 namespace Microsoft.Templates.Core
@@ -155,23 +155,9 @@ namespace Microsoft.Templates.Core
                         .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
         }
 
-        [Obsolete("This method has been deprecated due to the addition of frontend and backend frameworks, please use GetFrontEndFrameworkList or GetBackEndFramework instead.")]
-        public static List<string> GetFrameworkList(this ITemplateInfo ti)
-        {
-            var frameworks = GetValueFromTag(ti, TagPrefix + "framework");
-            var result = new List<string>();
-
-            if (!string.IsNullOrEmpty(frameworks))
-            {
-                result.AddRange(frameworks.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-            }
-
-            return result;
-        }
-
         public static List<string> GetFrontEndFrameworkList(this ITemplateInfo ti)
         {
-            var frontEndFrameworks = GetValueFromTag(ti, TagPrefix + "frontEndFramework");
+            var frontEndFrameworks = GetValueFromTag(ti, TagPrefix + "frontendframework");
 
             var result = new List<string>();
 
@@ -185,7 +171,7 @@ namespace Microsoft.Templates.Core
 
         public static List<string> GetBackEndFrameworkList(this ITemplateInfo ti)
         {
-            var backEndFrameworks = GetValueFromTag(ti, TagPrefix + "backEndFramework");
+            var backEndFrameworks = GetValueFromTag(ti, TagPrefix + "backendframework");
 
             var result = new List<string>();
 
@@ -218,6 +204,21 @@ namespace Microsoft.Templates.Core
         public static string GetGroup(this ITemplateInfo ti)
         {
             return GetValueFromTag(ti, TagPrefix + "group");
+        }
+
+        public static bool GetIsGroupExclusiveSelection(this ITemplateInfo ti)
+        {
+            var result = GetValueFromTag(ti, TagPrefix + "isGroupExclusiveSelection");
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                if (bool.TryParse(result, out bool boolResult))
+                {
+                    return boolResult;
+                }
+            }
+
+            return false;
         }
 
         public static string GetVersion(this ITemplateInfo ti)

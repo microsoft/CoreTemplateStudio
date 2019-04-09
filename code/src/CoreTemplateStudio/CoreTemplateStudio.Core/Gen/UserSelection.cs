@@ -21,20 +21,6 @@ namespace Microsoft.Templates.Core.Gen
 
     public class UserSelection
     {
-        [Obsolete("This constructor has been depricated due to the additional requirement of frontend and backend frameworks, please use the constructor that uses both frontend and backend frameworks.")]
-        public UserSelection(string projectType, string framework, string platform, string language)
-        {
-            if (string.IsNullOrWhiteSpace(language))
-            {
-                throw new ArgumentNullException(nameof(language));
-            }
-
-            ProjectType = projectType;
-            Framework = framework;
-            Platform = platform;
-            Language = language;
-        }
-
         public UserSelection(string projectType, string frontEndFramework, string backEndFramework, string platform, string language)
         {
             if (string.IsNullOrWhiteSpace(language))
@@ -51,9 +37,6 @@ namespace Microsoft.Templates.Core.Gen
 
         public string ProjectType { get; set; }
 
-        [Obsolete("This property has been depricated due to the additional requirement of frontend and backend frameworks, please use FrontEndFramework and BackEndFramework instead.")]
-        public string Framework { get; set; }
-
         public string FrontEndFramework { get; set; }
 
         public string BackEndFramework { get; set; }
@@ -66,11 +49,11 @@ namespace Microsoft.Templates.Core.Gen
 
         public ItemGenerationType ItemGenerationType { get; set; } = ItemGenerationType.None;
 
-        public List<TemplateInfo> Pages { get; } = new List<TemplateInfo>();
+        public List<UserSelectionItem> Pages { get; } = new List<UserSelectionItem>();
 
-        public List<TemplateInfo> Features { get; } = new List<TemplateInfo>();
+        public List<UserSelectionItem> Features { get; } = new List<UserSelectionItem>();
 
-        public IEnumerable<TemplateInfo> PagesAndFeatures
+        public IEnumerable<UserSelectionItem> PagesAndFeatures
         {
             get
             {
@@ -116,22 +99,22 @@ namespace Microsoft.Templates.Core.Gen
 
             if (Pages.Any())
             {
-                sb.AppendFormat("Pages: '{0}'", string.Join(", ", Pages.Select(p => $"{p.Name} - {p.Template.Name}").ToArray()));
+                sb.AppendFormat("Pages: '{0}'", string.Join(", ", Pages.Select(p => $"{p.Name} - {p.TemplateId}").ToArray()));
                 sb.AppendLine();
             }
 
             if (Features.Any())
             {
-                sb.AppendFormat("Features: '{0}'", string.Join(", ", Features.Select(p => $"{p.Name} - {p.Template.Name}").ToArray()));
+                sb.AppendFormat("Features: '{0}'", string.Join(", ", Features.Select(p => $"{p.Name} - {p.TemplateId}").ToArray()));
                 sb.AppendLine();
             }
 
             return sb.ToString();
         }
 
-        public void Add(TemplateInfo template)
+        public void Add(UserSelectionItem template, TemplateType templateType)
         {
-            switch (template.Template.GetTemplateType())
+            switch (templateType)
             {
                 case TemplateType.Page:
                     Pages.Add(template);

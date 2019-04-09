@@ -493,10 +493,26 @@ Die folgenden Änderungen konnten nicht integriert werden: {2}
     <comment>Generating exception message. {0}: Template. {1}: Name, {2}: Reason</comment>
   </data>
   <data name="ErrorTrackTelemetryException" xml:space="preserve">
-    <value>Ausnahme für die Nachverfolgungstelemetrie während der Generierung.</value>
+    <value>Ausnahmenachverfolgungstelemetrie während der Generierung.</value>
     <comment>Exception tracking telemetry during generation.</comment>
   </data>
   <data name="ErrorUnableResolvePlatform" xml:space="preserve">
     <value>Plattform kann nicht aufgelöst werden.</value>
+  </data>
+  <data name="ErrorTitleInvalidProjectName" xml:space="preserve">
+    <value>Ungültiger Projektname</value>
+    <comment>Message box title for project invalid names.</comment>
+  </data>
+  <data name="ErrorProjectReservedName" xml:space="preserve">
+    <value>„{0}“ ist ein reservierter Name. Wählen Sie einen anderen Namen aus und wiederholen Sie den Vorgang.</value>
+    <comment>Message box text for project reserved names.</comment>
+  </data>
+  <data name="ErrorProjectStartsWith" xml:space="preserve">
+    <value>„{0}“ ist kein gültiger Name. Ein Projektname darf nicht mit „{1}“ beginnen.</value>
+    <comment>Message box text for project name can not start with.</comment>
+  </data>
+  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
+    <value>File `{0}` has encoding &amp;apos;{1}&amp;apos; while file `{2}` has encoding &amp;apos;{3}&amp;apos; please ensure both encodings are the same.</value>
+    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
 </root>

@@ -9,7 +9,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.Win32.SafeHandles;
+
+using Mono.Unix.Native;
 
 namespace Microsoft.Templates.Core.Locations
 {
@@ -215,6 +218,18 @@ namespace Microsoft.Templates.Core.Locations
                 throw new IOException($"Directory '{targetDir}' already exists.");
             }
 
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                CreateJuntionOtherPlatforms(sourceDir, targetDir);
+            }
+            else
+            {
+                CreateJuntionWindows(sourceDir, targetDir);
+            }
+        }
+
+        private static void CreateJuntionWindows(string sourceDir, string targetDir)
+        {
             Directory.CreateDirectory(targetDir);
 
             using (SafeFileHandle handle = OpenReparsePoint(targetDir, EFileAccess.GenericWrite))
@@ -252,6 +267,16 @@ namespace Microsoft.Templates.Core.Locations
                 {
                     Marshal.FreeHGlobal(inBuffer);
                 }
+            }
+        }
+
+        private static void CreateJuntionOtherPlatforms(string sourceDir, string targetDir)
+        {
+            Directory.CreateDirectory(Path.Combine(targetDir, ".."));
+            int i = Syscall.symlink(sourceDir, targetDir);
+            if (i == -1)
+            {
+                Console.WriteLine(Stdlib.GetLastError());
             }
         }
 

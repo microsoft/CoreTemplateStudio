@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Microsoft.Templates.Core.Locations;
 using Microsoft.Templates.Core.Packaging;
 using Microsoft.Templates.Core.Test.TestFakes;
+
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Locations
@@ -250,6 +251,7 @@ namespace Microsoft.Templates.Core.Test.Locations
             Assert.True(File.Exists(Path.Combine(extractionDir, Path.GetFileName(inFile))));
 
             File.Delete(outFile);
+            File.Delete(inFile);
         }
 
         [Fact]

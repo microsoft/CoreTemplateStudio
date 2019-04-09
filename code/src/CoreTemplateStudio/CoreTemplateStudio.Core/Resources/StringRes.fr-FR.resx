@@ -499,4 +499,20 @@ Les modifications suivantes n'ont pu être intégrées : {2}
   <data name="ErrorUnableResolvePlatform" xml:space="preserve">
     <value>Impossible de résoudre la plateforme.</value>
   </data>
+  <data name="ErrorTitleInvalidProjectName" xml:space="preserve">
+    <value>Nom de projet incorrect</value>
+    <comment>Message box title for project invalid names.</comment>
+  </data>
+  <data name="ErrorProjectReservedName" xml:space="preserve">
+    <value>« {0} » est un nom réservé. Choisissez un autre nom et réessayez.</value>
+    <comment>Message box text for project reserved names.</comment>
+  </data>
+  <data name="ErrorProjectStartsWith" xml:space="preserve">
+    <value>« {0} » n'est pas un nom correct. Le nom de projet ne peut pas commencer par « {1} ».</value>
+    <comment>Message box text for project name can not start with.</comment>
+  </data>
+  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
+    <value>File `{0}` has encoding &amp;apos;{1}&amp;apos; while file `{2}` has encoding &amp;apos;{3}&amp;apos; please ensure both encodings are the same.</value>
+    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
+  </data>
 </root>

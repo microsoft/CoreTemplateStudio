@@ -3,43 +3,39 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Linq;
+
+using CoreTemplateStudio.Api.Extensions.Filters;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.TemplateEngine.Abstractions;
+using Microsoft.Templates.Api.Resources;
+using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateGenContextFilter]
     public class PageController : Controller
     {
-        /// <summary>
-        /// GET api/page?projectType=<>&frontEndFramework=<>&backEndFramework
-        /// Given a project type, and possibly either a frontend and backend framework
-        /// will return a list of pages supported by these filters.
-        /// </summary>
-        /// <param name="projectType">Project Type that was selected by the user</param>
-        /// <param name="frontEndFramework">The frontend framework that was selected by the user</param>
-        /// <param name="backEndFramework">The backend framework that was selected by the user</param>
-        /// <returns>A list of pages that match with the filters given.</returns>
         [HttpGet]
-        public JsonResult GetPagesForFrameworks(string projectType, string frontEndFramework, string backEndFramework)
+        public ActionResult<List<TemplateInfo>> GetPagesForFrameworks(string projectType, string frontEndFramework, string backEndFramework)
         {
-            if (GenContext.ToolBox == null)
-            {
-                return Json(BadRequest(new { message = "You must first sync templates before calling this endpoint" }));
-            }
-
             if (frontEndFramework == null && backEndFramework == null)
             {
-                return Json(BadRequest(new { message = "You must specify a backend or frontend framework at the very least" }));
+                return BadRequest(new { message = StringRes.BadReqNoBackendOrFrontend });
             }
 
-            string platform = GenContext.CurrentPlatform;
+            var platform = GenContext.CurrentPlatform;
+            var pages = GenContext.ToolBox.Repo.GetTemplatesInfo(
+                                                                TemplateType.Page,
+                                                                platform,
+                                                                projectType,
+                                                                frontEndFramework,
+                                                                backEndFramework);
 
-            IEnumerable<ITemplateInfo> templates = GenComposer.GetPages(projectType, platform, frontEndFramework, backEndFramework);
-            return Json(Ok(new { items = templates }));
+            return pages.ToList();
         }
     }
 }

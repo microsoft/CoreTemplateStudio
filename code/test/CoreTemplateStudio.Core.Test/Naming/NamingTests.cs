@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test
@@ -116,8 +117,12 @@ namespace Microsoft.Templates.Core.Test
         public void Validate_RecognizesValidNameAsValid(string language)
         {
             SetUpFixtureForTesting(language);
-
-            var result = Naming.Validate("Blank1", new List<Validator>());
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+            };
+            var result = Naming.Validate("Blank1", validators);
 
             Assert.True(result.IsValid);
         }
@@ -127,8 +132,12 @@ namespace Microsoft.Templates.Core.Test
         public void Validate_RecognizesEmptyStringAsInvalid(string language)
         {
             SetUpFixtureForTesting(language);
-
-            var result = Naming.Validate(string.Empty, new List<Validator>());
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+            };
+            var result = Naming.Validate(string.Empty, validators);
 
             Assert.False(result.IsValid);
             Assert.Equal(ValidationErrorType.Empty, result.ErrorType);
@@ -141,7 +150,12 @@ namespace Microsoft.Templates.Core.Test
             SetUpFixtureForTesting(language);
 
             var existing = new[] { "Blank" };
-            var validators = new List<Validator> { new ExistingNamesValidator(existing) };
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+                new ExistingNamesValidator(existing),
+            };
             var result = Naming.Validate("Blank", validators);
 
             Assert.False(result.IsValid);
@@ -154,7 +168,12 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(language);
 
-            var validators = new List<Validator> { new DefaultNamesValidator() };
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+                new DefaultNamesValidator(),
+            };
             var result = Naming.Validate("LiveTile", validators);
 
             Assert.False(result.IsValid);
@@ -167,7 +186,12 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(language);
 
-            var validators = new List<Validator> { new ReservedNamesValidator() };
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+                new ReservedNamesValidator(),
+            };
             var result = Naming.Validate("Page", validators);
 
             Assert.False(result.IsValid);
@@ -180,7 +204,12 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(language);
 
-            var result = Naming.Validate("Blank;", new List<Validator>());
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+            };
+            var result = Naming.Validate("Blank;", validators);
 
             Assert.False(result.IsValid);
             Assert.Equal(ValidationErrorType.BadFormat, result.ErrorType);
@@ -192,7 +221,12 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(language);
 
-            var result = Naming.Validate("1Blank", new List<Validator>());
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+            };
+            var result = Naming.Validate("1Blank", validators);
 
             Assert.False(result.IsValid);
             Assert.Equal(ValidationErrorType.BadFormat, result.ErrorType);
@@ -204,7 +238,13 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(language);
 
-            var result = Naming.Validate("BlankPage", new List<Validator>() { new PageSuffixValidator() });
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+                new PageSuffixValidator(),
+            };
+            var result = Naming.Validate("BlankPage", validators);
 
             Assert.False(result.IsValid);
             Assert.Equal(ValidationErrorType.EndsWithPageSuffix, result.ErrorType);
@@ -216,7 +256,53 @@ namespace Microsoft.Templates.Core.Test
         {
             SetUpFixtureForTesting(language);
 
-            var result = Naming.Validate("BlankView", new List<Validator>() { new PageSuffixValidator() });
+            var validators = new List<Validator>()
+            {
+                new EmptyNameValidator(),
+                new BadFormatValidator(),
+                new PageSuffixValidator(),
+            };
+            var result = Naming.Validate("BlankView", validators);
+
+            Assert.True(result.IsValid);
+            Assert.Equal(ValidationErrorType.None, result.ErrorType);
+        }
+
+        [Fact]
+        public void Validate_SuccessfullyIdentifies_ReservedProjectName()
+        {
+            var validators = new List<Validator>()
+            {
+                new ProjectReservedNamesValidator(),
+            };
+            var result = Naming.Validate("Prism", validators);
+
+            Assert.False(result.IsValid);
+            Assert.Equal(ValidationErrorType.ProjectReservedName, result.ErrorType);
+        }
+
+        [Fact]
+        public void Validate_SuccessfullyIdentifies_ProjectStartsWith()
+        {
+            var validators = new List<Validator>()
+            {
+                new ProjectStartsWithValidator(),
+            };
+            var result = Naming.Validate("$App", validators);
+
+            Assert.False(result.IsValid);
+            Assert.Equal(ValidationErrorType.ProjectStartsWith, result.ErrorType);
+        }
+
+        [Fact]
+        public void Validate_SuccessfullyIdentifies_ValidProjectName()
+        {
+            var validators = new List<Validator>()
+            {
+                new ProjectReservedNamesValidator(),
+                new ProjectStartsWithValidator(),
+            };
+            var result = Naming.Validate("App", validators);
 
             Assert.True(result.IsValid);
             Assert.Equal(ValidationErrorType.None, result.ErrorType);
@@ -224,7 +310,7 @@ namespace Microsoft.Templates.Core.Test
 
         private void SetUpFixtureForTesting(string language)
         {
-            _fixture.InitializeFixture(language);
+            _fixture.InitializeFixture("test", language);
         }
 
         public static IEnumerable<object[]> GetAllLanguages()

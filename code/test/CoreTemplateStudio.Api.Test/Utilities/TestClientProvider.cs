@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+
 using CoreTemplateStudio.Api;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 
 namespace Microsoft.Templates.Api.Test.Utilities
 {

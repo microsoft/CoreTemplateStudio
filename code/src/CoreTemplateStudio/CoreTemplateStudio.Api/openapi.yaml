@@ -6,7 +6,7 @@ info:
   version: "1.0.0"
   title: "CoreTemplateStudio Engine API"
   contact:
-    email: "t-dadua@microsoft.com"
+    email: "t-satara@microsoft.com"
 servers:
 - url: "http://localhost:5000/api"
   description: "local server to connect with the engine"
@@ -28,10 +28,25 @@ paths:
     post:
       tags:
       - "generate"
-      summary: "Generate templates from user selections"
+      summary: "Generate templates from user selections given a path and a project name."
       description: "This endpoint parses and validates a JSON of user selections 
-      from the request body and generates the templates accordingly"
+      from the request body and generates the templates to the gen path with the project name provided."
       operationId: "generate"
+      parameters:
+      - in: "query"
+        name: "projectName"
+        description: "The name of the project."
+        required: true
+        schema:
+          type: "string"
+          example: "Test"
+      - in: "query"
+        name: "genPath"
+        description: "The output folder for generation"
+        required: true
+        schema:
+          type: "string"
+          example: "./Output"
       requestBody:
         description: "User selection as JSON. The selections are the keys 
         returned from other (information/detail) endpoints. Note that the
@@ -104,40 +119,22 @@ paths:
     get:
       tags:
       - "framework"
-      summary: "Get all frameworks for the current platform "
-      description: "Returns frameworks for given current platform and language. Platform and language must first be defined
-      in the POST /sync endpoint"
+      summary: "Get all frameworks for the current platform for the specified project type"
+      description: "Returns frameworks for given current platform, language and project type. Platform and language must first be defined
+      in the POST /sync endpoint. Project type should correspond to the name of a project type returned from the /projectType endpoint."
       operationId: "GetFrameworks"
+      parameters:
+      - in: query
+        name: projectType
+        description: >-
+          The project type you want frameworks for, to get meaningful output make sure it is the project type from /projectType.
+        required: true
+        schema:
+          type: string
+        example: FullStackWebApp
       responses:
         200:
           $ref: '#/components/responses/FrameworksResponse'
-        400:
-          $ref: '#/components/responses/ErrorResponse'
-        404:
-          $ref: '#/components/responses/ErrorResponse'
-  /framework/{frameworkType}:
-    get:
-      tags:
-      - "framework"
-      summary: "Get all frameworks matching the frameworkType for the current platform and language."
-      description: "Returns frameworks of given frameworkType for the current platform and language. Platform and Language must
-      first be defined in the POST /sync endpoint. WinTS should use /framework endpoint as there is only one type of framework in WinTS."
-      operationId: "GetFrameworksOfType"
-      parameters:
-      - in: "path"
-        name: "frameworkType"
-        description: "Framework Type to display matching frameworks for. Can be frontend or backend for WebTS and
-        uwpDesign for WinTS. Case-insensitive."
-        required: true
-        schema:
-          type: "string"
-          enum:
-          - "frontend"
-          - "backend"
-          - "uwpDesign"
-      responses:
-        200:
-          $ref: '#/components/responses/FrameworksResponseSpecific'
         400:
           $ref: '#/components/responses/ErrorResponse'
         404:
@@ -146,23 +143,37 @@ paths:
     get:
       tags:
       - "page"
-      summary: "Get all valid pages for given frameworks "
-      description: "Returns valid pages for multiple frameworks passed in query"
+      summary: "Get all valid pages for given frameworks and  project type"
+      description: "Returns valid pages for multiple frameworks and the project type passed in query"
       operationId: "GetPagesForFrameworks"
       parameters:
       - in: "query"
-        name: "frameworks"
-        description: "Frameworks to return matching pages for. Provide both frontend and backend framework
-        for web. This can be done as *`?frameworks=ReactJS&frameworks=NodeJS`*"
+        name: "frontEndFramework"
+        description: "Frontend framework to return matching pages for. Provide both frontend and backend framework
+        for web unless backend only project type is chosen."
         required: true
         schema:
-          type: "array"
-          items:
-            type: "string"
-            example: "ReactJS"
+          type: "string"
+        example: "ReactJS"
+      - in: "query"
+        name: "backEndFramework"
+        description: "Backend to return matching pages for. Provide both frontend and backend framework
+        for web unless backend only project type is chosen. Backend can be ommitted for WinTS."
+        required: true
+        schema:
+          type: "string"
+        example: "NodeJS"
+      - in: "query"
+        name: "projectType"
+        description: "The project type to return matching pages for. 
+        To get meaningful output make sure it is the project type from /projectType."
+        required: true
+        schema:
+          type: "string"
+        example: "FullStackWebApp"
       responses:
         200:
-          $ref: '#/components/responses/FrameworksResponse'
+          $ref: '#/components/responses/PageResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
         404:
@@ -171,23 +182,38 @@ paths:
     get:
       tags:
       - "feature"
-      summary: "Get all valid features for given frameworks "
-      description: "Returns valid feature for multiple frameworks passed in query"
+      summary: "Get all valid features for given frameworks and project type"
+      description: "Given a project type, and possibly either a frontend and backend framework
+        will return a list of features supported by these filters."
       operationId: "GetFeaturesForFrameworks"
       parameters:
       - in: "query"
-        name: "frameworks"
-        description: "Frameworks to return matching features for. Provide both frontend and backend framework
-        for web. This can be done as *`?frameworks=ReactJS&frameworks=NodeJS`*"
+        name: "frontEndFramework"
+        description: "Frontend framework to return matching features for. Provide both frontend and backend framework
+        for web unless backend only project type is chosen."
         required: true
         schema:
-          type: "array"
-          items:
-            type: "string"
-            example: "ReactJS"
+          type: "string"
+        example: "ReactJS"
+      - in: "query"
+        name: "backEndFramework"
+        description: "Backend to return matching features for. Provide both frontend and backend framework
+        for web unless backend only project type is chosen. Backend can be ommitted for WinTS."
+        required: true
+        schema:
+          type: "string"
+        example: "NodeJS"
+      - in: "query"
+        name: "projectType"
+        description: "The project type to return matching features for. 
+        To get meaningful output make sure it is the project type from /projectType."
+        required: true
+        schema:
+          type: "string"
+        example: "FullStackWebApp"
       responses:
         200:
-          $ref: '#/components/responses/FrameworksResponse'
+          $ref: '#/components/responses/PageResponse'
         400:
           $ref: '#/components/responses/ErrorResponse'
         404:
@@ -201,26 +227,38 @@ components:
           type: "string"
         projectType:
           type: "string"
-        frontend:
+        frontEndFramework:
           type: "string"
-        backend:
+        backEndFramework:
+          type: "string"
+        language:
+          type: "string"
+        homeName:
           type: "string"
         pages:
           type: "array"
           items:
-            type: "string"
+            type: "object"
         features:
           type: "array"
           items:
-            type: "string"
+            type: "object"
       example:
         {
-          "platform": "Web",
-          "projectType": "MultiPageFull",
-          "frontend": "ReactJS",
-          "backend": "NodeJS",
-          "pages": ["blankWeb", "blog"],
-          "features": ["azureDatabase", "azureFunctions"]
+            "ProjectType": "FullStackWebApp",
+            "FrontEndFramework": "ReactJS",
+            "BackEndFramework": "NodeJS",
+            "Language": "Any",
+            "HomeName": "Test",
+            "Features": [],
+            "Platform": "Web",
+            "Pages":
+            [
+              {
+                "Name": "Test",
+                "Template": "Html Blank"
+              }
+            ]
         }
   responses:
     FeatureResponse:
@@ -270,21 +308,131 @@ components:
                 items:
                   type: "object"
                   example: 
-                    "BlankWeb": {
-                      "name": "Blank",
-                      "description":"A blank page for Web Applications",
-                      "imagePath": "/icon.png"
-                    }
-                    "Home": {
-                      "name": "Home",
-                      "description":"A home page for Web Applications",
-                      "imagePath": "/icon.png"
-                    }
-                    "News": {
-                      "name": "News",
-                      "description":"A news page for Web Applications",
-                      "imagePath": "/icon.png"
-                    }
+                    "items": [
+                      {
+                          "configMountPointId": "a140f98f-6c53-43ef-8cfb-3dcb96360c03",
+                          "author": "Microsoft",
+                          "classifications": [
+                              "Universal"
+                          ],
+                          "defaultName": null,
+                          "description": "This is the most html basic page.",
+                          "identity": "wts.Page.Html.Blank",
+                          "generatorId": "0c434df7-e2cb-4dee-b216-d7c58c8eb4b3",
+                          "groupIdentity": "wts.Page.Html.Blank",
+                          "precedence": 0,
+                          "name": "Html Blank",
+                          "shortName": null,
+                          "tags": {
+                              "language": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "Any": ""
+                                  },
+                                  "defaultValue": "Any"
+                              },
+                              "type": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "item": ""
+                                  },
+                                  "defaultValue": "item"
+                              },
+                              "wts.type": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "page": ""
+                                  },
+                                  "defaultValue": "page"
+                              },
+                              "wts.platform": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "Web": ""
+                                  },
+                                  "defaultValue": "Web"
+                              },
+                              "wts.projecttype": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "FullStackWebApp": ""
+                                  },
+                                  "defaultValue": "FullStackWebApp"
+                              },
+                              "wts.frontEndFramework": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "all": ""
+                                  },
+                                  "defaultValue": "all"
+                              },
+                              "wts.backEndFramework": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "all": ""
+                                  },
+                                  "defaultValue": "all"
+                              },
+                              "wts.version": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "1.0.0": ""
+                                  },
+                                  "defaultValue": "1.0.0"
+                              },
+                              "wts.displayOrder": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "1": ""
+                                  },
+                                  "defaultValue": "1"
+                              },
+                              "wts.genGroup": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "0": ""
+                                  },
+                                  "defaultValue": "0"
+                              },
+                              "wts.rightClickEnabled": {
+                                  "description": null,
+                                  "choicesAndDescriptions": {
+                                      "true": ""
+                                  },
+                                  "defaultValue": "true"
+                              }
+                          },
+                          "cacheParameters": {
+                              "wts.rootNamespace": {
+                                  "dataType": null,
+                                  "defaultValue": null,
+                                  "description": ""
+                              },
+                              "wts.itemNamespace": {
+                                  "dataType": null,
+                                  "defaultValue": null,
+                                  "description": ""
+                              },
+                              "baseclass": {
+                                  "dataType": null,
+                                  "defaultValue": null,
+                                  "description": ""
+                              },
+                              "setter": {
+                                  "dataType": null,
+                                  "defaultValue": null,
+                                  "description": ""
+                              }
+                          },
+                          "configPlace": "/Web/Pages/Html.Blank/.template.config/template.json",
+                          "localeConfigMountPointId": "00000000-0000-0000-0000-000000000000",
+                          "localeConfigPlace": null,
+                          "hostConfigMountPointId": "00000000-0000-0000-0000-000000000000",
+                          "hostConfigPlace": null,
+                          "thirdPartyNotices": null,
+                          "baselineInfo": {}
+                      }
+                  ]
               statusCode:
                 type: "integer"
                 example: 200
@@ -332,9 +480,27 @@ components:
             properties:
               value:
                 type: "object"
-                properties:
-                  wasGenerated:
-                    type: "boolean"
+                example: 
+                  "response":
+                    {
+                      "projectName": "Test",
+                      "safeProjectName": "Test",
+                      "generationOutputPath": "./Output",
+                      "destinationPath": "./Output",
+                      "projectInfo": {
+                          "projects": [],
+                          "projectItems": [],
+                          "sdkReferences": [],
+                          "nugetReferences": [],
+                          "projectReferences": []
+                      },
+                      "filesToOpen": [],
+                      "failedMergePostActions": [],
+                      "mergeFilesFromProject": {},
+                      "projectMetrics": {
+                          "Generation": 0.2124428
+                      }
+                    }
               statusCode:
                 type: "integer"
                 example: 200
