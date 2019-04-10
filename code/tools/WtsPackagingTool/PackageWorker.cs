@@ -250,7 +250,7 @@ namespace WtsPackagingTool
             int countFiles = 0;
 
             ConsoleHelper.HideCursor();
-
+            prepareDir = Path.GetFullPath(prepareDir);
             var prepareDirPath = new DirectoryInfo(prepareDir).Parent.FullName;
 
             toCopy.ForEach(d =>
