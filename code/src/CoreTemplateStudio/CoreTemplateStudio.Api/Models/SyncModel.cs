@@ -7,7 +7,6 @@ using System.IO;
 using System.Threading.Tasks;
 
 using Microsoft.Templates.Api.Utilities;
-using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 
@@ -21,6 +20,8 @@ namespace Microsoft.Templates.Api.Models
         private readonly Action<SyncStatus, int> _callback;
 
         public bool WasUpdated { get; set; }
+
+        public string TemplatesVersion { get; set; }
 
         public SyncModel(string platform, string language, string installedPackagePath, Action<SyncStatus, int> callback)
         {
@@ -56,6 +57,7 @@ namespace Microsoft.Templates.Api.Models
 #endif
             GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
             await GenContext.ToolBox.Repo.SynchronizeAsync(true);
+            TemplatesVersion = GenContext.ToolBox.TemplatesVersion;
         }
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
