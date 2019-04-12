@@ -2,15 +2,15 @@
 
 <img src="https://img.shields.io/badge/platform-linux--64%20%7C%20win--64%20%7C%20osx--64%20-lightgrey.svg" alt="Platforms Supported: MacOSX, Linux, Windows"/> <a href="https://www.repostatus.org/#active"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed." /></a> <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: We are using the MIT License"></a> <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="We are welcoming PRS!"></a>
 
-Core Template Studio is a .NET Standard 2.1 project that handles all of the template synchronization and code generation (composition, generation + postaction execution) for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)**. The project has two parts: a .NET Standard core and its corresponding API that exposes the core.
+Core Template Studio is a .NET Standard 2.0 project that handles all of the template synchronization and code generation (composition, generation + postaction execution) for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)**. The project has two parts: a .NET Standard core and its corresponding API that exposes the core.
 
 ## Build Status
 
-| Branch  |                                                                                                                                 Build Status                                                                                                                                  |
-| :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| dev     |     [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=dev)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=dev)     |
-| staging | [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=staging)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=staging) |
-| master  |  [![Build Status](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_apis/build/status/Web-Template-Studio-DevCI/CoreTemplateStudio-CI?branchName=master)](https://microsoftgarage.visualstudio.com/Intern%20GitHub/_build/latest?definitionId=276&branchName=master)  |
+| Branch  |                                                                                                                Build Status                                                                                                                |
+| :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| dev     |     [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=dev)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=dev)     |
+| staging | [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=staging)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=staging) |
+| master  |  [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=master)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=master)  |
 
 # Documentation
 
