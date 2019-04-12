@@ -62,9 +62,10 @@ namespace Microsoft.Templates.Api.HubHandlers
 #else
             suffix = $"{_platform}.{_language}.Templates.mstx";
 #endif
+
             return path != null
                 && suffix == "/templates" ? Directory.Exists(path + suffix)
-                                          : File.Exists(path + suffix);
+                                          : File.Exists(Path.Combine(path, suffix));
         }
     }
 }
