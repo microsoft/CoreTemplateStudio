@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using CoreTemplateStudio.Api;
 using FluentAssertions;
-
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Templates.Api.Test.ResponseModels;
 using Microsoft.Templates.Api.Test.Utilities;
-
+using Microsoft.Templates.Core.Locations;
 using Newtonsoft.Json;
 
 using Xunit;
@@ -18,59 +21,38 @@ namespace Microsoft.Templates.Api.Test.Controllers
     [Trait("ExecutionSet", "Minimum")]
     public class SyncControllerTest
     {
-         
-        [Fact]
-        public async void TestSync_ShouldHandleInvalidInput()
-        {
-            List<string> invalidPlatforms = new List<string>() { "uw", "we", "windows", null };
-            List<string> invalidPaths = (new List<string>() { "../../", null, "test", "../../../test/CoreTemplateStudio.Api.Test/" });
-            const string ValidPath = ".";
-            const string InvalidWeb = "VisualBasic";
-            const string InvalidUwp = "Any";
-
-            using (HttpClient client = new TestClientProvider().Client)
-            {
-                // handle invalid platforms
-                foreach (string plat in invalidPlatforms)
-                {
-                    ApiResponse response = await GetResponseFromUrlPost(client, $"/api/sync?platform={plat}&path={ValidPath}");
-
-                    response.StatusCode.Should().Be(400, "The platforms are invalid so shouldn't be successful response.");
-                    response.Value["message"].Should().Be("invalid platform", "The platform is invalid so the message should reflect that");
-                }
-
-                // handle invalid paths
-                foreach (string path in invalidPaths)
-                {
-                    ApiResponse response = await GetResponseFromUrlPost(client, $"/api/sync?platform=web&path={path}");
-
-                    response.StatusCode.Should().Be(400, "The paths are invalid so shouldn't be successful response.");
-                    response.Value["message"].Should().Be("invalid path", "The path is invalid so the message should reflect that");
-                }
-
-                // handle invalid platform + language combination
-                ApiResponse resp = await GetResponseFromUrlPost(client, $"/api/sync/?platform=uwp&path={ValidPath}&language={InvalidUwp}");
-                resp.StatusCode.Should().Be(400, "When passing the platform uwp, this language cannot be used.");
-                resp.Value["message"].Should().Be("invalid language for this platform.", "The language is invalid so the message should reflect that");
-
-                resp = await GetResponseFromUrlPost(client, $"/api/sync/?platform=web&path={ValidPath}&language={InvalidWeb}");
-                resp.StatusCode.Should().Be(400, "When passing the platform web, this language cannot be used.");
-                resp.Value["message"].Should().Be("invalid language for this platform.", "The language is invalid so the message should reflect that");
-            }
-        }
-
         [Fact]
         public async void TestSync_ShouldBeSuccessResponse()
         {
             const string ValidPath = ".";
+            var message = SyncStatus.None;
+            var progress = 0;
 
-            using (HttpClient client = new TestClientProvider().Client)
+
+            var connection = CreateConnection();
+            
+            connection.On<SyncStatus, int>("syncMessage", (msg, prg) =>
             {
-                ApiResponse response = await GetResponseFromUrlPost(client, $"/api/sync?platform=web&path={ValidPath}");
-                ApiResponse response2 = await GetResponseFromUrlPost(client, $"/api/sync?platform=uwp&path={ValidPath}&language=VisualBasic");
-                response.StatusCode.Should().Be(200, "The parameters passed are valid, so the response should be successful");
-                response2.StatusCode.Should().Be(200, "The parameters passed are valid, so the response should be successful");
-            }
+                message = msg;
+                progress = prg;
+
+            });
+
+            await connection.StartAsync();
+            await connection.InvokeAsync("SyncTemplates", "UWP", ValidPath, "CSharp");
+            await connection.StopAsync();
+
+            message.Should().Be(SyncStatus.Updated, "Sync has finished with success");
+        }
+
+        private HubConnection CreateConnection()
+        {
+            var _server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+
+            return new HubConnectionBuilder()
+                .WithUrl("http://localhost:5000/corehub",
+                o => o.HttpMessageHandlerFactory = _ => _server.CreateHandler())
+                .Build();
         }
 
         private async Task<ApiResponse> GetResponseFromUrlPost(HttpClient client, string url)
@@ -80,4 +62,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
             return JsonConvert.DeserializeObject<ApiResponse>(content);
         }
     }
+
+    
+    
 }
