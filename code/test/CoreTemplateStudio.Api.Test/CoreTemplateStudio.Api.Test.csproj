@@ -7,14 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="templates\**" />
-    <EmbeddedResource Remove="templates\**" />
-    <None Remove="templates\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -41,12 +36,120 @@
       <Link>StyleCop.json</Link>
     </AdditionalFiles>
 
-    <None Update="xunit.runner.json"> 
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="templates\PageTemplate\.template.config\en-US.template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="templates\PageTemplate\.template.config\es-ES.template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="templates\PageTemplate\.template.config\template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="templates\ProjectTemplate\.template.config\icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="templates\ProjectTemplate\.template.config\Layout.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="templates\ProjectTemplate\.template.config\template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <None Include="templates\PageTemplate\.template.config\description.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 
-    <None Include="templates\**">
+    <None Include="templates\PageTemplate\.template.config\en-US.description.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Include="templates\PageTemplate\.template.config\es-ES.description.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Include="templates\ProjectTemplate\.template.config\description.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\backendframeworks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\backendframeworks\en-US.TestFramework.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\backendframeworks\es-ES.TestFramework.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\backendframeworks\TestFramework.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\en-US.backendframeworks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\en-US.frontendframeworks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\en-US.projectTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\es-ES.backendframeworks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\es-ES.frontendframeworks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\es-ES.projectTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\frontendframeworks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\frontendframeworks\en-US.TestFramework.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\frontendframeworks\es-ES.TestFramework.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\frontendframeworks\TestFramework.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\projectTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\projectTypes\en-US.TestProjectType.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\projectTypes\es-ES.TestProjectType.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="templates\_catalog\projectTypes\TestProjectType.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="xunit.runner.json"> 
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -59,12 +162,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="templates\_catalog\projectTypes\FullstackWebApp.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="templates\_catalog\projectTypes\RestAPI.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
     <None Update="_catalog\projectTypes\FullstackWebApp.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>

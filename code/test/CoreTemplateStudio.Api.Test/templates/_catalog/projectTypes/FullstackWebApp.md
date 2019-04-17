@@ -1,1 +1,0 @@
-﻿Fullstack Web Application project type details.
