@@ -60,7 +60,14 @@ namespace Microsoft.Templates.Core.Gen
 
         private static void AddProject(UserSelection userSelection, List<GenInfo> genQueue)
         {
-            var projectTemplates = GenContext.ToolBox.Repo.GetTemplates(TemplateType.Project, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, userSelection.BackEndFramework);
+            var projectTemplates = GenContext.ToolBox.Repo
+                .GetTemplates(
+                              TemplateType.Project,
+                              userSelection.Platform,
+                              userSelection.ProjectType,
+                              userSelection.FrontEndFramework,
+                              userSelection.BackEndFramework)
+                .OrderBy(projectTemplate => projectTemplate.Identity);
 
             foreach (var projectTemplate in projectTemplates)
             {
