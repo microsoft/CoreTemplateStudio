@@ -48,7 +48,7 @@ namespace Microsoft.Templates.Core
 
         public static string LoadedConfigFile { get; private set; }
 
-        public const string DefaultJsonConfigFileName = "WindowsTemplateStudio.config.json";
+        public const string DefaultJsonConfigFileName = "CoreTemplateStudio.config.json";
 
         private static Configuration _current;
 
