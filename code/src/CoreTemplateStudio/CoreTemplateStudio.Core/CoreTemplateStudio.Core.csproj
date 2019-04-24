@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.3.0" />
     <PackageReference Include="Microsoft.TemplateEngine.Abstractions" Version="1.0.0-beta2-20170518-234" />
     <PackageReference Include="Microsoft.TemplateEngine.Core" Version="1.0.0-beta2-20170518-234" />
