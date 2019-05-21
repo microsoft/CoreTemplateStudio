@@ -48,6 +48,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
         private HubConnection CreateConnection()
         {
             var _server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            
 
             return new HubConnectionBuilder()
                 .WithUrl("http://localhost:5000/corehub",
