@@ -23,7 +23,6 @@ namespace Microsoft.Templates.Utilities
     [Trait("ExecutionSet", "Minimum")]
     public class DigitalSignaturServiceTests
     {
-
         [Fact]
         public async Task DigitalSignaturService_IsSigned()
         {
@@ -85,7 +84,7 @@ namespace Microsoft.Templates.Utilities
                     var statusFlag = dss.VerifyCertificate(cert);
                     Assert.NotEqual(X509ChainStatusFlags.Revoked, statusFlag);
                 }
-            }  
+            }
         }
 
         [Fact]
@@ -129,11 +128,9 @@ namespace Microsoft.Templates.Utilities
             var file2 = Path.GetFullPath(@".\Packaging\ToSign.mstx");
             File.Copy(file, file2);
 
-
             using (Package package = Package.Open(file2, FileMode.Open))
             {
                 dss.SignPackage(package, cert);
-
             }
 
             ModifyContent(file2, "SampleContent.txt");
