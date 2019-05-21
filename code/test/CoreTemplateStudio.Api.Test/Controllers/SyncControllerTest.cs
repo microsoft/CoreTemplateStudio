@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -28,14 +32,12 @@ namespace Microsoft.Templates.Api.Test.Controllers
             var message = SyncStatus.None;
             var progress = 0;
 
-
             var connection = CreateConnection();
-            
+
             connection.On<SyncStatus, int>("syncMessage", (msg, prg) =>
             {
                 message = msg;
                 progress = prg;
-
             });
 
             await connection.StartAsync();
@@ -47,12 +49,12 @@ namespace Microsoft.Templates.Api.Test.Controllers
 
         private HubConnection CreateConnection()
         {
-            var _server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
-            
+            var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
 
             return new HubConnectionBuilder()
-                .WithUrl("http://localhost:5000/corehub",
-                o => o.HttpMessageHandlerFactory = _ => _server.CreateHandler())
+                .WithUrl(
+                    "http://localhost:5000/corehub",
+                    o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                 .Build();
         }
 
@@ -63,7 +65,4 @@ namespace Microsoft.Templates.Api.Test.Controllers
             return JsonConvert.DeserializeObject<ApiResponse>(content);
         }
     }
-
-    
-    
 }
