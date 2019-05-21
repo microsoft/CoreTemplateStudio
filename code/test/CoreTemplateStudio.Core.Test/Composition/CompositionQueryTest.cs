@@ -170,13 +170,12 @@ namespace Microsoft.Templates.Core.Test.Composition
             Assert.True(result);
         }
 
-
         [Fact]
         public void Match_WithContext_NotEquals_Empty()
         {
             var data = GetFactData();
             var target = CompositionQuery.Parse("identity==item-identity&tag2==tagVal2&$name!=context-name");
-            var context = new QueryablePropertyDictionary { new QueryableProperty("name", "") };
+            var context = new QueryablePropertyDictionary { new QueryableProperty("name", string.Empty) };
 
             var result = target.Match(data, context);
 

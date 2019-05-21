@@ -317,7 +317,10 @@ namespace Microsoft.Templates.Core.Test
         {
             foreach (var language in ProgrammingLanguages.GetAllLanguages())
             {
-                yield return new object[] { language };
+                if (language != ProgrammingLanguages.Any)
+                {
+                    yield return new object[] { language };
+                }
             }
         }
     }
