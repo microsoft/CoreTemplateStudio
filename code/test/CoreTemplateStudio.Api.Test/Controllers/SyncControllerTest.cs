@@ -41,7 +41,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
             });
 
             await connection.StartAsync();
-            await connection.InvokeAsync("SyncTemplates", "UWP", ValidPath, "CSharp");
+            await connection.InvokeAsync("SyncTemplates", "UWP", ValidPath, "C#");
             await connection.StopAsync();
 
             message.Should().Be(SyncStatus.Updated, "Sync has finished with success");
