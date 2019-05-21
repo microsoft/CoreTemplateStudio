@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
@@ -47,7 +49,8 @@
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\..\WtsRulesTests.ruleset</CodeAnalysisRuleSet>
+
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1701;1702</NoWarn>
   </PropertyGroup>
@@ -73,9 +76,6 @@
     <AdditionalFiles Include="..\..\StyleCop.json">
       <Link>StyleCop.json</Link>
     </AdditionalFiles>
-    <None Include="..\..\WtsRulesTests.ruleset">
-      <Link>WtsRulesTests.ruleset</Link>
-    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
