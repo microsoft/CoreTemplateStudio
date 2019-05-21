@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <IsPackable>false</IsPackable>
-    <Configurations>Debug;Release;Analyze</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -87,17 +87,12 @@
 
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\WtsRulesTests.ruleset</CodeAnalysisRuleSet>
-    <AssemblyName>Microsoft.Templates.Core.Test</AssemblyName>
+    <AssemblyName>CoreTemplateStudio.Core.Test</AssemblyName>
     <RootNamespace>Microsoft.Templates.Core.Test</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Analyze|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
   
