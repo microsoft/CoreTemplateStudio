@@ -234,9 +234,6 @@ namespace Microsoft.Templates.Core.Gen
                 ns = GenContext.Current.SafeProjectName;
             }
 
-            // TODO: This is needed to make legacy tests work, remove once 3.1 is released
-            genInfo.Parameters.Add(GenParams.ItemNamespace, ns);
-
             genInfo.Parameters.Add(GenParams.RootNamespace, ns);
         }
     }
