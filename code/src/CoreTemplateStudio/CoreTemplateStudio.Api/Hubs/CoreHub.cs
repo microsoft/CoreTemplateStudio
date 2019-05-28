@@ -49,7 +49,6 @@ namespace Microsoft.Templates.Api.Hubs
             var userSelection = generationData.ToUserSelection();
             await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(userSelection);
 
-            // TODO: We should generationOutputPath??
             return provider;
         }
 
