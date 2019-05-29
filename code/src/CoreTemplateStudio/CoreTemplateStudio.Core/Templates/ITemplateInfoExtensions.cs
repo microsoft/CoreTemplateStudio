@@ -378,7 +378,7 @@ namespace Microsoft.Templates.Core
             return false;
         }
 
-        public static List<string> GetRequiredWorkloads(this ITemplateInfo ti)
+        public static List<string> GetRequiredVisualStudioWorkloads(this ITemplateInfo ti)
         {
             var workloadIds = GetValueFromTag(ti, TagPrefix + "requiredWorkload");
 

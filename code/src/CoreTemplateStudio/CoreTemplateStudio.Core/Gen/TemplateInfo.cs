@@ -50,6 +50,6 @@ namespace Microsoft.Templates.Core.Gen
 
         public bool RightClickEnabled { get; set; }
 
-        public IEnumerable<string> RequiredWorkloads { get; set; } = new List<string>();
+        public IEnumerable<string> RequiredVisualStudioWorkloads { get; set; } = new List<string>();
     }
 }
