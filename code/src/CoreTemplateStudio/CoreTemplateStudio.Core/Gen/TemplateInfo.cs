@@ -49,5 +49,7 @@ namespace Microsoft.Templates.Core.Gen
         public TemplateType TemplateType { get; set; }
 
         public bool RightClickEnabled { get; set; }
+
+        public IEnumerable<string> RequiredWorkloads { get; set; } = new List<string>();
     }
 }

@@ -378,6 +378,20 @@ namespace Microsoft.Templates.Core
             return false;
         }
 
+        public static List<string> GetRequiredWorkloads(this ITemplateInfo ti)
+        {
+            var workloadIds = GetValueFromTag(ti, TagPrefix + "requiredWorkload");
+
+            var result = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(workloadIds))
+            {
+                result.AddRange(workloadIds.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
         private static string GetConfigDir(ITemplateInfo ti)
         {
             CodeGen.Instance.Settings.SettingsLoader.TryGetFileFromIdAndPath(ti.ConfigMountPointId, ti.ConfigPlace, out IFile file, out IMountPoint mountPoint);
