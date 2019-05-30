@@ -25,7 +25,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         internal override void ExecuteInternal()
         {
-            string originalFilePath = GetFilePath();
+            string originalFilePath = Regex.Replace(Config.FilePath, MergeConfiguration.PostactionRegex, ".");
             if (!File.Exists(originalFilePath))
             {
                 HandleFileNotFound(originalFilePath, MergeConfiguration.Suffix);
@@ -96,24 +96,6 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
             // Add info to context
             GenContext.Current.FailedMergePostActions.Add(new FailedMergePostActionInfo(originalFileRelativePath, Config.FilePath, failedFileName.GetPathRelativeToGenerationParentPath(), failedFileName, errorMessage, mergeFailureType));
-        }
-
-        private string GetFilePath()
-        {
-            // TODO: Remove this when 3.0 is released, only necesary for legacy tests
-            if (Path.GetFileName(Config.FilePath).StartsWith(MergeConfiguration.Extension, StringComparison.OrdinalIgnoreCase))
-            {
-                var extension = Path.GetExtension(Config.FilePath);
-                var directory = Path.GetDirectoryName(Config.FilePath);
-
-                return Directory.EnumerateFiles(directory, $"*{extension}").FirstOrDefault(f => !f.Contains(MergeConfiguration.Suffix));
-            }
-            else
-            {
-                var path = Regex.Replace(Config.FilePath, MergeConfiguration.PostactionRegex, ".");
-
-                return path;
-            }
         }
 
         protected Encoding GetEncoding(string originalFilePath)
