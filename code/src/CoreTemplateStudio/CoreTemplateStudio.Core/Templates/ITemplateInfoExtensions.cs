@@ -380,7 +380,7 @@ namespace Microsoft.Templates.Core
 
         public static List<string> GetRequiredVisualStudioWorkloads(this ITemplateInfo ti)
         {
-            var workloadIds = GetValueFromTag(ti, TagPrefix + "requiredWorkload");
+            var workloadIds = GetValueFromTag(ti, TagPrefix + "requiredVsWorkload");
 
             var result = new List<string>();
 
