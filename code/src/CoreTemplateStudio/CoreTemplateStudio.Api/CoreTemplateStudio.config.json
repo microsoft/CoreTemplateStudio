@@ -1,13 +1,13 @@
 ﻿{
-  "Environment": "LocalVsixEnv",
+  "Environment": "LocalEnv",
   "CdnUrl": "",
-  "RemoteTelemetryKey": "VSIX Key",
+  "RemoteTelemetryKey": "",
   "LogFileFolderPath": "CoreTS\\Logs",
   "CustomTelemetryEndpoint": "",
   "RepositoryFolderName": "CoreTS",
   "BackupFolderPath": "CoreTS\\Backups",
   "TempGenerationFolderPath": "WTSTempGeneration",
-  "DiagnosticsTraceLevel": "debug",
+  "DiagnosticsTraceLevel": "Verbose",
   "GitHubDocsUrl": "",
   "DaysToKeepTempGenerations": 5,
   "DaysToKeepDiagnosticsLogs": 5,
@@ -18,5 +18,6 @@
     "2A0A69F1AB9BB46A8AE3563B72702FD6CCB16ECBF669D62A7DC92D217A084E318EC8BB2AE87A4A2C6855BDB9C0F4FD93D77E802AAACDDEB795C2EF718D7D4890",
     "3887006BEB41CEE5386343BE28289FB8D08ED52D4DCB0907FBC4624D0EA886E9295303467AD3323D98D20703CBFBDA331680B2D8D90B3A561A98C94E05E9A021",
     "C70A54064923A7CFB68FFA0E2C4308D496CA4B56FFE5ECCC4338F4A4E87083EB881CFFC73B19FC60DC362F45D381CFEB1C719B08AB47A8BE6190D7DEB7A83834"
-  ]
+  ],
+  "BreakingChangesVersions": []
 }
