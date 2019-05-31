@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CoreTemplateStudio.Api;
+using CoreTemplateStudio.Api.Models.Generation;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -23,51 +24,27 @@ using Xunit;
 namespace Microsoft.Templates.Api.Test.Controllers
 {
     [Trait("ExecutionSet", "Minimum")]
-    public class SyncControllerTest
+    public class GenerationControllerTest
     {
         [Fact]
-        public async void TestSync_ShouldBeSuccessResponse()
+        public async void TestGenerate_ShouldBeSuccessResponse()
         {
-            const string ValidPath = ".";
-            var message = SyncStatus.None;
-            var progress = 0;
+            Directory.CreateDirectory("Test");
+            var message = string.Empty;
 
             var connection = CreateConnection();
 
-            connection.On<SyncStatus, int>("syncMessage", (msg, prg) =>
+            connection.On<string>("genMessage", (msg) =>
             {
                 message = msg;
-                progress = prg;
             });
 
             await connection.StartAsync();
-            await connection.InvokeAsync("SyncTemplates", "UWP", ValidPath, "1.2.19140003", "C#");
+            await connection.InvokeAsync("SyncTemplates", "Uwp", ".", "1.2.19140003", "C#");
+            await connection.InvokeAsync("Generate", testGeneration);
             await connection.StopAsync();
 
-            message.Should().Be(SyncStatus.Updated, "Sync has finished with success");
-        }
-
-        [Fact]
-        public async void TestSync_InvalidPlatform()
-        {
-            const string ValidPath = ".";
-            var errrorMessage = string.Empty;
-
-            var connection = CreateConnection();
-
-            await connection.StartAsync();
-            try
-            {
-                await connection.InvokeAsync("SyncTemplates", "Wrong", ValidPath, "1.2.3.4", "C#");
-            }
-            catch (Exception ex)
-            {
-                errrorMessage = ex.Message;
-            }
-
-            await connection.StopAsync();
-
-            errrorMessage.Should().Be("An unexpected error occurred invoking 'SyncTemplates' on the server. HubException: invalid platform", "Sync has finished with success");
+            message.Should().Be("Test", "Generation has finished with success");
         }
 
         private HubConnection CreateConnection()
@@ -80,6 +57,19 @@ namespace Microsoft.Templates.Api.Test.Controllers
                     o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                 .Build();
         }
+
+        private GenerationData testGeneration = new GenerationData()
+        {
+            ProjectName = "Test",
+            GenPath = ".",
+            ProjectType = "TestProjectType",
+            FrontendFramework = "TestFramework",
+            HomeName = "HomeName",
+            Language = "C#",
+            Platform = "test",
+            Pages = new List<GenerationItem>(),
+            Features = new List<GenerationItem>(),
+        };
 
         private async Task<ApiResponse> GetResponseFromUrlPost(HttpClient client, string url)
         {

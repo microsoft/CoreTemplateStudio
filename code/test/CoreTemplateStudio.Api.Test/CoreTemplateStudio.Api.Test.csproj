@@ -93,6 +93,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 
+    <None Update="CoreTemplateStudio.config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
     <None Update="templates\_catalog\backendframeworks.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

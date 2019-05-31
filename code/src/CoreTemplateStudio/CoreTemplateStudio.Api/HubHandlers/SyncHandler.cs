@@ -7,10 +7,12 @@ using System.IO;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Templates.Api.Models;
 using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core;
+using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 
 namespace Microsoft.Templates.Api.HubHandlers
@@ -20,38 +22,82 @@ namespace Microsoft.Templates.Api.HubHandlers
         private readonly string _platform;
         private readonly string _path;
         private readonly string _language;
+        private readonly string _wizardVersion;
         private readonly Action<SyncStatus, int> _statusListener;
+        private bool _wasUpdated;
 
-        public SyncHandler(string platform, string path, string language, Action<SyncStatus, int> statusListener)
+        public SyncHandler(string platform, string path, string language, string wizardVersion, Action<SyncStatus, int> statusListener)
         {
             _platform = platform;
             _path = path;
             _language = language;
+            _wizardVersion = wizardVersion;
             _statusListener = statusListener;
         }
 
-        public async Task<ActionResult<SyncModel>> AttemptSync()
+        public async Task<ActionResult<SyncModel>> Sync()
         {
             if (!Platforms.IsValidPlatform(_platform))
             {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPlatform });
+                throw new HubException(StringRes.BadReqInvalidPlatform);
             }
 
             if (!IsValidPath(_path))
             {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPath });
+                throw new HubException(StringRes.BadReqInvalidPath);
             }
 
             if (!ProgrammingLanguages.IsValidLanguage(_language, _platform))
             {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidLanguage });
+                throw new HubException(StringRes.BadReqInvalidLanguage);
             }
 
-            SyncModel syncHelper = new SyncModel(_platform, _language, _path, _statusListener);
+            try
+            {
+#if DEBUG
+                GenContext.Bootstrap(
+                    new LocalTemplatesSource(
+                        _path,
+                        "0.0.0.0",
+                        string.Empty),
+                    new ApiGenShell(),
+                    new Version(_wizardVersion),
+                    _platform,
+                    _language);
+#else
+            GenContext.Bootstrap(
+                new RemoteTemplatesSource(
+                    _platform,
+                    _language,
+                    _path,
+                    new ApiDigitalSignatureService()),
+                new ApiGenShell(),
+                new Version(_wizardVersion),
+                _platform,
+                _language);
+#endif
+                GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
+                await GenContext.ToolBox.Repo.SynchronizeAsync(true);
+                return new SyncModel()
+                {
+                    TemplatesVersion = GenContext.ToolBox.TemplatesVersion,
+                    WasUpdated = _wasUpdated,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new HubException($"Error syncing templates: {ex.Message}");
+            }
+        }
 
-            await syncHelper.Sync();
+        private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
+        {
+            _statusListener.Invoke(args.Status, args.Progress);
 
-            return syncHelper;
+            if (args.Status.Equals(SyncStatus.Updated))
+            {
+                _wasUpdated = true;
+            }
         }
 
         private bool IsValidPath(string path)

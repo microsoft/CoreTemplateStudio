@@ -23,33 +23,19 @@ namespace Microsoft.Templates.Api.Hubs
 {
     public class CoreHub : Hub
     {
-        public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
+        public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string wizardVersion, string language = ProgrammingLanguages.Any)
         {
-            SyncHandler handler = new SyncHandler(platform, path, language, SendMessageToClient);
+            var handler = new SyncHandler(platform, path, language, wizardVersion, SendMessageToClient);
 
-            return await handler.AttemptSync();
+            return await handler.Sync();
         }
 
+        [ValidateGenContextFilter]
         public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
-            ApiGenShell shell = GenContext.ToolBox.Shell as ApiGenShell;
-            shell.SetMessageEventListener(SendProgressToClient);
-            var safeProjectName = generationData.ProjectName.MakeSafeProjectName();
-            var combinedPath = Path.Combine(generationData.GenPath, safeProjectName, safeProjectName);
+            var handler = new GenerationHandler(SendProgressToClient);
 
-            ContextProvider provider = new ContextProvider()
-            {
-                ProjectName = generationData.ProjectName,
-                GenerationOutputPath = combinedPath,
-                DestinationPath = combinedPath,
-            };
-
-            GenContext.Current = provider;
-
-            var userSelection = generationData.ToUserSelection();
-            await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(userSelection);
-
-            return provider;
+            return await handler.Generate(generationData);
         }
 
         private void SendMessageToClient(SyncStatus status, int progress)
@@ -57,7 +43,7 @@ namespace Microsoft.Templates.Api.Hubs
             Clients.Caller.SendAsync("syncMessage", status.ToString(), progress);
         }
 
-        private void SendProgressToClient(object sender, string message)
+        private void SendProgressToClient(string message)
         {
             Clients.Caller.SendAsync("genMessage", message);
         }
