@@ -24,8 +24,10 @@ using Xunit;
 namespace Microsoft.Templates.Api.Test.Controllers
 {
     [Trait("ExecutionSet", "Minimum")]
-    public class GenerationControllerTest
+    public class GenerationControllerTest : IDisposable
     {
+        private TestServer testServer;
+
         [Fact]
         public async void TestGenerate_ShouldBeSuccessResponse()
         {
@@ -40,21 +42,21 @@ namespace Microsoft.Templates.Api.Test.Controllers
             });
 
             await connection.StartAsync();
-            await connection.InvokeAsync("SyncTemplates", "Uwp", ".", "1.2.19140003", "C#");
+            await connection.InvokeAsync("SyncTemplates", "Web", ".", "Any");
             await connection.InvokeAsync("Generate", testGeneration);
             await connection.StopAsync();
 
-            message.Should().Be("Test", "Generation has finished with success");
+            message.Should().Be("Creating project 'Test'...", "Generation has finished with success");
         }
 
         private HubConnection CreateConnection()
         {
-            var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>());
 
             return new HubConnectionBuilder()
                 .WithUrl(
                     "http://localhost:5000/corehub",
-                    o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
+                    o => o.HttpMessageHandlerFactory = _ => testServer.CreateHandler())
                 .Build();
         }
 
@@ -64,9 +66,10 @@ namespace Microsoft.Templates.Api.Test.Controllers
             GenPath = ".",
             ProjectType = "TestProjectType",
             FrontendFramework = "TestFramework",
+            BackendFramework = string.Empty,
             HomeName = "HomeName",
-            Language = "C#",
-            Platform = "test",
+            Language = "Any",
+            Platform = "Web",
             Pages = new List<GenerationItem>(),
             Features = new List<GenerationItem>(),
         };
@@ -76,6 +79,11 @@ namespace Microsoft.Templates.Api.Test.Controllers
             HttpResponseMessage httpResponse = await client.PostAsync(url, null);
             string content = await httpResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ApiResponse>(content);
+        }
+
+        public void Dispose()
+        {
+            testServer?.Dispose();
         }
     }
 }

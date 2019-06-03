@@ -23,8 +23,10 @@ using Xunit;
 namespace Microsoft.Templates.Api.Test.Controllers
 {
     [Trait("ExecutionSet", "Minimum")]
-    public class SyncControllerTest
+    public class SyncControllerTest : IDisposable
     {
+        private TestServer testServer;
+
         [Fact]
         public async void TestSync_ShouldBeSuccessResponse()
         {
@@ -41,16 +43,16 @@ namespace Microsoft.Templates.Api.Test.Controllers
             });
 
             await connection.StartAsync();
-            await connection.InvokeAsync("SyncTemplates", "UWP", ValidPath, "1.2.19140003", "C#");
+            await connection.InvokeAsync("SyncTemplates", "Web", ValidPath, "Any");
             await connection.StopAsync();
 
             message.Should().Be(SyncStatus.Updated, "Sync has finished with success");
         }
 
         [Fact]
-        public async void TestSync_InvalidPlatform()
+        public async void TestSync_InvalidPath()
         {
-            const string ValidPath = ".";
+            const string InValidPath = @"..\wrongpath\";
             var errrorMessage = string.Empty;
 
             var connection = CreateConnection();
@@ -58,7 +60,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
             await connection.StartAsync();
             try
             {
-                await connection.InvokeAsync("SyncTemplates", "Wrong", ValidPath, "1.2.3.4", "C#");
+                await connection.InvokeAsync("SyncTemplates", "Web", InValidPath, "Any");
             }
             catch (Exception ex)
             {
@@ -67,17 +69,17 @@ namespace Microsoft.Templates.Api.Test.Controllers
 
             await connection.StopAsync();
 
-            errrorMessage.Should().Be("An unexpected error occurred invoking 'SyncTemplates' on the server. HubException: invalid platform", "Sync has finished with success");
+            errrorMessage.Should().Be("An unexpected error occurred invoking 'SyncTemplates' on the server. HubException: invalid path", "Sync has finished with success");
         }
 
         private HubConnection CreateConnection()
         {
-            var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>());
 
             return new HubConnectionBuilder()
                 .WithUrl(
                     "http://localhost:5000/corehub",
-                    o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
+                    o => o.HttpMessageHandlerFactory = _ => testServer.CreateHandler())
                 .Build();
         }
 
@@ -86,6 +88,11 @@ namespace Microsoft.Templates.Api.Test.Controllers
             HttpResponseMessage httpResponse = await client.PostAsync(url, null);
             string content = await httpResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ApiResponse>(content);
+        }
+
+        public void Dispose()
+        {
+            testServer?.Dispose();
         }
     }
 }

@@ -88,6 +88,15 @@ namespace Microsoft.Templates.Api.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to invalid package.
+        /// </summary>
+        public static string BadReqInvalidPackage {
+            get {
+                return ResourceManager.GetString("BadReqInvalidPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to invalid path.
         /// </summary>
         public static string BadReqInvalidPath {
@@ -138,6 +147,24 @@ namespace Microsoft.Templates.Api.Resources {
         public static string BadReqNotSynced {
             get {
                 return ResourceManager.GetString("BadReqNotSynced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error generating. {0}.
+        /// </summary>
+        public static string ErrorGenerating {
+            get {
+                return ResourceManager.GetString("ErrorGenerating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error syncing templates. {0}.
+        /// </summary>
+        public static string ErrorSyncingTemplates {
+            get {
+                return ResourceManager.GetString("ErrorSyncingTemplates", resourceCulture);
             }
         }
     }

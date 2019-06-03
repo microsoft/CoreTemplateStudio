@@ -26,7 +26,6 @@ namespace Microsoft.Templates.Api.HubHandlers
 
         public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
-
             if (GenContext.ToolBox == null)
             {
                 throw new HubException(StringRes.BadReqNotSynced);
@@ -56,7 +55,7 @@ namespace Microsoft.Templates.Api.HubHandlers
             }
             catch (Exception ex)
             {
-                throw new HubException($"Error generating: {ex.Message}");
+                throw new HubException(string.Format(StringRes.ErrorGenerating, ex.Message));
             }
         }
     }

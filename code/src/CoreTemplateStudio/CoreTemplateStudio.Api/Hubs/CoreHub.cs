@@ -23,9 +23,9 @@ namespace Microsoft.Templates.Api.Hubs
 {
     public class CoreHub : Hub
     {
-        public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string wizardVersion, string language = ProgrammingLanguages.Any)
+        public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
         {
-            var handler = new SyncHandler(platform, path, language, wizardVersion, SendMessageToClient);
+            var handler = new SyncHandler(platform, path, language, SendMessageToClient);
 
             return await handler.Sync();
         }

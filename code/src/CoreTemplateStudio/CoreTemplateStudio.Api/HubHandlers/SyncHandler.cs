@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
@@ -21,17 +22,24 @@ namespace Microsoft.Templates.Api.HubHandlers
     {
         private readonly string _platform;
         private readonly string _path;
+        private readonly string _fullPath;
         private readonly string _language;
-        private readonly string _wizardVersion;
         private readonly Action<SyncStatus, int> _statusListener;
         private bool _wasUpdated;
 
-        public SyncHandler(string platform, string path, string language, string wizardVersion, Action<SyncStatus, int> statusListener)
+        public SyncHandler(string platform, string path, string language, Action<SyncStatus, int> statusListener)
         {
-            _platform = platform;
+            _platform = "Web";
+            _language = "Any";
+
+#if DEBUG
             _path = path;
-            _language = language;
-            _wizardVersion = wizardVersion;
+            _fullPath = path + "/templates";
+
+#else
+            _path = @"..";
+            _fullPath = Path.Combine(_path, $"{_platform}.{_language}.Templates.mstx");
+#endif
             _statusListener = statusListener;
         }
 
@@ -42,9 +50,14 @@ namespace Microsoft.Templates.Api.HubHandlers
                 throw new HubException(StringRes.BadReqInvalidPlatform);
             }
 
-            if (!IsValidPath(_path))
+            if (!IsValidPath(_fullPath))
             {
                 throw new HubException(StringRes.BadReqInvalidPath);
+            }
+
+            if (_fullPath.EndsWith("mstx") && !IsPackageValid(_fullPath))
+            {
+                throw new HubException(StringRes.BadReqInvalidPackage);
             }
 
             if (!ProgrammingLanguages.IsValidLanguage(_language, _platform))
@@ -61,20 +74,20 @@ namespace Microsoft.Templates.Api.HubHandlers
                         "0.0.0.0",
                         string.Empty),
                     new ApiGenShell(),
-                    new Version(_wizardVersion),
+                    new Version("0.0.0.0"),
                     _platform,
                     _language);
 #else
-            GenContext.Bootstrap(
-                new RemoteTemplatesSource(
-                    _platform,
-                    _language,
-                    _path,
-                    new ApiDigitalSignatureService()),
-                new ApiGenShell(),
-                new Version(_wizardVersion),
-                _platform,
-                _language);
+                GenContext.Bootstrap(
+                  new RemoteTemplatesSource(
+                      _platform,
+                      _language,
+                      _path,
+                      new ApiDigitalSignatureService()),
+                  new ApiGenShell(),
+                  new Version("1.0.0.0"),
+                  _platform,
+                  _language);
 #endif
                 GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
                 await GenContext.ToolBox.Repo.SynchronizeAsync(true);
@@ -86,7 +99,22 @@ namespace Microsoft.Templates.Api.HubHandlers
             }
             catch (Exception ex)
             {
-                throw new HubException($"Error syncing templates: {ex.Message}");
+                throw new HubException(string.Format(StringRes.ErrorSyncingTemplates, ex.Message));
+            }
+        }
+
+        private bool IsPackageValid(string fullpath)
+        {
+            return Configuration.Current.AllowedPackages.Contains(GetHash(fullpath));
+        }
+
+        private string GetHash(string fullpath)
+        {
+            using (FileStream stream = File.OpenRead(fullpath))
+            {
+                var sha = new SHA256Managed();
+                byte[] checksum = sha.ComputeHash(stream);
+                return BitConverter.ToString(checksum).Replace("-", string.Empty);
             }
         }
 
@@ -100,18 +128,13 @@ namespace Microsoft.Templates.Api.HubHandlers
             }
         }
 
-        private bool IsValidPath(string path)
+        private bool IsValidPath(string fullpath)
         {
-            string suffix = string.Empty;
 #if DEBUG
-            suffix = "/templates";
+            return fullpath != null && Directory.Exists(fullpath);
 #else
-            suffix = $"{_platform}.{_language}.Templates.mstx";
+            return fullpath != null && File.Exists(fullpath);
 #endif
-
-            return path != null
-                && suffix == "/templates" ? Directory.Exists(path + suffix)
-                                          : File.Exists(Path.Combine(path, suffix));
         }
     }
 }
