@@ -27,7 +27,6 @@ namespace Microsoft.Templates.Api.Test.Controllers
     [Trait("ExecutionSet", "Minimum")]
     public class ProjectTypeControllerTest
     {
-        [Fact]
         public async void TestProjectType_SyncNotCalled()
         {
             using (HttpClient client = new TestClientProvider().Client)

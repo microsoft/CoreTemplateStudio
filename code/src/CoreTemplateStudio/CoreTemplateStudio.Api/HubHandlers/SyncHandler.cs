@@ -4,13 +4,16 @@
 
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Templates.Api.Models;
 using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Core;
+using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 
 namespace Microsoft.Templates.Api.HubHandlers
@@ -19,53 +22,119 @@ namespace Microsoft.Templates.Api.HubHandlers
     {
         private readonly string _platform;
         private readonly string _path;
+        private readonly string _fullPath;
         private readonly string _language;
         private readonly Action<SyncStatus, int> _statusListener;
+        private bool _wasUpdated;
 
-        public SyncHandler(string platform, string path, string language, Action<SyncStatus, int> statusListener)
+        public SyncHandler(string path, Action<SyncStatus, int> statusListener)
         {
-            _platform = platform;
+            _platform = "Web";
+            _language = "Any";
+
+#if DEBUG
             _path = path;
-            _language = language;
+            _fullPath = path + "/templates";
+
+#else
+            _path = @"..";
+            _fullPath = Path.Combine(_path, $"{_platform}.{_language}.Templates.mstx");
+#endif
             _statusListener = statusListener;
         }
 
-        public async Task<ActionResult<SyncModel>> AttemptSync()
+        public async Task<ActionResult<SyncModel>> Sync()
         {
             if (!Platforms.IsValidPlatform(_platform))
             {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPlatform });
+                throw new HubException(StringRes.BadReqInvalidPlatform);
             }
 
-            if (!IsValidPath(_path))
+            if (!IsValidPath(_fullPath))
             {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidPath });
+                throw new HubException(StringRes.BadReqInvalidPath);
+            }
+
+            if (_fullPath.EndsWith("mstx") && !IsPackageValid(_fullPath))
+            {
+                throw new HubException(StringRes.BadReqInvalidPackage);
             }
 
             if (!ProgrammingLanguages.IsValidLanguage(_language, _platform))
             {
-                return new BadRequestObjectResult(new { message = StringRes.BadReqInvalidLanguage });
+                throw new HubException(StringRes.BadReqInvalidLanguage);
             }
 
-            SyncModel syncHelper = new SyncModel(_platform, _language, _path, _statusListener);
-
-            await syncHelper.Sync();
-
-            return syncHelper;
+            try
+            {
+#if DEBUG
+                GenContext.Bootstrap(
+                    new LocalTemplatesSource(
+                        _path,
+                        "0.0.0.0",
+                        string.Empty),
+                    new ApiGenShell(),
+                    new Version("0.0.0.0"),
+                    _platform,
+                    _language);
+#else
+                GenContext.Bootstrap(
+                  new RemoteTemplatesSource(
+                      _platform,
+                      _language,
+                      _path,
+                      new ApiDigitalSignatureService()),
+                  new ApiGenShell(),
+                  new Version("1.0.0.0"),
+                  _platform,
+                  _language);
+#endif
+                GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
+                await GenContext.ToolBox.Repo.SynchronizeAsync(true);
+                return new SyncModel()
+                {
+                    TemplatesVersion = GenContext.ToolBox.TemplatesVersion,
+                    WasUpdated = _wasUpdated,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new HubException(string.Format(StringRes.ErrorSyncingTemplates, ex.Message));
+            }
         }
 
-        private bool IsValidPath(string path)
+        private bool IsPackageValid(string fullpath)
         {
-            string suffix = string.Empty;
-#if DEBUG
-            suffix = "/templates";
-#else
-            suffix = $"{_platform}.{_language}.Templates.mstx";
-#endif
+            return Configuration.Current.AllowedPackages.Contains(GetHash(fullpath));
+        }
 
-            return path != null
-                && suffix == "/templates" ? Directory.Exists(path + suffix)
-                                          : File.Exists(Path.Combine(path, suffix));
+        private string GetHash(string fullpath)
+        {
+            using (FileStream stream = File.OpenRead(fullpath))
+            {
+                var sha = new SHA256Managed();
+                byte[] checksum = sha.ComputeHash(stream);
+                return BitConverter.ToString(checksum).Replace("-", string.Empty);
+            }
+        }
+
+        private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
+        {
+            _statusListener.Invoke(args.Status, args.Progress);
+
+            if (args.Status.Equals(SyncStatus.Updated))
+            {
+                _wasUpdated = true;
+            }
+        }
+
+        private bool IsValidPath(string fullpath)
+        {
+#if DEBUG
+            return fullpath != null && Directory.Exists(fullpath);
+#else
+            return fullpath != null && File.Exists(fullpath);
+#endif
         }
     }
 }

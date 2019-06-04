@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using CoreTemplateStudio.Api.Extensions.Filters;
-
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
@@ -18,6 +18,7 @@ namespace Microsoft.Templates.Api.Controllers
     [ValidateGenContextFilter]
     public class ProjectTypeController : Controller
     {
+        [EnableCors("AllowAll")]
         [HttpGet]
         public List<MetadataInfo> GetProjectTypes()
         {

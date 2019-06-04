@@ -4,7 +4,7 @@
     "displayName": "Test Framework Base",
     "summary": "Test Framework Base Summary",
     "author": "Microsoft",
-    "platforms": [ "test" ],
+    "platforms": [ "Web" ],
     "order": "1",
     "licenses": ""
   }
