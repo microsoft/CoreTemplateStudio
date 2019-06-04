@@ -43,7 +43,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
             });
 
             await connection.StartAsync();
-            await connection.InvokeAsync("SyncTemplates", "Web", ValidPath, "Any");
+            await connection.InvokeAsync("SyncTemplates", ValidPath);
             await connection.StopAsync();
 
             message.Should().Be(SyncStatus.Updated, "Sync has finished with success");
@@ -60,7 +60,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
             await connection.StartAsync();
             try
             {
-                await connection.InvokeAsync("SyncTemplates", "Web", InValidPath, "Any");
+                await connection.InvokeAsync("SyncTemplates", InValidPath);
             }
             catch (Exception ex)
             {

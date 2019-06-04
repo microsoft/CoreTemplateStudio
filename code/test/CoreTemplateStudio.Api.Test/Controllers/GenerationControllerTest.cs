@@ -42,7 +42,7 @@ namespace Microsoft.Templates.Api.Test.Controllers
             });
 
             await connection.StartAsync();
-            await connection.InvokeAsync("SyncTemplates", "Web", ".", "Any");
+            await connection.InvokeAsync("SyncTemplates", ".");
             await connection.InvokeAsync("Generate", testGeneration);
             await connection.StopAsync();
 
