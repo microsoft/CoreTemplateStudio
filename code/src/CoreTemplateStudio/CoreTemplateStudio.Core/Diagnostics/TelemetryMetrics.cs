@@ -10,6 +10,10 @@ namespace Microsoft.Templates.Core.Diagnostics
 
         public static string FeaturesCount { get; private set; } = TelemetryEvents.Prefix + "FeaturesCount";
 
+        public static string ServicesCount { get; private set; } = TelemetryEvents.Prefix + "ServicesCount";
+
+        public static string TestingCount { get; private set; } = TelemetryEvents.Prefix + "TestingCount";
+
         public static string TimeSpent { get; private set; } = TelemetryEvents.Prefix + "SecTotal";
 
         public static string ProjectMetricsTimeSpent { get; private set; } = TelemetryEvents.Prefix + "Sec";

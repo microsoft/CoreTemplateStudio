@@ -34,6 +34,10 @@ namespace Microsoft.Templates.Core
                     return TemplateType.Page;
                 case "FEATURE":
                     return TemplateType.Feature;
+                case "SERVICE":
+                    return TemplateType.Service;
+                case "TESTING":
+                    return TemplateType.Testing;
                 case "COMPOSITION":
                     return TemplateType.Composition;
                 default:

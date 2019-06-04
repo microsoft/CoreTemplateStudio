@@ -547,6 +547,24 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating &apos;{0}&apos; service ....
+        /// </summary>
+        public static string StatusBarGeneratingServiceMessage {
+            get {
+                return ResourceManager.GetString("StatusBarGeneratingServiceMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating &apos;{0}&apos; testing ....
+        /// </summary>
+        public static string StatusBarGeneratingTestingMessage {
+            get {
+                return ResourceManager.GetString("StatusBarGeneratingTestingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opening generated files ....
         /// </summary>
         public static string StatusOpeningItems {

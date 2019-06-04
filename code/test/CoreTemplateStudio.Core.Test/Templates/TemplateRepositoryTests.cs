@@ -144,5 +144,85 @@ namespace Microsoft.Templates.Core.Test.Templates
 
             Assert.Empty(features);
         }
+
+        [Fact]
+        public void GetServices_OnlyFrontEndFrameworkFilter()
+        {
+            SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
+
+            var services = _repo.GetTemplatesInfo(TemplateType.Service, TestPlatform, "pt1", "fx1");
+
+            Assert.Collection(
+                services,
+                f1 =>
+                {
+                    Assert.Equal("ServiceTemplate", f1.Name);
+                });
+        }
+
+        [Fact]
+        public void GetServices_BackendAndFrontEndFrameworkFilter()
+        {
+            SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
+
+            var services = _repo.GetTemplatesInfo(TemplateType.Service, TestPlatform, "pt3", "fx1", "fx3");
+
+            Assert.Collection(
+                services,
+                f1 =>
+                {
+                    Assert.Equal("ServiceTemplate", f1.Name);
+                });
+        }
+
+        [Fact]
+        public void GetServices_NoMatches()
+        {
+            SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
+
+            var services = _repo.GetTemplatesInfo(TemplateType.Service, TestPlatform, "pt1", "fx1", "fx4");
+
+            Assert.Empty(services);
+        }
+
+        [Fact]
+        public void GetTestings_OnlyFrontEndFrameworkFilter()
+        {
+            SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
+
+            var testing = _repo.GetTemplatesInfo(TemplateType.Testing, TestPlatform, "pt1", "fx1");
+
+            Assert.Collection(
+                testing,
+                f1 =>
+                {
+                    Assert.Equal("TestingTemplate", f1.Name);
+                });
+        }
+
+        [Fact]
+        public void GetTestings_BackendAndFrontEndFrameworkFilter()
+        {
+            SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
+
+            var testing = _repo.GetTemplatesInfo(TemplateType.Testing, TestPlatform, "pt3", "fx1", "fx3");
+
+            Assert.Collection(
+                testing,
+                f1 =>
+                {
+                    Assert.Equal("TestingTemplate", f1.Name);
+                });
+        }
+
+        [Fact]
+        public void GetTestings_NoMatches()
+        {
+            SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
+
+            var testing = _repo.GetTemplatesInfo(TemplateType.Testing, TestPlatform, "pt1", "fx1", "fx4");
+
+            Assert.Empty(testing);
+        }
     }
 }

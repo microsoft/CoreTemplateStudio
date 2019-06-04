@@ -6,10 +6,12 @@ namespace Microsoft.Templates.Core
 {
     public enum TemplateType
     {
-        Project = 1,
-        Page = 2,
-        Feature = 3,
-        Composition = 4,
-        Unspecified = 100,
+        Project,
+        Page,
+        Feature,
+        Service,
+        Testing,
+        Composition,
+        Unspecified,
     }
 }

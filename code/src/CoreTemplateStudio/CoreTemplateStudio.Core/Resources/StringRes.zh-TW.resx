@@ -476,6 +476,14 @@
     <value>在使用者的選擇中找不到相依性範本 {0}。</value>
     <comment>Missing dependency exception message. {0}:Dependency Template id</comment>
   </data>
+  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
+    <value>Creating '{0}' testing ...</value>
+    <comment>Status bar message generating testing. {0}: Testing name</comment>
+  </data>
+  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
+    <value>Creating '{0}' service ...</value>
+    <comment>Status bar message generating service. {0}: Service name</comment>
+  </data>
   <data name="StatusBarGeneratingFeatureMessage" xml:space="preserve">
     <value>正在建立 '{0}' 功能...</value>
     <comment>Status bar message generating feature. {0}: Feature name</comment>

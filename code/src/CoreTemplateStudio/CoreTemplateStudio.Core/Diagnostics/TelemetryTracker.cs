@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Template;
+using Microsoft.Templates.Core.Extensions;
 using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Core.Diagnostics
@@ -93,6 +94,12 @@ namespace Microsoft.Templates.Core.Diagnostics
                     case TemplateType.Feature:
                         await TrackItemGenAsync(TelemetryEvents.FeatureGen, template, genSource, appProjectType, appFx, result);
                         break;
+                    case TemplateType.Service:
+                        await TrackItemGenAsync(TelemetryEvents.ServiceGen, template, genSource, appProjectType, appFx, result);
+                        break;
+                    case TemplateType.Testing:
+                        await TrackItemGenAsync(TelemetryEvents.TestingGen, template, genSource, appProjectType, appFx, result);
+                        break;
                     case TemplateType.Unspecified:
                         break;
                 }
@@ -101,7 +108,8 @@ namespace Microsoft.Templates.Core.Diagnostics
 
         public async Task TrackNewItemAsync(TemplateType templateType, string appType, string appFx, string appPlatform, Guid vsProjectId, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
         {
-            var newItemType = templateType == TemplateType.Page ? NewItemType.Page : NewItemType.Feature;
+            var itemType = templateType.GetNewItemType();
+            var itemTypeString = itemType != null ? itemType.ToString() : string.Empty;
 
             var properties = new Dictionary<string, string>()
             {
@@ -112,7 +120,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.EventName, TelemetryEvents.NewItemGen },
                 { TelemetryProperties.VisualStudioActiveProjectGuid, vsProjectId.ToString() },
                 { TelemetryProperties.VsProjectCategory, appPlatform },
-                { TelemetryProperties.NewItemType, newItemType.ToString() },
+                { TelemetryProperties.NewItemType, itemTypeString },
             };
 
             var metrics = new Dictionary<string, double>();
@@ -132,7 +140,17 @@ namespace Microsoft.Templates.Core.Diagnostics
                 metrics.Add(TelemetryMetrics.FeaturesCount, genItemsTelemetryData.FeaturesCount.Value);
             }
 
-            GenContext.ToolBox.Shell.SafeTrackNewItemVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, metrics);
+            if (genItemsTelemetryData.ServicesCount.HasValue)
+            {
+                metrics.Add(TelemetryMetrics.ServicesCount, genItemsTelemetryData.ServicesCount.Value);
+            }
+
+            if (genItemsTelemetryData.TestingCount.HasValue)
+            {
+                metrics.Add(TelemetryMetrics.TestingCount, genItemsTelemetryData.TestingCount.Value);
+            }
+
+            GenContext.ToolBox.Shell.SafeTrackNewItemVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, genItemsTelemetryData.ServiceIdentities, genItemsTelemetryData.TestingIdentities, metrics);
 
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.NewItemGen, properties, metrics).ConfigureAwait(false);
         }
@@ -176,6 +194,16 @@ namespace Microsoft.Templates.Core.Diagnostics
                 metrics.Add(TelemetryMetrics.FeaturesCount, genItemsTelemetryData.FeaturesCount.Value);
             }
 
+            if (genItemsTelemetryData.ServicesCount.HasValue)
+            {
+                metrics.Add(TelemetryMetrics.ServicesCount, genItemsTelemetryData.ServicesCount.Value);
+            }
+
+            if (genItemsTelemetryData.TestingCount.HasValue)
+            {
+                metrics.Add(TelemetryMetrics.TestingCount, genItemsTelemetryData.TestingCount.Value);
+            }
+
             if (timeSpent.HasValue)
             {
                 metrics.Add(TelemetryMetrics.TimeSpent, timeSpent.Value);
@@ -189,7 +217,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 }
             }
 
-            GenContext.ToolBox.Shell.SafeTrackProjectVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, metrics, status == GenStatusEnum.Completed);
+            GenContext.ToolBox.Shell.SafeTrackProjectVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, genItemsTelemetryData.ServiceIdentities, genItemsTelemetryData.TestingIdentities, metrics, status == GenStatusEnum.Completed);
 
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.ProjectGen, properties, metrics).ConfigureAwait(false);
         }
