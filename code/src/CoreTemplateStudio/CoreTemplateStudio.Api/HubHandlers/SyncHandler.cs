@@ -27,7 +27,7 @@ namespace Microsoft.Templates.Api.HubHandlers
         private readonly Action<SyncStatus, int> _statusListener;
         private bool _wasUpdated;
 
-        public SyncHandler(string platform, string path, string language, Action<SyncStatus, int> statusListener)
+        public SyncHandler(string path, Action<SyncStatus, int> statusListener)
         {
             _platform = "Web";
             _language = "Any";

@@ -29,7 +29,6 @@ namespace CoreTemplateStudio.Api
         {
             services.AddSingleton<ValidateGenContextFilter>();
 
-            // Adds Cors policy for swagger docs response, since this is a local server this should be fine.
             services.AddCors(options =>
              {
                  options.AddPolicy(
@@ -71,7 +70,6 @@ namespace CoreTemplateStudio.Api
 
             app
               .UseMiddleware<ErrorHandlerMiddleware>()
-              .UseCors("AllowAll")
               .UseMvc()
               .UseSignalR(route =>
               {

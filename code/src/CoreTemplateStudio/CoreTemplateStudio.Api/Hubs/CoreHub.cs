@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 using CoreTemplateStudio.Api.Extensions.Filters;
 using CoreTemplateStudio.Api.Models.Generation;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Templates.Api.HubHandlers;
@@ -23,14 +22,13 @@ namespace Microsoft.Templates.Api.Hubs
 {
     public class CoreHub : Hub
     {
-        public async Task<ActionResult<SyncModel>> SyncTemplates(string platform, string path, string language = ProgrammingLanguages.Any)
+        public async Task<ActionResult<SyncModel>> SyncTemplates(string path)
         {
-            var handler = new SyncHandler(platform, path, language, SendMessageToClient);
+            var handler = new SyncHandler(path, SendMessageToClient);
 
             return await handler.Sync();
         }
 
-        [ValidateGenContextFilter]
         public async Task<ActionResult<ContextProvider>> Generate(GenerationData generationData)
         {
             var handler = new GenerationHandler(SendProgressToClient);
