@@ -40,6 +40,8 @@ namespace Microsoft.Templates.Core
 
         public List<string> AllowedPublicKeysPins { get; set; } = new List<string>() { };
 
+        public List<string> AllowedPackages { get; set; } = new List<string>() { };
+
         public List<BreakingChangeVersion> BreakingChangesVersions { get; set; } = new List<BreakingChangeVersion>() { };
 
         public string CustomTelemetryEndpoint { get; set; } = string.Empty;

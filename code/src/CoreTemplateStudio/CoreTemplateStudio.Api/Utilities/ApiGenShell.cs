@@ -10,17 +10,17 @@ using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Api.Utilities
 {
-    public delegate void StatusBarMessageHandler(object sender, string message);
+    public delegate void StatusBarMessageHandler(string message);
 
     public class ApiGenShell : GenShell
     {
-        private static StatusBarMessageHandler _messageEventHandler;
+        private Action<string> _messageListener;
 
-        public void SetMessageEventListener(StatusBarMessageHandler messageEventHandler)
+        public void SetMessageEventListener(Action<string> messageListener)
         {
-            if (messageEventHandler != null)
+            if (messageListener != null)
             {
-                _messageEventHandler = messageEventHandler;
+                _messageListener = messageListener;
             }
         }
 
@@ -128,7 +128,7 @@ namespace Microsoft.Templates.Api.Utilities
 
         public override void ShowStatusBarMessage(string message)
         {
-            _messageEventHandler?.Invoke(this, message);
+            _messageListener?.Invoke(message);
         }
 
         public override void ShowTaskList()

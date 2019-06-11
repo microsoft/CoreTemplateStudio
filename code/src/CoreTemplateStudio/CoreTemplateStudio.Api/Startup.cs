@@ -29,7 +29,6 @@ namespace CoreTemplateStudio.Api
         {
             services.AddSingleton<ValidateGenContextFilter>();
 
-            // Adds Cors policy for swagger docs response, since this is a local server this should be fine.
             services.AddCors(options =>
              {
                  options.AddPolicy(
@@ -39,8 +38,7 @@ namespace CoreTemplateStudio.Api
                          builder
                          .AllowAnyOrigin()
                          .AllowAnyMethod()
-                         .AllowAnyHeader()
-                         .AllowCredentials();
+                         .AllowAnyHeader();
                      });
              });
 
@@ -50,7 +48,7 @@ namespace CoreTemplateStudio.Api
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // Validation controller models
             services.Configure<ApiBehaviorOptions>(options =>
@@ -72,7 +70,6 @@ namespace CoreTemplateStudio.Api
 
             app
               .UseMiddleware<ErrorHandlerMiddleware>()
-              .UseCors("AllowAll")
               .UseMvc()
               .UseSignalR(route =>
               {

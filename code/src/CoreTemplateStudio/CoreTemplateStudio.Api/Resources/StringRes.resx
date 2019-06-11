@@ -127,6 +127,9 @@
   <data name="BadReqInvalidLanguage" xml:space="preserve">
     <value>invalid language for this platform</value>
   </data>
+  <data name="BadReqInvalidPackage" xml:space="preserve">
+    <value>invalid package</value>
+  </data>
   <data name="BadReqInvalidPath" xml:space="preserve">
     <value>invalid path</value>
   </data>
@@ -144,5 +147,11 @@
   </data>
   <data name="BadReqNotSynced" xml:space="preserve">
     <value>You must first sync templates before calling this endpoint.</value>
+  </data>
+  <data name="ErrorGenerating" xml:space="preserve">
+    <value>Error generating. {0}</value>
+  </data>
+  <data name="ErrorSyncingTemplates" xml:space="preserve">
+    <value>Error syncing templates. {0}</value>
   </data>
 </root>

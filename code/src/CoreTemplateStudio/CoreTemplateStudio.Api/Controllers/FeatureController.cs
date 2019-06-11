@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using CoreTemplateStudio.Api.Extensions.Filters;
-
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Templates.Api.Resources;
 using Microsoft.Templates.Core;
@@ -19,6 +19,7 @@ namespace Microsoft.Templates.Api.Controllers
     [ValidateGenContextFilter]
     public class FeatureController : Controller
     {
+        [EnableCors("AllowAll")]
         [HttpGet]
         public ActionResult<List<TemplateInfo>> GetFeaturesForFrameworks(string projectType, string frontEndFramework, string backEndFramework)
         {
