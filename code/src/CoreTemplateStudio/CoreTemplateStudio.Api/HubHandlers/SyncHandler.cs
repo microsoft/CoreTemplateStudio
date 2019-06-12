@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -85,7 +87,7 @@ namespace Microsoft.Templates.Api.HubHandlers
                       _path,
                       new ApiDigitalSignatureService()),
                   new ApiGenShell(),
-                  new Version("1.0.0.0"),
+                  new Version(GetFileVersion()),
                   _platform,
                   _language);
 #endif
@@ -101,6 +103,14 @@ namespace Microsoft.Templates.Api.HubHandlers
             {
                 throw new HubException(string.Format(StringRes.ErrorSyncingTemplates, ex.Message));
             }
+        }
+
+        private static string GetFileVersion()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            return fvi.FileVersion;
         }
 
         private bool IsPackageValid(string fullpath)
