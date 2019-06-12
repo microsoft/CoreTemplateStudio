@@ -5,11 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Composition;
 using Microsoft.Templates.Core.Resources;
+using Microsoft.Templates.Core.Templates;
 
 namespace Microsoft.Templates.Core.Gen
 {
@@ -195,8 +195,14 @@ namespace Microsoft.Templates.Core.Gen
                 }
 
                 var genInfo = CreateGenInfo(mainGenInfo.Name, targetTemplate, queue, newItemGeneration);
-                genInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
-                genInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+
+                foreach (var param in mainGenInfo.Parameters)
+                {
+                    if (!genInfo.Parameters.ContainsKey(param.Key))
+                    {
+                        genInfo.Parameters.Add(param.Key, param.Value);
+                    }
+                }
             }
         }
 
@@ -216,6 +222,11 @@ namespace Microsoft.Templates.Core.Gen
             queue.Add(genInfo);
 
             AddDefaultParams(genInfo, newItemGeneration);
+
+            foreach (var casing in template.GetCasings())
+            {
+                genInfo.Parameters.Add(casing.GetParameterName(), casing.GetTransform(name));
+            }
 
             return genInfo;
         }

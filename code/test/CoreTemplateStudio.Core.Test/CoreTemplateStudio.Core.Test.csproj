@@ -134,6 +134,7 @@
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="PostActions\Catalog\AddJsonDictionaryItemPostActionTest.cs" />
+    <Compile Include="Templates\CasingExtensionsTests.cs" />
     <Compile Include="Templates\TemplateRepositoryTests.cs" />
     <Compile Include="Localization\LocalizationTest.cs" />
     <Compile Include="Locations\TemplateSourceConfigTests.cs" />

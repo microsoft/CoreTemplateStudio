@@ -17,6 +17,9 @@ namespace Microsoft.Templates.Core.Templates
             FileRenameParams = new Dictionary<string, string>()
             {
                 { "Param_ProjectName", genParameters.SafeGet(GenParams.ProjectName) },
+                { "Param_SourceName_Kebab", genParameters.SafeGet(CasingType.Kebab.GetParameterName()) },
+                { "Param_SourceName_Pascal", genParameters.SafeGet(CasingType.Pascal.GetParameterName()) },
+                { "Param_SourceName_Camel", genParameters.SafeGet(CasingType.Camel.GetParameterName()) },
             };
         }
 
