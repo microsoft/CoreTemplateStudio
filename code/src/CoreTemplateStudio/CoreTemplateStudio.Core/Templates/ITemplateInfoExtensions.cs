@@ -11,7 +11,9 @@ using System.Text.RegularExpressions;
 
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Abstractions.Mount;
+using Microsoft.Templates.Core.Casing;
 using Microsoft.Templates.Core.Composition;
+using Microsoft.Templates.Core.Templates;
 using Newtonsoft.Json;
 
 namespace Microsoft.Templates.Core
@@ -158,11 +160,11 @@ namespace Microsoft.Templates.Core
                         .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
         }
 
-        public static List<CasingType> GetCasings(this ITemplateInfo ti)
+        public static List<ICasingService> GetCasingServices(this ITemplateInfo ti)
         {
             var casings = GetValueFromTag(ti, TagPrefix + "sourceNameCasing");
 
-            var result = new List<CasingType>();
+            var result = new List<ICasingService>();
 
             if (!string.IsNullOrEmpty(casings))
             {
@@ -171,13 +173,13 @@ namespace Microsoft.Templates.Core
                     switch (casing.ToUpper())
                     {
                         case "KEBAB":
-                            result.Add(CasingType.Kebab);
+                            result.Add(new KebabCasingService());
                             break;
                         case "PASCAL":
-                            result.Add(CasingType.Pascal);
+                            result.Add(new PascalCasingService());
                             break;
                         case "CAMEL":
-                            result.Add(CasingType.Camel);
+                            result.Add(new CamelCasingService());
                             break;
                         default:
                             break;

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.Templates.Core.Casing;
 using Microsoft.Templates.Core.Templates;
 using Xunit;
 
@@ -15,44 +16,51 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void Test_TransformToKebab()
         {
-            Assert.Equal("master-detail", CasingType.Kebab.GetTransform("MasterDetail"));
-            Assert.Equal("master-detail", CasingType.Kebab.GetTransform("Master_Detail"));
-            Assert.Equal("master-detail", CasingType.Kebab.GetTransform("Master Detail"));
-            Assert.Equal("master-detail", CasingType.Kebab.GetTransform(" Master Detail"));
-            Assert.Equal("master-detail", CasingType.Kebab.GetTransform("master detail"));
+            var kebabCasingService = new KebabCasingService();
 
-            Assert.Equal("master-detail-1", CasingType.Kebab.GetTransform("MasterDetail1"));
-            Assert.Equal("master-ui", CasingType.Kebab.GetTransform("MasterUI"));
-            Assert.Equal("master-ui", CasingType.Kebab.GetTransform("Master UI"));
-            Assert.Equal("master-ui", CasingType.Kebab.GetTransform("Master_UI"));
+            Assert.Equal("master-detail", kebabCasingService.Transform("MasterDetail"));
+            Assert.Equal("master-detail", kebabCasingService.Transform("Master_Detail"));
+            Assert.Equal("master-detail", kebabCasingService.Transform("Master Detail"));
+            Assert.Equal("master-detail", kebabCasingService.Transform(" Master Detail "));
+            Assert.Equal("master-detail", kebabCasingService.Transform("master detail"));
+            Assert.Equal("master-detail-123-abc", kebabCasingService.Transform("master   -  detail 123 abc"));
+
+            Assert.Equal("master-detail-1", kebabCasingService.Transform("MasterDetail1"));
+            Assert.Equal("master-ui", kebabCasingService.Transform("MasterUI"));
+            Assert.Equal("master-ui", kebabCasingService.Transform("Master UI"));
+            Assert.Equal("master-ui", kebabCasingService.Transform("Master_UI"));
         }
 
         [Fact]
         public void Test_TransformToPascalCase()
         {
-            Assert.Equal("MasterDetail", CasingType.Pascal.GetTransform("MasterDetail"));
-            Assert.Equal("MasterDetail", CasingType.Pascal.GetTransform("Master_Detail"));
-            Assert.Equal("MasterDetail", CasingType.Pascal.GetTransform("Master Detail"));
-            Assert.Equal("MasterDetail", CasingType.Pascal.GetTransform(" Master Detail"));
-            Assert.Equal("MasterDetail1", CasingType.Pascal.GetTransform("master detail 1"));
+            var pascalCasingService = new PascalCasingService();
 
-            Assert.Equal("MasterUI", CasingType.Pascal.GetTransform("MasterUI"));
-            Assert.Equal("MasterUI", CasingType.Pascal.GetTransform("master UI"));
-            Assert.Equal("MasterUI", CasingType.Pascal.GetTransform("Master_UI"));
+            Assert.Equal("MasterDetail", pascalCasingService.Transform("MasterDetail"));
+            Assert.Equal("MasterDetail", pascalCasingService.Transform("Master_Detail"));
+            Assert.Equal("MasterDetail", pascalCasingService.Transform("Master Detail"));
+            Assert.Equal("MasterDetail", pascalCasingService.Transform(" Master Detail "));
+            Assert.Equal("MasterDetail1", pascalCasingService.Transform("master detail 1"));
+
+            Assert.Equal("MasterUI", pascalCasingService.Transform("MasterUI"));
+            Assert.Equal("MasterUI", pascalCasingService.Transform("master UI"));
+            Assert.Equal("MasterUI", pascalCasingService.Transform("Master_UI"));
         }
 
         [Fact]
         public void Test_TransformToCamelCase()
         {
-            Assert.Equal("masterDetail", CasingType.Camel.GetTransform("MasterDetail"));
-            Assert.Equal("masterDetail", CasingType.Camel.GetTransform("Master_Detail"));
-            Assert.Equal("masterDetail", CasingType.Camel.GetTransform("Master Detail"));
-            Assert.Equal("masterDetail", CasingType.Camel.GetTransform(" Master Detail"));
-            Assert.Equal("masterDetail1", CasingType.Camel.GetTransform("master detail 1"));
+            var camelCasingService = new CamelCasingService();
 
-            Assert.Equal("masterUI", CasingType.Camel.GetTransform("MasterUI"));
-            Assert.Equal("masterUI", CasingType.Camel.GetTransform("master UI"));
-            Assert.Equal("masterUI", CasingType.Camel.GetTransform("Master_UI"));
+            Assert.Equal("masterDetail", camelCasingService.Transform("MasterDetail"));
+            Assert.Equal("masterDetail", camelCasingService.Transform("Master_Detail"));
+            Assert.Equal("masterDetail", camelCasingService.Transform("Master Detail"));
+            Assert.Equal("masterDetail", camelCasingService.Transform(" Master Detail "));
+            Assert.Equal("masterDetail1", camelCasingService.Transform("master detail 1"));
+
+            Assert.Equal("masterUI", camelCasingService.Transform("MasterUI"));
+            Assert.Equal("masterUI", camelCasingService.Transform("master UI"));
+            Assert.Equal("masterUI", camelCasingService.Transform("Master_UI"));
         }
     }
 }

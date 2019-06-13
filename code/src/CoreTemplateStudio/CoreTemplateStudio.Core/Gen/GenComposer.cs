@@ -230,9 +230,9 @@ namespace Microsoft.Templates.Core.Gen
 
             AddDefaultParams(genInfo, newItemGeneration);
 
-            foreach (var casing in template.GetCasings())
+            foreach (var casingService in template.GetCasingServices())
             {
-                genInfo.Parameters.Add(casing.GetParameterName(), casing.GetTransform(name));
+                genInfo.Parameters.Add(casingService.GetParameterName(), casingService.Transform(name));
             }
 
             return genInfo;

@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Casing
 {
-    public enum CasingType
+    public interface ICasingService
     {
-        Kebab,
-        Pascal,
-        Camel,
+        string GetParameterName();
+
+        string Transform(string value);
     }
 }

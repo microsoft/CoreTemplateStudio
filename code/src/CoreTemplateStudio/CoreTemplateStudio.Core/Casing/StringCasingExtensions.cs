@@ -7,54 +7,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Microsoft.Templates.Core.Templates
+namespace Microsoft.Templates.Core.Casing
 {
-    public static class CasingExtensions
+    public static class StringCasingExtensions
     {
         private static readonly char[] Separators = { ' ', '-', '_' };
 
-        private static Dictionary<CasingType, string> ParameterNames { get; set; } = new Dictionary<CasingType, string>
-        {
-            { CasingType.Pascal, "wts.sourceName.casing.pascal" },
-            { CasingType.Kebab, "wts.sourceName.casing.kebab" },
-        };
-
-        public static string GetParameterName(this CasingType casing)
-        {
-            if (ParameterNames.ContainsKey(casing))
-            {
-                return ParameterNames[casing].ToString();
-            }
-
-            return string.Empty;
-        }
-
-        public static string GetTransform(this CasingType casing, string name)
-        {
-            switch (casing)
-            {
-                case CasingType.Kebab:
-                    return ToKebabCase(name);
-                case CasingType.Pascal:
-                    return ToPascalCase(name);
-                case CasingType.Camel:
-                    return ToCamelCase(name);
-                default:
-                    return name;
-            }
-        }
-
-        private static string ToKebabCase(string name)
+        public static string ToKebabCase(this string name)
         {
             return Transform(name, '-').ToLower();
         }
 
-        private static string ToPascalCase(string name)
+        public static string ToPascalCase(this string name)
         {
             return Transform(name, null, ToUpperCase);
         }
 
-        private static string ToCamelCase(string name)
+        public static string ToCamelCase(this string name)
         {
             return Transform(name, null, ToUpperCaseExceptFirstLetter);
         }
@@ -76,7 +45,7 @@ namespace Microsoft.Templates.Core.Templates
             }
         }
 
-        private static string Transform(string name, char? separator, Func<char, int, char> newWordTreatment = null)
+        private static string Transform(string name, char? separator, Func<char, int, char> firstLetterTreatment = null)
         {
             name = name.Trim();
             var builder = new StringBuilder();
@@ -88,7 +57,10 @@ namespace Microsoft.Templates.Core.Templates
 
                 if (Separators.Contains(currentCharacter))
                 {
-                    builder.Append(separator);
+                    if (!Separators.Contains(lastChar))
+                    {
+                        builder.Append(separator);
+                    }
                 }
 
                 if (char.IsLetterOrDigit(currentCharacter))
@@ -102,9 +74,9 @@ namespace Microsoft.Templates.Core.Templates
                             builder.Append(separator);
                         }
 
-                        if (newWordTreatment != null)
+                        if (firstLetterTreatment != null)
                         {
-                            builder.Append(newWordTreatment(currentCharacter, i));
+                            builder.Append(firstLetterTreatment(currentCharacter, i));
                         }
                         else
                         {
