@@ -81,6 +81,7 @@ namespace Microsoft.Templates.Core.Gen
                 genProject.Parameters.Add(GenParams.BackEndFramework, userSelection.BackEndFramework);
                 genProject.Parameters.Add(GenParams.Platform, userSelection.Platform);
                 genProject.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+                genProject.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
             }
         }
 
