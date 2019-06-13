@@ -476,6 +476,14 @@ Impossibile integrare le seguenti modifiche: {2}
     <value>Modello di dipendenza {0} non trovato alla selezione utente.</value>
     <comment>Missing dependency exception message. {0}:Dependency Template id</comment>
   </data>
+  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
+    <value>Creating '{0}' testing ...</value>
+    <comment>Status bar message generating testing. {0}: Testing name</comment>
+  </data>
+  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
+    <value>Creating '{0}' service ...</value>
+    <comment>Status bar message generating service. {0}: Service name</comment>
+  </data>
   <data name="StatusBarGeneratingFeatureMessage" xml:space="preserve">
     <value>Creazione funzionalità '{0}' in corso...</value>
     <comment>Status bar message generating feature. {0}: Feature name</comment>

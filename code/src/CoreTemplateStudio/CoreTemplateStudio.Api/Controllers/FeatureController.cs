@@ -30,7 +30,7 @@ namespace Microsoft.Templates.Api.Controllers
 
             var platform = GenContext.CurrentPlatform;
             var features = GenContext.ToolBox.Repo.GetTemplatesInfo(
-                                                                TemplateType.Page,
+                                                                TemplateType.Feature,
                                                                 platform,
                                                                 projectType,
                                                                 frontEndFramework,
