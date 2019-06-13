@@ -11,8 +11,9 @@ using System.Text.RegularExpressions;
 
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Abstractions.Mount;
+using Microsoft.Templates.Core.Casing;
 using Microsoft.Templates.Core.Composition;
-using Microsoft.Templates.Core.Gen;
+using Microsoft.Templates.Core.Templates;
 using Newtonsoft.Json;
 
 namespace Microsoft.Templates.Core
@@ -157,6 +158,36 @@ namespace Microsoft.Templates.Core
             return ti.Tags
                         .Where(t => t.Key.Contains(TagPrefix + "export."))
                         .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
+        }
+
+        public static List<ICasingService> GetCasingServices(this ITemplateInfo ti)
+        {
+            var casings = GetValueFromTag(ti, TagPrefix + "sourceNameCasing");
+
+            var result = new List<ICasingService>();
+
+            if (!string.IsNullOrEmpty(casings))
+            {
+                foreach (var casing in casings.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                {
+                    switch (casing.ToUpper())
+                    {
+                        case "KEBAB":
+                            result.Add(new KebabCasingService());
+                            break;
+                        case "PASCAL":
+                            result.Add(new PascalCasingService());
+                            break;
+                        case "CAMEL":
+                            result.Add(new CamelCasingService());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return result;
         }
 
         public static List<string> GetFrontEndFrameworkList(this ITemplateInfo ti)

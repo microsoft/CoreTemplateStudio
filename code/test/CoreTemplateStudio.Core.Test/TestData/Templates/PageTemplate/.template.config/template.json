@@ -16,7 +16,8 @@
     "wts.displayOrder": "1",
     "wts.genGroup": "1",
     "wts.export.baseclass": "ViewModelBase",
-    "wts.export.setter": "Set"
+    "wts.export.setter": "Set",
+    "wts.sourceNameCasing": "kebab|camel|pascal"
   },
   "sourceName": "App_Name",
   "preferNameDirectory": true
