@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Template;
+using Microsoft.Templates.Core.Extensions;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Locations;
@@ -224,8 +225,7 @@ namespace Microsoft.Templates.Core
                         else
                         {
                             var templateType = template.GetTemplateType();
-
-                            if (templateType != TemplateType.Page && templateType != TemplateType.Feature)
+                            if (!templateType.IsItemTemplate())
                             {
                                 LogOrAlertException(string.Format(StringRes.ErrorLayoutType, template.Identity));
                             }
@@ -294,9 +294,9 @@ namespace Microsoft.Templates.Core
                 }
                 else
                 {
-                    var templateType = dependencyTemplate?.GetTemplateType();
+                    var templateType = dependencyTemplate.GetTemplateType();
 
-                    if (templateType != TemplateType.Page && templateType != TemplateType.Feature)
+                    if (!templateType.IsItemTemplate())
                     {
                         LogOrAlertException(string.Format(StringRes.ErrorDependencyType, dependencyTemplate.Identity));
                     }

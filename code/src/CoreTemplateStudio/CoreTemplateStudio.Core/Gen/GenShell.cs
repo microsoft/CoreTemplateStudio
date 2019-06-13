@@ -85,9 +85,9 @@ namespace Microsoft.Templates.Core.Gen
 
         public abstract VSTelemetryInfo GetVSTelemetryInfo();
 
-        public abstract void SafeTrackProjectVsTelemetry(Dictionary<string, string> properties, string pages, string features, Dictionary<string, double> metrics, bool success = true);
+        public abstract void SafeTrackProjectVsTelemetry(Dictionary<string, string> properties, string pages, string features, string services, string testing, Dictionary<string, double> metrics, bool success = true);
 
-        public abstract void SafeTrackNewItemVsTelemetry(Dictionary<string, string> properties, string pages, string features, Dictionary<string, double> metrics, bool success = true);
+        public abstract void SafeTrackNewItemVsTelemetry(Dictionary<string, string> properties, string pages, string features, string services, string testing, Dictionary<string, double> metrics, bool success = true);
 
         public abstract void SafeTrackWizardCancelledVsTelemetry(Dictionary<string, string> properties, bool success = true);
 

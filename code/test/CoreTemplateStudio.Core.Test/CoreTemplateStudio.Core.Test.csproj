@@ -22,6 +22,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\description.md" />
+    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\en-US.description.md" />
+    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\TestingTemplate\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\TestingTemplate\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\TestingTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\description.md" />
     <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.description.md" />
     <Content Include="TestData\Templates\CompositionTemplateVB\.template.config\template.json" />
@@ -38,6 +46,10 @@
     <Content Include="TestData\Templates\Naming.DefaultNameTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\Naming.DefaultNameTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\OutputToParent.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\ServiceTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\ServiceTemplate\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\ServiceTemplate\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\ServiceTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\PageTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\PageTemplate\.template.config\en-US.template.json" />
     <Content Include="TestData\Templates\PageTemplate\.template.config\es-ES.template.json" />
@@ -284,10 +296,17 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestData\Templates\TestingTemplateVB\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\TestingTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\TestingTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\TestingTemplate\.template.config\es-ES.description.md" />
     <None Include="TestData\Templates\FeatureTemplateVB\.template.config\es-ES.description.md" />
     <None Include="TestData\Templates\FeatureTemplate\.template.config\description.md" />
     <None Include="TestData\Templates\FeatureTemplate\.template.config\en-US.description.md" />
     <None Include="TestData\Templates\FeatureTemplate\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\ServiceTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\ServiceTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\ServiceTemplate\.template.config\es-ES.description.md" />
     <None Include="TestData\Templates\PageTemplate\.template.config\description.md" />
     <None Include="TestData\Templates\PageTemplate\.template.config\en-US.description.md" />
     <None Include="TestData\Templates\PageTemplate\.template.config\es-ES.description.md" />

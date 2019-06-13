@@ -63,6 +63,30 @@ namespace Microsoft.Templates.Core.Test
 
         [Theory]
         [MemberData(nameof(GetAllLanguages))]
+        public void GetTemplateType_service(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("ServiceTemplate");
+
+            var result = target.GetTemplateType();
+            Assert.Equal(TemplateType.Service, result);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
+        public void GetTemplateType_testing(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("TestingTemplate");
+
+            var result = target.GetTemplateType();
+            Assert.Equal(TemplateType.Testing, result);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
         public void GetTemplateType_composition(string language)
         {
             SetUpFixtureForTesting(language);

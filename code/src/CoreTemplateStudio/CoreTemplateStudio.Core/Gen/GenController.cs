@@ -139,6 +139,10 @@ namespace Microsoft.Templates.Core.Gen
                     return string.Format(StringRes.StatusBarGeneratingPageMessage, $"{genInfo.Name} ({genInfo.Template.Name})");
                 case TemplateType.Feature:
                     return string.Format(StringRes.StatusBarGeneratingFeatureMessage, $"{genInfo.Name} ({genInfo.Template.Name})");
+                case TemplateType.Service:
+                    return string.Format(StringRes.StatusBarGeneratingServiceMessage, $"{genInfo.Name} ({genInfo.Template.Name})");
+                case TemplateType.Testing:
+                    return string.Format(StringRes.StatusBarGeneratingTestingMessage, $"{genInfo.Name} ({genInfo.Template.Name})");
                 default:
                     return null;
             }

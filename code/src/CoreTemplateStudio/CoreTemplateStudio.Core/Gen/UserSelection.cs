@@ -53,7 +53,11 @@ namespace Microsoft.Templates.Core.Gen
 
         public List<UserSelectionItem> Features { get; } = new List<UserSelectionItem>();
 
-        public IEnumerable<UserSelectionItem> PagesAndFeatures
+        public List<UserSelectionItem> Services { get; } = new List<UserSelectionItem>();
+
+        public List<UserSelectionItem> Testing { get; } = new List<UserSelectionItem>();
+
+        public IEnumerable<UserSelectionItem> Items
         {
             get
             {
@@ -65,6 +69,16 @@ namespace Microsoft.Templates.Core.Gen
                 foreach (var feature in Features)
                 {
                     yield return feature;
+                }
+
+                foreach (var service in Services)
+                {
+                    yield return service;
+                }
+
+                foreach (var testing in Testing)
+                {
+                    yield return testing;
                 }
             }
         }
@@ -109,6 +123,18 @@ namespace Microsoft.Templates.Core.Gen
                 sb.AppendLine();
             }
 
+            if (Services.Any())
+            {
+                sb.AppendFormat("Services: '{0}'", string.Join(", ", Services.Select(p => $"{p.Name} - {p.TemplateId}").ToArray()));
+                sb.AppendLine();
+            }
+
+            if (Testing.Any())
+            {
+                sb.AppendFormat("Testing: '{0}'", string.Join(", ", Testing.Select(p => $"{p.Name} - {p.TemplateId}").ToArray()));
+                sb.AppendLine();
+            }
+
             return sb.ToString();
         }
 
@@ -121,6 +147,12 @@ namespace Microsoft.Templates.Core.Gen
                     break;
                 case TemplateType.Feature:
                     Features.Add(template);
+                    break;
+                case TemplateType.Service:
+                    Services.Add(template);
+                    break;
+                case TemplateType.Testing:
+                    Testing.Add(template);
                     break;
             }
         }

@@ -27,6 +27,8 @@ namespace Microsoft.Templates.Core.Gen
             AddProject(userSelection, genQueue);
             AddTemplates(userSelection.Pages, genQueue, userSelection, false);
             AddTemplates(userSelection.Features, genQueue, userSelection, false);
+            AddTemplates(userSelection.Services, genQueue, userSelection, false);
+            AddTemplates(userSelection.Testing, genQueue, userSelection, false);
 
             genQueue = AddInCompositionTemplates(genQueue, userSelection, false);
 
@@ -52,6 +54,8 @@ namespace Microsoft.Templates.Core.Gen
 
             AddTemplates(userSelection.Pages, genQueue, userSelection, true);
             AddTemplates(userSelection.Features, genQueue, userSelection, true);
+            AddTemplates(userSelection.Services, genQueue, userSelection, true);
+            AddTemplates(userSelection.Testing, genQueue, userSelection, true);
 
             genQueue = AddInCompositionTemplates(genQueue, userSelection, true);
 
@@ -116,7 +120,7 @@ namespace Microsoft.Templates.Core.Gen
 
             foreach (var dependencyItem in dependencies)
             {
-                var dependencyTemplate = userSelection.PagesAndFeatures.FirstOrDefault(f => f.TemplateId == dependencyItem.Identity);
+                var dependencyTemplate = userSelection.Items.FirstOrDefault(f => f.TemplateId == dependencyItem.Identity);
 
                 if (dependencyTemplate != null)
                 {
@@ -144,6 +148,8 @@ namespace Microsoft.Templates.Core.Gen
                 new QueryableProperty("projecttype", userSelection.ProjectType),
                 new QueryableProperty("page", string.Join("|", userSelection.Pages.Select(p => p.TemplateId))),
                 new QueryableProperty("feature", string.Join("|", userSelection.Features.Select(p => p.TemplateId))),
+                new QueryableProperty("service", string.Join("|", userSelection.Services.Select(p => p.TemplateId))),
+                new QueryableProperty("testing", string.Join("|", userSelection.Testing.Select(p => p.TemplateId))),
             };
 
             if (!string.IsNullOrEmpty(userSelection.FrontEndFramework))

@@ -476,6 +476,14 @@ Die folgenden Änderungen konnten nicht integriert werden: {2}
     <value>Die Abhängigkeitsvorlage {0} für die Benutzerauswahl wurde nicht gefunden.</value>
     <comment>Missing dependency exception message. {0}:Dependency Template id</comment>
   </data>
+  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
+    <value>Creating '{0}' testing ...</value>
+    <comment>Status bar message generating testing. {0}: Testing name</comment>
+  </data>
+  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
+    <value>Creating '{0}' service ...</value>
+    <comment>Status bar message generating service. {0}: Service name</comment>
+  </data>
   <data name="StatusBarGeneratingFeatureMessage" xml:space="preserve">
     <value>Feature „{0}“ wird erstellt...</value>
     <comment>Status bar message generating feature. {0}: Feature name</comment>

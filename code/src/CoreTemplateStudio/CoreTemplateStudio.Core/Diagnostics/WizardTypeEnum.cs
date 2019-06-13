@@ -9,5 +9,7 @@ namespace Microsoft.Templates.Core.Diagnostics
         NewProject = 0,
         AddPage = 1,
         AddFeature = 2,
+        AddService = 3,
+        AddTesting = 4,
     }
 }
