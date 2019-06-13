@@ -11,8 +11,4 @@ namespace Microsoft.Templates.Cli.Services
             return 0;
         }
     }
-
-
-
-
 }
