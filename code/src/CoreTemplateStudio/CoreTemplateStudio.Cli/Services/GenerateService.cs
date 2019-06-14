@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Options;
 using Microsoft.Templates.Cli.Services.Contracts;
 
@@ -6,9 +7,9 @@ namespace Microsoft.Templates.Cli.Services
 {
     public class GenerateService : IGenerateService
     {
-        public int Process(GenerateOptions options)
+        public async Task<int> ProcessAsync(GenerateOptions options)
         {
-            return 0;
+            return await Task.FromResult(0);
         }
     }
 }

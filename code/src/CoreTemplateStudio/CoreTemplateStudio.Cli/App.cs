@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using CommandLine;
 using Microsoft.Templates.Cli.Options;
 using Microsoft.Templates.Cli.Services.Contracts;
@@ -39,13 +40,14 @@ namespace Microsoft.Templates.Cli
             var result = Parser.Default
                 .ParseArguments<SyncOptions, GetTemplatesOptions, GenerateOptions, CloseOptions>(args)
                 .MapResult(
-                    (SyncOptions opts) => _syncService.Process(opts),
-                    (GetTemplatesOptions opts) => _getTemplatesService.Process(opts),
-                    (GenerateOptions opts) => _generateService.Process(opts),
-                    (CloseOptions opts) => 1,
-                    errors => 0);
+                    async (SyncOptions opts) => await _syncService.ProcessAsync(opts),
+                    async (GetTemplatesOptions opts) => await _getTemplatesService.ProcessAsync(opts),
+                    async (GenerateOptions opts) => await _generateService.ProcessAsync(opts),
+                    (CloseOptions opts) => Task.FromResult(1),
+                    errors => Task.FromResult(0));
 
-            return result == 0;
+            //todo: use async task
+            return result.Result == 0;
         }
     }
 }

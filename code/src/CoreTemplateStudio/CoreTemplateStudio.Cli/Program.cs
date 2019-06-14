@@ -22,6 +22,7 @@ namespace Microsoft.Templates.Cli
             services.AddTransient<IGenerateService, GenerateService>();
             services.AddTransient<IGetTemplatesService, GetTemplatesService>();
             services.AddTransient<ISyncService, SyncService>();
+            services.AddSingleton<IMessageService, MessageService>();
 
             // App entry point
             services.AddTransient<App>();
