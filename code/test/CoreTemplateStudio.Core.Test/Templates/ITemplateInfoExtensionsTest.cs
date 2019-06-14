@@ -697,9 +697,9 @@ namespace Microsoft.Templates.Core.Test
             var result = target.GetCasingServices();
 
             Assert.Equal(3, result.Count);
-            Assert.Contains(result, r => r.GetType() == typeof(KebabCasingService));
-            Assert.Contains(result, r => r.GetType() == typeof(CamelCasingService));
-            Assert.Contains(result, r => r.GetType() == typeof(PascalCasingService));
+            Assert.Contains(result, r => r.Type == CasingType.Kebab);
+            Assert.Contains(result, r => r.Type == CasingType.Camel);
+            Assert.Contains(result, r => r.Type == CasingType.Pascal);
         }
 
         [Theory]

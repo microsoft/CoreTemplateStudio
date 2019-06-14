@@ -16,7 +16,7 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void Test_TransformToKebab()
         {
-            var kebabCasingService = new KebabCasingService();
+            var kebabCasingService = new TextCasing() { Type = CasingType.Kebab };
 
             Assert.Equal("master-detail", kebabCasingService.Transform("MasterDetail"));
             Assert.Equal("master-detail", kebabCasingService.Transform("Master_Detail"));
@@ -34,7 +34,7 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void Test_TransformToPascalCase()
         {
-            var pascalCasingService = new PascalCasingService();
+            var pascalCasingService = new TextCasing() { Type = CasingType.Pascal };
 
             Assert.Equal("MasterDetail", pascalCasingService.Transform("MasterDetail"));
             Assert.Equal("MasterDetail", pascalCasingService.Transform("Master_Detail"));
@@ -50,14 +50,13 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void Test_TransformToCamelCase()
         {
-            var camelCasingService = new CamelCasingService();
+            var camelCasingService = new TextCasing() { Type = CasingType.Camel };
 
             Assert.Equal("masterDetail", camelCasingService.Transform("MasterDetail"));
             Assert.Equal("masterDetail", camelCasingService.Transform("Master_Detail"));
             Assert.Equal("masterDetail", camelCasingService.Transform("Master Detail"));
             Assert.Equal("masterDetail", camelCasingService.Transform(" Master Detail "));
             Assert.Equal("masterDetail1", camelCasingService.Transform("master detail 1"));
-
             Assert.Equal("masterUI", camelCasingService.Transform("MasterUI"));
             Assert.Equal("masterUI", camelCasingService.Transform("master UI"));
             Assert.Equal("masterUI", camelCasingService.Transform("Master_UI"));

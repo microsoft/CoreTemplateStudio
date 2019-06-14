@@ -4,10 +4,10 @@
 
 namespace Microsoft.Templates.Core.Casing
 {
-    public interface ICasingService
+    public enum CasingType
     {
-        string GetParameterName();
-
-        string Transform(string value);
+        Camel,
+        Kebab,
+        Pascal,
     }
 }
