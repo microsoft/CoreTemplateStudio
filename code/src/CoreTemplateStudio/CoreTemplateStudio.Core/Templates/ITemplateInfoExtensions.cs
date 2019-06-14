@@ -160,26 +160,30 @@ namespace Microsoft.Templates.Core
                         .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
         }
 
-        public static List<ICasingService> GetCasingServices(this ITemplateInfo ti)
+        public static List<TextCasing> GetCasingServices(this ITemplateInfo ti)
         {
-            var casings = GetValueFromTag(ti, TagPrefix + "sourceNameCasing");
+            var result = new List<TextCasing>();
 
-            var result = new List<ICasingService>();
+            var casingTags = ti.Tags
+                        .Where(t => t.Key.Contains(TagPrefix + "casing."))
+                        .ToDictionary(
+                            t => t.Key.Replace(TagPrefix + "casing.", string.Empty),
+                            v => v.Value.DefaultValue.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
 
-            if (!string.IsNullOrEmpty(casings))
+            foreach (var casingTag in casingTags)
             {
-                foreach (var casing in casings.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                foreach (var casing in casingTag.Value)
                 {
                     switch (casing.ToUpper())
                     {
                         case "KEBAB":
-                            result.Add(new KebabCasingService());
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Kebab });
                             break;
                         case "PASCAL":
-                            result.Add(new PascalCasingService());
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Pascal });
                             break;
                         case "CAMEL":
-                            result.Add(new CamelCasingService());
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Camel });
                             break;
                         default:
                             break;
