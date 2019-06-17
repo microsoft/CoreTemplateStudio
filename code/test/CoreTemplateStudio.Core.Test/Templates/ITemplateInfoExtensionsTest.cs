@@ -694,7 +694,7 @@ namespace Microsoft.Templates.Core.Test
             SetUpFixtureForTesting(language);
 
             var target = GetTargetByName("PageTemplate");
-            var result = target.GetCasingServices();
+            var result = target.GetTextCasings();
 
             Assert.Equal(3, result.Count);
             Assert.Contains(result, r => r.Type == CasingType.Kebab);
@@ -709,7 +709,7 @@ namespace Microsoft.Templates.Core.Test
             SetUpFixtureForTesting(language);
 
             var target = GetTargetByName("UnspecifiedTemplate");
-            var result = target.GetCasingServices();
+            var result = target.GetTextCasings();
 
             Assert.Empty(result);
         }
