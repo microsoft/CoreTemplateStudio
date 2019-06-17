@@ -1,9 +1,9 @@
-using Microsoft.Templates.Cli.Options;
+using Microsoft.Templates.Cli.Commands.Contracts;
 using System.Threading.Tasks;
 
 namespace Microsoft.Templates.Cli.Services.Contracts
 {
-    public interface IOptionsService<T> where T : IOptions
+    public interface IOptionsService<T> where T : ICommand
     {
         Task<int> ProcessAsync(T options);
     }
