@@ -10,21 +10,20 @@ namespace Microsoft.Templates.Cli
 {
     public class App
     {
-        private readonly Parser _parser;
         private readonly string promptSymbol = ">> ";
         private readonly IMessageService _messageService;
         private readonly IGenerateService _generateService;
         private readonly IGetProjectTypesService _getProjectTypesService;
+        private readonly IGetFrameworksService _getFrameworksService;
         private readonly ISyncService _syncService;
 
-        public App(IMessageService messageService, IGenerateService generateService, IGetProjectTypesService getProjectTypesService, ISyncService syncService)
+        public App(IMessageService messageService, IGenerateService generateService, IGetProjectTypesService getProjectTypesService, IGetFrameworksService getFrameworksService, ISyncService syncService)
         {
             _messageService = messageService;
             _generateService = generateService;
             _getProjectTypesService = getProjectTypesService;
+            _getFrameworksService = getFrameworksService;
             _syncService = syncService;
-
-            _parser = new Parser(cfg => cfg.CaseInsensitiveEnumValues = true);
         }
 
         public void Run()
@@ -50,11 +49,12 @@ namespace Microsoft.Templates.Cli
         {
             var args = command.Split();
 
-            var parserResult = _parser.ParseArguments<SyncOptions, GetProjectTypesOptions, GenerateOptions, CloseOptions>(args);
+            var parserResult = Parser.Default.ParseArguments<SyncOptions, GetProjectTypesOptions, GetFrameworksOptions, GenerateOptions, CloseOptions>(args);
 
               var exitCode = parserResult.MapResult(
                     (SyncOptions opts) => _syncService.ProcessAsync(opts),
                     (GetProjectTypesOptions opts) => _getProjectTypesService.ProcessAsync(opts),
+                    (GetFrameworksOptions opts) => _getFrameworksService.ProcessAsync(opts),
                     (GenerateOptions opts) => _generateService.ProcessAsync(opts),
                     (CloseOptions opts) => Task.FromResult(1),
                     errors => {

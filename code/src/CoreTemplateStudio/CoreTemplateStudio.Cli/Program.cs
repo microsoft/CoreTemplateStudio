@@ -21,6 +21,7 @@ namespace Microsoft.Templates.Cli
 
             services.AddTransient<IGenerateService, GenerateService>();
             services.AddTransient<IGetProjectTypesService, GetProjectTypesService>();
+            services.AddTransient<IGetFrameworksService, GetFrameworksService>();
             services.AddTransient<ISyncService, SyncService>();
             services.AddSingleton<IMessageService, MessageService>();
 
