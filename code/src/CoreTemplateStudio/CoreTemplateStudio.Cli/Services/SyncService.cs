@@ -11,7 +11,6 @@ using Microsoft.Templates.Cli.Utilities;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
-using Newtonsoft.Json;
 
 namespace Microsoft.Templates.Cli.Services
 {
@@ -89,8 +88,8 @@ namespace Microsoft.Templates.Cli.Services
                 GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
                 await GenContext.ToolBox.Repo.SynchronizeAsync(true);
 
-                var syncModel = JsonConvert.SerializeObject(new { GenContext.ToolBox.TemplatesVersion, WasUpdated = _wasUpdated });
-                _messageService.SendMessage(syncModel);
+                var syncModel = new { GenContext.ToolBox.TemplatesVersion, WasUpdated = _wasUpdated };
+                _messageService.Send(syncModel);
                 //return new SyncModel()
                 //{
                 //    TemplatesVersion = GenContext.ToolBox.TemplatesVersion,

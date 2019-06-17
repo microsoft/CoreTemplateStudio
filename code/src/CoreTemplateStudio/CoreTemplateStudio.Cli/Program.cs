@@ -20,7 +20,7 @@ namespace Microsoft.Templates.Cli
             IServiceCollection services = new ServiceCollection();
 
             services.AddTransient<IGenerateService, GenerateService>();
-            services.AddTransient<IGetTemplatesService, GetTemplatesService>();
+            services.AddTransient<IGetProjectTypesService, GetProjectTypesService>();
             services.AddTransient<ISyncService, SyncService>();
             services.AddSingleton<IMessageService, MessageService>();
 

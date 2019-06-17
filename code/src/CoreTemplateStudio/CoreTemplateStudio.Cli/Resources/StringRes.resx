@@ -148,6 +148,9 @@
   <data name="BadReqNotSynced" xml:space="preserve">
     <value>You must first sync templates before calling this endpoint.</value>
   </data>
+  <data name="ErrorExecutingCommand" xml:space="preserve">
+    <value>Error to execute command. {0}</value>
+  </data>
   <data name="ErrorGenerating" xml:space="preserve">
     <value>Error generating. {0}</value>
   </data>

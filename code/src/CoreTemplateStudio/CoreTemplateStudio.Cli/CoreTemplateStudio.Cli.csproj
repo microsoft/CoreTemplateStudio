@@ -1,8 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>Microsoft.Templates.Cli</RootNamespace>
+    <AssemblyName>Microsoft.Templates.Cli</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,8 +27,9 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\StringRes.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StringRes.Designer.cs</LastGenOutput>
+      <CustomToolNamespace></CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
 

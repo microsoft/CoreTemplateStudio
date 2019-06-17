@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Templates.Cli.Services.Contracts;
+using Newtonsoft.Json;
 
 namespace Microsoft.Templates.Cli.Services
 {
@@ -9,12 +10,18 @@ namespace Microsoft.Templates.Cli.Services
     {
         public void SendError(string error)
         {
-            Console.WriteLine(error);
+            Console.Error.WriteLine(error);
         }
 
         public void SendMessage(string message)
         {
             Console.WriteLine(message);
+        }
+
+        public void Send<T>(T item)
+        {
+            var json = JsonConvert.SerializeObject(item);
+            SendMessage(json);
         }
     }
 }

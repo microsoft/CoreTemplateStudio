@@ -9,5 +9,7 @@ namespace Microsoft.Templates.Cli.Services.Contracts
         void SendMessage(string message);
 
         void SendError(string error);
+
+        void Send<T>(T item);
     }
 }

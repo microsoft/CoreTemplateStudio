@@ -22,7 +22,7 @@ namespace Microsoft.Templates.Cli.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class StringRes {
+    public class StringRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Microsoft.Templates.Cli.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CoreTemplateStudio.Cli.Resources.StringRes", typeof(StringRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Templates.Cli.Resources.StringRes", typeof(StringRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Microsoft.Templates.Cli.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Internal Server Error from the custom middleware. {0}.
         /// </summary>
-        internal static string BadReqInternalServerError {
+        public static string BadReqInternalServerError {
             get {
                 return ResourceManager.GetString("BadReqInternalServerError", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Invalid generation path.
         /// </summary>
-        internal static string BadReqInvalidGenPath {
+        public static string BadReqInvalidGenPath {
             get {
                 return ResourceManager.GetString("BadReqInvalidGenPath", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to invalid language for this platform.
         /// </summary>
-        internal static string BadReqInvalidLanguage {
+        public static string BadReqInvalidLanguage {
             get {
                 return ResourceManager.GetString("BadReqInvalidLanguage", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to invalid package.
         /// </summary>
-        internal static string BadReqInvalidPackage {
+        public static string BadReqInvalidPackage {
             get {
                 return ResourceManager.GetString("BadReqInvalidPackage", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to invalid path.
         /// </summary>
-        internal static string BadReqInvalidPath {
+        public static string BadReqInvalidPath {
             get {
                 return ResourceManager.GetString("BadReqInvalidPath", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to invalid platform.
         /// </summary>
-        internal static string BadReqInvalidPlatform {
+        public static string BadReqInvalidPlatform {
             get {
                 return ResourceManager.GetString("BadReqInvalidPlatform", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Invalid project name.
         /// </summary>
-        internal static string BadReqInvalidProjectName {
+        public static string BadReqInvalidProjectName {
             get {
                 return ResourceManager.GetString("BadReqInvalidProjectName", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to invalid project type.
         /// </summary>
-        internal static string BadReqInvalidProjectType {
+        public static string BadReqInvalidProjectType {
             get {
                 return ResourceManager.GetString("BadReqInvalidProjectType", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You must specify a backend or frontend framework at the very least.
         /// </summary>
-        internal static string BadReqNoBackendOrFrontend {
+        public static string BadReqNoBackendOrFrontend {
             get {
                 return ResourceManager.GetString("BadReqNoBackendOrFrontend", resourceCulture);
             }
@@ -144,16 +144,25 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You must first sync templates before calling this endpoint..
         /// </summary>
-        internal static string BadReqNotSynced {
+        public static string BadReqNotSynced {
             get {
                 return ResourceManager.GetString("BadReqNotSynced", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error to execute command. {0}.
+        /// </summary>
+        public static string ErrorExecutingCommand {
+            get {
+                return ResourceManager.GetString("ErrorExecutingCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error generating. {0}.
         /// </summary>
-        internal static string ErrorGenerating {
+        public static string ErrorGenerating {
             get {
                 return ResourceManager.GetString("ErrorGenerating", resourceCulture);
             }
@@ -162,7 +171,7 @@ namespace Microsoft.Templates.Cli.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error syncing templates. {0}.
         /// </summary>
-        internal static string ErrorSyncingTemplates {
+        public static string ErrorSyncingTemplates {
             get {
                 return ResourceManager.GetString("ErrorSyncingTemplates", resourceCulture);
             }
