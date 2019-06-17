@@ -160,7 +160,7 @@ namespace Microsoft.Templates.Core
                         .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
         }
 
-        public static List<TextCasing> GetCasingServices(this ITemplateInfo ti)
+        public static List<TextCasing> GetTextCasings(this ITemplateInfo ti)
         {
             var result = new List<TextCasing>();
 

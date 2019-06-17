@@ -209,8 +209,6 @@ namespace Microsoft.Templates.Core.Gen
 
                 var genInfo = CreateGenInfo(mainGenInfo.Name, targetTemplate, queue, newItemGeneration);
 
-                AddCasingParams(mainGenInfo.Name, targetTemplate, genInfo);
-
                 foreach (var param in mainGenInfo.Parameters)
                 {
                     if (!genInfo.Parameters.ContainsKey(param.Key))
@@ -218,6 +216,8 @@ namespace Microsoft.Templates.Core.Gen
                         genInfo.Parameters.Add(param.Key, param.Value);
                     }
                 }
+
+                AddCasingParams(mainGenInfo.Name, targetTemplate, genInfo);
             }
         }
 
@@ -243,7 +243,7 @@ namespace Microsoft.Templates.Core.Gen
 
         private static void AddCasingParams(string name, ITemplateInfo template, GenInfo genInfo)
         {
-            foreach (var textCasing in template.GetCasingServices())
+            foreach (var textCasing in template.GetTextCasings())
             {
                 var value = textCasing.Key == "sourceName"
                     ? name
@@ -251,7 +251,10 @@ namespace Microsoft.Templates.Core.Gen
 
                 if (!string.IsNullOrEmpty(value))
                 {
-                    genInfo.Parameters.Add(textCasing.ParameterName, textCasing.Transform(value));
+                    if (!genInfo.Parameters.ContainsKey(textCasing.ParameterName))
+                    {
+                        genInfo.Parameters.Add(textCasing.ParameterName, textCasing.Transform(value));
+                    }
                 }
             }
         }
