@@ -22,9 +22,7 @@ namespace Microsoft.Templates.Cli.Commands.Dispatcher
             }
 
             var handler = _serviceProvider.GetService<ICommandHandler<T>>();
-            handler.Execute(command);
-
-            return await Task.FromResult<int>(0);
+            return await handler.ExecuteAsync(command);
         }
     }
 }

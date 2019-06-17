@@ -1,4 +1,5 @@
-﻿using Microsoft.Templates.Cli.Commands.Contracts;
+﻿using System.Threading.Tasks;
+using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Services.Contracts;
 
 namespace Microsoft.Templates.Cli.Commands.Handlers
@@ -12,10 +13,9 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
             _templatesService = templatesService;
         }
 
-        public int Execute(GetPagesCommand command)
+        public async Task<int> ExecuteAsync(GetPagesCommand command)
         {
-            // do something here
-            return 0;
+            return await Task.FromResult(0);
         }
     }
 }

@@ -5,60 +5,47 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Resources;
-using Microsoft.Templates.Cli.Options;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Cli.Utilities;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
+using Microsoft.Templates.Cli.Models;
 
 namespace Microsoft.Templates.Cli.Services
 {
     public class SyncService : ISyncService
     {
-        private readonly IMessageService _messageService;
-
-        private readonly string _platform;
-        private readonly string _language;
+        private readonly string _platform = "Web";
+        private readonly string _language = "Any";
         private string _path;
         private string _fullPath;
-
+        private Action<SyncStatus, int> _statusListener;
         private bool _wasUpdated;
-
-        public SyncService(IMessageService messageService)
+        
+        public async Task<SyncModel> ProcessAsync(string path, Action<SyncStatus, int> statusListener)
         {
-            _messageService = messageService;
-
-            _platform = "Web";
-            _language = "Any";
-        }
-
-        public async Task<int> ProcessAsync(SyncOptions options)
-        {
-            ConfigurePaths(options.Path);
+            ConfigurePaths(path);
+            _statusListener = statusListener;
 
             if (!Platforms.IsValidPlatform(_platform))
             {
-                _messageService.SendError(StringRes.BadReqInvalidPlatform);
-                return 0;
+                throw new Exception(StringRes.BadReqInvalidPlatform);
             }
 
             if (!IsValidPath(_fullPath))
             {
-                _messageService.SendError(StringRes.BadReqInvalidPath);
-                return 0;
+                throw new Exception(StringRes.BadReqInvalidPath);
             }
 
             if (_fullPath.EndsWith("mstx") && !IsPackageValid(_fullPath))
             {
-                _messageService.SendError(StringRes.BadReqInvalidPackage);
-                return 0;
+                throw new Exception(StringRes.BadReqInvalidPackage);
             }
 
             if (!ProgrammingLanguages.IsValidLanguage(_language, _platform))
             {
-                _messageService.SendError(StringRes.BadReqInvalidLanguage);
-                return 0;
+                throw new Exception(StringRes.BadReqInvalidLanguage);
             }
 
             try
@@ -88,20 +75,16 @@ namespace Microsoft.Templates.Cli.Services
                 GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
                 await GenContext.ToolBox.Repo.SynchronizeAsync(true);
 
-                var syncModel = new { GenContext.ToolBox.TemplatesVersion, WasUpdated = _wasUpdated };
-                _messageService.Send(syncModel);
-                //return new SyncModel()
-                //{
-                //    TemplatesVersion = GenContext.ToolBox.TemplatesVersion,
-                //    WasUpdated = _wasUpdated,
-                //};
+                return new SyncModel()
+                {
+                    TemplatesVersion = GenContext.ToolBox.TemplatesVersion,
+                    WasUpdated = _wasUpdated,
+                };
             }
             catch (Exception ex)
             {
-                _messageService.SendError(string.Format(StringRes.ErrorSyncingTemplates, ex.Message));
+                throw new Exception(string.Format(StringRes.ErrorSyncingTemplates, ex.Message));
             }
-
-            return 0;
         }
 
         private static string GetFileVersion()
@@ -129,9 +112,7 @@ namespace Microsoft.Templates.Cli.Services
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
         {
-            //SignalR call
-            //Clients.Caller.SendAsync("syncMessage", status.ToString(), progress);
-            _messageService.SendMessage($"syncMessage : {args.Status.ToString()} - {args.Progress}");
+            _statusListener.Invoke(args.Status, args.Progress);
 
             if (args.Status.Equals(SyncStatus.Updated))
             {

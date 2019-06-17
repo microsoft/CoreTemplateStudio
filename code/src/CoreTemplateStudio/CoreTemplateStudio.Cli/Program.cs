@@ -34,6 +34,7 @@ namespace Microsoft.Templates.Cli
             // Commands
             services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
             services.AddSingleton<ICommandHandler<GetPagesCommand>, GetPagesHandler>();
+            services.AddSingleton<ICommandHandler<SyncCommand>, SyncHandler>();
 
             // App entry point
             services.AddTransient<App>();

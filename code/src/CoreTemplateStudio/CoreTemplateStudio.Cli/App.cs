@@ -53,13 +53,13 @@ namespace Microsoft.Templates.Cli
         {
             var args = command.Split();
 
-            var parserResult = Parser.Default.ParseArguments<SyncOptions, GetProjectTypesOptions, GetFrameworksOptions, GetPagesCommand, GenerateOptions, CloseOptions>(args);
+            var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesOptions, GetFrameworksOptions, GetPagesCommand, GenerateOptions, CloseOptions>(args);
 
               var exitCode = parserResult.MapResult(
-                    (SyncOptions opts) => _syncService.ProcessAsync(opts),
+                    (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetProjectTypesOptions opts) => _getProjectTypesService.ProcessAsync(opts),
                     (GetFrameworksOptions opts) => _getFrameworksService.ProcessAsync(opts),
-                    (GetPagesCommand opts) => _dispatcher.DispatchAsync<GetPagesCommand>(opts),
+                    (GetPagesCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GenerateOptions opts) => _generateService.ProcessAsync(opts),
                     (CloseOptions opts) => Task.FromResult(1),
                     errors => {
