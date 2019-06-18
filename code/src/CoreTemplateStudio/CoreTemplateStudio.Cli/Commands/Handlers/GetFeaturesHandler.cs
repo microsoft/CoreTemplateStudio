@@ -4,21 +4,21 @@ using Microsoft.Templates.Cli.Services.Contracts;
 
 namespace Microsoft.Templates.Cli.Commands.Handlers
 {
-    public class GetPagesHandler : ICommandHandler<GetPagesCommand>
+    public class GetFeaturesHandler : ICommandHandler<GetFeaturesCommand>
     {
         private readonly IMessageService _messageService;
         private readonly ITemplatesService _templatesService;
 
-        public GetPagesHandler(IMessageService messageService, ITemplatesService templatesService)
+        public GetFeaturesHandler(IMessageService messageService, ITemplatesService templatesService)
         {
             _messageService = messageService;
             _templatesService = templatesService;
         }
 
-        public async Task<int> ExecuteAsync(GetPagesCommand command)
+        public async Task<int> ExecuteAsync(GetFeaturesCommand command)
         {
-            var pages = _templatesService.GetPages(command.ProjectType, command.FrontendFramework, command.BackendFramework);
-            _messageService.Send(pages);
+            var features = _templatesService.GetFeatures(command.ProjectType, command.FrontendFramework, command.BackendFramework);
+            _messageService.Send(features);
 
             return await Task.FromResult(0);
         }

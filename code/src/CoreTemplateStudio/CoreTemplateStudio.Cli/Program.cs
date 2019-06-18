@@ -35,6 +35,7 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<ICommandHandler<GetProjectTypesCommand>, GetProjectTypesHandler>();
             services.AddSingleton<ICommandHandler<GetFrameworksCommand>, GetFrameworksHandler>();
             services.AddSingleton<ICommandHandler<GetPagesCommand>, GetPagesHandler>();
+            services.AddSingleton<ICommandHandler<GetFeaturesCommand>, GetFeaturesHandler>();
 
             // App entry point
             services.AddTransient<App>();

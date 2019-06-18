@@ -1,10 +1,10 @@
 ﻿using CommandLine;
 using Microsoft.Templates.Cli.Commands.Contracts;
 
-namespace Microsoft.Templates.Cli.Options
+namespace Microsoft.Templates.Cli.Commands
 {
     [Verb("getfeatures", HelpText = "Get features by core.")]
-    public class GetFeatures : ICommand
+    public class GetFeaturesCommand : ICommand
     {
         [Option('p', "project-type", Required = true, HelpText = "Project type")]
         public string ProjectType { get; set; }
