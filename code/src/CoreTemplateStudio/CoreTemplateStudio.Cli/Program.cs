@@ -25,16 +25,16 @@ namespace Microsoft.Templates.Cli
 
             // Services
             services.AddSingleton<IGenerateService, GenerateService>();
-            services.AddSingleton<IGetProjectTypesService, GetProjectTypesService>();
-            services.AddSingleton<IGetFrameworksService, GetFrameworksService>();
             services.AddSingleton<ITemplatesService, TemplatesService>();
             services.AddSingleton<ISyncService, SyncService>();
             services.AddSingleton<IMessageService, MessageService>();
 
             // Commands
             services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
-            services.AddSingleton<ICommandHandler<GetPagesCommand>, GetPagesHandler>();
             services.AddSingleton<ICommandHandler<SyncCommand>, SyncHandler>();
+            services.AddSingleton<ICommandHandler<GetProjectTypesCommand>, GetProjectTypesHandler>();
+            services.AddSingleton<ICommandHandler<GetFrameworksCommand>, GetFrameworksHandler>();
+            services.AddSingleton<ICommandHandler<GetPagesCommand>, GetPagesHandler>();
 
             // App entry point
             services.AddTransient<App>();

@@ -16,17 +16,13 @@ namespace Microsoft.Templates.Cli
         private readonly ICommandDispatcher _dispatcher;
         private readonly IMessageService _messageService;
         private readonly IGenerateService _generateService;
-        private readonly IGetProjectTypesService _getProjectTypesService;
-        private readonly IGetFrameworksService _getFrameworksService;
         private readonly ISyncService _syncService;
 
-        public App(ICommandDispatcher dispatcher, IMessageService messageService, IGenerateService generateService, IGetProjectTypesService getProjectTypesService, IGetFrameworksService getFrameworksService, ISyncService syncService)
+        public App(ICommandDispatcher dispatcher, IMessageService messageService, IGenerateService generateService, ISyncService syncService)
         {
             _dispatcher = dispatcher;
             _messageService = messageService;
             _generateService = generateService;
-            _getProjectTypesService = getProjectTypesService;
-            _getFrameworksService = getFrameworksService;
             _syncService = syncService;
         }
 
@@ -53,12 +49,12 @@ namespace Microsoft.Templates.Cli
         {
             var args = command.Split();
 
-            var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesOptions, GetFrameworksOptions, GetPagesCommand, GenerateOptions, CloseOptions>(args);
+            var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesCommand, GetFrameworksCommand, GetPagesCommand, GenerateOptions, CloseOptions>(args);
 
               var exitCode = parserResult.MapResult(
                     (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetProjectTypesOptions opts) => _getProjectTypesService.ProcessAsync(opts),
-                    (GetFrameworksOptions opts) => _getFrameworksService.ProcessAsync(opts),
+                    (GetProjectTypesCommand opts) => _dispatcher.DispatchAsync(opts),
+                    (GetFrameworksCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetPagesCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GenerateOptions opts) => _generateService.ProcessAsync(opts),
                     (CloseOptions opts) => Task.FromResult(1),

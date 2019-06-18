@@ -1,10 +1,10 @@
-using CommandLine;
+﻿using CommandLine;
 using Microsoft.Templates.Cli.Commands.Contracts;
 
-namespace Microsoft.Templates.Cli.Options
+namespace Microsoft.Templates.Cli.Commands
 {
     [Verb("getprojecttypes", HelpText = "Get project types.")]
-    public class GetProjectTypesOptions : ICommand
+    public class GetProjectTypesCommand : ICommand
     {
     }
 }
