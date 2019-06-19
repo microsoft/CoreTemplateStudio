@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Templates.Cli.Commands.Contracts
 {
-    public interface IValidateHandler<T> where T : ICommand
+    public interface ICommandValidator<T> where T : ICommand
     {
         Task<CommandValidatorResult> ValidateAsync(T command);
     }

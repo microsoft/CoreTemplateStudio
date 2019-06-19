@@ -41,11 +41,11 @@ namespace Microsoft.Templates.Cli.Commands.Dispatcher
                 throw new ArgumentNullException(nameof(command), "Command can not be null.");
             }
 
-            var handler = _serviceProvider.GetService<IValidateHandler<T>>();
+            var handler = _serviceProvider.GetService<ICommandValidator<T>>();
 
             if (handler == null)
             {
-                throw new Exception($"{command.GetType().Name} validation was not found.");
+                throw new Exception($"{command.GetType().Name} validator was not found.");
             }
 
             return await handler.ValidateAsync(command);
