@@ -13,6 +13,14 @@ namespace Microsoft.Templates.Cli.Services
             Console.Error.WriteLine(error);
         }
 
+        public void SendErrors(IEnumerable<string> errors)
+        {
+            foreach(var error in errors)
+            {
+                SendError(error);
+            }
+        }
+
         public void SendMessage(string message)
         {
             Console.WriteLine(message);

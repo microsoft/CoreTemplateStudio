@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Templates.Cli.Commands.Contracts;
+using Microsoft.Templates.Cli.Commands.Validators;
 using System;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace Microsoft.Templates.Cli.Commands.Dispatcher
             _serviceProvider = serviceProvider;
         }
 
+        //todo : refactor exceptions
         public async Task<int> DispatchAsync<T>(T command) where T : ICommand
         {
             if (command == null)
@@ -22,7 +24,31 @@ namespace Microsoft.Templates.Cli.Commands.Dispatcher
             }
 
             var handler = _serviceProvider.GetService<ICommandHandler<T>>();
+
+
+            if (handler == null)
+            {
+                throw new Exception($"{command.GetType().Name} handler was not found.");
+            }
+
             return await handler.ExecuteAsync(command);
+        }
+
+        public async Task<CommandValidatorResult> ValidateAsync<T>(T command) where T : ICommand
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command), "Command can not be null.");
+            }
+
+            var handler = _serviceProvider.GetService<IValidateHandler<T>>();
+
+            if (handler == null)
+            {
+                throw new Exception($"{command.GetType().Name} validation was not found.");
+            }
+
+            return await handler.ValidateAsync(command);
         }
     }
 }

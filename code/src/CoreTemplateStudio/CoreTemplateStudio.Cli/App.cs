@@ -50,13 +50,13 @@ namespace Microsoft.Templates.Cli
             var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesCommand, GetFrameworksCommand, GetPagesCommand, GetFeaturesCommand, GenerateCommand, CloseCommand>(args);
 
               var exitCode = parserResult.MapResult(
-                    (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetProjectTypesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetFrameworksCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetPagesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetFeaturesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GenerateCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (CloseCommand opts) => _dispatcher.DispatchAsync(opts),
+                    (SyncCommand opts) => DispatchCommand(opts),
+                    (GetProjectTypesCommand opts) => DispatchCommand(opts),
+                    (GetFrameworksCommand opts) => DispatchCommand(opts),
+                    (GetPagesCommand opts) => DispatchCommand(opts),
+                    (GetFeaturesCommand opts) => DispatchCommand(opts),
+                    (GenerateCommand opts) => DispatchCommand(opts),
+                    (CloseCommand opts) => DispatchCommand(opts),
                     errors => {
                         var helpText = HelpText.AutoBuild(parserResult);
                         helpText.AddEnumValuesToHelpText = true;
@@ -67,6 +67,20 @@ namespace Microsoft.Templates.Cli
 
             //todo: use async task
             return exitCode.Result == 0;
+        }
+
+        private async Task<int> DispatchCommand(ICommand command)
+        {
+            var validations = await _dispatcher.ValidateAsync(command);
+
+            if(validations.IsValid)
+            {
+                return await _dispatcher.DispatchAsync(command);
+            }
+
+            _messageService.SendErrors(validations.Messages);
+            return 0;
+
         }
     }
 }

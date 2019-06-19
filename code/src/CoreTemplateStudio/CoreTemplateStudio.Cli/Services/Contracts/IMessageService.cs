@@ -10,6 +10,8 @@ namespace Microsoft.Templates.Cli.Services.Contracts
 
         void SendError(string error);
 
+        void SendErrors(IEnumerable<string> errors);
+
         void Send<T>(T item);
     }
 }
