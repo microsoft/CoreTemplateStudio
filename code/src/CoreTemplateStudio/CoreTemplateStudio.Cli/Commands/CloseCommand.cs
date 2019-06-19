@@ -1,10 +1,10 @@
-using CommandLine;
+﻿using CommandLine;
 using Microsoft.Templates.Cli.Commands.Contracts;
 
-namespace Microsoft.Templates.Cli.Options
+namespace Microsoft.Templates.Cli.Commands
 {
     [Verb("close", HelpText = "Close command.")]
-    public class CloseOptions : ICommand
+    public class CloseCommand : ICommand
     {
     }
 }

@@ -1,8 +1,12 @@
-using Microsoft.Templates.Cli.Options;
+using Microsoft.Templates.Cli.Models;
+using Microsoft.Templates.Cli.Utilities;
+using System;
+using System.Threading.Tasks;
 
 namespace Microsoft.Templates.Cli.Services.Contracts
 {
-    public interface IGenerateService : IOptionsService<GenerateOptions>
+    public interface IGenerateService
     {
+        Task<ContextProvider> GenerateAsync(GenerationData generationData, Action<string> messageListener);
     }
 }

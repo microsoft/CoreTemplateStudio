@@ -1,10 +1,11 @@
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommandLine;
 using CommandLine.Text;
 using Microsoft.Templates.Cli.Commands;
 using Microsoft.Templates.Cli.Commands.Contracts;
-using Microsoft.Templates.Cli.Options;
 using Microsoft.Templates.Cli.Resources;
 using Microsoft.Templates.Cli.Services.Contracts;
 
@@ -13,17 +14,14 @@ namespace Microsoft.Templates.Cli
     public class App
     {
         private readonly string promptSymbol = ">> ";
+        private readonly string splitPattern = @"""(?:(?<= "")([^""]+)""\s*)|\s*([^""\s]+)";
         private readonly ICommandDispatcher _dispatcher;
         private readonly IMessageService _messageService;
-        private readonly IGenerateService _generateService;
-        private readonly ISyncService _syncService;
 
-        public App(ICommandDispatcher dispatcher, IMessageService messageService, IGenerateService generateService, ISyncService syncService)
+        public App(ICommandDispatcher dispatcher, IMessageService messageService)
         {
             _dispatcher = dispatcher;
             _messageService = messageService;
-            _generateService = generateService;
-            _syncService = syncService;
         }
 
         public void Run()
@@ -47,9 +45,9 @@ namespace Microsoft.Templates.Cli
 
         private bool ProcessCommand(string command)
         {
-            var args = command.Split();
+            var args = Regex.Split(command, splitPattern).Where(s => !string.IsNullOrEmpty(s.Trim()));
 
-            var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesCommand, GetFrameworksCommand, GetPagesCommand, GetFeaturesCommand, GenerateOptions, CloseOptions>(args);
+            var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesCommand, GetFrameworksCommand, GetPagesCommand, GetFeaturesCommand, GenerateCommand, CloseCommand>(args);
 
               var exitCode = parserResult.MapResult(
                     (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
@@ -57,8 +55,8 @@ namespace Microsoft.Templates.Cli
                     (GetFrameworksCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetPagesCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetFeaturesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GenerateOptions opts) => _generateService.ProcessAsync(opts),
-                    (CloseOptions opts) => Task.FromResult(1),
+                    (GenerateCommand opts) => _dispatcher.DispatchAsync(opts),
+                    (CloseCommand opts) => _dispatcher.DispatchAsync(opts),
                     errors => {
                         var helpText = HelpText.AutoBuild(parserResult);
                         helpText.AddEnumValuesToHelpText = true;

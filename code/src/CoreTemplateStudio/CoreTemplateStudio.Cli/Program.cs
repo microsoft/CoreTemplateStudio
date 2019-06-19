@@ -6,6 +6,7 @@ using Microsoft.Templates.Cli.Commands;
 using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Commands.Dispatcher;
 using Microsoft.Templates.Cli.Commands.Handlers;
+using System.IO;
 
 namespace Microsoft.Templates.Cli
 {
@@ -13,6 +14,11 @@ namespace Microsoft.Templates.Cli
     {
         static void Main(string[] args)
         {
+            byte[] bytes = new byte[4096];
+            Stream inputStream = Console.OpenStandardInput(bytes.Length);
+            //Console.SetIn(new StreamReader(inputStream));
+            Console.SetIn(new StreamReader(inputStream, Console.InputEncoding, false, bytes.Length));
+
             var services = ConfigureServices();
             var serviceProvider = services.BuildServiceProvider();
             
@@ -36,6 +42,8 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<ICommandHandler<GetFrameworksCommand>, GetFrameworksHandler>();
             services.AddSingleton<ICommandHandler<GetPagesCommand>, GetPagesHandler>();
             services.AddSingleton<ICommandHandler<GetFeaturesCommand>, GetFeaturesHandler>();
+            services.AddSingleton<ICommandHandler<GenerateCommand>, GenerateHandler>();
+            services.AddSingleton<ICommandHandler<CloseCommand>, CloseHandler>();
 
             // App entry point
             services.AddTransient<App>();
