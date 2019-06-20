@@ -10,9 +10,7 @@ using Windows.UI.Xaml.Navigation;
 namespace TestData
 {
 //{--{
-
     //THIS COMMENT SHOULD BE REMOVED
-
 //}--}
     sealed partial class App : Application
     {
@@ -38,10 +36,12 @@ namespace TestData
             //AFTER ONLAUNCHED!!
             //}]}
             Settings.SettingsViewModel.InitAppTheme();
+
             //^^
             //{[{
             //BEFORE END!!
             var s = "";
+
             //}]}
             //{??{
             //This might be there or not
@@ -73,6 +73,3 @@ namespace TestData
         //}]}
     }
 }
-//{[{
-//FINAL COMMENT
-//}]}
