@@ -31,9 +31,9 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
         private const string CSharpComment = "// ";
         private const string VBComment = "' ";
 
-        public static int SafeIndexOf(this IEnumerable<string> source, string item, int skip)
+        public static int SafeIndexOf(this IEnumerable<string> source, string item, int skip, bool ignoreEmptyLines = true)
         {
-            if (string.IsNullOrWhiteSpace(item))
+            if (ignoreEmptyLines && string.IsNullOrWhiteSpace(item))
             {
                 return -1;
             }
@@ -116,7 +116,11 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                     }
                     else
                     {
-                        if (mergeMode == MergeMode.Insert || mergeMode == MergeMode.InsertBefore || mergeLine == string.Empty)
+                        if (mergeMode == MergeMode.Remove)
+                        {
+                            removalBuffer.Add(mergeLine.WithLeadingTrivia(diffTrivia));
+                        }
+                        else if (mergeMode == MergeMode.Insert || mergeMode == MergeMode.InsertBefore || mergeLine == string.Empty)
                         {
                             if (mergeMode == MergeMode.InsertBefore)
                             {
@@ -124,10 +128,6 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                             }
 
                             insertionBuffer.Add(mergeLine.WithLeadingTrivia(diffTrivia));
-                        }
-                        else if (mergeMode == MergeMode.Remove)
-                        {
-                            removalBuffer.Add(mergeLine.WithLeadingTrivia(diffTrivia));
                         }
                         else if (mergeMode == MergeMode.OptionalContext)
                         {
@@ -236,7 +236,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             {
                 var insertIndex = GetInsertLineIndex(currentLineIndex, lastLineIndex, beforeMode);
 
-                if (insertIndex < result.Count)
+                if (insertIndex <= result.Count)
                 {
                     EnsureNoWhiteLinesNextToBraces(insertionBuffer, result, insertIndex);
 
@@ -254,7 +254,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
         {
             if (removalBuffer.Any() && BlockExists(removalBuffer, result, lastLineIndex) && currentLineIndex > -1)
             {
-                var index = result.SafeIndexOf(removalBuffer[0], lastLineIndex);
+                var index = result.SafeIndexOf(removalBuffer[0], lastLineIndex, false);
                 if (index <= currentLineIndex)
                 {
                     result.RemoveRange(index, removalBuffer.Count);
