@@ -121,6 +121,9 @@
     <value>Internal Server Error from the custom middleware. {0}</value>
     <comment>{0} is the error message.</comment>
   </data>
+  <data name="BadReqInvalidGenJson" xml:space="preserve">
+    <value>Invalid generation json data</value>
+  </data>
   <data name="BadReqInvalidGenPath" xml:space="preserve">
     <value>Invalid generation path</value>
   </data>

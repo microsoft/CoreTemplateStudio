@@ -70,6 +70,15 @@ namespace Microsoft.Templates.Cli.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid generation json data.
+        /// </summary>
+        public static string BadReqInvalidGenJson {
+            get {
+                return ResourceManager.GetString("BadReqInvalidGenJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid generation path.
         /// </summary>
         public static string BadReqInvalidGenPath {

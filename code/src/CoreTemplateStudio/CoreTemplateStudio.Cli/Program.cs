@@ -8,6 +8,7 @@ using Microsoft.Templates.Cli.Commands.Dispatcher;
 using Microsoft.Templates.Cli.Commands.Handlers;
 using System.IO;
 using Microsoft.Templates.Cli.Commands.Validators;
+using FluentValidation;
 
 namespace Microsoft.Templates.Cli
 {
@@ -44,16 +45,14 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<ICommandHandler<GetPagesCommand>, GetPagesHandler>();
             services.AddSingleton<ICommandHandler<GetFeaturesCommand>, GetFeaturesHandler>();
             services.AddSingleton<ICommandHandler<GenerateCommand>, GenerateHandler>();
-            services.AddSingleton<ICommandHandler<CloseCommand>, CloseHandler>();
 
             // Validators
-            services.AddSingleton<ICommandValidator<SyncCommand>, SyncValidator>();
-            services.AddSingleton<ICommandValidator<GetProjectTypesCommand>, GetProjectTypesValidator>();
-            services.AddSingleton<ICommandValidator<GetFrameworksCommand>, GetFrameworksValidator>();
-            services.AddSingleton<ICommandValidator<GetPagesCommand>, GetPagesValidator>();
-            services.AddSingleton<ICommandValidator<GetFeaturesCommand>, GetFeaturesValidator>();
-            services.AddSingleton<ICommandValidator<GenerateCommand>, GenerateValidator>();
-            services.AddSingleton<ICommandValidator<CloseCommand>, CloseValidator>();
+            services.AddSingleton<IValidator<SyncCommand>, SyncValidator>();
+            services.AddSingleton<IValidator<GetProjectTypesCommand>, GetProjectTypesValidator>();
+            services.AddSingleton<IValidator<GetFrameworksCommand>, GetFrameworksValidator>();
+            services.AddSingleton<IValidator<GetPagesCommand>, GetPagesValidator>();
+            services.AddSingleton<IValidator<GetFeaturesCommand>, GetFeaturesValidator>();
+            services.AddSingleton<IValidator<GenerateCommand>, GenerateValidator>();
 
             // App entry point
             services.AddTransient<App>();

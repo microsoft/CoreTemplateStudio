@@ -1,20 +1,15 @@
-﻿using Microsoft.Templates.Cli.Commands.Contracts;
+﻿using FluentValidation;
 using Microsoft.Templates.Cli.Resources;
-using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Cli.Commands.Validators
 {
-    public class GenerateValidator : ICommandValidator<GenerateCommand>
+    public class GenerateValidator : GenContextValidator<GenerateCommand>
     {
-        public CommandValidatorResult Validate(GenerateCommand command)
+        public GenerateValidator()
         {
-            var validationResult = new CommandValidatorResult();
-            if (GenContext.ToolBox == null)
-            {
-               validationResult.AddMessage(StringRes.BadReqNotSynced);
-            }
-
-            return validationResult;
+            RuleFor(x => x.GenerationDataJson)
+                .Empty()
+                .WithMessage(StringRes.BadReqInvalidGenJson);
         }
     }
 }

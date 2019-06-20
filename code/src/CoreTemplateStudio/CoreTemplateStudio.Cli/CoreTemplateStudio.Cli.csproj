@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.5.0" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>

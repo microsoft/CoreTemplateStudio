@@ -1,25 +1,17 @@
-﻿using Microsoft.Templates.Cli.Commands.Contracts;
-using Microsoft.Templates.Cli.Resources;
-using Microsoft.Templates.Core.Gen;
+﻿using Microsoft.Templates.Cli.Resources;
+using FluentValidation;
+
 namespace Microsoft.Templates.Cli.Commands.Validators
 {
-    public class GetPagesValidator : ICommandValidator<GetPagesCommand>
+    public class GetPagesValidator : GenContextValidator<GetPagesCommand>
     {
-        public CommandValidatorResult Validate(GetPagesCommand command)
+        public GetPagesValidator()
         {
-            var validationResult = new CommandValidatorResult();
-
-            if (GenContext.ToolBox == null)
-            {
-                validationResult.AddMessage(StringRes.BadReqNotSynced);
-            }
-
-            if (string.IsNullOrEmpty(command.FrontendFramework) && string.IsNullOrEmpty(command.BackendFramework))
-            {
-                validationResult.AddMessage(StringRes.BadReqNoBackendOrFrontend);
-            }
-
-            return validationResult;
+            RuleFor(x => x.FrontendFramework)
+                .Empty()
+                .DependentRules(() => {
+                    RuleFor(x => x.BackendFramework).Empty();
+                }).WithMessage(StringRes.BadReqNoBackendOrFrontend);
         }
     }
 }

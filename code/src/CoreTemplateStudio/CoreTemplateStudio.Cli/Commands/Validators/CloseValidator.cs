@@ -1,12 +1,8 @@
-﻿using Microsoft.Templates.Cli.Commands.Contracts;
+﻿using FluentValidation;
 
 namespace Microsoft.Templates.Cli.Commands.Validators
 {
-    public class CloseValidator : ICommandValidator<CloseCommand>
+    public class CloseValidator : AbstractValidator<CloseCommand>
     {
-        public CommandValidatorResult Validate(CloseCommand command)
-        {
-            return new CommandValidatorResult();
-        }
     }
 }
