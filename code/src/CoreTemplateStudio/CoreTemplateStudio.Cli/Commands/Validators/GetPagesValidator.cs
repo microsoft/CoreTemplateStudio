@@ -7,11 +7,9 @@ namespace Microsoft.Templates.Cli.Commands.Validators
     {
         public GetPagesValidator()
         {
-            RuleFor(x => x.FrontendFramework)
-                .NotEmpty()
-                .DependentRules(() => {
-                    RuleFor(x => x.BackendFramework).Empty();
-                }).WithMessage(StringRes.BadReqNoBackendOrFrontend);
+            RuleFor(x => x)
+                .Must(x => x.FrontendFramework != null || x.BackendFramework != null)
+                .WithMessage(StringRes.BadReqNoBackendOrFrontend);
         }
     }
 }

@@ -45,7 +45,8 @@ namespace Microsoft.Templates.Cli
 
         private bool ProcessCommand(string command)
         {
-            var args = Regex.Split(command, splitPattern).Where(s => !string.IsNullOrEmpty(s.Trim()));
+            var args = Regex.Split(command, splitPattern)
+                .Select(s => s.Trim('"'));
 
             var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesCommand, GetFrameworksCommand, GetPagesCommand, GetFeaturesCommand, GenerateCommand, CloseCommand>(args);
 
