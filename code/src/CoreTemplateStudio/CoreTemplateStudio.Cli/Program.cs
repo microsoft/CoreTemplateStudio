@@ -46,6 +46,15 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<ICommandHandler<GenerateCommand>, GenerateHandler>();
             services.AddSingleton<ICommandHandler<CloseCommand>, CloseHandler>();
 
+            // Validators
+            services.AddSingleton<ICommandValidator<SyncCommand>, SyncValidator>();
+            services.AddSingleton<ICommandValidator<GetProjectTypesCommand>, GetProjectTypesValidator>();
+            services.AddSingleton<ICommandValidator<GetFrameworksCommand>, GetFrameworksValidator>();
+            services.AddSingleton<ICommandValidator<GetPagesCommand>, GetPagesValidator>();
+            services.AddSingleton<ICommandValidator<GetFeaturesCommand>, GetFeaturesValidator>();
+            services.AddSingleton<ICommandValidator<GenerateCommand>, GenerateValidator>();
+            services.AddSingleton<ICommandValidator<CloseCommand>, CloseValidator>();
+
             // App entry point
             services.AddTransient<App>();
 

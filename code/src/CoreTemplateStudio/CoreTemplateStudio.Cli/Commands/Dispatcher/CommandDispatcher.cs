@@ -40,7 +40,6 @@ namespace Microsoft.Templates.Cli.Commands.Dispatcher
             {
                 throw new ArgumentNullException(nameof(command), "Command can not be null.");
             }
-            var services =_serviceProvider.GetServices<ICommandHandler<ICommand>>();
 
             var handler = _serviceProvider.GetService<ICommandValidator<T>>();
 

@@ -69,7 +69,7 @@ namespace Microsoft.Templates.Cli
             return exitCode.Result == 0;
         }
 
-        private async Task<int> DispatchCommand(ICommand command)
+        private async Task<int> DispatchCommand<T>(T command) where T : ICommand
         {
             var validations = _dispatcher.Validate(command);
 
