@@ -9,7 +9,7 @@ namespace Microsoft.Templates.Cli.Commands.Validators
         public GetFrameworksValidator()
         {
             RuleFor(x => x.ProjectType)
-                .Empty()
+                .NotEmpty()
                 .WithMessage(StringRes.BadReqInvalidProjectType);
         }
     }

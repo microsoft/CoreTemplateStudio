@@ -8,9 +8,9 @@ namespace Microsoft.Templates.Cli.Commands.Validators
         public GetFeaturesValidator()
         {
             RuleFor(x => x.FrontendFramework)
-                .Empty()
+                .NotEmpty()
                 .DependentRules(() => {
-                    RuleFor(x => x.BackendFramework).Empty();
+                    RuleFor(x => x.BackendFramework).NotEmpty();
             }).WithMessage(StringRes.BadReqNoBackendOrFrontend);
         }        
     }

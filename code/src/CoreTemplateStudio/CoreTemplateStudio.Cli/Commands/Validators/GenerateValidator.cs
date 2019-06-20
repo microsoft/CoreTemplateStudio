@@ -8,7 +8,7 @@ namespace Microsoft.Templates.Cli.Commands.Validators
         public GenerateValidator()
         {
             RuleFor(x => x.GenerationDataJson)
-                .Empty()
+                .NotEmpty()
                 .WithMessage(StringRes.BadReqInvalidGenJson);
         }
     }
