@@ -31,9 +31,9 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
         private const string CSharpComment = "// ";
         private const string VBComment = "' ";
 
-        public static int SafeIndexOf(this IEnumerable<string> source, string item, int skip)
+        public static int SafeIndexOf(this IEnumerable<string> source, string item, int skip, bool ignoreWhiteLines = true)
         {
-            if (string.IsNullOrWhiteSpace(item))
+            if (string.IsNullOrWhiteSpace(item) && ignoreWhiteLines)
             {
                 return -1;
             }
@@ -236,7 +236,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             {
                 var insertIndex = GetInsertLineIndex(currentLineIndex, lastLineIndex, beforeMode);
 
-                if (insertIndex < result.Count)
+                if (insertIndex <= result.Count)
                 {
                     EnsureNoWhiteLinesNextToBraces(insertionBuffer, result, insertIndex);
 
@@ -254,7 +254,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
         {
             if (removalBuffer.Any() && BlockExists(removalBuffer, result, lastLineIndex) && currentLineIndex > -1)
             {
-                var index = result.SafeIndexOf(removalBuffer[0], lastLineIndex);
+                var index = result.SafeIndexOf(removalBuffer[0], lastLineIndex, false);
                 if (index <= currentLineIndex)
                 {
                     result.RemoveRange(index, removalBuffer.Count);
