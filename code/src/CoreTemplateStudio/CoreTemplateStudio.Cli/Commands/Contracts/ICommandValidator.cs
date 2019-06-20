@@ -5,6 +5,6 @@ namespace Microsoft.Templates.Cli.Commands.Contracts
 {
     public interface ICommandValidator<T> where T : ICommand
     {
-        Task<CommandValidatorResult> ValidateAsync(T command);
+        CommandValidatorResult Validate(T command);
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Commands.Dispatcher;
 using Microsoft.Templates.Cli.Commands.Handlers;
 using System.IO;
+using Microsoft.Templates.Cli.Commands.Validators;
 
 namespace Microsoft.Templates.Cli
 {

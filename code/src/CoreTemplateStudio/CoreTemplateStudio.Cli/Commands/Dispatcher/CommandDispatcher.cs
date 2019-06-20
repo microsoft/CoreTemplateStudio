@@ -34,12 +34,13 @@ namespace Microsoft.Templates.Cli.Commands.Dispatcher
             return await handler.ExecuteAsync(command);
         }
 
-        public async Task<CommandValidatorResult> ValidateAsync<T>(T command) where T : ICommand
+        public CommandValidatorResult Validate<T>(T command) where T : ICommand
         {
             if (command == null)
             {
                 throw new ArgumentNullException(nameof(command), "Command can not be null.");
             }
+            var services =_serviceProvider.GetServices<ICommandHandler<ICommand>>();
 
             var handler = _serviceProvider.GetService<ICommandValidator<T>>();
 
@@ -48,7 +49,7 @@ namespace Microsoft.Templates.Cli.Commands.Dispatcher
                 throw new Exception($"{command.GetType().Name} validator was not found.");
             }
 
-            return await handler.ValidateAsync(command);
+            return handler.Validate(command);
         }
     }
 }

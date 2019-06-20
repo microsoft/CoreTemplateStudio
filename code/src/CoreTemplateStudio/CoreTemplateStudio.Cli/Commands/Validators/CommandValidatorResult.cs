@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.Templates.Cli.Commands.Validators
 {
     public class CommandValidatorResult
     {
-        public bool IsValid { get; set; } = true;
+        public bool IsValid => !Messages.Any();
 
-        public IEnumerable<string> Messages { get; set; }
+        public List<string> Messages { get; set; } = new List<string>();
+
+        public void AddMessage(string message) => Messages.Add(message);
     }
 }

@@ -7,6 +7,6 @@ namespace Microsoft.Templates.Cli.Commands.Contracts
     {
         Task<int> DispatchAsync<T>(T command) where T : ICommand;
 
-        Task<CommandValidatorResult> ValidateAsync<T>(T command) where T : ICommand;
+        CommandValidatorResult Validate<T>(T command) where T : ICommand;
     }
 }

@@ -12,11 +12,6 @@ namespace Microsoft.Templates.Cli.Services
     {   
         public IEnumerable<TemplateInfo> GetFeatures(string projectType, string frontEndFramework, string backEndFramework)
         {
-            if (frontEndFramework == null && backEndFramework == null)
-            {
-                throw new Exception(StringRes.BadReqNoBackendOrFrontend);
-            }
-
             var platform = GenContext.CurrentPlatform;
             var features = GenContext.ToolBox.Repo.GetTemplatesInfo(
                                                                 TemplateType.Feature,
@@ -30,11 +25,6 @@ namespace Microsoft.Templates.Cli.Services
 
         public IEnumerable<MetadataInfo> GetFrameworks(string projectType)
         {
-            if (string.IsNullOrEmpty(projectType))
-            {
-                throw new Exception(StringRes.BadReqInvalidProjectType);
-            }
-
             var platform = GenContext.CurrentPlatform;
             var frontendFrameworks = GenContext.ToolBox.Repo.GetFrontEndFrameworks(platform, projectType);
             var backendFrameworks = GenContext.ToolBox.Repo.GetBackEndFrameworks(platform, projectType);
@@ -48,11 +38,6 @@ namespace Microsoft.Templates.Cli.Services
 
         public IEnumerable<TemplateInfo> GetPages(string projectType, string frontEndFramework, string backEndFramework)
         {
-            if (frontEndFramework == null && backEndFramework == null)
-            {
-                throw new Exception(StringRes.BadReqNoBackendOrFrontend);
-            }
-
             var platform = GenContext.CurrentPlatform;
             var pages = GenContext.ToolBox.Repo.GetTemplatesInfo(
                                                                 TemplateType.Page,

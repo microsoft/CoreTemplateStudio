@@ -71,7 +71,7 @@ namespace Microsoft.Templates.Cli
 
         private async Task<int> DispatchCommand(ICommand command)
         {
-            var validations = await _dispatcher.ValidateAsync(command);
+            var validations = _dispatcher.Validate(command);
 
             if(validations.IsValid)
             {

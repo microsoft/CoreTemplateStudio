@@ -13,11 +13,6 @@ namespace Microsoft.Templates.Cli.Services
     {
         public async Task<ContextProvider> GenerateAsync(GenerationData generationData, Action<string> messageListener)
         {
-            if (GenContext.ToolBox == null)
-            {
-                throw new Exception(StringRes.BadReqNotSynced);
-            }
-
             try
             {
                 CliGenShell shell = GenContext.ToolBox.Shell as CliGenShell;
