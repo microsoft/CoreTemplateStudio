@@ -26,7 +26,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TestData
 {
+
     //THIS COMMENT SHOULD BE REMOVED
+
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
