@@ -16,11 +16,6 @@ namespace Microsoft.Templates.Cli
     {
         static void Main(string[] args)
         {
-            byte[] bytes = new byte[4096];
-            Stream inputStream = Console.OpenStandardInput(bytes.Length);
-            //Console.SetIn(new StreamReader(inputStream));
-            Console.SetIn(new StreamReader(inputStream, Console.InputEncoding, false, bytes.Length));
-
             var services = ConfigureServices();
             var serviceProvider = services.BuildServiceProvider();
             
