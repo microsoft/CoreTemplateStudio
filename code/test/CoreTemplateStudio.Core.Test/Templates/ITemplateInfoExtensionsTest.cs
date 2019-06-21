@@ -694,12 +694,12 @@ namespace Microsoft.Templates.Core.Test
             SetUpFixtureForTesting(language);
 
             var target = GetTargetByName("PageTemplate");
-            var result = target.GetCasingServices();
+            var result = target.GetTextCasings();
 
             Assert.Equal(3, result.Count);
-            Assert.Contains(result, r => r.GetType() == typeof(KebabCasingService));
-            Assert.Contains(result, r => r.GetType() == typeof(CamelCasingService));
-            Assert.Contains(result, r => r.GetType() == typeof(PascalCasingService));
+            Assert.Contains(result, r => r.Type == CasingType.Kebab);
+            Assert.Contains(result, r => r.Type == CasingType.Camel);
+            Assert.Contains(result, r => r.Type == CasingType.Pascal);
         }
 
         [Theory]
@@ -709,7 +709,7 @@ namespace Microsoft.Templates.Core.Test
             SetUpFixtureForTesting(language);
 
             var target = GetTargetByName("UnspecifiedTemplate");
-            var result = target.GetCasingServices();
+            var result = target.GetTextCasings();
 
             Assert.Empty(result);
         }

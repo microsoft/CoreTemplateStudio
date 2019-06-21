@@ -86,6 +86,8 @@ namespace Microsoft.Templates.Core.Gen
                 genProject.Parameters.Add(GenParams.Platform, userSelection.Platform);
                 genProject.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
                 genProject.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
+
+                AddCasingParams(GenContext.Current.ProjectName, projectTemplate, genProject);
             }
         }
 
@@ -110,6 +112,8 @@ namespace Microsoft.Templates.Core.Gen
                             genInfo.Parameters.Add(dependency, dependencyName);
                         }
                     }
+
+                    AddCasingParams(selectedTemplate.Name, template, genInfo);
                 }
             }
         }
@@ -130,6 +134,8 @@ namespace Microsoft.Templates.Core.Gen
                         var depGenInfo = CreateGenInfo(dependencyTemplate.Name, dependencyTemplateInfo, genQueue, newItemGeneration);
                         depGenInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
                         depGenInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+
+                        AddCasingParams(dependencyTemplate.Name, dependencyTemplateInfo, depGenInfo);
                     }
                 }
                 else
@@ -210,6 +216,8 @@ namespace Microsoft.Templates.Core.Gen
                         genInfo.Parameters.Add(param.Key, param.Value);
                     }
                 }
+
+                AddCasingParams(mainGenInfo.Name, targetTemplate, genInfo);
             }
         }
 
@@ -230,12 +238,25 @@ namespace Microsoft.Templates.Core.Gen
 
             AddDefaultParams(genInfo, newItemGeneration);
 
-            foreach (var casingService in template.GetCasingServices())
-            {
-                genInfo.Parameters.Add(casingService.GetParameterName(), casingService.Transform(name));
-            }
-
             return genInfo;
+        }
+
+        private static void AddCasingParams(string name, ITemplateInfo template, GenInfo genInfo)
+        {
+            foreach (var textCasing in template.GetTextCasings())
+            {
+                var value = textCasing.Key == "sourceName"
+                    ? name
+                    : genInfo.Parameters.SafeGet($"wts.{textCasing.Key}");
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (!genInfo.Parameters.ContainsKey(textCasing.ParameterName))
+                    {
+                        genInfo.Parameters.Add(textCasing.ParameterName, textCasing.Transform(value));
+                    }
+                }
+            }
         }
 
         private static void AddDefaultParams(GenInfo genInfo, bool newItemGeneration)
