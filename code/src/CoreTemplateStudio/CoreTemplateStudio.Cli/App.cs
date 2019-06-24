@@ -48,7 +48,16 @@ namespace Microsoft.Templates.Cli
             var args = Regex.Split(command, splitPattern)
                 .Select(s => s.Trim('"'));
 
-            var parserResult = Parser.Default.ParseArguments<SyncCommand, GetProjectTypesCommand, GetFrameworksCommand, GetPagesCommand, GetFeaturesCommand, GenerateCommand, CloseCommand>(args);
+            var parserResult = Parser.Default.ParseArguments<
+                    SyncCommand,
+                    GetProjectTypesCommand,
+                    GetFrameworksCommand,
+                    GetPagesCommand,
+                    GetFeaturesCommand,
+                    GetServicesCommand,
+                    GetTestingsCommand,
+                    GenerateCommand,
+                    CloseCommand>(args);
 
               var exitCode = parserResult.MapResult(
                     (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
@@ -56,6 +65,8 @@ namespace Microsoft.Templates.Cli
                     (GetFrameworksCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetPagesCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetFeaturesCommand opts) => _dispatcher.DispatchAsync(opts),
+                    (GetServicesCommand opts) => _dispatcher.DispatchAsync(opts),
+                    (GetTestingsCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GenerateCommand opts) => _dispatcher.DispatchAsync(opts),
                     (CloseCommand opts) => Task.FromResult(1),
                     errors => {

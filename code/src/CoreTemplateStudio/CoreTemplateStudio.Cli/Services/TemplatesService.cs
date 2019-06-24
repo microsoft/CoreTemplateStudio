@@ -12,13 +12,10 @@ namespace Microsoft.Templates.Cli.Services
     {   
         public IEnumerable<TemplateInfo> GetFeatures(string projectType, string frontEndFramework, string backEndFramework)
         {
-            var platform = GenContext.CurrentPlatform;
-            var features = GenContext.ToolBox.Repo.GetTemplatesInfo(
-                                                                TemplateType.Feature,
-                                                                platform,
-                                                                projectType,
-                                                                frontEndFramework,
-                                                                backEndFramework);
+            var features = GetTemplateItems(TemplateType.Feature,
+                                            projectType,
+                                            frontEndFramework,
+                                            backEndFramework);
 
             return features;
         }
@@ -38,13 +35,10 @@ namespace Microsoft.Templates.Cli.Services
 
         public IEnumerable<TemplateInfo> GetPages(string projectType, string frontEndFramework, string backEndFramework)
         {
-            var platform = GenContext.CurrentPlatform;
-            var pages = GenContext.ToolBox.Repo.GetTemplatesInfo(
-                                                                TemplateType.Page,
-                                                                platform,
-                                                                projectType,
-                                                                frontEndFramework,
-                                                                backEndFramework);
+            var pages = GetTemplateItems(TemplateType.Page,
+                                        projectType,
+                                        frontEndFramework,
+                                        backEndFramework);
 
             return pages;
         }
@@ -55,6 +49,39 @@ namespace Microsoft.Templates.Cli.Services
             var result = GenContext.ToolBox.Repo.GetProjectTypes(platform);
 
             return result;
+        }
+
+        public IEnumerable<TemplateInfo> GetServices(string projectType, string frontEndFramework, string backEndFramework)
+        {
+            var pages = GetTemplateItems(TemplateType.Service,
+                                        projectType,
+                                        frontEndFramework,
+                                        backEndFramework);
+
+            return pages;
+        }
+
+        public IEnumerable<TemplateInfo> GetTestings(string projectType, string frontEndFramework, string backEndFramework)
+        {
+            var pages = GetTemplateItems(TemplateType.Testing,
+                                        projectType,
+                                        frontEndFramework,
+                                        backEndFramework);
+
+            return pages;
+        }
+
+        private IEnumerable<TemplateInfo> GetTemplateItems(TemplateType templateType, string projectType, string frontEndFramework, string backEndFramework)
+        {
+            var platform = GenContext.CurrentPlatform;
+            var templateItems = GenContext.ToolBox.Repo.GetTemplatesInfo(
+                                                                templateType,
+                                                                platform,
+                                                                projectType,
+                                                                frontEndFramework,
+                                                                backEndFramework);
+
+            return templateItems;
         }
     }
 }
