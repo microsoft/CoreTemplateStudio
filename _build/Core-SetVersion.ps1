@@ -26,7 +26,7 @@ else{
 ## APPLY VERSION TO ASSEMBLY FILES (AssemblyVersion and AssemblyFileVersion)
 Write-Host
 Write-Host "Applying version to AssemblyInfo files" 
-$files = Get-ChildItem -include "*AssemblyInfo.cs" -Recurse |  Where-Object{ $_.FullName -notmatch "\\Templates\\" }
+$files = Get-ChildItem -include "*AssemblyInfo.cs" -Recurse |  Where-Object{ $_.FullName -match "CoreTemplateStudio" }
 if($files)
 {
     Write-Host "Will apply $versionNumber to $($files.count) files."
@@ -50,7 +50,7 @@ else
 ## APPLY VERSION TO PROJ FILES 
 Write-Host
 Write-Host "Applying version to csproj files" 
-$files = Get-ChildItem -include "*.csproj" -Recurse |  Where-Object{ $_.FullName -notmatch "\\Templates\\" }
+$files = Get-ChildItem -include "*.csproj" -Recurse |  Where-Object{ $_.FullName -match "CoreTemplateStudio" }
 if($files)
 {
     Write-Host "Will apply $versionNumber to $($files.count) files."
