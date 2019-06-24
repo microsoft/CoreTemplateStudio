@@ -70,3 +70,6 @@ namespace TestData
         //End of block
     }
 }
+//Block to be included
+//New comment
+//End of block
