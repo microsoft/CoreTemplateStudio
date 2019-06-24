@@ -11,8 +11,9 @@ using System.Text.RegularExpressions;
 
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Abstractions.Mount;
+using Microsoft.Templates.Core.Casing;
 using Microsoft.Templates.Core.Composition;
-using Microsoft.Templates.Core.Gen;
+using Microsoft.Templates.Core.Templates;
 using Newtonsoft.Json;
 
 namespace Microsoft.Templates.Core
@@ -34,6 +35,10 @@ namespace Microsoft.Templates.Core
                     return TemplateType.Page;
                 case "FEATURE":
                     return TemplateType.Feature;
+                case "SERVICE":
+                    return TemplateType.Service;
+                case "TESTING":
+                    return TemplateType.Testing;
                 case "COMPOSITION":
                     return TemplateType.Composition;
                 default:
@@ -153,6 +158,40 @@ namespace Microsoft.Templates.Core
             return ti.Tags
                         .Where(t => t.Key.Contains(TagPrefix + "export."))
                         .ToDictionary(t => t.Key.Replace(TagPrefix + "export.", string.Empty), v => v.Value.DefaultValue);
+        }
+
+        public static List<TextCasing> GetTextCasings(this ITemplateInfo ti)
+        {
+            var result = new List<TextCasing>();
+
+            var casingTags = ti.Tags
+                        .Where(t => t.Key.Contains(TagPrefix + "casing."))
+                        .ToDictionary(
+                            t => t.Key.Replace(TagPrefix + "casing.", string.Empty),
+                            v => v.Value.DefaultValue.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+
+            foreach (var casingTag in casingTags)
+            {
+                foreach (var casing in casingTag.Value)
+                {
+                    switch (casing.ToUpper())
+                    {
+                        case "KEBAB":
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Kebab });
+                            break;
+                        case "PASCAL":
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Pascal });
+                            break;
+                        case "CAMEL":
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Camel });
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return result;
         }
 
         public static List<string> GetFrontEndFrameworkList(this ITemplateInfo ti)

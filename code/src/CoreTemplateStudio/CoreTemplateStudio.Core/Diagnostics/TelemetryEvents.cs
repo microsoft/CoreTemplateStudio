@@ -18,6 +18,10 @@ namespace Microsoft.Templates.Core.Diagnostics
 
         public static string FeatureGen { get; private set; } = Prefix + "FeatureGen";
 
+        public static string ServiceGen { get; private set; } = Prefix + "ServiceGen";
+
+        public static string TestingGen { get; private set; } = Prefix + "TestingGen";
+
         public static string Wizard { get; private set; } = Prefix + "Wizard";
 
         public static string SessionStart { get; private set; } = Prefix + "SessionStart";

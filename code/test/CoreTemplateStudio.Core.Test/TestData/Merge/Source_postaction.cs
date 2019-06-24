@@ -10,7 +10,9 @@ using Windows.UI.Xaml.Navigation;
 namespace TestData
 {
 //{--{
+
     //THIS COMMENT SHOULD BE REMOVED
+
 //}--}
     sealed partial class App : Application
     {
@@ -73,3 +75,6 @@ namespace TestData
         //}]}
     }
 }
+//{[{
+//New comment
+//}]}

@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 
 using Microsoft.TemplateEngine.Abstractions;
-
+using Microsoft.Templates.Core.Casing;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test
@@ -59,6 +59,30 @@ namespace Microsoft.Templates.Core.Test
 
             var result = target.GetTemplateType();
             Assert.Equal(TemplateType.Feature, result);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
+        public void GetTemplateType_service(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("ServiceTemplate");
+
+            var result = target.GetTemplateType();
+            Assert.Equal(TemplateType.Service, result);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
+        public void GetTemplateType_testing(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("TestingTemplate");
+
+            var result = target.GetTemplateType();
+            Assert.Equal(TemplateType.Testing, result);
         }
 
         [Theory]
@@ -661,6 +685,33 @@ namespace Microsoft.Templates.Core.Test
             var result = target.GetDefaultName();
 
             Assert.Equal("UnspecifiedTemplate", result);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
+        public void GetCasingServices(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("PageTemplate");
+            var result = target.GetTextCasings();
+
+            Assert.Equal(3, result.Count);
+            Assert.Contains(result, r => r.Type == CasingType.Kebab);
+            Assert.Contains(result, r => r.Type == CasingType.Camel);
+            Assert.Contains(result, r => r.Type == CasingType.Pascal);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
+        public void GetCasingServices_Unspecified(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("UnspecifiedTemplate");
+            var result = target.GetTextCasings();
+
+            Assert.Empty(result);
         }
 
         private ITemplateInfo GetTargetByName(string templateName)

@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-
+using Microsoft.Templates.Core.Casing;
 using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Core.Templates
@@ -17,6 +17,9 @@ namespace Microsoft.Templates.Core.Templates
             FileRenameParams = new Dictionary<string, string>()
             {
                 { "Param_ProjectName", genParameters.SafeGet(GenParams.ProjectName) },
+                { "Param_SourceName_Kebab", genParameters.SafeGet("wts.sourceName.casing.kebab") },
+                { "Param_SourceName_Pascal", genParameters.SafeGet("wts.sourceName.casing.pascal") },
+                { "Param_SourceName_Camel", genParameters.SafeGet("wts.sourceName.casing.camel") },
             };
         }
 

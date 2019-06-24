@@ -8,5 +8,7 @@ namespace Microsoft.Templates.Core.Diagnostics
     {
         Page,
         Feature,
+        Service,
+        Testing,
     }
 }

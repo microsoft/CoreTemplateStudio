@@ -5,11 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Composition;
 using Microsoft.Templates.Core.Resources;
+using Microsoft.Templates.Core.Templates;
 
 namespace Microsoft.Templates.Core.Gen
 {
@@ -27,6 +27,8 @@ namespace Microsoft.Templates.Core.Gen
             AddProject(userSelection, genQueue);
             AddTemplates(userSelection.Pages, genQueue, userSelection, false);
             AddTemplates(userSelection.Features, genQueue, userSelection, false);
+            AddTemplates(userSelection.Services, genQueue, userSelection, false);
+            AddTemplates(userSelection.Testing, genQueue, userSelection, false);
 
             genQueue = AddInCompositionTemplates(genQueue, userSelection, false);
 
@@ -52,6 +54,8 @@ namespace Microsoft.Templates.Core.Gen
 
             AddTemplates(userSelection.Pages, genQueue, userSelection, true);
             AddTemplates(userSelection.Features, genQueue, userSelection, true);
+            AddTemplates(userSelection.Services, genQueue, userSelection, true);
+            AddTemplates(userSelection.Testing, genQueue, userSelection, true);
 
             genQueue = AddInCompositionTemplates(genQueue, userSelection, true);
 
@@ -81,6 +85,9 @@ namespace Microsoft.Templates.Core.Gen
                 genProject.Parameters.Add(GenParams.BackEndFramework, userSelection.BackEndFramework);
                 genProject.Parameters.Add(GenParams.Platform, userSelection.Platform);
                 genProject.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+                genProject.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
+
+                AddCasingParams(GenContext.Current.ProjectName, projectTemplate, genProject);
             }
         }
 
@@ -105,6 +112,8 @@ namespace Microsoft.Templates.Core.Gen
                             genInfo.Parameters.Add(dependency, dependencyName);
                         }
                     }
+
+                    AddCasingParams(selectedTemplate.Name, template, genInfo);
                 }
             }
         }
@@ -115,7 +124,7 @@ namespace Microsoft.Templates.Core.Gen
 
             foreach (var dependencyItem in dependencies)
             {
-                var dependencyTemplate = userSelection.PagesAndFeatures.FirstOrDefault(f => f.TemplateId == dependencyItem.Identity);
+                var dependencyTemplate = userSelection.Items.FirstOrDefault(f => f.TemplateId == dependencyItem.Identity);
 
                 if (dependencyTemplate != null)
                 {
@@ -125,6 +134,8 @@ namespace Microsoft.Templates.Core.Gen
                         var depGenInfo = CreateGenInfo(dependencyTemplate.Name, dependencyTemplateInfo, genQueue, newItemGeneration);
                         depGenInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
                         depGenInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+
+                        AddCasingParams(dependencyTemplate.Name, dependencyTemplateInfo, depGenInfo);
                     }
                 }
                 else
@@ -143,6 +154,8 @@ namespace Microsoft.Templates.Core.Gen
                 new QueryableProperty("projecttype", userSelection.ProjectType),
                 new QueryableProperty("page", string.Join("|", userSelection.Pages.Select(p => p.TemplateId))),
                 new QueryableProperty("feature", string.Join("|", userSelection.Features.Select(p => p.TemplateId))),
+                new QueryableProperty("service", string.Join("|", userSelection.Services.Select(p => p.TemplateId))),
+                new QueryableProperty("testing", string.Join("|", userSelection.Testing.Select(p => p.TemplateId))),
             };
 
             if (!string.IsNullOrEmpty(userSelection.FrontEndFramework))
@@ -195,8 +208,16 @@ namespace Microsoft.Templates.Core.Gen
                 }
 
                 var genInfo = CreateGenInfo(mainGenInfo.Name, targetTemplate, queue, newItemGeneration);
-                genInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
-                genInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+
+                foreach (var param in mainGenInfo.Parameters)
+                {
+                    if (!genInfo.Parameters.ContainsKey(param.Key))
+                    {
+                        genInfo.Parameters.Add(param.Key, param.Value);
+                    }
+                }
+
+                AddCasingParams(mainGenInfo.Name, targetTemplate, genInfo);
             }
         }
 
@@ -218,6 +239,24 @@ namespace Microsoft.Templates.Core.Gen
             AddDefaultParams(genInfo, newItemGeneration);
 
             return genInfo;
+        }
+
+        private static void AddCasingParams(string name, ITemplateInfo template, GenInfo genInfo)
+        {
+            foreach (var textCasing in template.GetTextCasings())
+            {
+                var value = textCasing.Key == "sourceName"
+                    ? name
+                    : genInfo.Parameters.SafeGet($"wts.{textCasing.Key}");
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (!genInfo.Parameters.ContainsKey(textCasing.ParameterName))
+                    {
+                        genInfo.Parameters.Add(textCasing.ParameterName, textCasing.Transform(value));
+                    }
+                }
+            }
         }
 
         private static void AddDefaultParams(GenInfo genInfo, bool newItemGeneration)
