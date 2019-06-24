@@ -1,27 +1,29 @@
-﻿using System;
-using Microsoft.Templates.Cli.Services;
-using Microsoft.Templates.Cli.Services.Contracts;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Templates.Cli.Commands;
 using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Commands.Dispatcher;
 using Microsoft.Templates.Cli.Commands.Handlers;
-using System.IO;
 using Microsoft.Templates.Cli.Commands.Validators;
-using FluentValidation;
+using Microsoft.Templates.Cli.Services;
+using Microsoft.Templates.Cli.Services.Contracts;
 
 namespace Microsoft.Templates.Cli
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var services = ConfigureServices();
             var serviceProvider = services.BuildServiceProvider();
-            
+
             serviceProvider.GetService<App>().Run();
         }
-        
+
         private static IServiceCollection ConfigureServices()
         {
             IServiceCollection services = new ServiceCollection();

@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Services.Contracts;
 
@@ -17,8 +21,8 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
 
         public async Task<int> ExecuteAsync(GetTestingsCommand command)
         {
-            var Testing = _templatesService.GetTestings(command.ProjectType, command.FrontendFramework, command.BackendFramework);
-            _messageService.Send(Testing);
+            var testing = _templatesService.GetTestings(command.ProjectType, command.FrontendFramework, command.BackendFramework);
+            _messageService.Send(testing);
 
             return await Task.FromResult(0);
         }

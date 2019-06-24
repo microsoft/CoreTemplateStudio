@@ -1,16 +1,21 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.Templates.Api.Utilities;
+using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Resources;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Cli.Utilities;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
-using Microsoft.Templates.Cli.Models;
 
 namespace Microsoft.Templates.Cli.Services
 {
@@ -22,7 +27,7 @@ namespace Microsoft.Templates.Cli.Services
         private string _fullPath;
         private Action<SyncStatus, int> _statusListener;
         private bool _wasUpdated;
-        
+
         public async Task<SyncModel> ProcessAsync(string path, Action<SyncStatus, int> statusListener)
         {
             ConfigurePaths(path);
@@ -67,7 +72,7 @@ namespace Microsoft.Templates.Cli.Services
                       _language,
                       _path,
                       new CliDigitalSignatureService()),
-                  new ApiGenShell(),
+                  new CliGenShell(),
                   new Version(GetFileVersion()),
                   _platform,
                   _language);

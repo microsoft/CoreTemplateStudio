@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Threading.Tasks;
-using Microsoft.Templates.Cli.Models;
-using Microsoft.Templates.Cli.Utilities;
+using Microsoft.Templates.Cli.Commands.Contracts;
 
 namespace Microsoft.Templates.Cli.Services.Contracts
 {
-    public interface IGenerateService
+    public interface IOptionsService<T>
+        where T : ICommand
     {
-        Task<ContextProvider> GenerateAsync(GenerationData generationData, Action<string> messageListener);
+        Task<int> ProcessAsync(T options);
     }
 }

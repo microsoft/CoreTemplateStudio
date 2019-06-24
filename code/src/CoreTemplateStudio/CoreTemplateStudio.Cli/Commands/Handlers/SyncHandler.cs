@@ -1,10 +1,11 @@
-﻿using Microsoft.Templates.Cli.Commands.Contracts;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Threading.Tasks;
+using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Core.Locations;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Templates.Cli.Commands.Handlers
 {
@@ -21,7 +22,6 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
 
         public async Task<int> ExecuteAsync(SyncCommand command)
         {
-            //todo: validate and test
             var result = await _syncService.ProcessAsync(command.Path, SyncStatusChanged);
             _messageService.Send(result);
             return 0;
@@ -30,7 +30,6 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
         private void SyncStatusChanged(SyncStatus status, int progress)
         {
             _messageService.SendMessage($"syncMessage : {status.ToString()} - {progress}");
-
         }
     }
 }

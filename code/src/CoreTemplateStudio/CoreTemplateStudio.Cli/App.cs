@@ -1,3 +1,7 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -25,7 +29,7 @@ namespace Microsoft.Templates.Cli
         }
 
         public void Run()
-        {            
+        {
             bool isRunning = true;
 
             while (isRunning)
@@ -36,7 +40,7 @@ namespace Microsoft.Templates.Cli
                     Console.Write($"{promptSymbol} ");
                     isRunning = ProcessCommand(Console.ReadLine());
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _messageService.SendError(string.Format(StringRes.ErrorExecutingCommand, ex.Message));
                 }
@@ -59,7 +63,7 @@ namespace Microsoft.Templates.Cli
                     GenerateCommand,
                     CloseCommand>(args);
 
-              var exitCode = parserResult.MapResult(
+            var exitCode = parserResult.MapResult(
                     (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetProjectTypesCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GetFrameworksCommand opts) => _dispatcher.DispatchAsync(opts),
@@ -69,7 +73,8 @@ namespace Microsoft.Templates.Cli
                     (GetTestingsCommand opts) => _dispatcher.DispatchAsync(opts),
                     (GenerateCommand opts) => _dispatcher.DispatchAsync(opts),
                     (CloseCommand opts) => Task.FromResult(1),
-                    errors => {
+                    errors =>
+                    {
                         var helpText = HelpText.AutoBuild(parserResult);
                         helpText.AddEnumValuesToHelpText = true;
                         helpText.AddOptions(parserResult);
@@ -77,7 +82,7 @@ namespace Microsoft.Templates.Cli
                         return Task.FromResult(0);
                     });
 
-            //todo: use async task
+            // todo: use async task
             return exitCode.Result == 0;
         }
     }

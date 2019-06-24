@@ -1,18 +1,20 @@
-﻿using Microsoft.Templates.Cli.Resources;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Collections.Generic;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Microsoft.Templates.Cli.Services
 {
     public class TemplatesService : ITemplatesService
-    {   
+    {
         public IEnumerable<TemplateInfo> GetFeatures(string projectType, string frontEndFramework, string backEndFramework)
         {
-            var features = GetTemplateItems(TemplateType.Feature,
+            var features = GetTemplateItems(
+                                            TemplateType.Feature,
                                             projectType,
                                             frontEndFramework,
                                             backEndFramework);
@@ -35,7 +37,8 @@ namespace Microsoft.Templates.Cli.Services
 
         public IEnumerable<TemplateInfo> GetPages(string projectType, string frontEndFramework, string backEndFramework)
         {
-            var pages = GetTemplateItems(TemplateType.Page,
+            var pages = GetTemplateItems(
+                                        TemplateType.Page,
                                         projectType,
                                         frontEndFramework,
                                         backEndFramework);
@@ -53,7 +56,8 @@ namespace Microsoft.Templates.Cli.Services
 
         public IEnumerable<TemplateInfo> GetServices(string projectType, string frontEndFramework, string backEndFramework)
         {
-            var pages = GetTemplateItems(TemplateType.Service,
+            var pages = GetTemplateItems(
+                                        TemplateType.Service,
                                         projectType,
                                         frontEndFramework,
                                         backEndFramework);
@@ -63,7 +67,8 @@ namespace Microsoft.Templates.Cli.Services
 
         public IEnumerable<TemplateInfo> GetTestings(string projectType, string frontEndFramework, string backEndFramework)
         {
-            var pages = GetTemplateItems(TemplateType.Testing,
+            var pages = GetTemplateItems(
+                                        TemplateType.Testing,
                                         projectType,
                                         frontEndFramework,
                                         backEndFramework);

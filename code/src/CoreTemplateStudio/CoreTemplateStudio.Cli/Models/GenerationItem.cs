@@ -4,8 +4,8 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-
 using Microsoft.Templates.Core.Gen;
+
 namespace Microsoft.Templates.Cli.Models
 {
     public class GenerationItem
