@@ -11,6 +11,6 @@ namespace Microsoft.Templates.Cli.Services.Contracts
 {
     public interface ISyncService
     {
-        Task<SyncModel> ProcessAsync(string path, Action<SyncStatus, int> statusListener);
+        Task<SyncModel> ProcessAsync(string path, string fullPath, string platform, string language, Action<SyncStatus, int> statusListener);
     }
 }

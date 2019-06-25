@@ -6,7 +6,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Cli.Models;
@@ -21,61 +20,36 @@ namespace Microsoft.Templates.Cli.Services
 {
     public class SyncService : ISyncService
     {
-        private readonly string _platform = "Web";
-        private readonly string _language = "Any";
-        private string _path;
-        private string _fullPath;
         private Action<SyncStatus, int> _statusListener;
         private bool _wasUpdated;
 
-        public async Task<SyncModel> ProcessAsync(string path, Action<SyncStatus, int> statusListener)
+        public async Task<SyncModel> ProcessAsync(string path, string fullPath, string platform, string language, Action<SyncStatus, int> statusListener)
         {
-            ConfigurePaths(path);
             _statusListener = statusListener;
-
-            if (!Platforms.IsValidPlatform(_platform))
-            {
-                throw new Exception(StringRes.BadReqInvalidPlatform);
-            }
-
-            if (!IsValidPath(_fullPath))
-            {
-                throw new Exception(StringRes.BadReqInvalidPath);
-            }
-
-            if (_fullPath.EndsWith("mstx") && !IsPackageValid(_fullPath))
-            {
-                throw new Exception(StringRes.BadReqInvalidPackage);
-            }
-
-            if (!ProgrammingLanguages.IsValidLanguage(_language, _platform))
-            {
-                throw new Exception(StringRes.BadReqInvalidLanguage);
-            }
 
             try
             {
 #if DEBUG
                 GenContext.Bootstrap(
                     new LocalTemplatesSource(
-                        _path,
+                        path,
                         "0.0.0.0",
                         string.Empty),
                     new CliGenShell(),
                     new Version("0.0.0.0"),
-                    _platform,
-                    _language);
+                    platform,
+                    language);
 #else
                 GenContext.Bootstrap(
                   new RemoteTemplatesSource(
-                      _platform,
-                      _language,
-                      _path,
+                      platform,
+                      language,
+                      path,
                       new CliDigitalSignatureService()),
                   new CliGenShell(),
                   new Version(GetFileVersion()),
-                  _platform,
-                  _language);
+                  platform,
+                  language);
 #endif
                 GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
                 await GenContext.ToolBox.Repo.SynchronizeAsync(true);
@@ -100,21 +74,6 @@ namespace Microsoft.Templates.Cli.Services
             return fvi.FileVersion;
         }
 
-        private bool IsPackageValid(string fullpath)
-        {
-            return Configuration.Current.AllowedPackages.Contains(GetHash(fullpath));
-        }
-
-        private string GetHash(string fullpath)
-        {
-            using (FileStream stream = File.OpenRead(fullpath))
-            {
-                var sha = new SHA256Managed();
-                byte[] checksum = sha.ComputeHash(stream);
-                return BitConverter.ToString(checksum).Replace("-", string.Empty);
-            }
-        }
-
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
         {
             _statusListener.Invoke(args.Status, args.Progress);
@@ -123,27 +82,6 @@ namespace Microsoft.Templates.Cli.Services
             {
                 _wasUpdated = true;
             }
-        }
-
-        private bool IsValidPath(string fullpath)
-        {
-#if DEBUG
-            return fullpath != null && Directory.Exists(fullpath);
-#else
-            return fullpath != null && File.Exists(fullpath);
-#endif
-        }
-
-        private void ConfigurePaths(string path)
-        {
-#if DEBUG
-            _path = path;
-            _fullPath = path + "/templates";
-
-#else
-            _path = @"..";
-            _fullPath = Path.Combine(_path, $"{_platform}.{_language}.Templates.mstx");
-#endif
         }
     }
 }

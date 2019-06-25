@@ -22,7 +22,12 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
 
         public async Task<int> ExecuteAsync(SyncCommand command)
         {
-            var result = await _syncService.ProcessAsync(command.Path, SyncStatusChanged);
+            var result = await _syncService.ProcessAsync(
+                                                        command.Path,
+                                                        command.FullPath,
+                                                        command.Platform,
+                                                        command.Language,
+                                                        SyncStatusChanged);
             _messageService.Send(result);
             return 0;
         }
