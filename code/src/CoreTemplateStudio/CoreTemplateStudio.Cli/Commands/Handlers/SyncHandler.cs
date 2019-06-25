@@ -26,15 +26,9 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
                                                         command.Path,
                                                         command.FullPath,
                                                         command.Platform,
-                                                        command.Language,
-                                                        SyncStatusChanged);
+                                                        command.Language);
             _messageService.Send(result);
             return 0;
-        }
-
-        private void SyncStatusChanged(SyncStatus status, int progress)
-        {
-            _messageService.SendMessage($"syncMessage : {status.ToString()} - {progress}");
         }
     }
 }

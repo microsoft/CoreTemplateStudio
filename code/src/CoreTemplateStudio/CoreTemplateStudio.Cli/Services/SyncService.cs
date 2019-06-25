@@ -20,13 +20,16 @@ namespace Microsoft.Templates.Cli.Services
 {
     public class SyncService : ISyncService
     {
-        private Action<SyncStatus, int> _statusListener;
+        private readonly IMessageService _messageService;
         private bool _wasUpdated;
 
-        public async Task<SyncModel> ProcessAsync(string path, string fullPath, string platform, string language, Action<SyncStatus, int> statusListener)
+        public SyncService(IMessageService messageService)
         {
-            _statusListener = statusListener;
+            _messageService = messageService;
+        }
 
+        public async Task<SyncModel> ProcessAsync(string path, string fullPath, string platform, string language)
+        {
             try
             {
 #if DEBUG
@@ -76,7 +79,7 @@ namespace Microsoft.Templates.Cli.Services
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
         {
-            _statusListener.Invoke(args.Status, args.Progress);
+            _messageService.SendMessage($"syncMessage : {args.Status.ToString()} - {args.Progress}");
 
             if (args.Status.Equals(SyncStatus.Updated))
             {

@@ -24,11 +24,9 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
         public async Task<int> ExecuteAsync(GenerateCommand command)
         {
             var generationData = JsonConvert.DeserializeObject<GenerationData>(command.GenerationDataJson);
-            await _generateService.GenerateAsync(generationData, OnGetMessage);
+            await _generateService.GenerateAsync(generationData);
 
             return 0;
         }
-
-        private void OnGetMessage(string message) => _messageService.SendMessage(message);
     }
 }
