@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-
+using System.IO;
 using Microsoft.TemplateEngine.Edge.Template;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.PostActions.Catalog;
@@ -31,8 +31,15 @@ namespace Microsoft.Templates.Core.PostActions
             var postActions = new List<PostAction>();
 
             AddGlobalMergeActions(postActions, $"*{MergeConfiguration.GlobalExtension}*", true);
-            postActions.Add(new SortUsingsPostAction());
-            postActions.Add(new SortImportsPostAction());
+
+            var paths = new List<string>();
+            foreach (var proj in GenContext.Current.ProjectInfo.Projects)
+            {
+                paths.Add(Path.GetDirectoryName(proj));
+            }
+
+            postActions.Add(new SortUsingsPostAction(paths));
+            postActions.Add(new SortImportsPostAction(paths));
             postActions.Add(new AddContextItemsToSolutionAndProjectPostAction());
             postActions.Add(new SetDefaultSolutionConfigurationPostAction());
 
