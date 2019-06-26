@@ -13,7 +13,11 @@ namespace Microsoft.Templates.Cli.Commands
     {
         public SyncCommand(string path)
         {
-            Path = GetPath();
+#if DEBUG
+            Path = path;
+#else
+            Path = @"..";
+#endif
         }
 
         [Option('p', "path", Required = true, HelpText = "Sync templates path")]
@@ -24,16 +28,6 @@ namespace Microsoft.Templates.Cli.Commands
         public string Platform => "Web";
 
         public string Language => "Any";
-
-        private string GetPath()
-        {
-#if DEBUG
-            return Path;
-
-#else
-            return @"..";
-#endif
-        }
 
         private string GetFullPath()
         {

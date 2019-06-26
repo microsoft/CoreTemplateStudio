@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Models;
@@ -23,7 +24,8 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
 
         public async Task<int> ExecuteAsync(GenerateCommand command)
         {
-            var generationData = JsonConvert.DeserializeObject<GenerationData>(command.GenerationDataJson);
+            var data = string.Join(' ', command.GenerationDataJson);
+            var generationData = JsonConvert.DeserializeObject<GenerationData>(data);
             await _generateService.GenerateAsync(generationData);
 
             return 0;
