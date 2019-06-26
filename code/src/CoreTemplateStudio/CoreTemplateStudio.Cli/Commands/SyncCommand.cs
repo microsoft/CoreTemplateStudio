@@ -16,7 +16,7 @@ namespace Microsoft.Templates.Cli.Commands
 #if DEBUG
             Path = path;
 #else
-            Path =  @"..";
+            Path = @"..";
 #endif
         }
 
