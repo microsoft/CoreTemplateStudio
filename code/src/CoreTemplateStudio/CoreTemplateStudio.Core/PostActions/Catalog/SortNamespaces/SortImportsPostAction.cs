@@ -8,6 +8,11 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.SortNamespaces
 {
     public class SortImportsPostAction : SortNamespacesPostAction
     {
+        public SortImportsPostAction(List<string> paths)
+           : base(paths)
+        {
+        }
+
         public override string FilesToSearch => "*.vb";
 
         public override bool SortMethod(List<string> classContent)
