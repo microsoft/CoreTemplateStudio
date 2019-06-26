@@ -4,6 +4,7 @@
 
 using CommandLine;
 using Microsoft.Templates.Cli.Commands.Contracts;
+using System.Collections.Generic;
 
 namespace Microsoft.Templates.Cli.Commands
 {
@@ -11,6 +12,6 @@ namespace Microsoft.Templates.Cli.Commands
     public class GenerateCommand : ICommand
     {
         [Option('d', "data", Required = true, HelpText = "Generation data in json format")]
-        public string GenerationDataJson { get; set; }
+        public IEnumerable<string> GenerationDataJson { get; set; }
     }
 }
