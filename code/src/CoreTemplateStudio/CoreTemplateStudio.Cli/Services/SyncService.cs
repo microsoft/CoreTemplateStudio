@@ -4,15 +4,12 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Templates.Api.Utilities;
 using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Resources;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Cli.Utilities;
-using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 

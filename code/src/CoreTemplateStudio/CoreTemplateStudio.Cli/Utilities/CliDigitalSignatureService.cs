@@ -5,13 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Packaging;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.Templates.Core.Packaging;
 
 // Modify or replace this class when dotnet core 3.0 is released to properly test
-namespace Microsoft.Templates.Api.Utilities
+namespace Microsoft.Templates.Cli.Utilities
 {
     public class CliDigitalSignatureService : IDigitalSignatureService
     {
@@ -19,9 +18,7 @@ namespace Microsoft.Templates.Api.Utilities
 
         public Dictionary<string, X509Certificate> GetPackageCertificates(Package package)
         {
-            var packageCertificates = new Dictionary<string, X509Certificate>();
-            packageCertificates.Add("Test", new X509Certificate(@"Packaging\TestCert.pfx", "pass@word1"));
-            return packageCertificates;
+            return new Dictionary<string, X509Certificate>();
         }
 
         public IEnumerable<X509Certificate> GetX509Certificates(Package package)
