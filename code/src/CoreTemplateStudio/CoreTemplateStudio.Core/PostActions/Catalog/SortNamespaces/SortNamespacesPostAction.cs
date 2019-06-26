@@ -14,24 +14,34 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.SortNamespaces
 {
     public abstract class SortNamespacesPostAction : PostAction
     {
+        public SortNamespacesPostAction(List<string> paths)
+        {
+            Paths = paths;
+        }
+
+        public List<string> Paths { get; set; }
+
         public abstract string FilesToSearch { get; }
 
         public abstract bool SortMethod(List<string> classContent);
 
         internal override void ExecuteInternal()
         {
-            var classFiles = Directory
-                .EnumerateFiles(Path.GetDirectoryName(GenContext.Current.GenerationOutputPath), FilesToSearch, SearchOption.AllDirectories)
+            foreach (var path in Paths)
+            {
+                var classFiles = Directory
+                .EnumerateFiles(path, FilesToSearch, SearchOption.AllDirectories)
                 .ToList();
 
-            foreach (var classFile in classFiles)
-            {
-                var fileContent = File.ReadAllLines(classFile).ToList();
-                var sortResult = SortMethod(fileContent);
-
-                if (sortResult)
+                foreach (var classFile in classFiles)
                 {
-                    File.WriteAllLines(classFile, fileContent, Encoding.UTF8);
+                    var fileContent = File.ReadAllLines(classFile).ToList();
+                    var sortResult = SortMethod(fileContent);
+
+                    if (sortResult)
+                    {
+                        File.WriteAllLines(classFile, fileContent, Encoding.UTF8);
+                    }
                 }
             }
         }
