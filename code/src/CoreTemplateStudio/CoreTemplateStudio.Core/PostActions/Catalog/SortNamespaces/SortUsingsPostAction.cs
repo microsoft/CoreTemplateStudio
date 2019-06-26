@@ -8,6 +8,11 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.SortNamespaces
 {
     public class SortUsingsPostAction : SortNamespacesPostAction
     {
+        public SortUsingsPostAction(List<string> paths)
+            : base(paths)
+        {
+        }
+
         public override string FilesToSearch => "*.cs";
 
         public override bool SortMethod(List<string> classContent)
