@@ -35,7 +35,7 @@ namespace Microsoft.Templates.Cli.Services
                         path,
                         "0.0.0.0",
                         string.Empty),
-                    new CliGenShell(),
+                    new CliGenShell(_messageService),
                     new Version("0.0.0.0"),
                     platform,
                     language);
@@ -46,7 +46,7 @@ namespace Microsoft.Templates.Cli.Services
                       language,
                       path,
                       new CliDigitalSignatureService()),
-                  new CliGenShell(),
+                  new CliGenShell(_messageService),
                   new Version(GetFileVersion()),
                   platform,
                   language);

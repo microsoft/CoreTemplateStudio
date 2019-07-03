@@ -13,12 +13,10 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
 {
     public class GenerateHandler : ICommandHandler<GenerateCommand>
     {
-        private readonly IMessageService _messageService;
         private readonly IGenerateService _generateService;
 
-        public GenerateHandler(IMessageService messageService, IGenerateService generateService)
+        public GenerateHandler(IGenerateService generateService)
         {
-            _messageService = messageService;
             _generateService = generateService;
         }
 

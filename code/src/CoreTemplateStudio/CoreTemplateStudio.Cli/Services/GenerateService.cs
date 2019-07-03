@@ -15,20 +15,10 @@ namespace Microsoft.Templates.Cli.Services
 {
     public class GenerateService : IGenerateService
     {
-        private readonly IMessageService _messageService;
-
-        public GenerateService(IMessageService messageService)
-        {
-            _messageService = messageService;
-        }
-
         public async Task<ContextProvider> GenerateAsync(GenerationData generationData)
         {
             try
             {
-                CliGenShell shell = GenContext.ToolBox.Shell as CliGenShell;
-                shell.SetMessageEventListener((message) => _messageService.SendMessage(message));
-
                 var safeProjectName = generationData.ProjectName.MakeSafeProjectName();
                 var combinedPath = Path.Combine(generationData.GenPath, safeProjectName, safeProjectName);
 
