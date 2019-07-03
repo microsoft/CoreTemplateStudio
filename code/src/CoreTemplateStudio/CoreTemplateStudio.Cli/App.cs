@@ -12,12 +12,14 @@ using Microsoft.Templates.Cli.Commands;
 using Microsoft.Templates.Cli.Commands.Contracts;
 using Microsoft.Templates.Cli.Resources;
 using Microsoft.Templates.Cli.Services.Contracts;
+using Microsoft.Templates.Core;
+using Microsoft.Templates.Core.Diagnostics;
 
 namespace Microsoft.Templates.Cli
 {
     public class App
     {
-        private readonly string promptSymbol = ">> ";
+        private readonly string promptSymbol = $"{Environment.NewLine}>> ";
         private readonly string splitPattern = "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
         private readonly ICommandDispatcher _dispatcher;
         private readonly IMessageService _messageService;
@@ -34,56 +36,60 @@ namespace Microsoft.Templates.Cli
 
             while (isRunning)
             {
-                try
-                {
-                    Console.WriteLine();
-                    Console.Write($"{promptSymbol} ");
-                    isRunning = ProcessCommand(Console.ReadLine());
-                }
-                catch (Exception ex)
-                {
-                    _messageService.SendError(string.Format(StringRes.ErrorExecutingCommand, ex.Message));
-                }
+                Console.Write($"{promptSymbol} ");
+                isRunning = ProcessCommand(Console.ReadLine());
             }
         }
 
         private bool ProcessCommand(string command)
         {
-            var args = Regex.Split(command, splitPattern)
-                .Select(s => s.Trim('"'));
+            try
+            {
+                AppHealth.Current.Verbose.TrackAsync(string.Format(StringRes.ReceivedCommand, command)).FireAndForget();
 
-            var parserResult = Parser.Default.ParseArguments<
-                    SyncCommand,
-                    GetProjectTypesCommand,
-                    GetFrameworksCommand,
-                    GetPagesCommand,
-                    GetFeaturesCommand,
-                    GetServicesCommand,
-                    GetTestingsCommand,
-                    GenerateCommand,
-                    CloseCommand>(args);
+                var args = Regex.Split(command, splitPattern)
+                    .Select(s => s.Trim('"'));
 
-            var exitCode = parserResult.MapResult(
-                    (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetProjectTypesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetFrameworksCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetPagesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetFeaturesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetServicesCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GetTestingsCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (GenerateCommand opts) => _dispatcher.DispatchAsync(opts),
-                    (CloseCommand opts) => Task.FromResult(1),
-                    errors =>
-                    {
-                        var helpText = HelpText.AutoBuild(parserResult);
-                        helpText.AddEnumValuesToHelpText = true;
-                        helpText.AddOptions(parserResult);
-                        _messageService.SendError(helpText);
-                        return Task.FromResult(0);
-                    });
+                var parserResult = Parser.Default.ParseArguments<
+                        SyncCommand,
+                        GetProjectTypesCommand,
+                        GetFrameworksCommand,
+                        GetPagesCommand,
+                        GetFeaturesCommand,
+                        GetServicesCommand,
+                        GetTestingsCommand,
+                        GenerateCommand,
+                        CloseCommand>(args);
 
-            // todo: use async task
-            return exitCode.Result == 0;
+                var exitCode = parserResult.MapResult(
+                        (SyncCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GetProjectTypesCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GetFrameworksCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GetPagesCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GetFeaturesCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GetServicesCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GetTestingsCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GenerateCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (CloseCommand opts) => Task.FromResult(1),
+                        errors =>
+                        {
+                            var helpText = HelpText.AutoBuild(parserResult);
+                            helpText.AddOptions(parserResult);
+                            var errorText = string.Format(StringRes.ErrorParsingCommand, command, helpText);
+                            AppHealth.Current.Error.TrackAsync(errorText).FireAndForget();
+                            return Task.FromResult(0);
+                        });
+
+                // todo: use async task
+                return exitCode.Result == 0;
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = string.Format(StringRes.ErrorExecutingCommand, command, ex.Message);
+                AppHealth.Current.Exception.TrackAsync(ex, errorMessage).FireAndForget();
+                _messageService.SendError(errorMessage);
+                return true;
+            }
         }
     }
 }
