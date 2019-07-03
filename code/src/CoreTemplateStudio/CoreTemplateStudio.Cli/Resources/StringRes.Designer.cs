@@ -160,7 +160,8 @@ namespace Microsoft.Templates.Cli.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error to execute command. {0}.
+        ///   Looks up a localized string similar to Error executing Command: {0}.
+        ///{1}.
         /// </summary>
         public static string ErrorExecutingCommand {
             get {
@@ -178,11 +179,30 @@ namespace Microsoft.Templates.Cli.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error parsing Command: {0}.
+        ///{1}.
+        /// </summary>
+        public static string ErrorParsingCommand {
+            get {
+                return ResourceManager.GetString("ErrorParsingCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error syncing templates. {0}.
         /// </summary>
         public static string ErrorSyncingTemplates {
             get {
                 return ResourceManager.GetString("ErrorSyncingTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received Command: {0}.
+        /// </summary>
+        public static string ReceivedCommand {
+            get {
+                return ResourceManager.GetString("ReceivedCommand", resourceCulture);
             }
         }
     }

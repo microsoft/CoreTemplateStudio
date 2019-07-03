@@ -4,7 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Gen;
 
@@ -14,14 +14,11 @@ namespace Microsoft.Templates.Cli.Utilities
 
     public class CliGenShell : GenShell
     {
-        private Action<string> _messageListener;
+        private readonly IMessageService _messageService;
 
-        public void SetMessageEventListener(Action<string> messageListener)
+        public CliGenShell(IMessageService messageService)
         {
-            if (messageListener != null)
-            {
-                _messageListener = messageListener;
-            }
+            _messageService = messageService;
         }
 
         public override void AddContextItemsToSolution(ProjectInfo projectInfo)
@@ -128,7 +125,7 @@ namespace Microsoft.Templates.Cli.Utilities
 
         public override void ShowStatusBarMessage(string message)
         {
-            _messageListener?.Invoke(message);
+            _messageService.SendMessage(message);
         }
 
         public override void ShowTaskList()

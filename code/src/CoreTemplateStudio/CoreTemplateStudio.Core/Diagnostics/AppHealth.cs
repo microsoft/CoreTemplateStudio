@@ -70,13 +70,13 @@ namespace Microsoft.Templates.Core.Diagnostics
         public void IntializeTelemetryClient(GenShell shell)
         {
             TelemetryService.Current.IntializeTelemetryClient(shell);
+            HealthWriters.Available.Add(TelemetryService.Current);
         }
 
         private void InstanceDefaultWriters()
         {
             HealthWriters.Available.Add(FileHealthWriter.Current);
             HealthWriters.Available.Add(new TraceHealthWriter());
-            HealthWriters.Available.Add(TelemetryService.Current);
         }
 
         ~AppHealth()

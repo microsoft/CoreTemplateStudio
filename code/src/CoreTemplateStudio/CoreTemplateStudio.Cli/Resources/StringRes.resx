@@ -152,12 +152,20 @@
     <value>You must first sync templates before calling this endpoint.</value>
   </data>
   <data name="ErrorExecutingCommand" xml:space="preserve">
-    <value>Error to execute command. {0}</value>
+    <value>Error executing Command: {0}.
+{1}</value>
   </data>
   <data name="ErrorGenerating" xml:space="preserve">
     <value>Error generating. {0}</value>
   </data>
+  <data name="ErrorParsingCommand" xml:space="preserve">
+    <value>Error parsing Command: {0}.
+{1}</value>
+  </data>
   <data name="ErrorSyncingTemplates" xml:space="preserve">
     <value>Error syncing templates. {0}</value>
+  </data>
+  <data name="ReceivedCommand" xml:space="preserve">
+    <value>Received Command: {0}</value>
   </data>
 </root>
