@@ -50,7 +50,8 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 }
             }
 
-            IEnumerable<string> result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler();
+            IEnumerable<string> result = mergeHandler.Merge(source, merge, out string errorLine);
 
             if (errorLine != string.Empty)
             {

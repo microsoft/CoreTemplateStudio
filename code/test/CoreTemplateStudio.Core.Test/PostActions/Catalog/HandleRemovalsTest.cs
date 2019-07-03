@@ -38,7 +38,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "{",
                 "}",
             };
-            var result = source.Merge(merge, out var errorLine);
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -72,7 +73,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    // Merge1",
                 "}",
             };
-            var result = source.Merge(merge1, out string errorLine);
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge1, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -120,8 +122,11 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    // Merge1",
                 "}",
             };
-            var result = source.Merge(merge1, out string errorLine).ToList();
-            result = result.Merge(merge2, out errorLine).ToList();
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge1, out var errorLine);
+
+            var mergeHandler2 = new MergeHandler();
+            result = mergeHandler2.Merge(result, merge2, out errorLine).ToList();
 
             Assert.Equal(expected, result);
         }
@@ -150,7 +155,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    yield break;",
                 "}",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -179,7 +185,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "{",
                 "}",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -206,7 +213,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "Public Sub SomeMethod()",
                 "End Sub",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -238,7 +246,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "End Sub",
             };
 
-            var result = source.Merge(merge1, out string errorLine).ToList();
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge1, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -282,8 +291,11 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    ' Merge1",
                 "End Sub",
             };
-            var result = source.Merge(merge1, out string errorLine).ToList();
-            result = result.Merge(merge2, out errorLine).ToList();
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge1, out var errorLine);
+
+            var mergeHandler2 = new MergeHandler();
+            result = mergeHandler2.Merge(result, merge2, out errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -309,7 +321,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    Exit Sub",
                 "End Sub",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -335,7 +348,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "Public Sub SomeMethod()",
                 "End Sub",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out var errorLine);
 
             Assert.Equal(expected, result);
         }
@@ -356,7 +370,8 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "Public Sub SomeMethod()",
                 "End Sub",
             };
-            var result = merge.RemoveRemovals();
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.RemoveRemovals(merge);
 
             Assert.Equal(expected, result);
         }

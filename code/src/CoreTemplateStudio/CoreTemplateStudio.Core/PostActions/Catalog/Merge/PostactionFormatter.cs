@@ -16,18 +16,19 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         public static string AsUserFriendlyPostAction(this string postactionCode)
         {
+            var mergeHandler = new MergeHandler();
             var output = postactionCode
-                            .Replace(IEnumerableExtensions.MacroBeforeMode, UserFriendlyPostActionMacroBeforeMode)
-                            .Replace(IEnumerableExtensions.MacroStartDocumentation, UserFriendlyPostActionMacroStartDocumentation)
-                            .Replace(IEnumerableExtensions.MacroEndDocumentation, UserFriendlyPostActionMacroEndDocumentation)
-                            .Replace(IEnumerableExtensions.MacroStartGroup, UserFriendlyPostActionMacroStartGroup)
-                            .Replace(IEnumerableExtensions.MacroEndGroup, UserFriendlyPostActionMacroEndGroup)
-                            .Replace("//" + IEnumerableExtensions.MacroStartOptionalContext, string.Empty)
-                            .Replace("//" + IEnumerableExtensions.MacroEndOptionalContext, string.Empty)
-                            .Replace("'" + IEnumerableExtensions.MacroStartOptionalContext, string.Empty)
-                            .Replace("'" + IEnumerableExtensions.MacroEndOptionalContext, string.Empty);
+                            .Replace(MergeHandler.MacroBeforeMode, UserFriendlyPostActionMacroBeforeMode)
+                            .Replace(MergeHandler.MacroStartDocumentation, UserFriendlyPostActionMacroStartDocumentation)
+                            .Replace(MergeHandler.MacroEndDocumentation, UserFriendlyPostActionMacroEndDocumentation)
+                            .Replace(MergeHandler.MacroStartGroup, UserFriendlyPostActionMacroStartGroup)
+                            .Replace(MergeHandler.MacroEndGroup, UserFriendlyPostActionMacroEndGroup)
+                            .Replace("//" + MergeHandler.MacroStartOptionalContext, string.Empty)
+                            .Replace("//" + MergeHandler.MacroEndOptionalContext, string.Empty)
+                            .Replace("'" + MergeHandler.MacroStartOptionalContext, string.Empty)
+                            .Replace("'" + MergeHandler.MacroEndOptionalContext, string.Empty);
 
-            var cleanRemovals = output.Split(new[] { Environment.NewLine }, StringSplitOptions.None).RemoveRemovals();
+            var cleanRemovals = mergeHandler.RemoveRemovals(output.Split(new[] { Environment.NewLine }, StringSplitOptions.None));
             output = string.Join(Environment.NewLine, cleanRemovals);
             return output;
         }

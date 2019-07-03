@@ -21,7 +21,9 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var source = File.ReadAllLines(@".\TestData\Merge\Source.cs");
             var merge = File.ReadAllLines(@".\TestData\Merge\Source_postaction.cs");
             var expected = File.ReadAllText(@".\TestData\Merge\Source_expected.cs");
-            var result = source.Merge(merge, out string errorLine);
+
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out string errorLine);
 
             // Remove all new line chars to avoid differentiation with the new line characters
             expected = expected.Replace("\r\n", string.Empty).Replace("\n", string.Empty);
@@ -36,7 +38,9 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var source = File.ReadAllLines(@".\TestData\Merge\SourceWithOptionalContextLines.cs");
             var merge = File.ReadAllLines(@".\TestData\Merge\Source_postaction.cs");
             var expected = File.ReadAllText(@".\TestData\Merge\Source_expectedWithOptionalContextLines.cs");
-            var result = source.Merge(merge, out string errorLine);
+
+            var mergeHandler = new MergeHandler();
+            var result = mergeHandler.Merge(source, merge, out string errorLine);
 
             // Remove all new line chars to avoid differentiation with the new line characters
             expected = expected.Replace("\r\n", string.Empty).Replace("\n", string.Empty);
