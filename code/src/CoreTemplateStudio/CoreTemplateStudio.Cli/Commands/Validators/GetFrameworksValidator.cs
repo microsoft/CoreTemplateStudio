@@ -4,13 +4,18 @@
 
 using FluentValidation;
 using Microsoft.Templates.Cli.Resources;
+using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Cli.Commands.Validators
 {
-    public class GetFrameworksValidator : GenContextValidator<GetFrameworksCommand>
+    public class GetFrameworksValidator : AbstractValidator<GetFrameworksCommand>
     {
         public GetFrameworksValidator()
         {
+            RuleFor(x => GenContext.ToolBox)
+                .NotEmpty()
+                .WithMessage(StringRes.BadReqNotSynced);
+
             RuleFor(x => x.ProjectType)
                 .NotEmpty()
                 .WithMessage(StringRes.BadReqInvalidProjectType);
