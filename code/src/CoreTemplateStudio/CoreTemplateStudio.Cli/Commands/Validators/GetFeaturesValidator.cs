@@ -4,15 +4,24 @@
 
 using FluentValidation;
 using Microsoft.Templates.Cli.Resources;
+using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Cli.Commands.Validators
 {
-    public class GetFeaturesValidator : GenContextValidator<GetFeaturesCommand>
+    public class GetFeaturesValidator : AbstractValidator<GetFeaturesCommand>
     {
         public GetFeaturesValidator()
         {
+            RuleFor(x => GenContext.ToolBox)
+                .NotEmpty()
+                .WithMessage(StringRes.BadReqNotSynced);
+
+            RuleFor(x => x.ProjectType)
+                .NotEmpty()
+                .WithMessage(StringRes.BadReqInvalidProjectType);
+
             RuleFor(x => x)
-                 .Must(x => x.FrontendFramework != null || x.BackendFramework != null)
+                 .Must(x => !string.IsNullOrEmpty(x.FrontendFramework) || !string.IsNullOrEmpty(x.BackendFramework))
                  .WithMessage(StringRes.BadReqNoBackendOrFrontend);
         }
     }

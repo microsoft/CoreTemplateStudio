@@ -4,13 +4,18 @@
 
 using FluentValidation;
 using Microsoft.Templates.Cli.Resources;
+using Microsoft.Templates.Core.Gen;
 
 namespace Microsoft.Templates.Cli.Commands.Validators
 {
-    public class GenerateValidator : GenContextValidator<GenerateCommand>
+    public class GenerateValidator : AbstractValidator<GenerateCommand>
     {
         public GenerateValidator()
         {
+            RuleFor(x => GenContext.ToolBox)
+                .NotEmpty()
+                .WithMessage(StringRes.BadReqNotSynced);
+
             RuleFor(x => x.GenerationDataJson)
                 .NotEmpty()
                 .WithMessage(StringRes.BadReqInvalidGenJson);

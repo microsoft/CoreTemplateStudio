@@ -1,0 +1,23 @@
+{
+  "author": "Microsoft",
+  "classifications": [ "Test" ],
+  "name": "PageTemplate",
+  "description": "Generic description...",
+  "groupIdentity": "Microsoft.Templates.Test.PageTemplate",
+  "identity": "Microsoft.Templates.Test.PageTemplate.CSharp",
+  "tags": {
+    "language": "Any",
+    "type": "item",
+    "wts.platform": "Web",
+    "wts.projecttype": "all",
+    "wts.frontendframework": "fx1",
+    "wts.backendframework": "fx3",
+    "wts.type": "page",
+    "wts.displayOrder": "1",
+    "wts.genGroup": "1",
+    "wts.export.baseclass": "ViewModelBase",
+    "wts.export.setter": "Set"
+  },
+  "sourceName": "App_Name",
+  "preferNameDirectory": true
+}
