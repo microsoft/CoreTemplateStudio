@@ -11,6 +11,6 @@ namespace Microsoft.Templates.Cli.Services.Contracts
 {
     public interface IGenerateService
     {
-        Task<ContextProvider> GenerateAsync(GenerationData generationData);
+        Task<GenerationResult> GenerateAsync(GenerationData generationData);
     }
 }
