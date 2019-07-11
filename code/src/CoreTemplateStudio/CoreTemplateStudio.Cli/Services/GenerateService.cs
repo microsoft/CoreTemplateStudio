@@ -15,7 +15,7 @@ namespace Microsoft.Templates.Cli.Services
 {
     public class GenerateService : IGenerateService
     {
-        public async Task<ContextProvider> GenerateAsync(GenerationData generationData)
+        public async Task<GenerationResult> GenerateAsync(GenerationData generationData)
         {
             try
             {
@@ -34,7 +34,11 @@ namespace Microsoft.Templates.Cli.Services
                 var userSelection = generationData.ToUserSelection();
                 await NewProjectGenController.Instance.UnsafeGenerateProjectAsync(userSelection);
 
-                return provider;
+                return new GenerationResult
+                {
+                    ProjectName = provider.ProjectName,
+                    GenerationPath = provider.GenerationOutputPath,
+                };
             }
             catch (Exception ex)
             {

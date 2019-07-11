@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.IO;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Templates.Cli.Commands;
@@ -18,6 +20,10 @@ namespace Microsoft.Templates.Cli
     {
         public static void Main(string[] args)
         {
+#if DEBUG
+            IncreaseConsoleReadLineBuffer();
+#endif
+
             var services = ConfigureServices();
             var serviceProvider = services.BuildServiceProvider();
 
@@ -59,6 +65,13 @@ namespace Microsoft.Templates.Cli
             services.AddTransient<App>();
 
             return services;
+        }
+
+        private static void IncreaseConsoleReadLineBuffer()
+        {
+            byte[] inputBuffer = new byte[4096];
+            Stream inputStream = Console.OpenStandardInput(inputBuffer.Length);
+            Console.SetIn(new StreamReader(inputStream, Console.InputEncoding, false, inputBuffer.Length));
         }
     }
 }

@@ -13,10 +13,12 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
 {
     public class GenerateHandler : ICommandHandler<GenerateCommand>
     {
+        private readonly IMessageService _messageService;
         private readonly IGenerateService _generateService;
 
-        public GenerateHandler(IGenerateService generateService)
+        public GenerateHandler(IMessageService messageService, IGenerateService generateService)
         {
+            _messageService = messageService;
             _generateService = generateService;
         }
 
@@ -24,8 +26,9 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
         {
             var data = string.Join(' ', command.GenerationDataJson);
             var generationData = JsonConvert.DeserializeObject<GenerationData>(data);
-            await _generateService.GenerateAsync(generationData);
+            var result = await _generateService.GenerateAsync(generationData);
 
+            _messageService.Send(result);
             return 0;
         }
     }
