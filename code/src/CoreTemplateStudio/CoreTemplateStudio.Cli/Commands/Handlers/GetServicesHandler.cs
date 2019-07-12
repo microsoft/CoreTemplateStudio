@@ -4,6 +4,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Commands.Contracts;
+using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Services.Contracts;
 
 namespace Microsoft.Templates.Cli.Commands.Handlers
@@ -22,7 +23,7 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
         public async Task<int> ExecuteAsync(GetServicesCommand command)
         {
             var services = _templatesService.GetServices(command.ProjectType, command.FrontendFramework, command.BackendFramework);
-            _messageService.Send(services);
+            _messageService.SendResult(MessageType.GetServicesResult, services);
 
             return await Task.FromResult(0);
         }

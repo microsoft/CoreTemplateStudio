@@ -5,8 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Microsoft.Templates.Cli.Services
 {
@@ -30,9 +32,10 @@ namespace Microsoft.Templates.Cli.Services
             Console.WriteLine(message);
         }
 
-        public void Send<T>(T item)
+        public void SendResult<T>(MessageType type, T item)
         {
-            var json = JsonConvert.SerializeObject(item);
+            var result = new { MessageType = type, Content = item };
+            var json = JsonConvert.SerializeObject(result, new StringEnumConverter());
             SendMessage(json);
         }
     }

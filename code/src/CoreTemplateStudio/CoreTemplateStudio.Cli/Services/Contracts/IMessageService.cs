@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using Microsoft.Templates.Cli.Models;
 
 namespace Microsoft.Templates.Cli.Services.Contracts
 {
@@ -14,6 +15,6 @@ namespace Microsoft.Templates.Cli.Services.Contracts
 
         void SendErrors(IEnumerable<string> errors);
 
-        void Send<T>(T item);
+        void SendResult<T>(MessageType type, T item);
     }
 }

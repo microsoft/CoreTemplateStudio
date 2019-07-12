@@ -28,7 +28,7 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
             var generationData = JsonConvert.DeserializeObject<GenerationData>(data);
             var result = await _generateService.GenerateAsync(generationData);
 
-            _messageService.Send(result);
+            _messageService.SendResult(MessageType.GenerateResult, result);
             return 0;
         }
     }

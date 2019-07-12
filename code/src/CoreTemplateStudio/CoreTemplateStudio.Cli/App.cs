@@ -36,7 +36,6 @@ namespace Microsoft.Templates.Cli
 
             while (isRunning)
             {
-                Console.Write($"{promptSymbol} ");
                 isRunning = ProcessCommand(Console.ReadLine());
             }
         }
