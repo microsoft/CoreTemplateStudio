@@ -76,7 +76,7 @@ namespace Microsoft.Templates.Cli.Services
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
         {
-            _messageService.SendMessage($"syncMessage : {args.Status.ToString()} - {args.Progress}");
+            _messageService.SendResult(MessageType.SyncProgress, new { args.Status, args.Progress });
 
             if (args.Status.Equals(SyncStatus.Updated))
             {

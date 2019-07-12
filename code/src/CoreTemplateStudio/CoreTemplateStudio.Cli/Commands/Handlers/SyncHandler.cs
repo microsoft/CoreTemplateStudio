@@ -4,8 +4,8 @@
 
 using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Commands.Contracts;
+using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Services.Contracts;
-using Microsoft.Templates.Core.Locations;
 
 namespace Microsoft.Templates.Cli.Commands.Handlers
 {
@@ -27,7 +27,8 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
                                                         command.FullPath,
                                                         command.Platform,
                                                         command.Language);
-            _messageService.Send(result);
+
+            _messageService.SendResult(MessageType.SyncResult, result);
             return 0;
         }
     }

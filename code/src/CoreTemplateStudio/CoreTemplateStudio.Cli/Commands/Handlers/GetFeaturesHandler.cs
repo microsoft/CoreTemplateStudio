@@ -4,6 +4,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Commands.Contracts;
+using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Services.Contracts;
 
 namespace Microsoft.Templates.Cli.Commands.Handlers
@@ -22,7 +23,7 @@ namespace Microsoft.Templates.Cli.Commands.Handlers
         public async Task<int> ExecuteAsync(GetFeaturesCommand command)
         {
             var features = _templatesService.GetFeatures(command.ProjectType, command.FrontendFramework, command.BackendFramework);
-            _messageService.Send(features);
+            _messageService.SendResult(MessageType.GetFeaturesResult, features);
 
             return await Task.FromResult(0);
         }

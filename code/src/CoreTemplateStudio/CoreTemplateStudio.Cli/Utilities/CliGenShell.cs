@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Gen;
@@ -125,7 +126,7 @@ namespace Microsoft.Templates.Cli.Utilities
 
         public override void ShowStatusBarMessage(string message)
         {
-            _messageService.SendMessage(message);
+            _messageService.SendResult(MessageType.GenerateProgress, message);
         }
 
         public override void ShowTaskList()
