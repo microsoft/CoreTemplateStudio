@@ -23,11 +23,13 @@ namespace Microsoft.Templates.Cli
         private readonly string splitPattern = "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
         private readonly ICommandDispatcher _dispatcher;
         private readonly IMessageService _messageService;
+        private readonly Parser _parser;
 
         public App(ICommandDispatcher dispatcher, IMessageService messageService)
         {
             _dispatcher = dispatcher;
             _messageService = messageService;
+            _parser = new Parser(settings => settings.AutoHelp = false);
         }
 
         public void Run()
@@ -49,7 +51,7 @@ namespace Microsoft.Templates.Cli
                 var args = Regex.Split(command, splitPattern)
                     .Select(s => s.Trim('"'));
 
-                var parserResult = Parser.Default.ParseArguments<
+                var parserResult = _parser.ParseArguments<
                         SyncCommand,
                         GetProjectTypesCommand,
                         GetFrameworksCommand,
@@ -73,8 +75,8 @@ namespace Microsoft.Templates.Cli
                         errors =>
                         {
                             var helpText = HelpText.AutoBuild(parserResult);
-                            helpText.AddOptions(parserResult);
                             var errorText = string.Format(StringRes.ErrorParsingCommand, command, helpText);
+                            _messageService.SendError(errorText);
                             AppHealth.Current.Error.TrackAsync(errorText).FireAndForget();
                             return Task.FromResult(0);
                         });
