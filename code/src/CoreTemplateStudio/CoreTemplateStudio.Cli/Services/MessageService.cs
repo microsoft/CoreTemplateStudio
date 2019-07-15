@@ -9,6 +9,7 @@ using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Microsoft.Templates.Cli.Services
 {
@@ -35,7 +36,12 @@ namespace Microsoft.Templates.Cli.Services
         public void SendResult<T>(MessageType type, T item)
         {
             var result = new { MessageType = type, Content = item };
-            var json = JsonConvert.SerializeObject(result, new StringEnumConverter());
+
+            var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+
+            var json = JsonConvert.SerializeObject(result, settings);
+
             SendMessage(json);
         }
     }
