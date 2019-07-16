@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
+    <value>正在創建"{0}"測試...</value>
+    <comment>Status bar message generating testing. {0}: Testing name</comment>
+  </data>
+  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
+    <value>正在創建"{0}"服務...</value>
+    <comment>Status bar message generating service. {0}: Service name</comment>
+  </data>
+  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
+    <value>檔'{0}'具有編碼'{1}',而檔'{2}'具有編碼'{3}',請確保兩種編碼相同。</value>
+    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
+  </data>
   <data name="AdditionalMessageString" xml:space="preserve">
     <value>其他訊息</value>
   </data>
@@ -476,14 +488,6 @@
     <value>在使用者的選擇中找不到相依性範本 {0}。</value>
     <comment>Missing dependency exception message. {0}:Dependency Template id</comment>
   </data>
-  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>Creating '{0}' testing ...</value>
-    <comment>Status bar message generating testing. {0}: Testing name</comment>
-  </data>
-  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>Creating '{0}' service ...</value>
-    <comment>Status bar message generating service. {0}: Service name</comment>
-  </data>
   <data name="StatusBarGeneratingFeatureMessage" xml:space="preserve">
     <value>正在建立 '{0}' 功能...</value>
     <comment>Status bar message generating feature. {0}: Feature name</comment>
@@ -518,9 +522,5 @@
   <data name="ErrorProjectStartsWith" xml:space="preserve">
     <value>「{0}」不是有效的名稱。專案名稱開頭不可為「{1}」。</value>
     <comment>Message box text for project name can not start with.</comment>
-  </data>
-  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>File `{0}` has encoding &amp;apos;{1}&amp;apos; while file `{2}` has encoding &amp;apos;{3}&amp;apos; please ensure both encodings are the same.</value>
-    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
 </root>

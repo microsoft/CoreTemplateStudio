@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
+    <value>Création de tests '{0}'...</value>
+    <comment>Status bar message generating testing. {0}: Testing name</comment>
+  </data>
+  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
+    <value>Création d'un service '{0}' ...</value>
+    <comment>Status bar message generating service. {0}: Service name</comment>
+  </data>
+  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
+    <value>Le fichier '{0}' a encodage '{1}' tandis que le fichier '{2}' a encodage '{3}' s'il vous plaît assurez-vous que les deux codages sont les mêmes.</value>
+    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
+  </data>
   <data name="AdditionalMessageString" xml:space="preserve">
     <value>Message supplémentaire</value>
   </data>
@@ -476,14 +488,6 @@ Les modifications suivantes n'ont pu être intégrées : {2}
     <value>Le modèle de dépendance {0} n'a pas été trouvé dans la sélection de l'utilisateur.</value>
     <comment>Missing dependency exception message. {0}:Dependency Template id</comment>
   </data>
-  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>Creating '{0}' testing ...</value>
-    <comment>Status bar message generating testing. {0}: Testing name</comment>
-  </data>
-  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>Creating '{0}' service ...</value>
-    <comment>Status bar message generating service. {0}: Service name</comment>
-  </data>
   <data name="StatusBarGeneratingFeatureMessage" xml:space="preserve">
     <value>Création de la fonctionnalité « {0} »…</value>
     <comment>Status bar message generating feature. {0}: Feature name</comment>
@@ -518,9 +522,5 @@ Les modifications suivantes n'ont pu être intégrées : {2}
   <data name="ErrorProjectStartsWith" xml:space="preserve">
     <value>« {0} » n'est pas un nom correct. Le nom de projet ne peut pas commencer par « {1} ».</value>
     <comment>Message box text for project name can not start with.</comment>
-  </data>
-  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>File `{0}` has encoding &amp;apos;{1}&amp;apos; while file `{2}` has encoding &amp;apos;{3}&amp;apos; please ensure both encodings are the same.</value>
-    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
 </root>
