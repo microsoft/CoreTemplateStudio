@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
+    <value>'{0}' テストを作成しています...</value>
+    <comment>Status bar message generating testing. {0}: Testing name</comment>
+  </data>
+  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
+    <value>'{0}' サービスを作成しています...</value>
+    <comment>Status bar message generating service. {0}: Service name</comment>
+  </data>
+  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
+    <value>ファイル '{0}' には '{1}' のエンコードがあり、ファイル '{2}' には '{3}' のエンコーディングが含まれています。</value>
+    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
+  </data>
   <data name="AdditionalMessageString" xml:space="preserve">
     <value>追加メッセージ</value>
   </data>
@@ -476,14 +488,6 @@
     <value>ユーザーが選択した中に依存関係テンプレート {0} がありません。</value>
     <comment>Missing dependency exception message. {0}:Dependency Template id</comment>
   </data>
-  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>Creating '{0}' testing ...</value>
-    <comment>Status bar message generating testing. {0}: Testing name</comment>
-  </data>
-  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>Creating '{0}' service ...</value>
-    <comment>Status bar message generating service. {0}: Service name</comment>
-  </data>
   <data name="StatusBarGeneratingFeatureMessage" xml:space="preserve">
     <value>'{0}' 機能を作成しています...</value>
     <comment>Status bar message generating feature. {0}: Feature name</comment>
@@ -518,9 +522,5 @@
   <data name="ErrorProjectStartsWith" xml:space="preserve">
     <value>"{0}" は有効な名前ではありません。プロジェクト名の先頭に "{1}" を使用することはできません。</value>
     <comment>Message box text for project name can not start with.</comment>
-  </data>
-  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>File `{0}` has encoding &amp;apos;{1}&amp;apos; while file `{2}` has encoding &amp;apos;{3}&amp;apos; please ensure both encodings are the same.</value>
-    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
 </root>
