@@ -7,13 +7,13 @@ This document will go over how to get set up, and the file structure of the proj
 Under the [code/src/CoreTemplateStudio](../code/src/CoreTemplateStudio) folder, the repo has different solutions to aid developers get focused on certain development areas:
 
 - **CoreTemplateStudio.Core.sln**: This solution contains the Core assembly. Use this solution when common core code is developed.
-- **CoreTemplateStudi.Api.sln**: This solution contains the API and Core assemblies. Use this solution when the API code is developed.
+- **CoreTemplateStudi.Cli.sln**: This solution contains the Cli and Core assemblies. Use this solution when the Cli code is developed.
 
 Under the [code/test/](../code/test) folder, the repo has additional solutions related to tests:
 
 - **CoreTemplateStudio.Core.Test.sln**: This solution contains the Core assembly + tests: Use this solution when ensuring that your newly developed code works and doesn't break anything, or if you are creating new tests for the core.
 
-- **CoreTemplateStudio.Api.Test.sln**: This solution contains the API + Core assembly + tests: Use this solution when ensuring that your newly developed code works and doesn't break anything, or if you are creating new tests for the API.
+- **CoreTemplateStudio.Cli.Test.sln**: This solution contains the Cli + Core assembly + tests: Use this solution when ensuring that your newly developed code works and doesn't break anything, or if you are creating new tests for the Cli.
 
 ## Dependencies
 
@@ -41,14 +41,9 @@ During the generation the GenContext class provides access to:
   - The destination path (project Path for both New Project and New Item generations)
   - ProjectInfo: Information about projects to be added to the solution and items and references that will be added to the project once the generation finishes
 
-## API Project
+## Cli Project
 
-The API project is in charge of:
+The Cli project is in charge of:
 
 - Communicating between the core and the caller given queries or payloads.
 - Providing a more abstract layer between the core and the caller.
-
-The API project also has the following characteristics:
-
-- Uses SignalR websocket endpoint for sync and generation.
-- Uses Rest endpoint for getting project types, pages and features.
