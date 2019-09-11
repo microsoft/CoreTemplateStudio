@@ -32,9 +32,9 @@ PR has to be validated by at least three (3) core members before being merged.
 - DO NOT use verbs that are not already used like fetch.
 - DO NOT return true or false to give sucess status. Throw exceptions if there was a failure.
 - DO provide good defaults for all values associated with parameters, options, etc.
-- DO ensure that APIs are intuitive and can be successfully used in basic scenarios without referring to the reference documentation.
-- DO communicate incorrect usage of APIs as soon as possible.
-- DO design an API by writing code samples for the main scenarios. Only then, you define the object model that supports those code samples.
+- DO ensure that Cli commands are intuitive and can be successfully used in basic scenarios without referring to the reference documentation.
+- DO communicate incorrect usage of Cli as soon as possible.
+- DO design an Cli commands, by writing code samples for the main scenarios. Only then, you define the object model that supports those code samples.
 - DO declare static dependency properties at the top of their file.
 - DO use extension methods over static methods where possible.
 - DO use verbs like GET.
@@ -49,7 +49,7 @@ PR has to be validated by at least three (3) core members before being merged.
 - DO provide great documentation with all new features and code.
 - DO use readable and self-documenting identifier names.
 - DO use consistent naming and terminology.
-- DO provide strongly typed APIs.
+- DO provide strongly typed Cli commands.
 - DO use verbose identifier names.
 
 ## Files and folders
