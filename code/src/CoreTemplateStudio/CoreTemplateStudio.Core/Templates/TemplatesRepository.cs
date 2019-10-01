@@ -181,6 +181,9 @@ namespace Microsoft.Templates.Core
             var dependencies = GetDependencies(template, platform, projectType, frontEndFramework, backEndFramework, new List<ITemplateInfo>());
             templateInfo.Dependencies = GetTemplatesInfo(dependencies, platform, projectType, frontEndFramework, backEndFramework);
 
+            var requirements = GetRequirements(template, platform, projectType, frontEndFramework, backEndFramework);
+            templateInfo.Requirements = GetTemplatesInfo(requirements, platform, projectType, frontEndFramework, backEndFramework);
+
             return templateInfo;
         }
 
@@ -321,6 +324,56 @@ namespace Microsoft.Templates.Core
             }
 
             return dependencyList;
+        }
+
+        public IEnumerable<ITemplateInfo> GetRequirements(ITemplateInfo template, string platform, string projectType, string frontEndFramework, string backEndFramework)
+        {
+            var requirementsList = new List<ITemplateInfo>();
+            var requirements = template.GetRequirementsList();
+
+            foreach (var requirement in requirements)
+            {
+                var requirementTemplate = Find(t => t.Identity == requirement
+                                                                && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
+                                                                && IsMatchFrontEnd(t, frontEndFramework)
+                                                                && IsMatchBackEnd(t, backEndFramework)
+                                                                && t.GetPlatform() == platform);
+
+                if (requirementTemplate == null)
+                {
+                    LogOrAlertException(string.Format(StringRes.ErrorRequirementNotFound, requirementTemplate, frontEndFramework, backEndFramework, platform));
+                }
+                else
+                {
+                    var templateType = requirementTemplate.GetTemplateType();
+
+                    if (!templateType.IsItemTemplate())
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorRequirementType, requirementTemplate.Identity));
+                    }
+                    else if (requirementTemplate.GetMultipleInstance())
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorRequirementMultipleInstance, requirementTemplate.Identity));
+                    }
+                    else if (template.GetRightClickEnabled())
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorRequirementRightClick, template.Identity));
+                    }
+                    else if (requirementTemplate.GetRequirementsList().Count > 0)
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorRecursiveRequirement, template.Identity, requirementTemplate.Identity));
+                    }
+                    else
+                    {
+                        if (!requirementsList.Contains(requirementTemplate))
+                        {
+                            requirementsList.Add(requirementTemplate);
+                        }
+                    }
+                }
+            }
+
+            return requirementsList;
         }
 
         private bool IsMatchFrontEnd(ITemplateInfo info, string frontEndFramework)

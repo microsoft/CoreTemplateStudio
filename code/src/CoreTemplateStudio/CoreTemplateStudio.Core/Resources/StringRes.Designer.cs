@@ -205,6 +205,60 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recursive requirement detected on template {0} with {1}..
+        /// </summary>
+        public static string ErrorRecursiveRequirement {
+            get {
+                return ResourceManager.GetString("ErrorRecursiveRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required template {0} not found on user selection..
+        /// </summary>
+        public static string ErrorRequirementMissing {
+            get {
+                return ResourceManager.GetString("ErrorRequirementMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid requirement item {0}. Requirements have to be configured as multipleInstance = false..
+        /// </summary>
+        public static string ErrorRequirementMultipleInstance {
+            get {
+                return ResourceManager.GetString("ErrorRequirementMultipleInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required template {0} not found for framework {1} and platform {2}..
+        /// </summary>
+        public static string ErrorRequirementNotFound {
+            get {
+                return ResourceManager.GetString("ErrorRequirementNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid requirement item on template {0}. Right click enabled items cannot have requirements..
+        /// </summary>
+        public static string ErrorRequirementRightClick {
+            get {
+                return ResourceManager.GetString("ErrorRequirementRightClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid requirement item {0}. Dependency items must be of type Page, Feature, Service or Testing..
+        /// </summary>
+        public static string ErrorRequirementType {
+            get {
+                return ResourceManager.GetString("ErrorRequirementType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid project name.
         /// </summary>
         public static string ErrorTitleInvalidProjectName {
