@@ -240,6 +240,19 @@ namespace Microsoft.Templates.Core
             return result;
         }
 
+        public static List<string> GetRequirementsList(this ITemplateInfo ti)
+        {
+            var requirements = GetValueFromTag(ti, TagPrefix + "requirements");
+            var result = new List<string>();
+
+            if (!string.IsNullOrEmpty(requirements))
+            {
+                result.AddRange(requirements.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
         public static string GetGroup(this ITemplateInfo ti)
         {
             return GetValueFromTag(ti, TagPrefix + "group");
