@@ -315,6 +315,18 @@ namespace Microsoft.Templates.Core.Test
 
         [Theory]
         [MemberData(nameof(GetAllLanguages))]
+        public void GetExclusionsList(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("ExclusionsTemplate");
+
+            var result = target.GetExclusionsList();
+            Assert.Collection(result, e1 => e1.Equals("e1"), e2 => e2.Equals("e2"));
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
         public void GetExports(string language)
         {
             SetUpFixtureForTesting(language);

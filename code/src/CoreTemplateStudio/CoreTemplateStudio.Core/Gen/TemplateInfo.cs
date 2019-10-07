@@ -48,6 +48,8 @@ namespace Microsoft.Templates.Core.Gen
 
         public IEnumerable<TemplateInfo> Requirements { get; set; } = new List<TemplateInfo>();
 
+        public IEnumerable<TemplateInfo> Exclusions { get; set; } = new List<TemplateInfo>();
+
         public TemplateType TemplateType { get; set; }
 
         public bool RightClickEnabled { get; set; }

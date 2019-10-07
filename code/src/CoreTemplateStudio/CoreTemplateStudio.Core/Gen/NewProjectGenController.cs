@@ -29,6 +29,7 @@ namespace Microsoft.Templates.Core.Gen
         public async Task UnsafeGenerateProjectAsync(UserSelection userSelection)
         {
             VerifyGenContextPaths();
+            ValidateUserSelection(userSelection);
 
             var genItems = GenComposer.Compose(userSelection).ToList();
 

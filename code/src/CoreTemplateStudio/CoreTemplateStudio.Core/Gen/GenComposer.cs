@@ -98,6 +98,7 @@ namespace Microsoft.Templates.Core.Gen
                 if (!genQueue.Any(t => t.Name == selectedTemplate.Name && t.Template.Identity == selectedTemplate.TemplateId))
                 {
                     var template = GenContext.ToolBox.Repo.Find(t => t.Identity == selectedTemplate.TemplateId);
+                    AddRequiredTemplates(template, genQueue, userSelection, newItemGeneration);
                     AddDependencyTemplates(template, genQueue, userSelection, newItemGeneration);
                     var genInfo = CreateGenInfo(selectedTemplate.Name, template, genQueue, newItemGeneration);
                     genInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
@@ -141,6 +142,29 @@ namespace Microsoft.Templates.Core.Gen
                 else
                 {
                     LogOrAlertException(string.Format(StringRes.ErrorDependencyMissing, dependencyItem.Identity));
+                }
+            }
+        }
+
+        private static void AddRequiredTemplates(ITemplateInfo template, List<GenInfo> genQueue, UserSelection userSelection, bool newItemGeneration)
+        {
+            var requirements = GenContext.ToolBox.Repo.GetRequirements(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, userSelection.BackEndFramework);
+
+            if (requirements.Count() > 0)
+            {
+                var requirementTemplate = userSelection.Items.FirstOrDefault(f => requirements.Select(r => r.Identity).Contains(f.TemplateId));
+
+                if (requirementTemplate != null)
+                {
+                    if (!genQueue.Any(t => t.Name == requirementTemplate.Name && t.Template.Identity == requirementTemplate.TemplateId))
+                    {
+                        var requirementTemplateInfo = GenContext.ToolBox.Repo.Find(t => t.Identity == requirementTemplate.TemplateId);
+                        var depGenInfo = CreateGenInfo(requirementTemplate.Name, requirementTemplateInfo, genQueue, newItemGeneration);
+                        depGenInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
+                        depGenInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+
+                        AddCasingParams(requirementTemplate.Name, requirementTemplateInfo, depGenInfo);
+                    }
                 }
             }
         }
