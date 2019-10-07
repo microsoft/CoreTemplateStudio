@@ -546,4 +546,24 @@ Die folgenden Änderungen konnten nicht integriert werden: {2}
     <value>Invalid requirement item {0}. Dependency items must be of type Page, Feature, Service or Testing.</value>
     <comment>Invalid requirement exception message. {0}:Requirement  Template id</comment>
   </data>
+  <data name="ErrorExcludedTemplatesFound" xml:space="preserve">
+    <value>Excluded template {0} found on user selection.</value>
+  </data>
+  <data name="ErrorExclusionAndDependency" xml:space="preserve">
+    <value>Exclusion template {0} is defined as exclusion and dependency for template {1}.</value>
+  </data>
+  <data name="ErrorExclusionAndRequirement" xml:space="preserve">
+    <value>Exclusion template {0} is defined as exclusion and requirement for template {1}.</value>
+  </data>
+  <data name="ErrorExclusionNotFound" xml:space="preserve">
+    <value>Exclusion template {0} not found for framework {1} and platform {2}.</value>
+    <comment>Dependency not found exception message. {0}:Dependency Template id, {1}: framework name, {2}: platform</comment>
+  </data>
+  <data name="ErrorExclusionRightClick" xml:space="preserve">
+    <value>Templates with exclusions cannot be awailable on right click.</value>
+  </data>
+  <data name="ErrorExclusionType" xml:space="preserve">
+    <value>Invalid exclusion item {0}. Exclusion items must be of type Page, Feature, Service or Testing.</value>
+    <comment>Invalid exclusion exception message. {0}:Dependency Template id</comment>
+  </data>
 </root>

@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="TestData\Templates\Exclusions.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\Exclusions.FeatureTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\Requirements.FeatureTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\Requirements.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\TestingTemplateVB\.template.config\description.md" />

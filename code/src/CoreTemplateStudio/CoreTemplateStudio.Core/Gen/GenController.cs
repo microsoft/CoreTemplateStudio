@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Template;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Helpers;
@@ -145,6 +145,41 @@ namespace Microsoft.Templates.Core.Gen
                     return string.Format(StringRes.StatusBarGeneratingTestingMessage, $"{genInfo.Name} ({genInfo.Template.Name})");
                 default:
                     return null;
+            }
+        }
+
+        internal static void ValidateUserSelection(UserSelection userSelection)
+        {
+            foreach (var item in userSelection.Items)
+            {
+                var template = GenContext.ToolBox.Repo.Find(t => t.Identity == item.TemplateId);
+
+                var dependencies = GenContext.ToolBox.Repo.GetDependencies(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null, new List<ITemplateInfo>());
+
+                foreach (var dependency in dependencies)
+                {
+                    if (!userSelection.Items.Any(i => i.TemplateId == dependency.Identity))
+                    {
+                        throw new InvalidDataException(string.Format(StringRes.ErrorDependencyMissing, dependency));
+                    }
+                }
+
+                var requirements = GenContext.ToolBox.Repo.GetRequirements(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null);
+
+                if (requirements.Count() > 0 && !userSelection.Items.Any(i => requirements.Select(r => r.Identity).Contains(i.TemplateId)))
+                {
+                    throw new InvalidDataException(string.Format(StringRes.ErrorRequirementMissing, requirements.Select(r => r.Name).Aggregate((i, j) => $"{i},{j}")));
+                }
+
+                var exclusionTemplates = GenContext.ToolBox.Repo.GetExclusions(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null);
+
+                foreach (var exclusion in exclusionTemplates)
+                {
+                    if (userSelection.Items.Any(i => i.TemplateId == exclusion.Identity))
+                    {
+                        throw new InvalidDataException(string.Format(StringRes.ErrorExcludedTemplatesFound, exclusion.Name));
+                    }
+                }
             }
         }
 

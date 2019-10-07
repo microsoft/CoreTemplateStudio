@@ -184,6 +184,9 @@ namespace Microsoft.Templates.Core
             var requirements = GetRequirements(template, platform, projectType, frontEndFramework, backEndFramework);
             templateInfo.Requirements = GetTemplatesInfo(requirements, platform, projectType, frontEndFramework, backEndFramework);
 
+            var exclusions = GetExclusions(template, platform, projectType, frontEndFramework, backEndFramework);
+            templateInfo.Exclusions = GetTemplatesInfo(exclusions, platform, projectType, frontEndFramework, backEndFramework);
+
             return templateInfo;
         }
 
@@ -374,6 +377,56 @@ namespace Microsoft.Templates.Core
             }
 
             return requirementsList;
+        }
+
+        public IEnumerable<ITemplateInfo> GetExclusions(ITemplateInfo template, string platform, string projectType, string frontEndFramework, string backEndFramework)
+        {
+            var exclusionsList = new List<ITemplateInfo>();
+            var exclusions = template.GetExclusionsList();
+
+            foreach (var exclusion in exclusions)
+            {
+                var exclusionTemplate = Find(t => t.GroupIdentity == exclusion
+                                                                && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
+                                                                && IsMatchFrontEnd(t, frontEndFramework)
+                                                                && IsMatchBackEnd(t, backEndFramework)
+                                                                && t.GetPlatform() == platform);
+
+                if (exclusionTemplate == null)
+                {
+                    LogOrAlertException(string.Format(StringRes.ErrorExclusionNotFound, exclusionTemplate, frontEndFramework, backEndFramework, platform));
+                }
+                else
+                {
+                    var templateType = exclusionTemplate.GetTemplateType();
+
+                    if (!templateType.IsItemTemplate())
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorExclusionType, exclusionTemplate.Identity));
+                    }
+                    else if (template.GetRightClickEnabled())
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorExclusionRightClick, template.Identity));
+                    }
+                    else if (template.GetDependencyList().Contains(exclusion))
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorExclusionAndDependency, template.Identity, exclusion));
+                    }
+                    else if (template.GetRequirementsList().Contains(exclusion))
+                    {
+                        LogOrAlertException(string.Format(StringRes.ErrorExclusionAndRequirement, template.Identity, exclusion));
+                    }
+                    else
+                    {
+                        if (!exclusionsList.Contains(exclusionTemplate))
+                        {
+                            exclusionsList.Add(exclusionTemplate);
+                        }
+                    }
+                }
+            }
+
+            return exclusionsList;
         }
 
         private bool IsMatchFrontEnd(ITemplateInfo info, string frontEndFramework)
