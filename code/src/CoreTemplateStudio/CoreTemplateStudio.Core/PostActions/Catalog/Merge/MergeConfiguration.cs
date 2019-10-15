@@ -21,9 +21,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
         public const string SearchReplaceExtension = "_" + SearchReplaceSuffix + ".";
         public const string GlobalExtension = "$*_g" + Suffix + ".";
 
-        public const string ResourceDictionaryMatch = @"<ResourceDictionary
-    xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
-    xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">";
+        public const string ResourceDictionaryMatch = "<ResourceDictionary\r\n    xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"\r\n    xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\">";
 
         public string FilePath { get; private set; }
 

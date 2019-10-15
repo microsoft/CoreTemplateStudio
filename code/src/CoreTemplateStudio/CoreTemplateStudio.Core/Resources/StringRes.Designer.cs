@@ -160,6 +160,60 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Excluded template {0} found on user selection..
+        /// </summary>
+        public static string ErrorExcludedTemplatesFound {
+            get {
+                return ResourceManager.GetString("ErrorExcludedTemplatesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclusion template {0} is defined as exclusion and dependency for template {1}..
+        /// </summary>
+        public static string ErrorExclusionAndDependency {
+            get {
+                return ResourceManager.GetString("ErrorExclusionAndDependency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclusion template {0} is defined as exclusion and requirement for template {1}..
+        /// </summary>
+        public static string ErrorExclusionAndRequirement {
+            get {
+                return ResourceManager.GetString("ErrorExclusionAndRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclusion template {0} not found for framework {1} and platform {2}..
+        /// </summary>
+        public static string ErrorExclusionNotFound {
+            get {
+                return ResourceManager.GetString("ErrorExclusionNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Templates with exclusions cannot be awailable on right click..
+        /// </summary>
+        public static string ErrorExclusionRightClick {
+            get {
+                return ResourceManager.GetString("ErrorExclusionRightClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid exclusion item {0}. Exclusion items must be of type Page, Feature, Service or Testing..
+        /// </summary>
+        public static string ErrorExclusionType {
+            get {
+                return ResourceManager.GetString("ErrorExclusionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Template &apos;{0}&apos;, name: &apos;{1}&apos;, reason: &apos;{2}&apos;.
         /// </summary>
         public static string ErrorGenerating {
@@ -201,6 +255,60 @@ namespace Microsoft.Templates.Core.Resources {
         public static string ErrorProjectStartsWith {
             get {
                 return ResourceManager.GetString("ErrorProjectStartsWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recursive requirement detected on template {0} with {1}..
+        /// </summary>
+        public static string ErrorRecursiveRequirement {
+            get {
+                return ResourceManager.GetString("ErrorRecursiveRequirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required template {0} not found on user selection..
+        /// </summary>
+        public static string ErrorRequirementMissing {
+            get {
+                return ResourceManager.GetString("ErrorRequirementMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid requirement item {0}. Requirements have to be configured as multipleInstance = false..
+        /// </summary>
+        public static string ErrorRequirementMultipleInstance {
+            get {
+                return ResourceManager.GetString("ErrorRequirementMultipleInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required template {0} not found for framework {1} and platform {2}..
+        /// </summary>
+        public static string ErrorRequirementNotFound {
+            get {
+                return ResourceManager.GetString("ErrorRequirementNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid requirement item on template {0}. Right click enabled items cannot have requirements..
+        /// </summary>
+        public static string ErrorRequirementRightClick {
+            get {
+                return ResourceManager.GetString("ErrorRequirementRightClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid requirement item {0}. Dependency items must be of type Page, Feature, Service or Testing..
+        /// </summary>
+        public static string ErrorRequirementType {
+            get {
+                return ResourceManager.GetString("ErrorRequirementType", resourceCulture);
             }
         }
         

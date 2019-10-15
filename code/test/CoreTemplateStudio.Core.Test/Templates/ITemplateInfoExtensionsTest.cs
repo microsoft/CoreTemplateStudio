@@ -303,6 +303,30 @@ namespace Microsoft.Templates.Core.Test
 
         [Theory]
         [MemberData(nameof(GetAllLanguages))]
+        public void GetRequirementList(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("RequirementsTemplate");
+
+            var result = target.GetRequirementsList();
+            Assert.Collection(result, e1 => e1.Equals("r1"), e2 => e2.Equals("r2"));
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
+        public void GetExclusionsList(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("ExclusionsTemplate");
+
+            var result = target.GetExclusionsList();
+            Assert.Collection(result, e1 => e1.Equals("e1"), e2 => e2.Equals("e2"));
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
         public void GetExports(string language)
         {
             SetUpFixtureForTesting(language);

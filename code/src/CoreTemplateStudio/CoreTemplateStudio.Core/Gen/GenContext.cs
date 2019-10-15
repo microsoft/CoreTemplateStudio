@@ -22,7 +22,7 @@ namespace Microsoft.Templates.Core.Gen
 
         private static string _tempGenerationFolder = Path.Combine(Path.GetTempPath(), Configuration.Current.TempGenerationFolderPath);
 
-        public static GenToolBox ToolBox { get; private set; }
+        public static GenToolBox ToolBox { get; set; }
 
         public static string CurrentPlatform { get; private set; }
 

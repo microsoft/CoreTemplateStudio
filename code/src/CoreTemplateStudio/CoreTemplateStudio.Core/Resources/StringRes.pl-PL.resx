@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
+    <value>Tworzenie testów '{0}'...</value>
+    <comment>Status bar message generating testing. {0}: Testing name</comment>
+  </data>
+  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
+    <value>Tworzenie usługi '{0}'...</value>
+    <comment>Status bar message generating service. {0}: Service name</comment>
+  </data>
+  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
+    <value>Plik '{0}' ma kodowanie '{1}', podczas gdy plik '{2}' ma kodowanie '{3}' Upewnij się, że oba kodowania są takie same.</value>
+    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
+  </data>
   <data name="AdditionalMessageString" xml:space="preserve">
     <value>Dodatkowa wiadomość</value>
   </data>
@@ -476,14 +488,6 @@ Nie można zinterpretować następujących zmian: {2}
     <value>Nie znaleziono szablonu zależności {0} w opcjach wybranych przez użytkownika.</value>
     <comment>Missing dependency exception message. {0}:Dependency Template id</comment>
   </data>
-  <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>Creating '{0}' testing ...</value>
-    <comment>Status bar message generating testing. {0}: Testing name</comment>
-  </data>
-  <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>Creating '{0}' service ...</value>
-    <comment>Status bar message generating service. {0}: Service name</comment>
-  </data>
   <data name="StatusBarGeneratingFeatureMessage" xml:space="preserve">
     <value>Tworzenie funkcji „{0}”…</value>
     <comment>Status bar message generating feature. {0}: Feature name</comment>
@@ -519,8 +523,47 @@ Nie można zinterpretować następujących zmian: {2}
     <value>„{0}” to nieprawidłowa nazwa. Nazwa projektu nie może zaczynać się od „{1}”.</value>
     <comment>Message box text for project name can not start with.</comment>
   </data>
-  <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>File `{0}` has encoding &amp;apos;{1}&amp;apos; while file `{2}` has encoding &amp;apos;{3}&amp;apos; please ensure both encodings are the same.</value>
-    <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
+  <data name="ErrorRecursiveRequirement" xml:space="preserve">
+    <value>Recursive requirement detected on template {0} with {1}.</value>
+    <comment>Recursive requirement exception message. {0}:Template id, {1}: Requirement Template id</comment>
+  </data>
+  <data name="ErrorRequirementMissing" xml:space="preserve">
+    <value>Required template {0} not found on user selection.</value>
+    <comment>Missing requirement exception message. {0}:Requirement Template id</comment>
+  </data>
+  <data name="ErrorRequirementMultipleInstance" xml:space="preserve">
+    <value>Invalid requirement item {0}. Requirements have to be configured as multipleInstance = false.</value>
+    <comment>Invalid requirement exception message. {0}:Requirement Template id </comment>
+  </data>
+  <data name="ErrorRequirementNotFound" xml:space="preserve">
+    <value>Required template {0} not found for framework {1} and platform {2}.</value>
+    <comment>Required Template not found exception message. {0}:Requirement Template id, {1}: framework name, {2}: platform</comment>
+  </data>
+  <data name="ErrorRequirementRightClick" xml:space="preserve">
+    <value>Invalid requirement item on template {0}. Right click enabled items cannot have requirements.</value>
+  </data>
+  <data name="ErrorRequirementType" xml:space="preserve">
+    <value>Invalid requirement item {0}. Dependency items must be of type Page, Feature, Service or Testing.</value>
+    <comment>Invalid requirement exception message. {0}:Requirement  Template id</comment>
+  </data>
+  <data name="ErrorExcludedTemplatesFound" xml:space="preserve">
+    <value>Excluded template {0} found on user selection.</value>
+  </data>
+  <data name="ErrorExclusionAndDependency" xml:space="preserve">
+    <value>Exclusion template {0} is defined as exclusion and dependency for template {1}.</value>
+  </data>
+  <data name="ErrorExclusionAndRequirement" xml:space="preserve">
+    <value>Exclusion template {0} is defined as exclusion and requirement for template {1}.</value>
+  </data>
+  <data name="ErrorExclusionNotFound" xml:space="preserve">
+    <value>Exclusion template {0} not found for framework {1} and platform {2}.</value>
+    <comment>Dependency not found exception message. {0}:Dependency Template id, {1}: framework name, {2}: platform</comment>
+  </data>
+  <data name="ErrorExclusionRightClick" xml:space="preserve">
+    <value>Templates with exclusions cannot be awailable on right click.</value>
+  </data>
+  <data name="ErrorExclusionType" xml:space="preserve">
+    <value>Invalid exclusion item {0}. Exclusion items must be of type Page, Feature, Service or Testing.</value>
+    <comment>Invalid exclusion exception message. {0}:Dependency Template id</comment>
   </data>
 </root>

@@ -18,12 +18,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 {
     public class MergeResourceDictionaryPostAction : MergePostAction
     {
-        private const string MergeDictionaryPattern = @"<ResourceDictionary.MergedDictionaries>
-    <!--^^-->
-    <!--{[{-->
-    <ResourceDictionary Source=""/{filePath}""/>
-    <!--}]}-->
-</ResourceDictionary.MergedDictionaries>";
+        private const string MergeDictionaryPattern = "<ResourceDictionary.MergedDictionaries>\r\n    <!--^^-->\r\n    <!--{[{-->\r\n    <ResourceDictionary Source=\"/{filePath}\"/>\r\n    <!--}]}-->\r\n</ResourceDictionary.MergedDictionaries>";
 
         public MergeResourceDictionaryPostAction(string relatedTemplate, MergeConfiguration config)
             : base(relatedTemplate, config)
