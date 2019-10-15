@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
-
+using Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.PostActions.Catalog
@@ -23,7 +23,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var expected = File.ReadAllText(@".\TestData\Merge\Source_expected.cs");
 
             var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, out string errorLine);
+            var result = mergeHandler.Merge(source, merge, new CSharpStyleProvider(), out string errorLine);
 
             // Remove all new line chars to avoid differentiation with the new line characters
             expected = expected.Replace("\r\n", string.Empty).Replace("\n", string.Empty);
@@ -40,7 +40,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var expected = File.ReadAllText(@".\TestData\Merge\Source_expectedWithOptionalContextLines.cs");
 
             var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, out string errorLine);
+            var result = mergeHandler.Merge(source, merge, new CSharpStyleProvider(), out string errorLine);
 
             // Remove all new line chars to avoid differentiation with the new line characters
             expected = expected.Replace("\r\n", string.Empty).Replace("\n", string.Empty);

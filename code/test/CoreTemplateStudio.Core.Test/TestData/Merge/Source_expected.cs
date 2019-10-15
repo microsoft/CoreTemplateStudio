@@ -39,7 +39,7 @@ namespace TestData
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-        public App()
+        public App(ITestService testService)
         {
             this.InitializeComponent();
             //AFTER INITIALIZE!!
@@ -53,7 +53,7 @@ namespace TestData
         /// </summary>
         /// <param name = "e">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
-        {   
+        {
             //AFTER ONLAUNCHED!!
             Frame rootFrame = Window.Current.Content as Frame;
             // Do not repeat app initialization when the Window already has content,

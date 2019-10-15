@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders;
+
 namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 {
     public class MergeConfiguration
@@ -25,11 +27,14 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         public string FilePath { get; private set; }
 
+        public BaseCodeStyleProvider CodeStyleProvider { get; private set; }
+
         public bool FailOnError { get; private set; }
 
-        public MergeConfiguration(string fileName, bool failOnError)
+        public MergeConfiguration(string fileName, BaseCodeStyleProvider codeStyleProvider, bool failOnError)
         {
             FilePath = fileName;
+            CodeStyleProvider = codeStyleProvider;
             FailOnError = failOnError;
         }
     }

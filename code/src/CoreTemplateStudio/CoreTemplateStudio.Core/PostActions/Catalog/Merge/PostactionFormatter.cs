@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 {
@@ -28,9 +30,36 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                             .Replace("'" + MergeHandler.MacroStartOptionalContext, string.Empty)
                             .Replace("'" + MergeHandler.MacroEndOptionalContext, string.Empty);
 
-            var cleanRemovals = mergeHandler.RemoveRemovals(output.Split(new[] { Environment.NewLine }, StringSplitOptions.None));
+            var cleanRemovals = RemoveRemovals(output.Split(new[] { Environment.NewLine }, StringSplitOptions.None));
             output = string.Join(Environment.NewLine, cleanRemovals);
             return output;
+        }
+
+        private static List<string> RemoveRemovals(IEnumerable<string> merge)
+        {
+            var mergeString = string.Join(Environment.NewLine, merge);
+
+            var startIndex = mergeString.IndexOf(MergeHandler.MacroStartDelete, StringComparison.OrdinalIgnoreCase);
+            var endIndex = mergeString.IndexOf(MergeHandler.MacroEndDelete, StringComparison.OrdinalIgnoreCase);
+
+            while (startIndex > 0 && endIndex > startIndex)
+            {
+                // VB uses a single character (') to start the comment, C# uses two (//)
+                int commentIndicatorLength = mergeString[startIndex - 1] == '\'' ? 1 : 2;
+
+                var lengthOfDeletion = endIndex - startIndex + MergeHandler.MacroStartDelete.Length + commentIndicatorLength;
+
+                if (mergeString.Substring(startIndex + lengthOfDeletion - commentIndicatorLength).StartsWith(Environment.NewLine, StringComparison.OrdinalIgnoreCase))
+                {
+                    lengthOfDeletion += Environment.NewLine.Length;
+                }
+
+                mergeString = mergeString.Remove(startIndex - commentIndicatorLength, lengthOfDeletion);
+                startIndex = mergeString.IndexOf(MergeHandler.MacroStartDelete, StringComparison.OrdinalIgnoreCase);
+                endIndex = mergeString.IndexOf(MergeHandler.MacroEndDelete, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return mergeString.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
+using Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders;
 using Microsoft.Templates.Core.Test.TestFakes;
 
 using Xunit;
@@ -28,7 +29,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var postaction = Path.GetFullPath(@".\TestData\Merge\Style_postaction.xaml");
             var expected = File.ReadAllText(@".\TestData\Merge\Style_expected.xaml").Replace("\r\n", string.Empty).Replace("\n", string.Empty);
 
-            var config = new MergeConfiguration(postaction, true);
+            var config = new MergeConfiguration(postaction, new XmlStyleProvider(), true);
 
             GenContext.Current = new TestContextProvider()
             {
@@ -57,7 +58,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 DestinationPath = Directory.GetCurrentDirectory(),
             };
 
-            var config = new MergeConfiguration(postaction, true);
+            var config = new MergeConfiguration(postaction, new XmlStyleProvider(), true);
 
             var mergeResourceDictionaryPostAction = new MergeResourceDictionaryPostAction("TestTemplate", config);
 
