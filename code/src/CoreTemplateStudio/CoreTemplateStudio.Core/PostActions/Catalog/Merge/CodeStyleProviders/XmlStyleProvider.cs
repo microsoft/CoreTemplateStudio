@@ -12,5 +12,9 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
     public class XmlStyleProvider : BaseCodeStyleProvider
     {
         public override string CommentSymbol => "<!--";
+
+        public override string InlineCommentStart => "<!--";
+
+        public override string InlineCommentEnd => "-->";
     }
 }

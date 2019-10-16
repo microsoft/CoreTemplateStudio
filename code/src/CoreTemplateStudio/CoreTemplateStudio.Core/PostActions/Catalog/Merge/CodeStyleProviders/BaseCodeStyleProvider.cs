@@ -11,9 +11,14 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
 {
     public class BaseCodeStyleProvider
     {
-        private List<string> contextCharsThatNeedCommaSeparatorForAdditions = new List<string>() { "(", ":" };
+        private const char OpeningParentesis = '(';
+        private const char ClosingParentesis = ')';
 
         public virtual string CommentSymbol => "//";
+
+        public virtual string InlineCommentStart => "/*";
+
+        public virtual string InlineCommentEnd => "*/";
 
         public virtual List<string> AdaptInsertionBlock(List<string> insertionBuffer, string lastContextLine, string nextContextLine)
         {
@@ -22,12 +27,9 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
             return insertionBuffer;
         }
 
-        public virtual string AdaptInlineAddition(string addition, string lastContextChar, string lastChar, string nextChar)
+        public virtual string AdaptInlineAddition(string addition, string contextStart, string contextEnd)
         {
-            if (contextCharsThatNeedCommaSeparatorForAdditions.Contains(lastContextChar))
-            {
-                addition = EnsureCommaSeparator(addition, lastChar, nextChar);
-            }
+            addition = EnsureCommaSeparatorBetweenParentesis(addition, contextStart, contextEnd);
 
             return addition;
         }
@@ -40,11 +42,14 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
             }
         }
 
-        private string EnsureCommaSeparator(string addition, string lastChar, string nextChar)
+        private string EnsureCommaSeparatorBetweenParentesis(string addition, string contextStart, string contextEnd)
         {
-            if (!contextCharsThatNeedCommaSeparatorForAdditions.Contains(lastChar) && !addition.StartsWith(", "))
+            if (contextStart.Contains(OpeningParentesis) && contextEnd.Contains(ClosingParentesis) && !contextStart.Last().Equals(OpeningParentesis))
             {
-                return addition = $", {addition}";
+                if (!addition.StartsWith(", "))
+                {
+                    return addition = $", {addition}";
+                }
             }
 
             return addition;

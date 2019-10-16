@@ -17,9 +17,6 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
         internal const string MacroStartGroup = "{[{";
         internal const string MacroEndGroup = "}]}";
 
-        internal const string MacroInlineAdditionStart = "/*{[{*/";
-        internal const string MacroInlineAdditionEnd = "/*}]}*/";
-
         internal const string MacroStartDocumentation = "{**";
         internal const string MacroEndDocumentation = "**}";
 
@@ -67,7 +64,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 // try to find context line
                 if (mergeMode == MergeMode.Context || mergeMode == MergeMode.OptionalContext || mergeMode == MergeMode.Remove)
                 {
-                    if (mergeLine.Contains(MacroInlineAdditionStart))
+                    if (mergeLine.Contains(codeFormatter.InlineCommentStart + MacroStartGroup + codeFormatter.InlineCommentEnd) && mergeLine.Contains(codeFormatter.InlineCommentStart + MacroEndGroup + codeFormatter.InlineCommentEnd))
                     {
                         currentContextLineIndex = FindAndModifyContextLine(mergeLine, diffTrivia, codeFormatter);
                     }
@@ -247,11 +244,14 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         private int FindAndModifyContextLine(string mergeLine, int diffTrivia, BaseCodeStyleProvider formatter)
         {
-            var mergeLineStart = mergeLine.Substring(0, mergeLine.IndexOf(MacroInlineAdditionStart));
-            var mergeLineEnd = mergeLine.Substring(mergeLine.IndexOf(MacroInlineAdditionEnd) + MacroInlineAdditionEnd.Length, mergeLine.Length - mergeLine.IndexOf(MacroInlineAdditionEnd) - MacroInlineAdditionEnd.Length);
+            var macroInlineAdditionStart = formatter.InlineCommentStart + MacroStartGroup + formatter.InlineCommentEnd;
+            var macroInlineAdditionEnd = formatter.InlineCommentStart + MacroEndGroup + formatter.InlineCommentEnd;
 
-            var additionStartIndex = mergeLine.IndexOf(MacroInlineAdditionStart) + MacroInlineAdditionStart.Length;
-            var additionEndIndex = mergeLine.IndexOf(MacroInlineAdditionEnd);
+            var mergeLineStart = mergeLine.Substring(0, mergeLine.IndexOf(macroInlineAdditionStart));
+            var mergeLineEnd = mergeLine.Substring(mergeLine.IndexOf(macroInlineAdditionEnd) + macroInlineAdditionEnd.Length, mergeLine.Length - mergeLine.IndexOf(macroInlineAdditionEnd) - macroInlineAdditionEnd.Length);
+
+            var additionStartIndex = mergeLine.IndexOf(macroInlineAdditionStart) + macroInlineAdditionStart.Length;
+            var additionEndIndex = mergeLine.IndexOf(macroInlineAdditionEnd);
 
             var addition = mergeLine.Substring(additionStartIndex, additionEndIndex - additionStartIndex);
             var lineIndex = result.SafeIndexOf(mergeLineStart.WithLeadingTrivia(diffTrivia), lastContextLineIndex, true, true);
@@ -269,9 +269,10 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                         nextChar = mergeLineEnd.Substring(1);
                     }
 
-                    var lastChar = insertIndex > 0 ? result[lineIndex].Substring(insertIndex - 1, 1) : string.Empty;
+                    // Get complete line content until insert index
+                    var lineStart = insertIndex > 0 ? result[lineIndex].Substring(0, insertIndex) : string.Empty;
 
-                    addition = formatter.AdaptInlineAddition(addition, mergeLineStart.Substring(mergeLineStart.Length - 1, 1), lastChar, nextChar);
+                    addition = formatter.AdaptInlineAddition(addition, lineStart, mergeLineEnd);
                 }
 
                 result[lineIndex] = result[lineIndex].Insert(insertIndex, addition);

@@ -25,6 +25,15 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
             return buffer;
         }
 
+        public override string AdaptInlineAddition(string addition, string contextStart, string contextEnd)
+        {
+            addition = base.AdaptInlineAddition(addition, contextStart, contextEnd);
+
+            addition = EnsureInterfacesSeperation(addition, contextStart, contextEnd);
+
+            return addition;
+        }
+
         private static void AdaptWhiteLinesToBraces(List<string> insertionBuffer, string lastContextLine, string nextContextLine)
         {
             if (lastContextLine.Trim().Equals(OpeningBrace) && insertionBuffer.First().Trim() == string.Empty)
@@ -46,6 +55,23 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
             {
                 insertionBuffer.Add(string.Empty);
             }
+        }
+
+        private string EnsureInterfacesSeperation(string addition, string contextStart, string contextEnd)
+        {
+            if (contextStart.Contains(" class "))
+            {
+                if (contextStart.Contains(":"))
+                {
+                    return addition = $", {addition}";
+                }
+                else
+                {
+                    return addition = $": {addition}";
+                }
+            }
+
+            return addition;
         }
     }
 }
