@@ -39,10 +39,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "{",
                 "}",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new CSharpStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -74,10 +74,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    // Merge1",
                 "}",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge1, new CSharpStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -123,13 +123,13 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    // Merge1",
                 "}",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge1, new CSharpStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            var mergeHandler2 = new MergeHandler();
-            result = mergeHandler2.Merge(result, merge2, new CSharpStyleProvider(), out errorLine).ToList();
+            var mergeHandler2 = new MergeHandler(new CSharpStyleProvider());
+            result = mergeHandler2.Merge(result.Result, merge2);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -156,10 +156,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    yield break;",
                 "}",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new CSharpStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -186,10 +186,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "{",
                 "}",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new CSharpStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -214,10 +214,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "Public Sub SomeMethod()",
                 "End Sub",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new VBStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -247,10 +247,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "End Sub",
             };
 
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge1, new VBStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -292,13 +292,15 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    ' Merge1",
                 "End Sub",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge1, new VBStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            var mergeHandler2 = new MergeHandler();
-            result = mergeHandler2.Merge(result, merge2, new VBStyleProvider(), out errorLine);
+            var mergeHandler2 = new MergeHandler(new VBStyleProvider());
+            result = mergeHandler2.Merge(result.Result, merge2);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
+            Assert.True(result.Success);
+            Assert.Equal(string.Empty, result.ErrorLine);
         }
 
         [Fact]
@@ -322,10 +324,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    Exit Sub",
                 "End Sub",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new VBStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -349,10 +351,12 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "Public Sub SomeMethod()",
                 "End Sub",
             };
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new VBStyleProvider(), out var errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
+            Assert.True(result.Success);
+            Assert.Equal(string.Empty, result.ErrorLine);
         }
     }
 }

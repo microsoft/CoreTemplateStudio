@@ -22,14 +22,15 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var merge = File.ReadAllLines(@".\TestData\Merge\Source_postaction.cs");
             var expected = File.ReadAllText(@".\TestData\Merge\Source_expected.cs");
 
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new CSharpStyleProvider(), out string errorLine);
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
             // Remove all new line chars to avoid differentiation with the new line characters
             expected = expected.Replace("\r\n", string.Empty).Replace("\n", string.Empty);
 
-            Assert.Equal(expected, string.Join(string.Empty, result.ToArray()));
-            Assert.Equal(errorLine, string.Empty);
+            Assert.Equal(expected, string.Join(string.Empty, result.Result.ToArray()));
+            Assert.True(result.Success);
+            Assert.Equal(string.Empty, result.ErrorLine);
         }
 
         [Fact]
@@ -39,14 +40,15 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var merge = File.ReadAllLines(@".\TestData\Merge\Source_postaction.cs");
             var expected = File.ReadAllText(@".\TestData\Merge\Source_expectedWithOptionalContextLines.cs");
 
-            var mergeHandler = new MergeHandler();
-            var result = mergeHandler.Merge(source, merge, new CSharpStyleProvider(), out string errorLine);
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
             // Remove all new line chars to avoid differentiation with the new line characters
             expected = expected.Replace("\r\n", string.Empty).Replace("\n", string.Empty);
 
-            Assert.Equal(expected, string.Join(string.Empty, result.ToArray()));
-            Assert.Equal(errorLine, string.Empty);
+            Assert.Equal(expected, string.Join(string.Empty, result.Result.ToArray()));
+            Assert.True(result.Success);
+            Assert.Equal(string.Empty, result.ErrorLine);
         }
     }
 }

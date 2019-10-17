@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
 {
@@ -29,35 +27,70 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
         {
             addition = base.AdaptInlineAddition(addition, contextStart, contextEnd);
 
-            addition = EnsureInterfacesSeperation(addition, contextStart, contextEnd);
+            addition = EnsureInterfaceSeparation(addition, contextStart, contextEnd);
 
             return addition;
         }
 
         private static void AdaptWhiteLinesToBraces(List<string> insertionBuffer, string lastContextLine, string nextContextLine)
         {
-            if (lastContextLine.Trim().Equals(OpeningBrace) && insertionBuffer.First().Trim() == string.Empty)
+            if (InsertionStartsWithBlankLine(insertionBuffer) && LastLineHasOpeningBrace(lastContextLine))
             {
                 insertionBuffer.RemoveAt(0);
             }
 
-            if (lastContextLine.Trim().Equals(ClosingBrace) && insertionBuffer.First().Trim() != string.Empty)
+            if (LastLineHasClosingBrace(lastContextLine) && !InsertionStartsWithBlankLine(insertionBuffer))
             {
                 insertionBuffer.Insert(0, string.Empty);
             }
 
-            if (nextContextLine.Trim().Equals(ClosingBrace) && insertionBuffer.Last().Trim() == string.Empty)
+            if (InsertionEndsWithBlankLine(insertionBuffer) && NextLineHasClosingBraces(nextContextLine))
             {
                 insertionBuffer.RemoveAt(insertionBuffer.Count - 1);
             }
 
-            if (!nextContextLine.Trim().Equals(ClosingBrace) && !nextContextLine.Trim().Equals(string.Empty) && insertionBuffer.Last().Trim().Equals(ClosingBrace))
+            if (InsertionEndsWithClosingBraces(insertionBuffer) && !NextLineHasClosingBraces(nextContextLine) && !NextLineIsEmpty(nextContextLine))
             {
                 insertionBuffer.Add(string.Empty);
             }
         }
 
-        private string EnsureInterfacesSeperation(string addition, string contextStart, string contextEnd)
+        private static bool InsertionEndsWithClosingBraces(List<string> insertionBuffer)
+        {
+            return insertionBuffer.Last().Trim().Equals(ClosingBrace);
+        }
+
+        private static bool NextLineIsEmpty(string nextContextLine)
+        {
+            return nextContextLine.Trim().Equals(string.Empty);
+        }
+
+        private static bool NextLineHasClosingBraces(string nextContextLine)
+        {
+            return nextContextLine.Trim().Equals(ClosingBrace);
+        }
+
+        private static bool InsertionEndsWithBlankLine(List<string> insertionBuffer)
+        {
+            return insertionBuffer.Last().Trim() == string.Empty;
+        }
+
+        private static bool LastLineHasClosingBrace(string lastContextLine)
+        {
+            return lastContextLine.Trim().Equals(ClosingBrace);
+        }
+
+        private static bool InsertionStartsWithBlankLine(List<string> insertionBuffer)
+        {
+            return insertionBuffer.First().Trim() == string.Empty;
+        }
+
+        private static bool LastLineHasOpeningBrace(string lastContextLine)
+        {
+            return lastContextLine.Trim().Equals(OpeningBrace);
+        }
+
+        private string EnsureInterfaceSeparation(string addition, string contextStart, string contextEnd)
         {
             if (contextStart.Contains(" class "))
             {

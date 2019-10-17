@@ -148,6 +148,7 @@ namespace Microsoft.Templates.Core.PostActions
                 case ".appxmanifest":
                 case ".config":
                 case ".resw":
+                case ".resx":
                     return new XmlStyleProvider();
                 default:
                     return new BaseCodeStyleProvider();

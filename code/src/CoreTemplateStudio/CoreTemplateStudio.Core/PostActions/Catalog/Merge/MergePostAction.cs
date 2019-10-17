@@ -50,18 +50,18 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 }
             }
 
-            var mergeHandler = new MergeHandler();
-            IEnumerable<string> result = mergeHandler.Merge(source, merge, Config.CodeStyleProvider, out string errorLine);
+            var mergeHandler = new MergeHandler(Config.CodeStyleProvider);
+            var result = mergeHandler.Merge(source, merge);
 
-            if (errorLine != string.Empty)
+            if (!result.Success)
             {
-                HandleLineNotFound(originalFilePath, errorLine);
+                HandleLineNotFound(originalFilePath, result.ErrorLine);
                 return;
             }
 
             Fs.EnsureFileEditable(originalFilePath);
 
-            File.WriteAllLines(originalFilePath, result, originalEncoding);
+            File.WriteAllLines(originalFilePath, result.Result, originalEncoding);
 
             File.Delete(Config.FilePath);
         }
@@ -136,7 +136,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             HandleFailedMergePostActions(relativeFilePath, MergeFailureType.FileNotFound, suffix, errorMessage);
         }
 
-        private void HandleLineNotFound(string originalFilePath, string errorLine)
+        protected void HandleLineNotFound(string originalFilePath, string errorLine)
         {
             if (Config.FailOnError)
             {

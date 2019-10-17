@@ -13,7 +13,7 @@ namespace TestData
     //THIS COMMENT SHOULD BE REMOVED
 //}--}
 
-    sealed partial class App : Application
+    sealed partial class App : /*{[{*/ITestInterface/*}]}*/
     {
 //{[{
         //PROPERTY DEFINITION

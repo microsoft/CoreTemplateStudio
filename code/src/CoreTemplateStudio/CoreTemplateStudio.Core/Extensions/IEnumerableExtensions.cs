@@ -6,11 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
+namespace Microsoft.Templates.Core
 {
     public static class IEnumerableExtensions
     {
-        public static int SafeIndexOf(this IEnumerable<string> source, string item, int skip, bool ignoreWhiteLines = true, bool contextWithAdditions = false)
+        public static int SafeIndexOf(this IEnumerable<string> source, string item, int skip, bool ignoreWhiteLines = true, bool compareUpToItemLength = false)
         {
             if (string.IsNullOrWhiteSpace(item) && ignoreWhiteLines)
             {
@@ -26,7 +26,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
             for (int i = 0; i < actual.Count; i++)
             {
-                if (contextWithAdditions)
+                if (compareUpToItemLength)
                 {
                     if (actual[i].Length > item.TrimEnd().Length)
                     {
@@ -46,24 +46,6 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             }
 
             return -1;
-        }
-
-        public static int FindDiffLeadingTrivia(this IEnumerable<string> target, IEnumerable<string> merge, int startIndex)
-        {
-            if (!target.Any() || !merge.Any())
-            {
-                return 0;
-            }
-
-            var firstMerge = merge.Skip(startIndex + 1).First(m => !string.IsNullOrEmpty(m));
-            var firstTarget = target.FirstOrDefault(t => t.Trim().Equals(firstMerge.Trim(), StringComparison.OrdinalIgnoreCase));
-
-            if (firstTarget == null)
-            {
-                return 0;
-            }
-
-            return firstTarget.GetLeadingTrivia() - firstMerge.GetLeadingTrivia();
         }
     }
 }

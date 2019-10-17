@@ -13,74 +13,53 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 {
     public class MergeHandler
     {
-        internal const string MacroBeforeMode = "^^";
-        internal const string MacroStartGroup = "{[{";
-        internal const string MacroEndGroup = "}]}";
-
-        internal const string MacroStartDocumentation = "{**";
-        internal const string MacroEndDocumentation = "**}";
-
-        internal const string MacroStartDelete = "{--{";
-        internal const string MacroEndDelete = "}--}";
-
-        internal const string MacroStartOptionalContext = "{??{";
-        internal const string MacroEndOptionalContext = "}??}";
-
-        private static string[] macros = new string[] { MacroBeforeMode, MacroStartGroup, MacroEndGroup, MacroStartDocumentation, MacroEndDocumentation, MacroStartDelete, MacroEndDelete, MacroStartOptionalContext, MacroEndOptionalContext };
-
-        private const string OpeningBrace = "{";
-        private const string ClosingBrace = "}";
-
-        private const string OpeningParentesis = "(";
-
-        private const string CSharpComment = "// ";
-        private const string VBComment = "' ";
+        private BaseCodeStyleProvider _codeStyleProvider;
+        private List<string> _result;
 
         private MergeMode mergeMode = MergeMode.Context;
-
-        private List<string> result;
-
         private bool insertBefore = false;
 
-        private List<string> insertionBuffer = new List<string>();
+        private List<string> _insertionBuffer = new List<string>();
+        private List<string> _removalBuffer = new List<string>();
 
-        private List<string> removalBuffer = new List<string>();
+        private int _currentContextLineIndex = -1;
+        private int _lastContextLineIndex = -1;
 
-        private int currentContextLineIndex = -1;
-
-        private int lastContextLineIndex = -1;
-
-        public IEnumerable<string> Merge(IEnumerable<string> source, IEnumerable<string> merge, BaseCodeStyleProvider codeFormatter, out string errorLine)
+        public MergeHandler(BaseCodeStyleProvider codeStyleProvider)
         {
-            errorLine = string.Empty;
-            result = source.ToList();
+            _codeStyleProvider = codeStyleProvider;
+        }
 
-            var documentationEndIndex = merge.SafeIndexOf(merge.FirstOrDefault(m => m.Contains(MacroEndDocumentation)), 0);
+        public MergeResult Merge(IEnumerable<string> source, IEnumerable<string> merge)
+        {
+            _result = source.ToList();
 
-            var diffTrivia = source.FindDiffLeadingTrivia(merge, documentationEndIndex);
+            var documentationEndIndex = merge.SafeIndexOf(merge.FirstOrDefault(m => m.Contains(MergeMacros.MacroEndDocumentation)), 0);
+            var diffTrivia = FindDiffLeadingTrivia(source, merge, documentationEndIndex);
 
             foreach (var mergeLine in merge)
             {
                 // try to find context line
                 if (mergeMode == MergeMode.Context || mergeMode == MergeMode.OptionalContext || mergeMode == MergeMode.Remove)
                 {
-                    if (mergeLine.Contains(codeFormatter.InlineCommentStart + MacroStartGroup + codeFormatter.InlineCommentEnd) && mergeLine.Contains(codeFormatter.InlineCommentStart + MacroEndGroup + codeFormatter.InlineCommentEnd))
+                    if (mergeLine.Contains(_codeStyleProvider.InlineCommentStart + MergeMacros.MacroStartGroup + _codeStyleProvider.InlineCommentEnd)
+                        && mergeLine.Contains(_codeStyleProvider.InlineCommentStart + MergeMacros.MacroEndGroup + _codeStyleProvider.InlineCommentEnd))
                     {
-                        currentContextLineIndex = FindAndModifyContextLine(mergeLine, diffTrivia, codeFormatter);
+                        _currentContextLineIndex = FindAndModifyContextLine(mergeLine, diffTrivia);
                     }
                     else
                     {
-                        currentContextLineIndex = FindContextLine(mergeLine, diffTrivia);
+                        _currentContextLineIndex = FindContextLine(mergeLine, diffTrivia);
                     }
                 }
 
                 // if line is found, add buffer if any
-                if (currentContextLineIndex > -1)
+                if (_currentContextLineIndex > -1)
                 {
-                    var linesAdded = TryAddBufferContent(codeFormatter);
+                    var linesAdded = TryAddBufferContent();
                     var linesRemoved = TryRemoveBufferContent();
 
-                    lastContextLineIndex = currentContextLineIndex + linesAdded - linesRemoved;
+                    _lastContextLineIndex = _currentContextLineIndex + linesAdded - linesRemoved;
 
                     CleanBuffers();
                 }
@@ -88,7 +67,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 // get new merge direction or add to buffer
                 if (IsMergeDirection(mergeLine))
                 {
-                    mergeMode = GetMergeMode(mergeLine, mergeMode, codeFormatter?.CommentSymbol);
+                    mergeMode = GetMergeMode(mergeLine, mergeMode, _codeStyleProvider?.CommentSymbol);
                 }
                 else
                 {
@@ -96,20 +75,24 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                     {
                         case MergeMode.InsertBefore:
                         case MergeMode.Insert:
-                            insertionBuffer.Add(mergeLine.WithLeadingTrivia(diffTrivia));
+                            _insertionBuffer.Add(mergeLine.WithLeadingTrivia(diffTrivia));
                             break;
                         case MergeMode.Remove:
-                            removalBuffer.Add(mergeLine.WithLeadingTrivia(diffTrivia));
+                            _removalBuffer.Add(mergeLine.WithLeadingTrivia(diffTrivia));
                             break;
                         case MergeMode.Context:
                             if (mergeLine == string.Empty)
                             {
-                                insertionBuffer.Add(mergeLine);
+                                _insertionBuffer.Add(mergeLine);
                             }
-                            else if (currentContextLineIndex == -1)
+                            else if (_currentContextLineIndex == -1)
                             {
-                                errorLine = mergeLine;
-                                return source;
+                                return new MergeResult()
+                                {
+                                    Success = false,
+                                    ErrorLine = mergeLine,
+                                    Result = source,
+                                };
                             }
 
                             break;
@@ -118,37 +101,42 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             }
 
             // Add remaining buffers before finishing
-            TryAddBufferContent(codeFormatter);
+            TryAddBufferContent();
             TryRemoveBufferContent();
 
-            return result;
-        }
+            return new MergeResult()
+            {
+                Success = true,
+                ErrorLine = string.Empty,
+                Result = _result,
+            };
+    }
 
         private void CleanBuffers()
         {
             insertBefore = false;
-            insertionBuffer.Clear();
-            removalBuffer.Clear();
+            _insertionBuffer.Clear();
+            _removalBuffer.Clear();
         }
 
-        private int TryAddBufferContent(BaseCodeStyleProvider codeFormatter)
+        private int TryAddBufferContent()
         {
-            if (insertionBuffer.Any() && !BlockExists(insertionBuffer, result, lastContextLineIndex))
+            if (_insertionBuffer.Any() && !BlockExists(_insertionBuffer, _result, _lastContextLineIndex))
             {
-                var insertIndex = GetInsertLineIndex(currentContextLineIndex, lastContextLineIndex, insertBefore);
+                var insertIndex = GetInsertLineIndex(_currentContextLineIndex, _lastContextLineIndex, insertBefore);
 
-                if (insertIndex <= result.Count && insertIndex > -1)
+                if (insertIndex <= _result.Count && insertIndex > -1)
                 {
-                    var lastContextLine = insertIndex != 0 ? result[insertIndex - 1] : string.Empty;
-                    var nextContextLine = insertIndex != result.Count() ? result[insertIndex] : string.Empty;
+                    var lastContextLine = insertIndex != 0 ? _result[insertIndex - 1] : string.Empty;
+                    var nextContextLine = insertIndex != _result.Count() ? _result[insertIndex] : string.Empty;
 
-                    if (codeFormatter != null)
+                    if (_codeStyleProvider != null)
                     {
-                        insertionBuffer = codeFormatter.AdaptInsertionBlock(insertionBuffer, lastContextLine, nextContextLine);
+                        _insertionBuffer = _codeStyleProvider.AdaptInsertionBlock(_insertionBuffer, lastContextLine, nextContextLine);
                     }
 
-                    result.InsertRange(insertIndex, insertionBuffer);
-                    return insertionBuffer.Count;
+                    _result.InsertRange(insertIndex, _insertionBuffer);
+                    return _insertionBuffer.Count;
                 }
             }
 
@@ -157,13 +145,13 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         private int TryRemoveBufferContent()
         {
-            if (removalBuffer.Any() && BlockExists(removalBuffer, result, lastContextLineIndex))
+            if (_removalBuffer.Any() && BlockExists(_removalBuffer, _result, _lastContextLineIndex))
             {
-                var index = result.SafeIndexOf(removalBuffer[0], lastContextLineIndex, false);
-                if (index <= currentContextLineIndex && index > -1)
+                var index = _result.SafeIndexOf(_removalBuffer[0], _lastContextLineIndex, false);
+                if (index <= _currentContextLineIndex && index > -1)
                 {
-                    result.RemoveRange(index, removalBuffer.Count);
-                    return removalBuffer.Count;
+                    _result.RemoveRange(index, _removalBuffer.Count);
+                    return _removalBuffer.Count;
                 }
             }
 
@@ -172,16 +160,16 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         private static bool IsMergeDirection(string mergeLine)
         {
-            return macros.Any(c => mergeLine.Contains(c));
+            return MergeMacros.Macros.Any(c => mergeLine.Contains(c));
         }
 
         private MergeMode GetMergeMode(string mergeLine, MergeMode current, string commentSymbol)
         {
-            if (mergeLine.Trim().StartsWith(commentSymbol + MacroBeforeMode))
+            if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroBeforeMode))
             {
                 return MergeMode.InsertBefore;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroStartGroup))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartGroup))
             {
                 if (current == MergeMode.InsertBefore)
                 {
@@ -193,31 +181,31 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                     return MergeMode.Insert;
                 }
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroEndGroup))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndGroup))
             {
                 return MergeMode.Context;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroStartDocumentation))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartDocumentation))
             {
                 return MergeMode.Documentation;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroEndDocumentation))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndDocumentation))
             {
                 return MergeMode.Context;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroStartDelete))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartDelete))
             {
                 return MergeMode.Remove;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroEndDelete))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndDelete))
             {
                 return MergeMode.Context;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroStartOptionalContext))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartOptionalContext))
             {
                 return MergeMode.OptionalContext;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MacroEndOptionalContext))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndOptionalContext))
             {
                 return MergeMode.Context;
             }
@@ -239,13 +227,13 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         private int FindContextLine(string mergeLine, int diffTrivia)
         {
-            return result.SafeIndexOf(mergeLine.WithLeadingTrivia(diffTrivia), lastContextLineIndex);
+            return _result.SafeIndexOf(mergeLine.WithLeadingTrivia(diffTrivia), _lastContextLineIndex);
         }
 
-        private int FindAndModifyContextLine(string mergeLine, int diffTrivia, BaseCodeStyleProvider formatter)
+        private int FindAndModifyContextLine(string mergeLine, int diffTrivia)
         {
-            var macroInlineAdditionStart = formatter.InlineCommentStart + MacroStartGroup + formatter.InlineCommentEnd;
-            var macroInlineAdditionEnd = formatter.InlineCommentStart + MacroEndGroup + formatter.InlineCommentEnd;
+            var macroInlineAdditionStart = _codeStyleProvider.InlineCommentStart + MergeMacros.MacroStartGroup + _codeStyleProvider.InlineCommentEnd;
+            var macroInlineAdditionEnd = _codeStyleProvider.InlineCommentStart + MergeMacros.MacroEndGroup + _codeStyleProvider.InlineCommentEnd;
 
             var mergeLineStart = mergeLine.Substring(0, mergeLine.IndexOf(macroInlineAdditionStart));
             var mergeLineEnd = mergeLine.Substring(mergeLine.IndexOf(macroInlineAdditionEnd) + macroInlineAdditionEnd.Length, mergeLine.Length - mergeLine.IndexOf(macroInlineAdditionEnd) - macroInlineAdditionEnd.Length);
@@ -254,28 +242,28 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             var additionEndIndex = mergeLine.IndexOf(macroInlineAdditionEnd);
 
             var addition = mergeLine.Substring(additionStartIndex, additionEndIndex - additionStartIndex);
-            var lineIndex = result.SafeIndexOf(mergeLineStart.WithLeadingTrivia(diffTrivia), lastContextLineIndex, true, true);
-            var insertIndex = result[lineIndex].Length;
+            var lineIndex = _result.SafeIndexOf(mergeLineStart.WithLeadingTrivia(diffTrivia), _lastContextLineIndex, true, true);
+            var insertIndex = _result[lineIndex].Length;
 
-            if (lineIndex != -1 && !result[lineIndex].Contains(addition))
+            if (lineIndex != -1 && !_result[lineIndex].Contains(addition))
             {
-                if (formatter != null)
+                if (_codeStyleProvider != null)
                 {
                     var nextChar = string.Empty;
 
                     if (mergeLineEnd != string.Empty)
                     {
-                        insertIndex = result[lineIndex].IndexOf(mergeLineEnd);
+                        insertIndex = _result[lineIndex].IndexOf(mergeLineEnd);
                         nextChar = mergeLineEnd.Substring(1);
                     }
 
                     // Get complete line content until insert index
-                    var lineStart = insertIndex > 0 ? result[lineIndex].Substring(0, insertIndex) : string.Empty;
+                    var lineStart = insertIndex > 0 ? _result[lineIndex].Substring(0, insertIndex) : string.Empty;
 
-                    addition = formatter.AdaptInlineAddition(addition, lineStart, mergeLineEnd);
+                    addition = _codeStyleProvider.AdaptInlineAddition(addition, lineStart, mergeLineEnd);
                 }
 
-                result[lineIndex] = result[lineIndex].Insert(insertIndex, addition);
+                _result[lineIndex] = _result[lineIndex].Insert(insertIndex, addition);
             }
 
             return lineIndex;
@@ -286,6 +274,24 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             return blockBuffer
                         .Where(b => !string.IsNullOrWhiteSpace(b))
                         .All(b => target.SafeIndexOf(b, skip) > -1);
+        }
+
+        public static int FindDiffLeadingTrivia(IEnumerable<string> target, IEnumerable<string> merge, int startIndex)
+        {
+            if (!target.Any() || !merge.Any())
+            {
+                return 0;
+            }
+
+            var firstMerge = merge.Skip(startIndex + 1).First(m => !string.IsNullOrEmpty(m));
+            var firstTarget = target.FirstOrDefault(t => t.Trim().Equals(firstMerge.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (firstTarget == null)
+            {
+                return 0;
+            }
+
+            return firstTarget.GetLeadingTrivia() - firstMerge.GetLeadingTrivia();
         }
     }
 }

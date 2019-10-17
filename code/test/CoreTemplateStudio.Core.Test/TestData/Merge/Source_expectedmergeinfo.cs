@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Navigation;
 //End of block
 namespace TestData
 {
-    sealed partial class App : Application
+    sealed partial class App : /*Block to be included*/ITestInterface/*End of block*/
     {
 //Block to be included
         //PROPERTY DEFINITION
