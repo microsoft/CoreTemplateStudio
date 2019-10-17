@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
-
+using Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.PostActions.Catalog
@@ -38,9 +39,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "{",
                 "}",
             };
-            var result = source.Merge(merge, out var errorLine);
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -72,9 +74,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    // Merge1",
                 "}",
             };
-            var result = source.Merge(merge1, out string errorLine);
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -111,7 +114,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "//}--}",
                 "}",
             };
-            var expected = new[]
+            var expected = new List<string>()
             {
                 "public void SomeMethod()",
                 "{",
@@ -120,10 +123,13 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    // Merge1",
                 "}",
             };
-            var result = source.Merge(merge1, out string errorLine).ToList();
-            result = result.Merge(merge2, out errorLine).ToList();
+            var mergeHandler = new MergeHandler(new CSharpStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            Assert.Equal(expected, result);
+            var mergeHandler2 = new MergeHandler(new CSharpStyleProvider());
+            result = mergeHandler2.Merge(result.Result, merge2);
+
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -150,9 +156,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    yield break;",
                 "}",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -179,9 +186,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "{",
                 "}",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -206,9 +214,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "Public Sub SomeMethod()",
                 "End Sub",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -238,9 +247,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "End Sub",
             };
 
-            var result = source.Merge(merge1, out string errorLine).ToList();
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -282,10 +292,15 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    ' Merge1",
                 "End Sub",
             };
-            var result = source.Merge(merge1, out string errorLine).ToList();
-            result = result.Merge(merge2, out errorLine).ToList();
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge1);
 
-            Assert.Equal(expected, result);
+            var mergeHandler2 = new MergeHandler(new VBStyleProvider());
+            result = mergeHandler2.Merge(result.Result, merge2);
+
+            Assert.Equal(expected, result.Result);
+            Assert.True(result.Success);
+            Assert.Equal(string.Empty, result.ErrorLine);
         }
 
         [Fact]
@@ -309,9 +324,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "    Exit Sub",
                 "End Sub",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
         }
 
         [Fact]
@@ -335,30 +351,12 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 "Public Sub SomeMethod()",
                 "End Sub",
             };
-            var result = source.Merge(merge, out string errorLine);
+            var mergeHandler = new MergeHandler(new VBStyleProvider());
+            var result = mergeHandler.Merge(source, merge);
 
-            Assert.Equal(expected, result);
-        }
-
-        [Fact]
-        public void RemovedRemovals()
-        {
-            var merge = new[]
-            {
-                "Public Sub SomeMethod()",
-                "'{--{",
-                "    Exit Sub",
-                "'}--}",
-                "End Sub",
-            };
-            var expected = new[]
-            {
-                "Public Sub SomeMethod()",
-                "End Sub",
-            };
-            var result = merge.RemoveRemovals();
-
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Result);
+            Assert.True(result.Success);
+            Assert.Equal(string.Empty, result.ErrorLine);
         }
     }
 }

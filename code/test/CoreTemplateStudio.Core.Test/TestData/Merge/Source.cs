@@ -26,7 +26,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TestData
 {
-
     //THIS COMMENT SHOULD BE REMOVED
 
     /// <summary>
@@ -52,7 +51,7 @@ namespace TestData
         /// </summary>
         /// <param name = "e">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
-        {   
+        {
             Frame rootFrame = Window.Current.Content as Frame;
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active

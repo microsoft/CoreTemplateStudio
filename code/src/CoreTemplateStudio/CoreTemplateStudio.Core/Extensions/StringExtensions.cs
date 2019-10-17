@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -50,6 +51,28 @@ namespace Microsoft.Templates.Core
         public static bool IsMultiValue(this string value)
         {
             return value.GetMultiValue().Length > 1;
+        }
+
+        public static int GetLeadingTrivia(this string statement)
+        {
+            return statement.TakeWhile(char.IsWhiteSpace).Count();
+        }
+
+        public static string WithLeadingTrivia(this string statement, int triviaCount)
+        {
+            if (triviaCount < 1)
+            {
+                return statement;
+            }
+            else
+            {
+                return string.Concat(new string(' ', triviaCount), statement);
+            }
+        }
+
+        public static bool Is(this string line, string character)
+        {
+            return line.Trim().Equals(character);
         }
     }
 }

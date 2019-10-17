@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
+using Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders;
 using Microsoft.Templates.Core.Resources;
 using Microsoft.Templates.Core.Test.TestFakes;
 
@@ -39,7 +40,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 DestinationPath = path,
             };
 
-            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, true));
+            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), true));
             mergePostAction.Execute();
 
             var result = File.ReadAllText(sourceFile).Replace("\r\n", string.Empty).Replace("\n", string.Empty);
@@ -62,7 +63,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 DestinationPath = Environment.CurrentDirectory,
             };
 
-            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, true));
+            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), true));
 
             var result = File.ReadAllText(sourceFile);
 
@@ -79,7 +80,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var templateName = "Test";
             var mergeFile = Path.GetFullPath(@".\TestData\Merge\NoSource_postaction.cs");
 
-            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, true));
+            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), true));
 
             Exception ex = Assert.Throws<Exception>(() => mergePostAction.Execute());
 
@@ -107,7 +108,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 DestinationPath = destinationPath,
             };
 
-            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, false));
+            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), false));
 
             var result = File.ReadAllText(Path.Combine(outputPath, sourceFile));
 
@@ -152,7 +153,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 DestinationPath = destinationPath,
             };
 
-            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, false));
+            var mergePostAction = new MergePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), false));
 
             mergePostAction.Execute();
             var expected = new FailedMergePostActionInfo(
