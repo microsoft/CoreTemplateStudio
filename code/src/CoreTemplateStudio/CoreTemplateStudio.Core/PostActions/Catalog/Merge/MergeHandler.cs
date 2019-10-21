@@ -42,8 +42,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 // try to find context line
                 if (mergeMode == MergeMode.Context || mergeMode == MergeMode.OptionalContext || mergeMode == MergeMode.Remove)
                 {
-                    if (mergeLine.Contains(_codeStyleProvider.InlineCommentStart + MergeMacros.MacroStartGroup + _codeStyleProvider.InlineCommentEnd)
-                        && mergeLine.Contains(_codeStyleProvider.InlineCommentStart + MergeMacros.MacroEndGroup + _codeStyleProvider.InlineCommentEnd))
+                    if (LineHasInlineAdditions(mergeLine))
                     {
                         _currentContextLineIndex = FindAndModifyContextLine(mergeLine, diffTrivia);
                     }
@@ -111,6 +110,12 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 Result = _result,
             };
     }
+
+        private bool LineHasInlineAdditions(string mergeLine)
+        {
+            return mergeLine.Contains(_codeStyleProvider.InlineCommentStart + MergeMacros.MacroStartGroup + _codeStyleProvider.InlineCommentEnd)
+                                    && mergeLine.Contains(_codeStyleProvider.InlineCommentStart + MergeMacros.MacroEndGroup + _codeStyleProvider.InlineCommentEnd);
+        }
 
         private void CleanBuffers()
         {
@@ -276,7 +281,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                         .All(b => target.SafeIndexOf(b, skip) > -1);
         }
 
-        public static int FindDiffLeadingTrivia(IEnumerable<string> target, IEnumerable<string> merge, int startIndex)
+        public int FindDiffLeadingTrivia(IEnumerable<string> target, IEnumerable<string> merge, int startIndex)
         {
             if (!target.Any() || !merge.Any())
             {
@@ -284,7 +289,16 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             }
 
             var firstMerge = merge.Skip(startIndex + 1).First(m => !string.IsNullOrEmpty(m));
-            var firstTarget = target.FirstOrDefault(t => t.Trim().Equals(firstMerge.Trim(), StringComparison.OrdinalIgnoreCase));
+            string firstTarget = null;
+            if (LineHasInlineAdditions(firstMerge))
+            {
+                var contextStart = firstMerge.Substring(0, firstMerge.IndexOf(_codeStyleProvider.InlineCommentStart));
+                firstTarget = target.FirstOrDefault(t => t.Trim().StartsWith(contextStart.Trim(), StringComparison.OrdinalIgnoreCase));
+            }
+            else
+            {
+                firstTarget = target.FirstOrDefault(t => t.Trim().Equals(firstMerge.Trim(), StringComparison.OrdinalIgnoreCase));
+            }
 
             if (firstTarget == null)
             {
