@@ -158,7 +158,7 @@
     <Compile Include="PostActions\Catalog\AddItemToContextPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\FakeCreationPath.cs" />
     <Compile Include="PostActions\Catalog\FakeTemplateDefinedPostAction.cs" />
-    <Compile Include="PostActions\Catalog\HandleRemovalsTest.cs" />
+    <Compile Include="PostActions\Catalog\MergeHandlerTest.cs" />
     <Compile Include="PostActions\Catalog\MergeTest.cs" />
     <Compile Include="PostActions\Catalog\SortImportsTest.cs" />
     <Compile Include="PostActions\Catalog\SortUsingsTest.cs" />
