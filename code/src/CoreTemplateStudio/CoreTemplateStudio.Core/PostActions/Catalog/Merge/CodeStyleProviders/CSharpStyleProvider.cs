@@ -39,7 +39,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
                 insertionBuffer.RemoveAt(0);
             }
 
-            if (LastLineHasClosingBrace(lastContextLine) && !InsertionStartsWithBlankLine(insertionBuffer))
+            if (LastLineHasClosingBrace(lastContextLine) && !InsertionStartsWithBlankLine(insertionBuffer) && !InsertionStartsWithElseLine(insertionBuffer))
             {
                 insertionBuffer.Insert(0, string.Empty);
             }
@@ -83,6 +83,11 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
         private static bool InsertionStartsWithBlankLine(List<string> insertionBuffer)
         {
             return insertionBuffer.First().Trim() == string.Empty;
+        }
+
+        private static bool InsertionStartsWithElseLine(List<string> insertionBuffer)
+        {
+            return insertionBuffer.First().Trim().StartsWith("else");
         }
 
         private static bool LastLineHasOpeningBrace(string lastContextLine)
