@@ -59,6 +59,12 @@ namespace Microsoft.Templates.Core.Gen
             ToolBox.Repo.CurrentLanguage = language;
         }
 
+        public static void SetCurrentPlatform(string platform)
+        {
+            CurrentPlatform = platform;
+            ToolBox.Repo.CurrentPlatform = platform;
+        }
+
         public static void Bootstrap(TemplatesSource source, GenShell shell, Version wizardVersion, string platform, string language)
         {
             try
