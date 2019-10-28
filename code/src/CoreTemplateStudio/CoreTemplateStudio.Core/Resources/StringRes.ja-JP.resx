@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>'{0}' テストを作成しています...</value>
+    <value>'{0}' 機能をテストしています...</value>
     <comment>Status bar message generating testing. {0}: Testing name</comment>
   </data>
   <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
@@ -126,7 +126,7 @@
     <comment>Status bar message generating service. {0}: Service name</comment>
   </data>
   <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>ファイル '{0}' には '{1}' のエンコードがあり、ファイル '{2}' には '{3}' のエンコーディングが含まれています。</value>
+    <value>ファイル `{0}` にはエンコーディング `{1}` が適用されており、ファイル `{2}` にはエンコーディング`{3}` が適用されています。両方のエンコーディングが同じであることを確認してください。</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
   <data name="AdditionalMessageString" xml:space="preserve">

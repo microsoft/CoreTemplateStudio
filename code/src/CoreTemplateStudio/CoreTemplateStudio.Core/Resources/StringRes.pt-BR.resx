@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>Criação de testes '{0}'...</value>
+    <value>Criando teste '{0}'...</value>
     <comment>Status bar message generating testing. {0}: Testing name</comment>
   </data>
   <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>Criação de serviço '{0}'...</value>
+    <value>Criando serviço '{0}'...</value>
     <comment>Status bar message generating service. {0}: Service name</comment>
   </data>
   <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>O arquivo '{0}' tem a codificação '{1}' enquanto o arquivo '{2}' tem a codificação '{3}' por favor, certifique-se de que ambas as codificações sejam as mesmas.</value>
+    <value>O arquivo `{0}` tem a codificação `{1}`, enquanto o arquivo `{2}` tem a codificação `{3}`. Verifique se as duas codificações são iguais.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
   <data name="AdditionalMessageString" xml:space="preserve">

@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>正在创建"{0}"测试...</value>
+    <value>正在创建“{0}”测试...</value>
     <comment>Status bar message generating testing. {0}: Testing name</comment>
   </data>
   <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>正在创建"{0}"服务...</value>
+    <value>正在创建“{0}”服务...</value>
     <comment>Status bar message generating service. {0}: Service name</comment>
   </data>
   <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>文件'{0}'具有编码'{1}',而文件'{2}'具有编码'{3}',请确保两种编码相同。</value>
+    <value>文件'{0}'的编码为 '{1}'，而文件'{2}'的编码为 '{3}'，请确保两个编码相同。</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
   <data name="AdditionalMessageString" xml:space="preserve">
