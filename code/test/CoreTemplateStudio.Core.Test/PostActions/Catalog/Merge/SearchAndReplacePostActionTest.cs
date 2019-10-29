@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.PostActions.Catalog.Merge;
+using Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders;
 using Microsoft.Templates.Core.Resources;
 using Microsoft.Templates.Core.Test.TestFakes;
 
@@ -39,7 +40,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 DestinationPath = path,
             };
 
-            var mergePostAction = new SearchAndReplacePostAction(templateName, new MergeConfiguration(mergeFile, true));
+            var mergePostAction = new SearchAndReplacePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), true));
             mergePostAction.Execute();
 
             var result = File.ReadAllText(sourceFile);
@@ -55,7 +56,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
             var templateName = "Test";
             var mergeFile = Path.GetFullPath(@".\TestData\SearchReplace\NoSource_searchreplace.cs");
 
-            var mergePostAction = new SearchAndReplacePostAction(templateName, new MergeConfiguration(mergeFile, true));
+            var mergePostAction = new SearchAndReplacePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), true));
 
             Exception ex = Assert.Throws<Exception>(() => mergePostAction.Execute());
 
@@ -80,7 +81,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 DestinationPath = Path.GetFullPath(@".\Destination\Project"),
             };
 
-            var mergePostAction = new SearchAndReplacePostAction(templateName, new MergeConfiguration(mergeFile, false));
+            var mergePostAction = new SearchAndReplacePostAction(templateName, new MergeConfiguration(mergeFile, new CSharpStyleProvider(), false));
 
             mergePostAction.Execute();
             var expected = new FailedMergePostActionInfo(

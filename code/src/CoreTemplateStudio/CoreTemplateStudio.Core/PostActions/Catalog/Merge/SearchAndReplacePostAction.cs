@@ -78,6 +78,11 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             }
 
             var result = string.Join(Environment.NewLine, source);
+            if (!result.Contains(search.First().Trim()) && !result.Contains(replace.First().Trim()))
+            {
+                HandleLineNotFound(originalFilePath, search.First());
+            }
+
             result = result.Replace(string.Join(Environment.NewLine, search), string.Join(Environment.NewLine, replace));
 
             File.WriteAllLines(originalFilePath, result.Split(new[] { Environment.NewLine }, StringSplitOptions.None), originalEncoding);
