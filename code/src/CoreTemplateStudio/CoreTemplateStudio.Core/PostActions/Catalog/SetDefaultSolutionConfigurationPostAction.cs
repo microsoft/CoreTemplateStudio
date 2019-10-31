@@ -12,11 +12,10 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
     {
         private const string Configuration = "Debug";
         private const string Platform = "x86";
-        private readonly string uwpProjectGuid = "A5A43C5B-DE2A-4C0C-9213-0A381AF9435A";
 
         internal override void ExecuteInternal()
         {
-            GenContext.ToolBox.Shell.SetDefaultSolutionConfiguration(Configuration, Platform, uwpProjectGuid);
+            GenContext.ToolBox.Shell.SetDefaultSolutionConfiguration(Configuration, Platform, GenContext.Current.ProjectName);
         }
     }
 }
