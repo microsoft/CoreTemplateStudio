@@ -20,7 +20,7 @@ namespace Microsoft.Templates.Core.Gen
 
         public abstract string GetActiveProjectLanguage();
 
-        public abstract void SetDefaultSolutionConfiguration(string configurationName, string platformName, string projectGuid);
+        public abstract void SetDefaultSolutionConfiguration(string configurationName, string platformName, string projectName);
 
         public abstract void ShowStatusBarMessage(string message);
 
