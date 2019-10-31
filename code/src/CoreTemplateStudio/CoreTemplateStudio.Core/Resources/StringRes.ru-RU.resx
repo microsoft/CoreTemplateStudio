@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>Создание тестирования '{0}'...</value>
+    <value>Создание тестирования "{0}"…</value>
     <comment>Status bar message generating testing. {0}: Testing name</comment>
   </data>
   <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>Создание сервиса '{0}'...</value>
+    <value>Создание службы "{0}"…</value>
     <comment>Status bar message generating service. {0}: Service name</comment>
   </data>
   <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>Файл '{0}' имеет кодирование '{1}', в то время как файл '{2}' имеет кодирование '{3}', пожалуйста, убедитесь, что оба кодирования одинаковы.</value>
+    <value>Кодировка файла "{0}" — "{1}", а файла "{2}" — "{3}". Файлы должны иметь одинаковую кодировку.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
   <data name="AdditionalMessageString" xml:space="preserve">

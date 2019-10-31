@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
-    <value>'{0}' 테스트 만들기...</value>
+    <value>'{0}' 테스트 생성 중...</value>
     <comment>Status bar message generating testing. {0}: Testing name</comment>
   </data>
   <data name="StatusBarGeneratingServiceMessage" xml:space="preserve">
-    <value>'{0}' 서비스 만들기...</value>
+    <value>'{0}' 서비스 생성 중...</value>
     <comment>Status bar message generating service. {0}: Service name</comment>
   </data>
   <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>파일 '{0}'에는 '{1}'을 인코딩하고 파일 '{2}'에는 '{3}'가 인코딩되어 두 인코딩이 동일한지 확인하십시오.</value>
+    <value>파일 `{0}`에는 인코딩 `{1}`(이)가 있으며 파일 `{2}`에는 인코딩 `{3}`(이)가 있습니다. 두 인코딩이 같은지 확인하십시오.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
   <data name="AdditionalMessageString" xml:space="preserve">

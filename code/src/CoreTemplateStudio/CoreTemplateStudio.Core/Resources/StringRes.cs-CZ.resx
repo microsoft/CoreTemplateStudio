@@ -126,7 +126,7 @@
     <comment>Status bar message generating service. {0}: Service name</comment>
   </data>
   <data name="FailedMergePostActionMismatchedEncoding" xml:space="preserve">
-    <value>Soubor {0} má kódování {1}, zatímco soubor {2} má kódování {3}, ujistěte se prosím, že obě kódování jsou stejná.</value>
+    <value>Soubor {0} používá kódování {1}, zatímco soubor {2} používá kódování {3}. Zajistěte, aby oba soubory používaly stejné kódování.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
   <data name="AdditionalMessageString" xml:space="preserve">
