@@ -38,11 +38,6 @@ namespace Microsoft.Templates.Core.Test.TestFakes
             return TestCertificateService.Instance.CreateCertificate(publisherName);
         }
 
-        public override string GetActiveProjectGuid()
-        {
-            return Guid.Empty.ToString();
-        }
-
         public override string GetActiveProjectLanguage()
         {
             return string.Empty;
@@ -68,7 +63,7 @@ namespace Microsoft.Templates.Core.Test.TestFakes
             return Guid.Empty.ToString();
         }
 
-        public override Guid GetVsProjectId()
+        public override Guid GetProjectGuidByName(string projectName)
         {
             return Guid.Empty;
         }

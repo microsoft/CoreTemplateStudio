@@ -44,7 +44,7 @@ namespace Microsoft.Templates.Core.Gen
 
             // TODO: Adapt telemetry to properly handle backend
             string appFx = userSelection.FrontEndFramework + (string.IsNullOrEmpty(userSelection.BackEndFramework) ? string.Empty : userSelection.BackEndFramework);
-            TrackTelemetry(templateType, genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, appFx, userSelection.Platform);
+            TrackTelemetry(templateType, genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, appFx, userSelection.Platform, userSelection.Platform);
         }
 
         public void UnsafeFinishGeneration(UserSelection userSelection)
@@ -204,17 +204,17 @@ namespace Microsoft.Templates.Core.Gen
             return File.ReadAllLines(file).SequenceEqual(File.ReadAllLines(destFilePath));
         }
 
-        private static void TrackTelemetry(TemplateType templateType, IEnumerable<GenInfo> genItems, Dictionary<string, TemplateCreationResult> genResults, double timeSpent, string appProjectType, string appFx, string appPlatform)
+        private static void TrackTelemetry(TemplateType templateType, IEnumerable<GenInfo> genItems, Dictionary<string, TemplateCreationResult> genResults, double timeSpent, string appProjectType, string appFx, string appPlatform, string appLanguage)
         {
             try
             {
                 var genItemsTelemetryData = new GenItemsTelemetryData(genItems);
-                AppHealth.Current.Telemetry.TrackNewItemAsync(templateType, appProjectType, appFx, appPlatform, GenContext.ToolBox.Shell.GetVsProjectId(), genItemsTelemetryData, timeSpent).FireAndForget();
+                AppHealth.Current.Telemetry.TrackNewItemAsync(templateType, appProjectType, appFx, appPlatform, appLanguage, GenContext.ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName), genItemsTelemetryData, timeSpent).FireAndForget();
 
                 foreach (var genInfo in genItems.Where(g => g.Template != null))
                 {
                     string resultsKey = $"{genInfo.Template.Identity}_{genInfo.Name}";
-                    AppHealth.Current.Telemetry.TrackItemGenAsync(genInfo.Template, GenSourceEnum.NewItem, appProjectType, appFx, genResults[resultsKey]).FireAndForget();
+                    AppHealth.Current.Telemetry.TrackItemGenAsync(genInfo.Template, GenSourceEnum.NewItem, appProjectType, appFx, appPlatform, genResults[resultsKey]).FireAndForget();
                 }
             }
             catch (Exception ex)

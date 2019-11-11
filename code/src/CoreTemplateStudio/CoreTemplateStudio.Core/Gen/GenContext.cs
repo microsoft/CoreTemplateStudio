@@ -103,7 +103,7 @@ namespace Microsoft.Templates.Core.Gen
 
         public static string GetTempGenerationPath(string projectName)
         {
-            string projectGuid = ToolBox.Shell.GetVsProjectId().ToString();
+            string projectGuid = ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName).ToString();
             var projectTempFolder = Path.Combine(_tempGenerationFolder, projectGuid);
 
             Fs.EnsureFolder(projectTempFolder);

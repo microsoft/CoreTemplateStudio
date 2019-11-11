@@ -72,7 +72,7 @@ namespace Microsoft.Templates.Core.Diagnostics
             await TrackProjectAsync(telemetryStatus, template.GetTelemetryName(), appProjectType, appFx, appPlatform, vsProjectId, language, genItemsTelemetryData, timeSpent, performanceCounters, result.Status, result.Message);
         }
 
-        public async Task TrackItemGenAsync(ITemplateInfo template, GenSourceEnum genSource, string appProjectType, string appFx, TemplateCreationResult result)
+        public async Task TrackItemGenAsync(ITemplateInfo template, GenSourceEnum genSource, string appProjectType, string appFx, string appPlatform, TemplateCreationResult result)
         {
             if (template == null)
             {
@@ -89,16 +89,16 @@ namespace Microsoft.Templates.Core.Diagnostics
                 switch (template.GetTemplateType())
                 {
                     case TemplateType.Page:
-                        await TrackItemGenAsync(TelemetryEvents.PageGen, template, genSource, appProjectType, appFx, result);
+                        await TrackItemGenAsync(TelemetryEvents.PageGen, template, genSource, appProjectType, appFx, appPlatform, result);
                         break;
                     case TemplateType.Feature:
-                        await TrackItemGenAsync(TelemetryEvents.FeatureGen, template, genSource, appProjectType, appFx, result);
+                        await TrackItemGenAsync(TelemetryEvents.FeatureGen, template, genSource, appProjectType, appFx, appPlatform, result);
                         break;
                     case TemplateType.Service:
-                        await TrackItemGenAsync(TelemetryEvents.ServiceGen, template, genSource, appProjectType, appFx, result);
+                        await TrackItemGenAsync(TelemetryEvents.ServiceGen, template, genSource, appProjectType, appFx, appPlatform, result);
                         break;
                     case TemplateType.Testing:
-                        await TrackItemGenAsync(TelemetryEvents.TestingGen, template, genSource, appProjectType, appFx, result);
+                        await TrackItemGenAsync(TelemetryEvents.TestingGen, template, genSource, appProjectType, appFx, appPlatform, result);
                         break;
                     case TemplateType.Unspecified:
                         break;
@@ -106,7 +106,7 @@ namespace Microsoft.Templates.Core.Diagnostics
             }
         }
 
-        public async Task TrackNewItemAsync(TemplateType templateType, string appType, string appFx, string appPlatform, Guid vsProjectId, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
+        public async Task TrackNewItemAsync(TemplateType templateType, string appType, string appFx, string appPlatform, string language, Guid vsProjectId, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
         {
             var itemType = templateType.GetNewItemType();
             var itemTypeString = itemType != null ? itemType.ToString() : string.Empty;
@@ -119,6 +119,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.GenEngineMessage, message },
                 { TelemetryProperties.EventName, TelemetryEvents.NewItemGen },
                 { TelemetryProperties.VisualStudioActiveProjectGuid, vsProjectId.ToString() },
+                { TelemetryProperties.Language, language },
                 { TelemetryProperties.VsProjectCategory, appPlatform },
                 { TelemetryProperties.NewItemType, itemTypeString },
             };
@@ -222,25 +223,26 @@ namespace Microsoft.Templates.Core.Diagnostics
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.ProjectGen, properties, metrics).ConfigureAwait(false);
         }
 
-        private async Task TrackItemGenAsync(string eventToTrack, ITemplateInfo template, GenSourceEnum genSource, string appProjectType, string appFx, TemplateCreationResult result)
+        private async Task TrackItemGenAsync(string eventToTrack, ITemplateInfo template, GenSourceEnum genSource, string appProjectType, string appFx, string appPlatform, TemplateCreationResult result)
         {
             GenStatusEnum telemetryStatus = result.Status == CreationResultStatus.Success ? GenStatusEnum.Completed : GenStatusEnum.Error;
 
-            await TrackItemGenAsync(eventToTrack, telemetryStatus, appProjectType, appFx, template.GetTelemetryName(), genSource, result.Status, result.Message);
+            await TrackItemGenAsync(eventToTrack, telemetryStatus, appProjectType, appFx, appPlatform, template.GetTelemetryName(), genSource, result.Status, result.Message);
         }
 
-        private async Task TrackItemGenAsync(string eventToTrack, GenStatusEnum status, string appType, string pageFx, string templateName, GenSourceEnum genSource, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
+        private async Task TrackItemGenAsync(string eventToTrack, GenStatusEnum status, string appType, string appFx, string appPlatform, string templateName, GenSourceEnum genSource, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
         {
             var properties = new Dictionary<string, string>
             {
                 { TelemetryProperties.Status, status.ToString() },
-                { TelemetryProperties.Framework, pageFx },
+                { TelemetryProperties.Framework, appFx },
                 { TelemetryProperties.TemplateName, templateName },
                 { TelemetryProperties.GenEngineStatus, genStatus.ToString() },
                 { TelemetryProperties.GenEngineMessage, message },
                 { TelemetryProperties.EventName, eventToTrack },
                 { TelemetryProperties.GenSource, genSource.ToString() },
                 { TelemetryProperties.ProjectType, appType },
+                { TelemetryProperties.VsProjectCategory, appPlatform },
             };
 
             await TelemetryService.Current.TrackEventAsync(eventToTrack, properties).ConfigureAwait(false);
