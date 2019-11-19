@@ -33,7 +33,7 @@ Please use [GitHub issues](https://github.com/Microsoft/CoreTemplateStudio/issue
 
 If you have specific feature requests or would like to vote on what others are recommending, please go to the [GitHub issues](https://github.com/Microsoft/CoreTemplateStudio/issues) section as well. We would love to see what you are thinking.
 
-This project is a shared project and will change based on the needs of WindowsTemplateStudio. You can check out their [roadmap](https://github.com/Microsoft/WindowsTemplateStudio/tree/dev/docs/roadmap.md) for more information.
+This project is a shared project and will change based on the needs of WindowsTemplateStudio. You can check out their [roadmap](https://github.com/microsoft/WindowsTemplateStudio/blob/dev/docs/roadmap.md) for more information.
 
 ## Reporting Security Issues
 
