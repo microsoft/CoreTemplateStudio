@@ -81,6 +81,9 @@ namespace Microsoft.Templates.Core
             if (!_cts.Token.IsCancellationRequested)
             {
                 await Sync.EnsureContentAsync(force, _cts.Token);
+
+                GetNamingConfigs();
+
                 if (!_cts.Token.IsCancellationRequested)
                 {
                     await Sync.RefreshTemplateCacheAsync(force);
@@ -88,8 +91,6 @@ namespace Microsoft.Templates.Core
 
                 Sync.CheckForWizardUpdates();
             }
-
-            GetNamingConfigs();
         }
 
         public async Task RefreshAsync(bool force = false)
