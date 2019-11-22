@@ -12,6 +12,7 @@ using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Template;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Naming;
 using Microsoft.Templates.Core.PostActions;
 using Microsoft.Templates.Core.Resources;
 using Microsoft.Templates.Core.Templates;
@@ -153,6 +154,19 @@ namespace Microsoft.Templates.Core.Gen
             foreach (var item in userSelection.Items)
             {
                 var template = GenContext.ToolBox.Repo.Find(t => t.Identity == item.TemplateId);
+
+                if (template.GetItemNameEditable())
+                {
+                    var itemNameService = new ItemNameService(GenContext.ToolBox.Repo.ItemNameValidationConfig, () => userSelection.Items.Where(t => t.TemplateId != template.Identity).Select(n => n.Name));
+
+                    var validationResult = itemNameService.Validate(item.Name);
+                    {
+                        if (!validationResult.IsValid)
+                        {
+                            throw new InvalidDataException(string.Format(StringRes.ErrorNamingValidationFailed, item.Name, validationResult.ValidatorName, validationResult.ErrorType));
+                        }
+                    }
+                }
 
                 var dependencies = GenContext.ToolBox.Repo.GetDependencies(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null, new List<ITemplateInfo>());
 
