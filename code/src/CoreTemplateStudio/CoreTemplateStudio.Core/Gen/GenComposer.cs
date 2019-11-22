@@ -105,6 +105,16 @@ namespace Microsoft.Templates.Core.Gen
                     genInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
                     genInfo?.Parameters.Add(GenParams.Username, Environment.UserName);
 
+                    if (template.GetTemplateOutputType() == TemplateOutputType.Project)
+                    {
+                        genInfo?.Parameters.Add(GenParams.WizardVersion, string.Concat("v", GenContext.ToolBox.WizardVersion));
+                        genInfo?.Parameters.Add(GenParams.TemplatesVersion, string.Concat("v", GenContext.ToolBox.TemplatesVersion));
+                        genInfo?.Parameters.Add(GenParams.ProjectType, userSelection.ProjectType);
+                        genInfo?.Parameters.Add(GenParams.FrontEndFramework, userSelection.FrontEndFramework);
+                        genInfo?.Parameters.Add(GenParams.BackEndFramework, userSelection.BackEndFramework);
+                        genInfo?.Parameters.Add(GenParams.Platform, userSelection.Platform);
+                    }
+
                     foreach (var dependency in genInfo?.Template.GetDependencyList())
                     {
                         if (genInfo.Template.Parameters.Any(p => p.Name == dependency))
