@@ -16,12 +16,27 @@ namespace Microsoft.Templates.Core.Naming
         {
             if (config == null)
             {
-                _validators.Add(new DefaultNamesValidator());
                 _validators.Add(new EmptyNameValidator());
                 _validators.Add(new ExistingNamesValidator(getExisitingNames));
+                _validators.Add(new DefaultNamesValidator());
             }
             else
             {
+                if (config.ValidateEmptyNames)
+                {
+                    _validators.Add(new EmptyNameValidator());
+                }
+
+                if (config.ValidateExistingNames)
+                {
+                    _validators.Add(new ExistingNamesValidator(getExisitingNames));
+                }
+
+                if (config.ValidateDefaultNames)
+                {
+                    _validators.Add(new DefaultNamesValidator());
+                }
+
                 if (config.Regexs != null)
                 {
                     foreach (var regexValidation in config.Regexs)
@@ -34,22 +49,7 @@ namespace Microsoft.Templates.Core.Naming
                 {
                     _validators.Add(new ReservedNamesValidator(config.ReservedNames));
                 }
-
-                if (config.ValidateDefaultNames)
-                {
-                    _validators.Add(new DefaultNamesValidator());
-                }
-
-                if (config.ValidateEmptyNames)
-                {
-                    _validators.Add(new EmptyNameValidator());
-                }
-
-                if (config.ValidateExistingNames)
-                {
-                        _validators.Add(new ExistingNamesValidator(getExisitingNames));
-                }
-             }
+            }
         }
 
         public string Infer(string suggestedName)
