@@ -2,30 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
-    public class FileExistsValidator : Validator<string>
+    public class ExistingNamesValidator : Validator<Func<IEnumerable<string>>>
     {
-        public FileExistsValidator(string config)
+        public ExistingNamesValidator(Func<IEnumerable<string>> config)
             : base(config)
         {
         }
 
         public override ValidationResult Validate(string suggestedName)
         {
-            var existing = Directory.EnumerateFiles(Config)
-                                            .Select(f => Path.GetFileNameWithoutExtension(f))
-                                            .ToList();
+            if (Config == null)
+            {
+                throw new ArgumentNullException(nameof(Config));
+            }
 
-            if (existing.Contains(suggestedName))
+            var existingNames = Config.Invoke();
+            if (existingNames.Contains(suggestedName))
             {
                 return new ValidationResult()
                 {
                     IsValid = false,
                     ErrorType = ValidationErrorType.AlreadyExists,
+                    ValidatorName = nameof(ExistingNamesValidator),
                 };
             }
 
@@ -33,6 +37,7 @@ namespace Microsoft.Templates.Core
             {
                 IsValid = true,
                 ErrorType = ValidationErrorType.None,
+                ValidatorName = nameof(ExistingNamesValidator),
             };
         }
     }

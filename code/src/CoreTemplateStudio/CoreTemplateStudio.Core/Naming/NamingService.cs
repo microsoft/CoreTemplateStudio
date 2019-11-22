@@ -10,9 +10,9 @@ using System.Text.RegularExpressions;
 
 using Microsoft.Templates.Core.Resources;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
-    public class Naming
+    public class NamingService
     {
         private const string InferInvalidPattern = @"[^\d\w\-]";
 

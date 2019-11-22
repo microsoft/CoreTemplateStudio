@@ -4,7 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
     public abstract class Validator
     {

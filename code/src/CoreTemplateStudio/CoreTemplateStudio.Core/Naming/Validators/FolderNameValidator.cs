@@ -5,12 +5,12 @@
 using System.IO;
 using System.Linq;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
-    public class SuggestedDirectoryNameValidator : Validator<string>
+    public class FolderNameValidator : Validator<string>
     {
         // config should be the path of an existing folder
-        public SuggestedDirectoryNameValidator(string config)
+        public FolderNameValidator(string config)
             : base(config)
         {
         }
@@ -37,6 +37,7 @@ namespace Microsoft.Templates.Core
                 {
                     IsValid = false,
                     ErrorType = ValidationErrorType.AlreadyExists,
+                    ValidatorName = nameof(FolderNameValidator),
                 };
             }
             else
@@ -45,6 +46,7 @@ namespace Microsoft.Templates.Core
                 {
                     IsValid = true,
                     ErrorType = ValidationErrorType.None,
+                    ValidatorName = nameof(FolderNameValidator),
                 };
             }
         }
