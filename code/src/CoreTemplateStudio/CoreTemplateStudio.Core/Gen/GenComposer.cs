@@ -103,7 +103,6 @@ namespace Microsoft.Templates.Core.Gen
                     var genInfo = CreateGenInfo(selectedTemplate.Name, template, genQueue, newItemGeneration);
                     genInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
                     genInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
-                    genInfo?.Parameters.Add(GenParams.Username, Environment.UserName);
 
                     if (template.GetTemplateOutputType() == TemplateOutputType.Project)
                     {
@@ -113,6 +112,7 @@ namespace Microsoft.Templates.Core.Gen
                         genInfo?.Parameters.Add(GenParams.FrontEndFramework, userSelection.FrontEndFramework);
                         genInfo?.Parameters.Add(GenParams.BackEndFramework, userSelection.BackEndFramework);
                         genInfo?.Parameters.Add(GenParams.Platform, userSelection.Platform);
+                        genInfo?.Parameters.Add(GenParams.Username, Environment.UserName);
                     }
 
                     foreach (var dependency in genInfo?.Template.GetDependencyList())
