@@ -23,7 +23,7 @@ namespace Microsoft.Templates.Core.Naming
             }
 
             var existingNames = Config.Invoke();
-            if (existingNames.Contains(suggestedName))
+            if (existingNames.Contains(suggestedName, StringComparer.OrdinalIgnoreCase))
             {
                 return new ValidationResult()
                 {

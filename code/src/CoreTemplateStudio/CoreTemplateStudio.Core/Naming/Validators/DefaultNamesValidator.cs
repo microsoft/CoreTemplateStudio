@@ -22,7 +22,7 @@ namespace Microsoft.Templates.Core.Naming
 
         public override ValidationResult Validate(string suggestedName)
         {
-            if (DefaultNames.Contains(suggestedName))
+            if (DefaultNames.Contains(suggestedName, StringComparer.OrdinalIgnoreCase))
             {
                 return new ValidationResult()
                 {
