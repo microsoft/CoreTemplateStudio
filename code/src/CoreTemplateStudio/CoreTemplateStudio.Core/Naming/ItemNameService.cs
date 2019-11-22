@@ -19,6 +19,12 @@ namespace Microsoft.Templates.Core.Naming
                 _validators.Add(new EmptyNameValidator());
                 _validators.Add(new ExistingNamesValidator(getExisitingNames));
                 _validators.Add(new DefaultNamesValidator());
+                _validators.Add(new RegExValidator(
+                    new RegExConfig()
+                    {
+                        Name = "badFormat",
+                        Pattern = "^((?!\\d)\\w+)$",
+                    }));
             }
             else
             {
