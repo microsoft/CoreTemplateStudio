@@ -16,36 +16,40 @@ namespace Microsoft.Templates.Core.Naming
         {
             if (config == null)
             {
-                throw new ArgumentNullException(nameof(ItemNameValidationConfig));
-            }
-
-            if (config.Regexs != null)
-            {
-                foreach (var regexValidation in config.Regexs)
-                {
-                    _validators.Add(new RegExValidator(regexValidation));
-                }
-            }
-
-            if (config.ReservedNames != null && config.ReservedNames.Length > 0)
-            {
-                _validators.Add(new ReservedNamesValidator(config.ReservedNames));
-            }
-
-            if (config.ValidateDefaultNames)
-            {
                 _validators.Add(new DefaultNamesValidator());
-            }
-
-            if (config.ValidateEmptyNames)
-            {
                 _validators.Add(new EmptyNameValidator());
-            }
-
-            if (config.ValidateExistingNames)
-            {
                 _validators.Add(new ExistingNamesValidator(getExisitingNames));
             }
+            else
+            {
+                if (config.Regexs != null)
+                {
+                    foreach (var regexValidation in config.Regexs)
+                    {
+                        _validators.Add(new RegExValidator(regexValidation));
+                    }
+                }
+
+                if (config.ReservedNames != null && config.ReservedNames.Length > 0)
+                {
+                    _validators.Add(new ReservedNamesValidator(config.ReservedNames));
+                }
+
+                if (config.ValidateDefaultNames)
+                {
+                    _validators.Add(new DefaultNamesValidator());
+                }
+
+                if (config.ValidateEmptyNames)
+                {
+                    _validators.Add(new EmptyNameValidator());
+                }
+
+                if (config.ValidateExistingNames)
+                {
+                        _validators.Add(new ExistingNamesValidator(getExisitingNames));
+                }
+             }
         }
 
         public string Infer(string suggestedName)

@@ -16,12 +16,6 @@ namespace Microsoft.Templates.Core.Test
     public class ProjectNameServiceTests
     {
         [Fact]
-        public void ProjectNameService_NullConfig()
-        {
-            Exception ex = Assert.Throws<ArgumentNullException>(() => new ProjectNameService(null, null));
-        }
-
-        [Fact]
         public void Infer_SuccessfullyAccountsForReservedNames()
         {
             var config = new ProjectNameValidationConfig()

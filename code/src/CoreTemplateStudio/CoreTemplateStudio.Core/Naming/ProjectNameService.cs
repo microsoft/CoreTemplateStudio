@@ -17,25 +17,28 @@ namespace Microsoft.Templates.Core.Naming
         {
             if (config == null)
             {
-                throw new ArgumentNullException(nameof(ProjectNameValidationConfig));
-            }
-
-            if (config.Regexs != null)
-            {
-                foreach (var regexValidation in config.Regexs)
-                {
-                    _validators.Add(new RegExValidator(regexValidation));
-                }
-            }
-
-            if (config.ReservedNames != null && config.ReservedNames.Length > 0)
-            {
-                _validators.Add(new ReservedNamesValidator(config.ReservedNames));
-            }
-
-            if (config.ValidateExistingNames)
-            {
+                _validators.Add(new EmptyNameValidator());
                 _validators.Add(new ExistingNamesValidator(getExisitingNames));
+            }
+            else
+            {
+                if (config.Regexs != null)
+                {
+                    foreach (var regexValidation in config.Regexs)
+                    {
+                        _validators.Add(new RegExValidator(regexValidation));
+                    }
+                }
+
+                if (config.ReservedNames != null && config.ReservedNames.Length > 0)
+                {
+                    _validators.Add(new ReservedNamesValidator(config.ReservedNames));
+                }
+
+                if (config.ValidateExistingNames)
+                {
+                    _validators.Add(new ExistingNamesValidator(getExisitingNames));
+                }
             }
         }
 

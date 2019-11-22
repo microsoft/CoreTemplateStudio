@@ -23,12 +23,6 @@ namespace Microsoft.Templates.Core.Test
         }
 
         [Fact]
-        public void ItemNameService_NullConfig()
-        {
-            Exception ex = Assert.Throws<ArgumentNullException>(() => new ItemNameService(null, null));
-        }
-
-        [Fact]
         public void Infer_SuccessfullyAccountsForReservedNames()
         {
             var config = new ItemNameValidationConfig()
