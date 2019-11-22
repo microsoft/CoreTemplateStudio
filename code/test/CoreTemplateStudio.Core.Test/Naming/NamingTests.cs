@@ -2,15 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
-
+using Microsoft.Templates.Core.Naming;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test
 {
     [Collection("Unit Test Templates")]
     [Trait("ExecutionSet", "Minimum")]
+    [Trait("Type", "Naming")]
     public class NamingTests
     {
         private TemplatesFixture _fixture;
@@ -20,28 +22,21 @@ namespace Microsoft.Templates.Core.Test
             _fixture = fixture;
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        [Trait("Type", "ProjectGeneration")]
-        public void Infer_SuccessfullyAccountsForExistingNames(string language)
+        [Fact]
+        public void Infer_SuccessfullyAccountsForExistingNames()
         {
-            SetUpFixtureForTesting(language);
-
-            var existing = new[] { "App" };
-            var validators = new List<Validator> { new ExistingNamesValidator(existing) };
-            var result = Naming.Infer("App", validators);
+            Func<IEnumerable<string>> getExistingNames = () => { return new string[] { "App" }; };
+            var validators = new List<Validator> { new ExistingNamesValidator(getExistingNames) };
+            var result = NamingService.Infer("App", validators);
 
             Assert.Equal("App1", result);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Infer_SuccessfullyAccountsForReservedNames(string language)
+        [Fact]
+        public void Infer_SuccessfullyAccountsForReservedNames()
         {
-            SetUpFixtureForTesting(language);
-
-            var validators = new List<Validator> { new ReservedNamesValidator() };
-            var result = Naming.Infer("Page", validators);
+            var validators = new List<Validator> { new ReservedNamesValidator(new string[] { "Page" }) };
+            var result = NamingService.Infer("Page", validators);
 
             Assert.Equal("Page1", result);
         }
@@ -53,40 +48,31 @@ namespace Microsoft.Templates.Core.Test
             SetUpFixtureForTesting(language);
 
             var validators = new List<Validator> { new DefaultNamesValidator() };
-            var result = Naming.Infer("LiveTile", validators);
+            var result = NamingService.Infer("LiveTile", validators);
 
             Assert.Equal("LiveTile1", result);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Infer_RemovesInvalidCharacters(string language)
+        [Fact]
+        public void Infer_RemovesInvalidCharacters()
         {
-            SetUpFixtureForTesting(language);
-
-            var result = Naming.Infer("Blank$Page", new List<Validator>());
+            var result = NamingService.Infer("Blank$Page", new List<Validator>());
 
             Assert.Equal("BlankPage", result);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Infer_DoesNotRemoveNonAsciiCharacters(string language)
+        [Fact]
+        public void Infer_DoesNotRemoveNonAsciiCharacters()
         {
-            SetUpFixtureForTesting(language);
-
-            var result = Naming.Infer("ÑäöÜ!Page", new List<Validator>());
+            var result = NamingService.Infer("ÑäöÜ!Page", new List<Validator>());
 
             Assert.Equal("ÑäöÜPage", result);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Infer_SuccessfullyHandlesSpacesAndConversionToTitleCase(string language)
+        [Fact]
+        public void Infer_SuccessfullyHandlesSpacesAndConversionToTitleCase()
         {
-            SetUpFixtureForTesting(language);
-
-            var result = Naming.Infer("blank page", new List<Validator>());
+            var result = NamingService.Infer("blank page", new List<Validator>());
 
             Assert.Equal("BlankPage", result);
         }
@@ -96,7 +82,7 @@ namespace Microsoft.Templates.Core.Test
         {
             var testDirectory = Path.GetTempPath();
             File.Create(Path.Combine(testDirectory, "TestFile"));
-            var result = Naming.Infer("TestFile", new List<Validator>() { new FileExistsValidator(testDirectory) });
+            var result = NamingService.Infer("TestFile", new List<Validator>() { new FileNameValidator(testDirectory) });
 
             Assert.Equal("TestFile1", result);
         }
@@ -107,7 +93,7 @@ namespace Microsoft.Templates.Core.Test
             var testDirectory = Path.GetTempPath();
 
             Directory.CreateDirectory(Path.Combine(testDirectory, "TestDir"));
-            var result = Naming.Infer("TestDir", new List<Validator>() { new SuggestedDirectoryNameValidator(testDirectory) });
+            var result = NamingService.Infer("TestDir", new List<Validator>() { new FolderNameValidator(testDirectory) });
 
             Assert.Equal("TestDir1", result);
         }
@@ -120,9 +106,9 @@ namespace Microsoft.Templates.Core.Test
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
             };
-            var result = Naming.Validate("Blank1", validators);
+            var result = NamingService.Validate("Blank1", validators);
 
             Assert.True(result.IsValid);
         }
@@ -135,28 +121,35 @@ namespace Microsoft.Templates.Core.Test
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
             };
-            var result = Naming.Validate(string.Empty, validators);
+            var result = NamingService.Validate(string.Empty, validators);
 
             Assert.False(result.IsValid);
-            Assert.Equal(ValidationErrorType.Empty, result.ErrorType);
+            Assert.Equal(ValidationErrorType.EmptyName, result.ErrorType);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Validate_SuccessfullyIdentifiesExistingNames(string language)
+        [Fact]
+        public void ExistingNamesValidator_NullConfig()
         {
-            SetUpFixtureForTesting(language);
+            var validators = new List<Validator>()
+            {
+                new ExistingNamesValidator(null),
+            };
+            Assert.Throws<ArgumentNullException>(() => NamingService.Validate("Blank", validators));
+        }
 
-            var existing = new[] { "Blank" };
+        [Fact]
+        public void Validate_SuccessfullyIdentifiesExistingNames()
+        {
+            Func<IEnumerable<string>> getExistingNames = () => { return new string[] { "Blank" }; };
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
-                new ExistingNamesValidator(existing),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
+                new ExistingNamesValidator(getExistingNames),
             };
-            var result = Naming.Validate("Blank", validators);
+            var result = NamingService.Validate("Blank", validators);
 
             Assert.False(result.IsValid);
             Assert.Equal(ValidationErrorType.AlreadyExists, result.ErrorType);
@@ -171,98 +164,86 @@ namespace Microsoft.Templates.Core.Test
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
                 new DefaultNamesValidator(),
             };
-            var result = Naming.Validate("LiveTile", validators);
+            var result = NamingService.Validate("LiveTile", validators);
 
             Assert.False(result.IsValid);
             Assert.Equal(ValidationErrorType.ReservedName, result.ErrorType);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Validate_SuccessfullyIdentifiesReservedNames(string language)
+        [Fact]
+        public void Validate_SuccessfullyIdentifiesReservedNames()
         {
-            SetUpFixtureForTesting(language);
-
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
-                new ReservedNamesValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
+                new ReservedNamesValidator(new string[] { "Page" }),
             };
-            var result = Naming.Validate("Page", validators);
+            var result = NamingService.Validate("Page", validators);
 
             Assert.False(result.IsValid);
             Assert.Equal(ValidationErrorType.ReservedName, result.ErrorType);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Validate_SuccessfullyIdentifies_InvalidChars(string language)
+        [Fact]
+        public void Validate_SuccessfullyIdentifies_InvalidChars()
         {
-            SetUpFixtureForTesting(language);
-
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
             };
-            var result = Naming.Validate("Blank;", validators);
+            var result = NamingService.Validate("Blank;", validators);
 
             Assert.False(result.IsValid);
-            Assert.Equal(ValidationErrorType.BadFormat, result.ErrorType);
+            Assert.Equal(ValidationErrorType.Regex, result.ErrorType);
+            Assert.Equal("badFormat", result.ValidatorName);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Validate_SuccessfullyIdentifies_NamesThatStartWithNumbers(string language)
+        [Fact]
+        public void Validate_SuccessfullyIdentifies_NamesThatStartWithNumbers()
         {
-            SetUpFixtureForTesting(language);
-
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
             };
-            var result = Naming.Validate("1Blank", validators);
+            var result = NamingService.Validate("1Blank", validators);
 
             Assert.False(result.IsValid);
-            Assert.Equal(ValidationErrorType.BadFormat, result.ErrorType);
+            Assert.Equal(ValidationErrorType.Regex, result.ErrorType);
+            Assert.Equal("badFormat", result.ValidatorName);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Validate_SuccessfullyIdentifies_InvalidPageSuffix(string language)
+        [Fact]
+        public void Validate_SuccessfullyIdentifies_InvalidPageSuffix()
         {
-            SetUpFixtureForTesting(language);
-
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
-                new PageSuffixValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
+                new RegExValidator(new RegExConfig() { Name = "itemEndsWithPage", Pattern = ".*(?<!page)$" }),
             };
-            var result = Naming.Validate("BlankPage", validators);
+            var result = NamingService.Validate("BlankPage", validators);
 
             Assert.False(result.IsValid);
-            Assert.Equal(ValidationErrorType.EndsWithPageSuffix, result.ErrorType);
+            Assert.Equal(ValidationErrorType.Regex, result.ErrorType);
+            Assert.Equal("itemEndsWithPage", result.ValidatorName);
         }
 
-        [Theory]
-        [MemberData(nameof(GetAllLanguages))]
-        public void Validate_SuccessfullyIdentifies_ValidPageSuffix(string language)
+        [Fact]
+        public void Validate_SuccessfullyIdentifies_ValidPageSuffix()
         {
-            SetUpFixtureForTesting(language);
-
             var validators = new List<Validator>()
             {
                 new EmptyNameValidator(),
-                new BadFormatValidator(),
-                new PageSuffixValidator(),
+                new RegExValidator(new RegExConfig() { Name = "badFormat", Pattern = "^((?!\\d)\\w+)$" }),
+                new RegExValidator(new RegExConfig() { Name = "itemEndsWithPage", Pattern = ".*(?<!page)$" }),
             };
-            var result = Naming.Validate("BlankView", validators);
+            var result = NamingService.Validate("BlankView", validators);
 
             Assert.True(result.IsValid);
             Assert.Equal(ValidationErrorType.None, result.ErrorType);
@@ -273,12 +254,12 @@ namespace Microsoft.Templates.Core.Test
         {
             var validators = new List<Validator>()
             {
-                new ProjectReservedNamesValidator(),
+                new ReservedNamesValidator(new string[] { "Prism" }),
             };
-            var result = Naming.Validate("Prism", validators);
+            var result = NamingService.Validate("Prism", validators);
 
             Assert.False(result.IsValid);
-            Assert.Equal(ValidationErrorType.ProjectReservedName, result.ErrorType);
+            Assert.Equal(ValidationErrorType.ReservedName, result.ErrorType);
         }
 
         [Fact]
@@ -286,12 +267,13 @@ namespace Microsoft.Templates.Core.Test
         {
             var validators = new List<Validator>()
             {
-                new ProjectStartsWithValidator(),
+                new RegExValidator(new RegExConfig() { Name = "projectStartWith$", Pattern = "^[^\\$]" }),
             };
-            var result = Naming.Validate("$App", validators);
+            var result = NamingService.Validate("$App", validators);
 
             Assert.False(result.IsValid);
-            Assert.Equal(ValidationErrorType.ProjectStartsWith, result.ErrorType);
+            Assert.Equal(ValidationErrorType.Regex, result.ErrorType);
+            Assert.Equal("projectStartWith$", result.ValidatorName);
         }
 
         [Fact]
@@ -299,10 +281,10 @@ namespace Microsoft.Templates.Core.Test
         {
             var validators = new List<Validator>()
             {
-                new ProjectReservedNamesValidator(),
-                new ProjectStartsWithValidator(),
+                new ReservedNamesValidator(new string[] { "Prism" }),
+                new RegExValidator(new RegExConfig() { Name = "projectStartWith$", Pattern = "^[^\\$]" }),
             };
-            var result = Naming.Validate("App", validators);
+            var result = NamingService.Validate("App", validators);
 
             Assert.True(result.IsValid);
             Assert.Equal(ValidationErrorType.None, result.ErrorType);

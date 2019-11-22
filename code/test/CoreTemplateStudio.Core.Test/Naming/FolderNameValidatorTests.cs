@@ -4,21 +4,21 @@
 
 using System;
 using System.IO;
-
+using Microsoft.Templates.Core.Naming;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test
 {
     [Collection("Unit Test Templates")]
     [Trait("ExecutionSet", "Minimum")]
-    public class SuggestedDirectoryNameValidatorTests
+    public class FolderNameValidatorTests
     {
         [Fact]
         public void Anything_InANonExistentConfigDirectory_IsValid()
         {
             var nonExistentDirectory = Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString()); // Use new GUID as a name for a folder that won't already exist
 
-            var sut = new SuggestedDirectoryNameValidator(nonExistentDirectory);
+            var sut = new FolderNameValidator(nonExistentDirectory);
 
             var result = sut.Validate(Guid.NewGuid().ToString());
 
@@ -28,7 +28,7 @@ namespace Microsoft.Templates.Core.Test
         [Fact]
         public void NewDirectory_InExistingConfigDirectory_IsValid()
         {
-            var sut = new SuggestedDirectoryNameValidator(Environment.CurrentDirectory);
+            var sut = new FolderNameValidator(Environment.CurrentDirectory);
             var result = sut.Validate(Guid.NewGuid().ToString()); // Use new GUID as a name for a folder that won't already exist
 
             Assert.True(result.IsValid);
@@ -42,7 +42,7 @@ namespace Microsoft.Templates.Core.Test
 
             try
             {
-                var sut = new SuggestedDirectoryNameValidator(Environment.CurrentDirectory);
+                var sut = new FolderNameValidator(Environment.CurrentDirectory);
 
                 var result = sut.Validate(existingDir.Name);
 

@@ -189,7 +189,7 @@ namespace Microsoft.Templates.Core.Test
 
             var target = GetTargetByName("ProjectTemplate");
 
-            var folderName = "ProjectTemplate";
+            var folderName = "test\\ProjectTemplate";
 
             if (language == ProgrammingLanguages.VisualBasic)
             {
