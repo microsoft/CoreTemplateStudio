@@ -209,6 +209,8 @@ namespace Microsoft.Templates.Core.Gen
                 combinedQueue.Add(genItem);
                 var compositionQueue = new List<GenInfo>();
 
+                context.Add(new QueryableProperty("ishomepage", (genItem.Name == userSelection.HomeName).ToString()));
+
                 foreach (var compositionItem in compositionCatalog)
                 {
                     if (compositionItem.Template.GetLanguage() == userSelection.Language

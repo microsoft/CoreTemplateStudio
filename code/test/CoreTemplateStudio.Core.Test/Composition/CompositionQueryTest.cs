@@ -138,8 +138,8 @@ namespace Microsoft.Templates.Core.Test.Composition
         public void Match_WithContext()
         {
             var data = GetFactData();
-            var target = CompositionQuery.Parse("identity==item-identity&tag2==tagVal2&$name==context-name");
-            var context = new QueryablePropertyDictionary { new QueryableProperty("name", "context-name") };
+            var target = CompositionQuery.Parse("identity==item-identity&tag2==tagVal2&$name==context-name&$ishomepage==false");
+            var context = new QueryablePropertyDictionary { new QueryableProperty("name", "context-name"), new QueryableProperty("ishomepage", "false") };
 
             var result = target.Match(data, context);
 
