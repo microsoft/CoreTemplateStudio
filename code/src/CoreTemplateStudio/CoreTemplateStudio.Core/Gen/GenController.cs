@@ -157,7 +157,9 @@ namespace Microsoft.Templates.Core.Gen
 
                 if (template.GetItemNameEditable())
                 {
-                    var itemNameService = new ItemNameService(GenContext.ToolBox.Repo.ItemNameValidationConfig, () => userSelection.Items.Where(t => t.TemplateId != template.Identity).Select(n => n.Name));
+                    Func<IEnumerable<string>> existingNames = () => userSelection.Items.Where(t => t.TemplateId != template.Identity).Select(n => n.Name);
+
+                    var itemNameService = new ItemNameService(GenContext.ToolBox.Repo.ItemNameValidationConfig, existingNames);
 
                     var validationResult = itemNameService.Validate(item.Name);
                     {
