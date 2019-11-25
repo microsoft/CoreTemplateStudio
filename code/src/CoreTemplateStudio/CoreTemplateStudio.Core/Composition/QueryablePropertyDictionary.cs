@@ -25,6 +25,19 @@ namespace Microsoft.Templates.Core.Composition
             Add(property.Name, property);
         }
 
+        public void AddOrUpdate(QueryableProperty property)
+        {
+            var queryableProperty = SafeGet(property.Name);
+            if (string.IsNullOrEmpty(queryableProperty.Name))
+            {
+                Add(property.Name, property);
+            }
+            else
+            {
+                this[property.Name] = property;
+            }
+        }
+
         public QueryableProperty SafeGet(string name)
         {
             return this.SafeGet(name, QueryableProperty.Empty);
