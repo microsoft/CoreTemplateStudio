@@ -10,6 +10,7 @@ namespace Microsoft.Templates.Cli.Models
         SyncResult,
         GetProjectTypesResult,
         GetFrameworksResult,
+        GetLayoutsResult,
         GetPagesResult,
         GetFeaturesResult,
         GetServicesResult,
