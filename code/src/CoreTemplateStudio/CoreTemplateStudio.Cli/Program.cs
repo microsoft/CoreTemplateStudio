@@ -45,6 +45,7 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<ICommandHandler<SyncCommand>, SyncHandler>();
             services.AddSingleton<ICommandHandler<GetProjectTypesCommand>, GetProjectTypesHandler>();
             services.AddSingleton<ICommandHandler<GetFrameworksCommand>, GetFrameworksHandler>();
+            services.AddSingleton<ICommandHandler<GetLayoutsCommand>, GetLayoutsHandler>();
             services.AddSingleton<ICommandHandler<GetPagesCommand>, GetPagesHandler>();
             services.AddSingleton<ICommandHandler<GetFeaturesCommand>, GetFeaturesHandler>();
             services.AddSingleton<ICommandHandler<GetServicesCommand>, GetServicesHandler>();
@@ -55,6 +56,7 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<IValidator<SyncCommand>, SyncValidator>();
             services.AddSingleton<IValidator<GetProjectTypesCommand>, GetProjectTypesValidator>();
             services.AddSingleton<IValidator<GetFrameworksCommand>, GetFrameworksValidator>();
+            services.AddSingleton<IValidator<GetLayoutsCommand>, GetLayoutsValidator>();
             services.AddSingleton<IValidator<GetPagesCommand>, GetPagesValidator>();
             services.AddSingleton<IValidator<GetFeaturesCommand>, GetFeaturesValidator>();
             services.AddSingleton<IValidator<GetServicesCommand>, GetServicesValidator>();

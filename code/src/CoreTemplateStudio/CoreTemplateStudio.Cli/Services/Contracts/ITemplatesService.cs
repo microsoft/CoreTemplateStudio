@@ -14,6 +14,8 @@ namespace Microsoft.Templates.Cli.Services.Contracts
 
         IEnumerable<MetadataInfo> GetFrameworks(string projectType);
 
+        IEnumerable<LayoutInfo> GetLayouts(string projectType, string frontEndFramework, string backEndFramework);
+
         IEnumerable<TemplateInfo> GetPages(string projectType, string frontEndFramework, string backEndFramework);
 
         IEnumerable<TemplateInfo> GetFeatures(string projectType, string frontEndFramework, string backEndFramework);
