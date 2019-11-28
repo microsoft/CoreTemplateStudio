@@ -54,6 +54,14 @@ namespace Microsoft.Templates.Cli.Services
             return result;
         }
 
+        public IEnumerable<LayoutInfo> GetLayouts(string projectType, string frontEndFramework, string backEndFramework)
+        {
+            var platform = GenContext.CurrentPlatform;
+            var layouts = GenContext.ToolBox.Repo.GetLayoutTemplates(platform, projectType, frontEndFramework, backEndFramework);
+
+            return layouts;
+        }
+
         public IEnumerable<TemplateInfo> GetServices(string projectType, string frontEndFramework, string backEndFramework)
         {
             var pages = GetTemplateItems(
