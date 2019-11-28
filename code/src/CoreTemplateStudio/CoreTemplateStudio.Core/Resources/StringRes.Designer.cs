@@ -241,6 +241,33 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template name {0} is not valid. Validator {1} failed with error {2}..
+        /// </summary>
+        public static string ErrorNamingValidationFailed {
+            get {
+                return ResourceManager.GetString("ErrorNamingValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;{0}&quot; already exists in folder {1}, please choose a different project name..
+        /// </summary>
+        public static string ErrorProjectAlreadyExists {
+            get {
+                return ResourceManager.GetString("ErrorProjectAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project name {0} is not valid. Validator {1} failed with error {2}..
+        /// </summary>
+        public static string ErrorProjectNameValidationFailed {
+            get {
+                return ResourceManager.GetString("ErrorProjectNameValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is a reserved name. Please choose a different name and try again..
         /// </summary>
         public static string ErrorProjectReservedName {
@@ -534,6 +561,15 @@ namespace Microsoft.Templates.Core.Resources {
         public static string MergeLineNotFoundExceptionMessage {
             get {
                 return ResourceManager.GetString("MergeLineNotFoundExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find naming configuration file {0}..
+        /// </summary>
+        public static string NamingErrorConfigFileNotFound {
+            get {
+                return ResourceManager.GetString("NamingErrorConfigFileNotFound", resourceCulture);
             }
         }
         

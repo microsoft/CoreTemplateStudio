@@ -7,7 +7,7 @@ using System.Linq;
 
 using Microsoft.Templates.Core.Gen;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
     public class DefaultNamesValidator : Validator
     {
@@ -22,12 +22,13 @@ namespace Microsoft.Templates.Core
 
         public override ValidationResult Validate(string suggestedName)
         {
-            if (DefaultNames.Contains(suggestedName))
+            if (DefaultNames.Contains(suggestedName, StringComparer.OrdinalIgnoreCase))
             {
                 return new ValidationResult()
                 {
                     IsValid = false,
                     ErrorType = ValidationErrorType.ReservedName,
+                    ValidatorName = nameof(DefaultNamesValidator),
                 };
             }
 
@@ -35,6 +36,7 @@ namespace Microsoft.Templates.Core
             {
                 IsValid = true,
                 ErrorType = ValidationErrorType.None,
+                ValidatorName = nameof(DefaultNamesValidator),
             };
         }
     }

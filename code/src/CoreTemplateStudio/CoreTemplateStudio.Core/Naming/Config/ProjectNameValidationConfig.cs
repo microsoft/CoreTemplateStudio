@@ -4,12 +4,14 @@
 
 namespace Microsoft.Templates.Core.Naming
 {
-    public class ValidationResult
+    public class ProjectNameValidationConfig
     {
-        public bool IsValid { get; set; }
+        public RegExConfig[] Regexs { get; set; }
 
-        public ValidationErrorType ErrorType { get; set; }
+        public string[] ReservedNames { get; set; }
 
-        public string ValidatorName { get; set; }
+        public bool ValidateExistingNames { get; set; }
+
+        public bool ValidateEmptyNames { get; set; }
     }
 }

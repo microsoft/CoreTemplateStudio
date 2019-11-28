@@ -58,6 +58,8 @@ namespace Microsoft.Templates.Cli.Services
                 {
                     TemplatesVersion = GenContext.ToolBox.TemplatesVersion,
                     WasUpdated = _wasUpdated,
+                    ProjectNameValidationConfig = GenContext.ToolBox.Repo.ProjectNameValidationConfig,
+                    ItemNameValidationConfig = GenContext.ToolBox.Repo.ItemNameValidationConfig,
                 };
             }
             catch (Exception ex)

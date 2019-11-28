@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="TestData\Templates\test\itemNameValidation.config.json" />
+    <None Remove="TestData\Templates\test\projectNameValidation.config.json" />
     <None Remove="TestData\Templates\_catalog\backendframeworks.json" />
     <None Remove="TestData\Templates\_catalog\en-US.backendframeworks.json" />
     <None Remove="TestData\Templates\_catalog\es-ES.backendframeworks.json" />
@@ -22,55 +24,55 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="TestData\Templates\Exclusions.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\Exclusions.FeatureTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\Requirements.FeatureTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\Requirements.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\description.md" />
-    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\en-US.description.md" />
-    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\en-US.template.json" />
-    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\es-ES.template.json" />
-    <Content Include="TestData\Templates\TestingTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\TestingTemplate\.template.config\en-US.template.json" />
-    <Content Include="TestData\Templates\TestingTemplate\.template.config\es-ES.template.json" />
-    <Content Include="TestData\Templates\TestingTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\description.md" />
-    <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.description.md" />
-    <Content Include="TestData\Templates\CompositionTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\CompositionTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\Dependencies.FeatureTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\Dependencies.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\en-US.template.json" />
-    <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\es-ES.template.json" />
-    <Content Include="TestData\Templates\FeatureTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\FeatureTemplate\.template.config\en-US.template.json" />
-    <Content Include="TestData\Templates\FeatureTemplate\.template.config\es-ES.template.json" />
-    <Content Include="TestData\Templates\FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\Hidden.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\Naming.DefaultNameTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\Naming.DefaultNameTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\OutputToParent.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\ServiceTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\ServiceTemplate\.template.config\en-US.template.json" />
-    <Content Include="TestData\Templates\ServiceTemplate\.template.config\es-ES.template.json" />
-    <Content Include="TestData\Templates\ServiceTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\PageTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\PageTemplate\.template.config\en-US.template.json" />
-    <Content Include="TestData\Templates\PageTemplate\.template.config\es-ES.template.json" />
-    <Content Include="TestData\Templates\PageTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\icon.png" />
-    <Content Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\Layout.json" />
-    <Content Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\template.json" />
-    <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\icon.png" />
-    <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\Layout.json" />
-    <Content Include="TestData\Templates\ProjectTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\ProjectTemplate\.template.config\icon.png" />
-    <Content Include="TestData\Templates\ProjectTemplate\.template.config\Layout.json" />
-    <Content Include="TestData\Templates\ProjectTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\RightClick.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\TelemetryName.FeatureTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\UnspecifiedTemplateVB\.template.config\template.json" />
-    <Content Include="TestData\Templates\UnspecifiedTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Exclusions.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Exclusions.FeatureTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Requirements.FeatureTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Requirements.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\TestingTemplateVB\.template.config\description.md" />
+    <Content Include="TestData\Templates\test\TestingTemplateVB\.template.config\en-US.description.md" />
+    <Content Include="TestData\Templates\test\TestingTemplateVB\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\test\TestingTemplateVB\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\test\TestingTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\TestingTemplate\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\test\TestingTemplate\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\test\TestingTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\FeatureTemplateVB\.template.config\description.md" />
+    <Content Include="TestData\Templates\test\FeatureTemplateVB\.template.config\en-US.description.md" />
+    <Content Include="TestData\Templates\test\CompositionTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\CompositionTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Dependencies.FeatureTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Dependencies.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\FeatureTemplateVB\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\test\FeatureTemplateVB\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\test\FeatureTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\FeatureTemplate\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\test\FeatureTemplate\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\test\FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Hidden.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Naming.DefaultNameTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Naming.DefaultNameTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\OutputToParent.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\ServiceTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\ServiceTemplate\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\test\ServiceTemplate\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\test\ServiceTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\PageTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\PageTemplate\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\test\PageTemplate\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\test\PageTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplate_FrontAndBack\.template.config\icon.png" />
+    <Content Include="TestData\Templates\test\ProjectTemplate_FrontAndBack\.template.config\Layout.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplate_FrontAndBack\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplateVB\.template.config\icon.png" />
+    <Content Include="TestData\Templates\test\ProjectTemplateVB\.template.config\Layout.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplate\.template.config\icon.png" />
+    <Content Include="TestData\Templates\test\ProjectTemplate\.template.config\Layout.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\RightClick.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\TelemetryName.FeatureTemplate\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\UnspecifiedTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\UnspecifiedTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\_catalog\backendframeworks.json" />
     <Content Include="TestData\Templates\_catalog\en-US.backendframeworks.json" />
     <Content Include="TestData\Templates\_catalog\es-ES.backendframeworks.json" />
@@ -149,6 +151,8 @@
     <Compile Include="Diagnostics\TelemetryServiceTest.cs" />
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Naming\ItemNameServiceTests.cs" />
+    <Compile Include="Naming\ProjectNameServiceTests.cs" />
     <Compile Include="PostActions\Catalog\AddJsonDictionaryItemPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\Merge\CodeStyleProviders\BaseCodeStyleProviderTest.cs" />
     <Compile Include="PostActions\Catalog\Merge\CodeStyleProviders\CSharpStyleProviderTest.cs" />
@@ -166,8 +170,10 @@
     <Compile Include="PostActions\Catalog\SortNamespaces\SortUsingsTest.cs" />
     <Compile Include="Templates\ITemplateInfoExtensionsTest.cs" />
     <Compile Include="Naming\NamingTests.cs" />
-    <Compile Include="Naming\SuggestedDirectoryNameValidatorTests.cs" />
+    <Compile Include="Naming\FolderNameValidatorTests.cs" />
     <Compile Include="Composition\CompositionQueryTest.cs" />
+    <Content Include="TestData\Templates\test\projectNameValidation.config.json" />
+    <Content Include="TestData\Templates\test\itemNameValidation.config.json" />
     <Compile Include="TestFakes\TestContextProvider.cs" />
     <Compile Include="TestFakes\TestDigitalSignatureService.cs" />
     <Compile Include="TestFakes\TestShell.cs" />
@@ -259,8 +265,6 @@
     <None Include="Packaging\SampleConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-
-    <Content Include="TestData\Templates\UnspecifiedTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\_catalog\en-US.frontendframeworks.json" />
     <Content Include="TestData\Templates\_catalog\es-ES.frontendframeworks.json" />
     <Content Include="TestData\Templates\_catalog\frontendframeworks.json" />
@@ -273,7 +277,6 @@
     <Content Include="TestData\Templates\_catalog\projectTypes\en-US.TestProjectType.md" />
     <Content Include="TestData\Templates\_catalog\projectTypes\es-ES.TestProjectType.md" />
     <Content Include="TestData\Templates\_catalog\projectTypes\TestProjectType.md" />
-    <Content Include="TestData\Templates\Hidden.FeatureTemplate\.template.config\template.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -302,23 +305,23 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestData\Templates\TestingTemplateVB\.template.config\es-ES.description.md" />
-    <None Include="TestData\Templates\TestingTemplate\.template.config\description.md" />
-    <None Include="TestData\Templates\TestingTemplate\.template.config\en-US.description.md" />
-    <None Include="TestData\Templates\TestingTemplate\.template.config\es-ES.description.md" />
-    <None Include="TestData\Templates\FeatureTemplateVB\.template.config\es-ES.description.md" />
-    <None Include="TestData\Templates\FeatureTemplate\.template.config\description.md" />
-    <None Include="TestData\Templates\FeatureTemplate\.template.config\en-US.description.md" />
-    <None Include="TestData\Templates\FeatureTemplate\.template.config\es-ES.description.md" />
-    <None Include="TestData\Templates\ServiceTemplate\.template.config\description.md" />
-    <None Include="TestData\Templates\ServiceTemplate\.template.config\en-US.description.md" />
-    <None Include="TestData\Templates\ServiceTemplate\.template.config\es-ES.description.md" />
-    <None Include="TestData\Templates\PageTemplate\.template.config\description.md" />
-    <None Include="TestData\Templates\PageTemplate\.template.config\en-US.description.md" />
-    <None Include="TestData\Templates\PageTemplate\.template.config\es-ES.description.md" />
-    <None Include="TestData\Templates\ProjectTemplate_FrontAndBack\.template.config\description.md" />
-    <None Include="TestData\Templates\ProjectTemplateVB\.template.config\description.md" />
-    <None Include="TestData\Templates\ProjectTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\test\TestingTemplateVB\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\test\TestingTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\test\TestingTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\test\TestingTemplate\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\test\FeatureTemplateVB\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\test\FeatureTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\test\FeatureTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\test\FeatureTemplate\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\test\ServiceTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\test\ServiceTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\test\ServiceTemplate\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\test\PageTemplate\.template.config\description.md" />
+    <None Include="TestData\Templates\test\PageTemplate\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\test\PageTemplate\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\test\ProjectTemplate_FrontAndBack\.template.config\description.md" />
+    <None Include="TestData\Templates\test\ProjectTemplateVB\.template.config\description.md" />
+    <None Include="TestData\Templates\test\ProjectTemplate\.template.config\description.md" />
   </ItemGroup>
   <ItemGroup>
   <None Update="xunit.runner.json"> 

@@ -2,25 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Linq;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
-    public class ProjectStartsWithValidator : Validator
+    public class ReservedNamesValidator : Validator<string[]>
     {
-        private static readonly string[] StartsWith = new string[]
+        public ReservedNamesValidator(string[] config)
+           : base(config)
         {
-            "$",
-        };
+        }
 
         public override ValidationResult Validate(string suggestedName)
         {
-            if (StartsWith.Any(r => suggestedName.StartsWith(r)))
+            if (Config.Contains(suggestedName, StringComparer.OrdinalIgnoreCase))
             {
                 return new ValidationResult()
                 {
                     IsValid = false,
-                    ErrorType = ValidationErrorType.ProjectStartsWith,
+                    ErrorType = ValidationErrorType.ReservedName,
+                    ValidatorName = nameof(ReservedNamesValidator),
                 };
             }
 
@@ -28,6 +30,7 @@ namespace Microsoft.Templates.Core
             {
                 IsValid = true,
                 ErrorType = ValidationErrorType.None,
+                ValidatorName = nameof(ReservedNamesValidator),
             };
         }
     }

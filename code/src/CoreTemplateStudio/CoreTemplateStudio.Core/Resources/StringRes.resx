@@ -566,4 +566,16 @@ The following changes could not be integrated: {2}
     <value>Invalid exclusion item {0}. Exclusion items must be of type Page, Feature, Service or Testing.</value>
     <comment>Invalid exclusion exception message. {0}:Dependency Template id</comment>
   </data>
+  <data name="ErrorNamingValidationFailed" xml:space="preserve">
+    <value>Template name {0} is not valid. Validator {1} failed with error {2}.</value>
+  </data>
+  <data name="NamingErrorConfigFileNotFound" xml:space="preserve">
+    <value>Could not find naming configuration file {0}.</value>
+  </data>
+  <data name="ErrorProjectNameValidationFailed" xml:space="preserve">
+    <value>Project name {0} is not valid. Validator {1} failed with error {2}.</value>
+  </data>
+  <data name="ErrorProjectAlreadyExists" xml:space="preserve">
+    <value>"{0}" already exists in folder {1}, please choose a different project name.</value>
+  </data>
 </root>
