@@ -11,5 +11,7 @@ namespace Microsoft.Templates.Core.Naming
         public string[] ReservedNames { get; set; }
 
         public bool ValidateExistingNames { get; set; }
+
+        public bool ValidateEmptyNames { get; set; }
     }
 }

@@ -151,6 +151,19 @@ namespace Microsoft.Templates.Core.Gen
 
         internal static void ValidateUserSelection(UserSelection userSelection)
         {
+            var rootDir = Directory.GetParent(Directory.GetParent(GenContext.Current.DestinationPath).FullName).FullName;
+
+            Func<IEnumerable<string>> existingProjectNames = () => Directory.EnumerateDirectories(rootDir, "*", SearchOption.TopDirectoryOnly).Select(d => Path.GetFileName(d));
+            var projectNameService = new ProjectNameService(GenContext.ToolBox.Repo.ProjectNameValidationConfig, existingProjectNames);
+
+            var result = projectNameService.Validate(GenContext.Current.ProjectName);
+            {
+                if (!result.IsValid)
+                {
+                    throw new InvalidDataException(string.Format(StringRes.ErrorProjectNameValidationFailed, GenContext.Current.ProjectName, result.ValidatorName, result.ErrorType));
+                }
+            }
+
             foreach (var item in userSelection.Items)
             {
                 var template = GenContext.ToolBox.Repo.Find(t => t.Identity == item.TemplateId);

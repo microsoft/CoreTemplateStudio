@@ -250,6 +250,24 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;{0}&quot; already exists in folder {1}, please choose a different project name..
+        /// </summary>
+        public static string ErrorProjectAlreadyExists {
+            get {
+                return ResourceManager.GetString("ErrorProjectAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project name {0} is not valid. Validator {1} failed with error {2}..
+        /// </summary>
+        public static string ErrorProjectNameValidationFailed {
+            get {
+                return ResourceManager.GetString("ErrorProjectNameValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is a reserved name. Please choose a different name and try again..
         /// </summary>
         public static string ErrorProjectReservedName {

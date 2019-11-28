@@ -19,6 +19,12 @@ namespace Microsoft.Templates.Core.Naming
             {
                 _validators.Add(new EmptyNameValidator());
                 _validators.Add(new ExistingNamesValidator(getExisitingNames));
+                _validators.Add(new RegExValidator(
+                    new RegExConfig()
+                    {
+                        Name = "projectStartWith$",
+                        Pattern = "^[^\\$]",
+                    }));
             }
             else
             {
@@ -33,6 +39,11 @@ namespace Microsoft.Templates.Core.Naming
                 if (config.ReservedNames != null && config.ReservedNames.Length > 0)
                 {
                     _validators.Add(new ReservedNamesValidator(config.ReservedNames));
+                }
+
+                if (config.ValidateEmptyNames)
+                {
+                    _validators.Add(new EmptyNameValidator());
                 }
 
                 if (config.ValidateExistingNames)
