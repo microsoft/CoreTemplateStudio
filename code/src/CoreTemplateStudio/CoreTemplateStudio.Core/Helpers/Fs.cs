@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -220,6 +221,16 @@ namespace Microsoft.Templates.Core.Helpers
                     AppHealth.Current.Warning.TrackAsync(string.Format(StringRes.FsSafeRenameDirectoryMessage, dir, ex.Message), ex).FireAndForget();
                 }
             }
+        }
+
+        public static IEnumerable<string> GetExistingFolderNames(string rootDir)
+        {
+            if (Directory.Exists(rootDir))
+            {
+                return Directory.EnumerateDirectories(rootDir, "*", SearchOption.TopDirectoryOnly).Select(d => Path.GetFileName(d));
+            }
+
+            return new List<string>();
         }
     }
 }

@@ -153,8 +153,7 @@ namespace Microsoft.Templates.Core.Gen
         {
             var rootDir = Directory.GetParent(Directory.GetParent(GenContext.Current.DestinationPath).FullName).FullName;
 
-            Func<IEnumerable<string>> existingProjectNames = () => Directory.EnumerateDirectories(rootDir, "*", SearchOption.TopDirectoryOnly).Select(d => Path.GetFileName(d));
-            var projectNameService = new ProjectNameService(GenContext.ToolBox.Repo.ProjectNameValidationConfig, existingProjectNames);
+            var projectNameService = new ProjectNameService(GenContext.ToolBox.Repo.ProjectNameValidationConfig, () => Fs.GetExistingFolderNames(rootDir));
 
             var result = projectNameService.Validate(GenContext.Current.ProjectName);
             {
