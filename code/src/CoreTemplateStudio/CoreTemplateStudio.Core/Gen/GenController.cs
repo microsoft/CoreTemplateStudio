@@ -149,17 +149,20 @@ namespace Microsoft.Templates.Core.Gen
             }
         }
 
-        internal static void ValidateUserSelection(UserSelection userSelection)
+        internal static void ValidateUserSelection(UserSelection userSelection, bool isNewProject)
         {
-            var rootDir = Directory.GetParent(Directory.GetParent(GenContext.Current.DestinationPath).FullName).FullName;
-
-            var projectNameService = new ProjectNameService(GenContext.ToolBox.Repo.ProjectNameValidationConfig, () => Fs.GetExistingFolderNames(rootDir));
-
-            var result = projectNameService.Validate(GenContext.Current.ProjectName);
+            if (isNewProject)
             {
-                if (!result.IsValid)
+                var rootDir = Directory.GetParent(Directory.GetParent(GenContext.Current.DestinationPath).FullName).FullName;
+
+                var projectNameService = new ProjectNameService(GenContext.ToolBox.Repo.ProjectNameValidationConfig, () => Fs.GetExistingFolderNames(rootDir));
+
+                var result = projectNameService.Validate(GenContext.Current.ProjectName);
                 {
-                    throw new InvalidDataException(string.Format(StringRes.ErrorProjectNameValidationFailed, GenContext.Current.ProjectName, result.ValidatorName, result.ErrorType));
+                    if (!result.IsValid)
+                    {
+                        throw new InvalidDataException(string.Format(StringRes.ErrorProjectNameValidationFailed, GenContext.Current.ProjectName, result.ValidatorName, result.ErrorType));
+                    }
                 }
             }
 
