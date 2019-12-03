@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -35,18 +36,23 @@ namespace Microsoft.Templates.Core.Services
 
             try
             {
-                var path = Path.Combine(GenContext.ToolBox.Shell.GetActiveProjectPath(), "Package.appxmanifest");
-                if (File.Exists(path))
+                var activeProjectPath = GenContext.ToolBox.Shell.GetActiveProjectPath();
+                if (!string.IsNullOrEmpty(activeProjectPath))
                 {
-                    var manifest = XElement.Load(path);
-                    XNamespace ns = "http://schemas.microsoft.com/appx/developer/windowsTemplateStudio";
+                    var metadataFileNames = new List<string>() { "Package.appxmanifest", "WTS.ProjectConfig.xml" };
+                    var metadataFile = metadataFileNames.FirstOrDefault(fileName => File.Exists(Path.Combine(activeProjectPath, fileName)));
+                    if (!string.IsNullOrEmpty(metadataFile))
+                    {
+                        var manifest = XElement.Load(Path.Combine(activeProjectPath, metadataFile));
+                        XNamespace ns = "http://schemas.microsoft.com/appx/developer/windowsTemplateStudio";
 
-                    var metadata = manifest.Descendants().FirstOrDefault(e => e.Name.LocalName == MetadataLiteral && e.Name.Namespace == ns);
+                        var metadata = manifest.Descendants().FirstOrDefault(e => e.Name.LocalName == MetadataLiteral && e.Name.Namespace == ns);
 
-                    projectMetadata.ProjectType = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == ProjectTypeLiteral)?.Attribute(ValueAttribLiteral)?.Value;
-                    projectMetadata.Framework = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == FrameworkLiteral)?.Attribute(ValueAttribLiteral)?.Value;
-                    projectMetadata.Platform = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == PlatformLiteral)?.Attribute(ValueAttribLiteral)?.Value;
-                    projectMetadata.TemplatesVersion = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == TemplatesVersionLiteral)?.Attribute(VersionAttribLiteral)?.Value;
+                        projectMetadata.ProjectType = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == ProjectTypeLiteral)?.Attribute(ValueAttribLiteral)?.Value;
+                        projectMetadata.Framework = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == FrameworkLiteral)?.Attribute(ValueAttribLiteral)?.Value;
+                        projectMetadata.Platform = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == PlatformLiteral)?.Attribute(ValueAttribLiteral)?.Value;
+                        projectMetadata.TemplatesVersion = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == TemplatesVersionLiteral)?.Attribute(VersionAttribLiteral)?.Value;
+                    }
                 }
             }
             catch (Exception ex)

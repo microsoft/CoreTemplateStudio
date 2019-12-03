@@ -64,22 +64,7 @@ namespace Microsoft.Templates.Core.Gen
             return "0.0.0.0-i";
         }
 
-        public bool GetActiveProjectIsWts()
-        {
-            bool result = false;
-            var activeProjectPath = GetActiveProjectPath();
-            if (!string.IsNullOrEmpty(activeProjectPath))
-            {
-                var appManifestFilePath = Path.Combine(activeProjectPath, "Package.appxmanifest");
-                if (File.Exists(appManifestFilePath))
-                {
-                    var fileContent = File.ReadAllText(appManifestFilePath);
-                    result = fileContent.Contains("genTemplate:Metadata");
-                }
-            }
-
-            return result;
-        }
+        public abstract bool GetActiveProjectIsWts();
 
         public abstract VSTelemetryInfo GetVSTelemetryInfo();
 
