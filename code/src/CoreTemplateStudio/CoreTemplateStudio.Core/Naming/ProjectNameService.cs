@@ -17,7 +17,6 @@ namespace Microsoft.Templates.Core.Naming
         {
             if (config == null)
             {
-                _validators.Add(new EmptyNameValidator());
                 _validators.Add(new ExistingNamesValidator(getExisitingNames));
                 _validators.Add(new RegExValidator(
                     new RegExConfig()
