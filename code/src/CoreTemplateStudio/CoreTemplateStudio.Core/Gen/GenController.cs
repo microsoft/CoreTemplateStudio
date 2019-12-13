@@ -161,8 +161,8 @@ namespace Microsoft.Templates.Core.Gen
                 {
                     if (!result.IsValid)
                     {
-                        var errors = string.Join(Environment.NewLine, result.Errors.Select(e => $"Error: {e.ErrorType}  Validator: {e.ValidatorName}"));
-                        throw new InvalidDataException(string.Format(StringRes.ErrorProjectNameValidationFailed, GenContext.Current.ProjectName, errors));
+                        var errors = string.Join(Environment.NewLine, result.Errors.Select(e => $"Error: {e.ErrorType}; Validator: {e.ValidatorName}."));
+                        throw new InvalidDataException(string.Format(StringRes.ErrorProjectNameValidationFailed, GenContext.Current.ProjectName, Environment.NewLine + errors));
                     }
                 }
             }
@@ -181,8 +181,8 @@ namespace Microsoft.Templates.Core.Gen
                     {
                         if (!validationResult.IsValid)
                         {
-                            var errors = string.Join(Environment.NewLine, validationResult.Errors.Select(e => $"Error: {e.ErrorType}  Validator: {e.ValidatorName}"));
-                            throw new InvalidDataException(string.Format(StringRes.ErrorNamingValidationFailed, item.Name, errors));
+                            var errors = string.Join(Environment.NewLine, validationResult.Errors.Select(e => $"Error: {e.ErrorType}; Validator: {e.ValidatorName}."));
+                            throw new InvalidDataException(string.Format(StringRes.ErrorNamingValidationFailed, item.Name, Environment.NewLine + errors));
                         }
                     }
                 }
