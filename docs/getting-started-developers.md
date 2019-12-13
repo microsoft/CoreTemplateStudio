@@ -17,9 +17,7 @@ Under the [code/test/](../code/test) folder, the repo has additional solutions r
 
 ## Dependencies
 
-This project depends on the .NET Core 2.1 SDK with ASP.NET Core, and nuget packages from [dotnet templating](https://github.com/dotnet/templating).
-
-The nuget packages can be installed by doing `dotnet restore`. If you are using Visual Studio to develop, this should be done automatically. 
+The projects target framework is .NET Standard 2.0. For template cache and genration it relies on [dotnet templating](https://github.com/dotnet/templating).
 
 ## Core project
 
@@ -45,5 +43,167 @@ During the generation the GenContext class provides access to:
 
 The Cli project is in charge of:
 
-- Communicating between the core and the caller given queries or payloads.
-- Providing a more abstract layer between the core and the caller.
+- Providing an entry point to the core project for external callers. 
+- Communicating between the core and the caller is done via commands.
+
+CoreTS Cli exposes the following commands:
+
+### Sync Command: 
+
+The Sync command builds the GenContext and synchronizes the templates available in the provided path. 
+
+`
+sync -p path
+`
+
+where
+
+- path: 
+ should point to the folder the .mstx file is located. 
+ (If the cli is launched in debug mode parh should point to a local template's directory, to synchronize a LocalTemplateSource)
+
+Sample usage: 
+
+For release with .mstx in the same folder as cli:
+
+`
+sync -p .. 
+`
+
+For debug:
+
+`
+sync -p C:\Projects\WebTemplateStudio
+`
+
+
+### Get Project Types Command: 
+
+Returns metadata info for all available project types for the current platform.
+
+`
+getprojecttypes
+`
+
+Sample usage: 
+
+`
+getprojecttypes
+`
+
+
+### Get Frameworks Command: 
+Returns metadata info for all available frontend and backend frameworks for the current platform and the selected project type.
+
+`
+getframeworks -p projectType
+`
+
+where
+
+- projectType: Name of the selected project type.
+
+Sample usage: 
+
+`
+getprojecttypes -p FullStackWebApp
+`
+
+### Get Pages Command: 
+Returns all page templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getpages -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getpages -p FullStackWebApp -f ReactJS -b NodeJS
+`
+
+### Get Features Command: 
+Returns all page templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getfeatures -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getfeatures -p FullStackWebApp -f ReactJS -b NodeJS
+`
+
+### Get Services Command: 
+Returns all services templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getservices -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getservices -p FullStackWebApp -f ReactJS -b NodeJS
+`
+
+### Get Testings Command: 
+Returns all testings templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+gettestings -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+gettestings -p FullStackWebApp -f ReactJS -b NodeJS
+`
+
+### Generate Command: 
+Performs project generation for the provided user selection.
+
+`
+generate -d userSelectionJsonData
+`
+
+where:
+- userSelectionJsonData: Json with the userSelection
+
+Sample usage: 
+
+`
+generate -d {"projectName":"testProject","genPath":"C:/Users/MyUser/projects","projectType":"FullStackWebApp","frontendFramework":"ReactJS","backendFramework":"NodeJS","language":"Any","platform":"Web","homeName":"Test","pages":[{"name":"Blank","templateid":"wts.Page.React.Blank"},{"name":"Grid","templateid":"wts.Page.React.Grid"},{"name":"Master Detail","templateid":"wts.Page.React.MasterDetail"},{"name":"List","templateid":"wts.Page.React.List"}],"features":[]}
+`
+
+### Close Command: close
+Closes the Cli 
+
+`
+close
+`
