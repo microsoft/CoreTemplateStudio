@@ -8,6 +8,8 @@ using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Naming.Validators
 {
+    [Trait("ExecutionSet", "Minimum")]
+    [Trait("Type", "Naming")]
     public class ReservedNamesValidatorTests
     {
         [Fact]
@@ -15,7 +17,7 @@ namespace Microsoft.Templates.Core.Test.Naming.Validators
         {
             var validator = new ReservedNamesValidator(new string[] { "Reserved" });
 
-            var result = validator.Validate("Reserved;");
+            var result = validator.Validate("Reserved");
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Count == 1);
