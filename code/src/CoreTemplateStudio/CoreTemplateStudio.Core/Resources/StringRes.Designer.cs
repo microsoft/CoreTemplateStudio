@@ -241,7 +241,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Template name {0} is not valid. Validator {1} failed with error {2}..
+        ///   Looks up a localized string similar to Template name {0} is not valid. Errors: {1}.
         /// </summary>
         public static string ErrorNamingValidationFailed {
             get {
@@ -259,7 +259,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project name {0} is not valid. Validator {1} failed with error {2}..
+        ///   Looks up a localized string similar to Project name {0} is not valid. Errors: {1}.
         /// </summary>
         public static string ErrorProjectNameValidationFailed {
             get {

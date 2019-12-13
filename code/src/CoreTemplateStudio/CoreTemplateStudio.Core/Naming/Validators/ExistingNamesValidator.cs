@@ -22,23 +22,22 @@ namespace Microsoft.Templates.Core.Naming
                 throw new ArgumentNullException(nameof(Config));
             }
 
+            var result = new ValidationResult();
+
             var existingNames = Config.Invoke();
             if (existingNames.Contains(suggestedName, StringComparer.OrdinalIgnoreCase))
             {
-                return new ValidationResult()
+                var error = new ValidationError()
                 {
-                    IsValid = false,
                     ErrorType = ValidationErrorType.AlreadyExists,
                     ValidatorName = nameof(ExistingNamesValidator),
                 };
+
+                result.IsValid = false;
+                result.Errors.Add(error);
             }
 
-            return new ValidationResult()
-            {
-                IsValid = true,
-                ErrorType = ValidationErrorType.None,
-                ValidatorName = nameof(ExistingNamesValidator),
-            };
+            return result;
         }
     }
 }

@@ -153,6 +153,13 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Naming\ItemNameServiceTests.cs" />
     <Compile Include="Naming\ProjectNameServiceTests.cs" />
+    <Compile Include="Naming\Validators\DefaultNamesValidatorTests.cs" />
+    <Compile Include="Naming\Validators\EmptyNameValidatorTests.cs" />
+    <Compile Include="Naming\Validators\ExistingNamesValidatorTests.cs" />
+    <Compile Include="Naming\Validators\FileNameValidatorTests.cs" />
+    <Compile Include="Naming\Validators\FolderNameValidatorTests.cs" />
+    <Compile Include="Naming\Validators\RegExValidatorTests.cs" />
+    <Compile Include="Naming\Validators\ReservedNamesValidatorTests.cs" />
     <Compile Include="PostActions\Catalog\AddJsonDictionaryItemPostActionTest.cs" />
     <Compile Include="PostActions\Catalog\Merge\CodeStyleProviders\BaseCodeStyleProviderTest.cs" />
     <Compile Include="PostActions\Catalog\Merge\CodeStyleProviders\CSharpStyleProviderTest.cs" />
