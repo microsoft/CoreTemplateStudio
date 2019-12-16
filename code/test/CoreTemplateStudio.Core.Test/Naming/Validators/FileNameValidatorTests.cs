@@ -26,6 +26,8 @@ namespace Microsoft.Templates.Core.Test.Naming.Validators
 
             var result = validator.Validate("testfile");
 
+            Directory.Delete(tempDir, true);
+
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Count == 1);
             Assert.Equal(ValidationErrorType.AlreadyExists, result.Errors.FirstOrDefault()?.ErrorType);
