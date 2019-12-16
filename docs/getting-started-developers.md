@@ -1,23 +1,35 @@
 # Getting started with the generator codebase
 
-This document will go over how to get set up, and the file structure of the project. Which is useful information if you are interested in [contributing](../CONTRIBUTING.md).
+This document will go over the structure and responsibilty of the projects contained in this repo. You should read this document if you are interested in [contributing](../CONTRIBUTING.md) to this repo.
 
 ## Repo Solutions
 
-Under the [code/src/CoreTemplateStudio](../code/src/CoreTemplateStudio) folder, the repo has different solutions to aid developers get focused on certain development areas:
+Under the [code/](../code/) folder, the repo has the following solution files:
 
-- **CoreTemplateStudio.Core.sln**: This solution contains the Core assembly. Use this solution when common core code is developed.
-- **CoreTemplateStudi.Cli.sln**: This solution contains the Cli and Core assemblies. Use this solution when the Cli code is developed.
+- **Big.sln**: This is the solution which contains all the projects available, including test projects.
+- **Core.sln**: This solution is focussed on the Core assembly. Use this solution when common core code is developed that requires no changes on the CLI.
+- **Tools.sln** : This solution is focussed on the Tools contained in the repo. Use this solution to work on Tools as WtsPackagingTool.
 
-Under the [code/test/](../code/test) folder, the repo has additional solutions related to tests:
+## Inside the Code folder
 
-- **CoreTemplateStudio.Core.Test.sln**: This solution contains the Core assembly + tests: Use this solution when ensuring that your newly developed code works and doesn't break anything, or if you are creating new tests for the core.
+Under the [code/](../code/) folder contents are organized using the following folders:
 
-- **CoreTemplateStudio.Cli.Test.sln**: This solution contains the Cli + Core assembly + tests: Use this solution when ensuring that your newly developed code works and doesn't break anything, or if you are creating new tests for the Cli.
+* _tools: common tooling required for testing / validations / template packaging.
+* src: solution source code 
+  * CoreTemplateStudio: 
+      * CoreTemplateStudio.Cli: Command line project that allows access to core, more details below
+      * CoreTemplateStudio.Core: Core Project, in charge of managing template repository and generation, more details below
+  * Utilities: CoreTS functionalities that (for now) require .net framework.
+* test
+  * CoreTemplateStudio.Cli.Test: Tests for cli project
+  * CoreTemplateStudio.Core.Test: Tests for core project
+  * Utilities.Test: Tests for utilities project
 
-## Dependencies
+## Target Framework and Dependencies
 
-The projects target framework is .NET Standard 2.0. For template cache and genration it relies on [dotnet templating](https://github.com/dotnet/templating).
+CoreTS's target framework is .NET Standard 2.0. CoreTS CLI's target frameworkk is .NET Core 3.1.
+
+For template cache and genration it relies on [dotnet templating](https://github.com/dotnet/templating).
 
 ## Core project
 
@@ -43,8 +55,7 @@ During the generation the GenContext class provides access to:
 
 The Cli project is in charge of:
 
-- Providing an entry point to the core project for external callers. 
-- Communicating between the core and the caller is done via commands.
+- Providing an entry point to the core project for external callers. Communicating between the core and the caller is done via commands using CommandLineParser.
 
 CoreTS Cli exposes the following commands:
 
