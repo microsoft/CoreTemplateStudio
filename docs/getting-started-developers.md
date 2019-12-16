@@ -106,7 +106,7 @@ where
 Sample usage: 
 
 `
-getprojecttypes -p FullStackWebApp
+getframeworks -p FullStackWebApp
 `
 
 ### Get Pages Command: 
@@ -125,7 +125,7 @@ where:
 Sample usage: 
 
 `
-getpages -p FullStackWebApp -f ReactJS -b NodeJS
+getpages -p FullStackWebApp -f React -b Node
 `
 
 ### Get Features Command: 
@@ -144,7 +144,7 @@ where:
 Sample usage: 
 
 `
-getfeatures -p FullStackWebApp -f ReactJS -b NodeJS
+getfeatures -p FullStackWebApp -f React -b Node
 `
 
 ### Get Services Command: 
@@ -163,7 +163,7 @@ where:
 Sample usage: 
 
 `
-getservices -p FullStackWebApp -f ReactJS -b NodeJS
+getservices -p FullStackWebApp -f React -b Node
 `
 
 ### Get Testings Command: 
@@ -182,7 +182,26 @@ where:
 Sample usage: 
 
 `
-gettestings -p FullStackWebApp -f ReactJS -b NodeJS
+gettestings -p FullStackWebApp -f React -b Node
+`
+
+### Get Layouts Command: 
+Returns layout information for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getlayouts -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getlayouts -p FullStackWebApp -f React -b Node
 `
 
 ### Generate Command: 
@@ -198,7 +217,7 @@ where:
 Sample usage: 
 
 `
-generate -d {"projectName":"testProject","genPath":"C:/Users/MyUser/projects","projectType":"FullStackWebApp","frontendFramework":"ReactJS","backendFramework":"NodeJS","language":"Any","platform":"Web","homeName":"Test","pages":[{"name":"Blank","templateid":"wts.Page.React.Blank"},{"name":"Grid","templateid":"wts.Page.React.Grid"},{"name":"Master Detail","templateid":"wts.Page.React.MasterDetail"},{"name":"List","templateid":"wts.Page.React.List"}],"features":[]}
+generate -d {"projectName":"testProject","genPath":"C:/Users/MyUser/projects","projectType":"FullStackWebApp","frontendFramework":"React","backendFramework":"Node","language":"Any","platform":"Web","homeName":"Test","pages":[{"name":"Blank","templateid":"wts.Page.React.Blank"},{"name":"Grid","templateid":"wts.Page.React.Grid"},{"name":"Master Detail","templateid":"wts.Page.React.MasterDetail"},{"name":"List","templateid":"wts.Page.React.List"}],"features":[]}
 `
 
 ### Close Command: close
