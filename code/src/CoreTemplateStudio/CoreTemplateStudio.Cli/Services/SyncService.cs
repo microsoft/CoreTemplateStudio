@@ -4,12 +4,14 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Templates.Cli.Models;
 using Microsoft.Templates.Cli.Resources;
 using Microsoft.Templates.Cli.Services.Contracts;
 using Microsoft.Templates.Cli.Utilities;
+using Microsoft.Templates.Core;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 
@@ -60,6 +62,7 @@ namespace Microsoft.Templates.Cli.Services
                     WasUpdated = _wasUpdated,
                     ProjectNameValidationConfig = GenContext.ToolBox.Repo.ProjectNameValidationConfig,
                     ItemNameValidationConfig = GenContext.ToolBox.Repo.ItemNameValidationConfig,
+                    DefaultNames = GetDefaultNames(),
                 };
             }
             catch (Exception ex)
@@ -74,6 +77,18 @@ namespace Microsoft.Templates.Cli.Services
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
 
             return fvi.FileVersion;
+        }
+
+        private static string[] GetDefaultNames()
+        {
+            if (GenContext.ToolBox.Repo.ItemNameValidationConfig?.ValidateDefaultNames == true)
+            {
+                return GenContext.ToolBox.Repo.Get(t => !t.GetItemNameEditable()).Select(n => n.GetDefaultName()).ToArray();
+            }
+            else
+            {
+                return new string[] { };
+            }
         }
 
         private void OnSyncStatusChanged(object sender, SyncStatusEventArgs args)
