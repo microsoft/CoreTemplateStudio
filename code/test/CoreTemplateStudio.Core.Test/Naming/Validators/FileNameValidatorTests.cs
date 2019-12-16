@@ -20,24 +20,27 @@ namespace Microsoft.Templates.Core.Test.Naming.Validators
             var tempDir = Path.GetFullPath(@".\temp\");
             Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "temp"));
 
-            File.Create(Path.Combine(Environment.CurrentDirectory, "temp\\testfile.txt"));
+            using (File.Create(Path.Combine(Environment.CurrentDirectory, "temp\\testfile.txt")))
+            {
+                var validator = new FileNameValidator(tempDir);
 
-            var validator = new FileNameValidator(tempDir);
+                var result = validator.Validate("testfile");
 
-            var result = validator.Validate("testfile");
+                Assert.False(result.IsValid);
+                Assert.True(result.Errors.Count == 1);
+                Assert.Equal(ValidationErrorType.AlreadyExists, result.Errors.FirstOrDefault()?.ErrorType);
+                Assert.Equal(nameof(FileNameValidator), result.Errors.FirstOrDefault()?.ValidatorName);
+            }
 
             Directory.Delete(tempDir, true);
-
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Count == 1);
-            Assert.Equal(ValidationErrorType.AlreadyExists, result.Errors.FirstOrDefault()?.ErrorType);
-            Assert.Equal(nameof(FileNameValidator), result.Errors.FirstOrDefault()?.ValidatorName);
         }
 
         [Fact]
         public void Validate_RecognizesNotExistingFileAsValid()
         {
             var tempDir = Path.GetFullPath(@".\temp\");
+
+            Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "temp"));
 
             var validator = new FileNameValidator(tempDir);
 
