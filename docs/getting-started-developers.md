@@ -13,18 +13,19 @@ Under the [code/](../code/) folder, the repo has the following solution files:
 ## Inside the Code folder
 
 Under the [code/](../code/) folder contents are organized using the following folders:
+```layout
 
-* _tools: common tooling required for testing / validations / template packaging.
-* src: solution source code 
-  * CoreTemplateStudio: 
-      * CoreTemplateStudio.Cli: Command line project that allows access to core, more details below
-      * CoreTemplateStudio.Core: Core Project, in charge of managing template repository and generation, more details below
-  * Utilities: CoreTS functionalities that (for now) require .net framework.
-* test
-  * CoreTemplateStudio.Cli.Test: Tests for cli project
-  * CoreTemplateStudio.Core.Test: Tests for core project
-  * Utilities.Test: Tests for utilities project
-
+├── src
+│  ├── CoreTemplateStudio 
+│  │ ├── CoreTemplateStudio.Cli: Command line project that allows access to core, more details below
+│  │ └── CoreTemplateStudio.Core: Core Project, in charge of managing template repository and generation, more details below
+│  └── Utilities: CoreTS functionalities that (for now) require .net framework.
+├── test
+│ ├── CoreTemplateStudio.Cli.Test: Tests for cli project
+│ ├── CoreTemplateStudio.Core.Test: Tests for core project
+│ └── Utilities.Test: Tests for utilities project
+└── tools: common tooling required for testing / validations / template packaging.
+```
 ## Target Framework and Dependencies
 
 CoreTS's target framework is .NET Standard 2.0. CoreTS CLI's target frameworkk is .NET Core 3.1.
