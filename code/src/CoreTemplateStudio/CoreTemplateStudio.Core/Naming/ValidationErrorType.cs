@@ -6,7 +6,6 @@ namespace Microsoft.Templates.Core.Naming
 {
     public enum ValidationErrorType
     {
-        None,
         EmptyName,
         AlreadyExists,
         BadFormat,

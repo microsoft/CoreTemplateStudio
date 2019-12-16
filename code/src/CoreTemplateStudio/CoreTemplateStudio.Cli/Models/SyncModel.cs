@@ -15,5 +15,7 @@ namespace Microsoft.Templates.Cli.Models
         public ProjectNameValidationConfig ProjectNameValidationConfig { get; set; }
 
         public ItemNameValidationConfig ItemNameValidationConfig { get; set; }
+
+        public string[] DefaultNames { get; set; }
     }
 }

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Templates.Core.Naming;
 using Newtonsoft.Json;
 using Xunit;
@@ -104,9 +105,9 @@ namespace Microsoft.Templates.Core.Test
             var validationService = new ItemNameService(config, null);
             var result = validationService.Validate("Testpage");
 
-            Assert.Equal(ValidationErrorType.Regex, result.ErrorType);
             Assert.False(result.IsValid);
-            Assert.Equal("itemEndsWithPage", result.ValidatorName);
+            Assert.Contains(result.Errors, e => e.ErrorType == ValidationErrorType.Regex);
+            Assert.Contains(result.Errors, e => e.ValidatorName == "itemEndsWithPage");
         }
 
         [Theory]
@@ -123,9 +124,9 @@ namespace Microsoft.Templates.Core.Test
             var validationService = new ItemNameService(config, null);
             var result = validationService.Validate("LiveTile");
 
-            Assert.Equal(ValidationErrorType.ReservedName, result.ErrorType);
             Assert.False(result.IsValid);
-            Assert.Equal("DefaultNamesValidator", result.ValidatorName);
+            Assert.Contains(result.Errors, e => e.ErrorType == ValidationErrorType.ReservedName);
+            Assert.Contains(result.Errors, e => e.ValidatorName == "DefaultNamesValidator");
         }
 
         [Fact]
@@ -139,9 +140,9 @@ namespace Microsoft.Templates.Core.Test
             var validationService = new ItemNameService(config, null);
             var result = validationService.Validate(string.Empty);
 
-            Assert.Equal(ValidationErrorType.EmptyName, result.ErrorType);
             Assert.False(result.IsValid);
-            Assert.Equal("EmptyNameValidator", result.ValidatorName);
+            Assert.Contains(result.Errors, e => e.ErrorType == ValidationErrorType.EmptyName);
+            Assert.Contains(result.Errors, e => e.ValidatorName == "EmptyNameValidator");
         }
 
         private void SetUpFixtureForTesting(string language)

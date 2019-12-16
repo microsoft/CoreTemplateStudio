@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Microsoft.Templates.Core.Naming
@@ -15,23 +16,22 @@ namespace Microsoft.Templates.Core.Naming
 
         public override ValidationResult Validate(string suggestedName)
         {
+            var result = new ValidationResult();
+
             var regex = new Regex(Config.Pattern, RegexOptions.IgnoreCase);
-            if (regex.IsMatch(suggestedName))
+            if (!regex.IsMatch(suggestedName))
             {
-                return new ValidationResult()
+                var error = new ValidationError()
                 {
-                    IsValid = true,
-                    ErrorType = ValidationErrorType.None,
+                    ErrorType = ValidationErrorType.Regex,
                     ValidatorName = Config.Name,
                 };
+
+                result.IsValid = false;
+                result.Errors.Add(error);
             }
 
-            return new ValidationResult()
-            {
-                IsValid = false,
-                ErrorType = ValidationErrorType.Regex,
-                ValidatorName = Config.Name,
-            };
+            return result;
         }
     }
 }
