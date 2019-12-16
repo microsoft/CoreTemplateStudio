@@ -10,9 +10,9 @@ using System.Text.RegularExpressions;
 
 using Microsoft.Templates.Core.Resources;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
-    public class Naming
+    public class NamingService
     {
         private const string InferInvalidPattern = @"[^\d\w\-]";
 
@@ -40,20 +40,19 @@ namespace Microsoft.Templates.Core
 
         public static ValidationResult Validate(string value, IEnumerable<Validator> validators)
         {
+            var result = new ValidationResult();
+
             foreach (var validator in validators)
             {
                 var validationResult = validator.Validate(value);
                 if (validationResult.IsValid == false)
                 {
-                    return validationResult;
+                    result.IsValid = false;
+                    result.Errors.AddRange(validationResult.Errors);
                 }
             }
 
-            return new ValidationResult
-            {
-                IsValid = true,
-                ErrorType = ValidationErrorType.None,
-            };
+            return result;
         }
 
         private static string ToTitleCase(string value)

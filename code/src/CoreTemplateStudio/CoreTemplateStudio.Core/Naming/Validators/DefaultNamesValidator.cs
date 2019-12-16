@@ -3,11 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Templates.Core.Gen;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
     public class DefaultNamesValidator : Validator
     {
@@ -22,20 +23,21 @@ namespace Microsoft.Templates.Core
 
         public override ValidationResult Validate(string suggestedName)
         {
-            if (DefaultNames.Contains(suggestedName))
+            var result = new ValidationResult();
+
+            if (DefaultNames.Contains(suggestedName, StringComparer.OrdinalIgnoreCase))
             {
-                return new ValidationResult()
+                var error = new ValidationError()
                 {
-                    IsValid = false,
                     ErrorType = ValidationErrorType.ReservedName,
+                    ValidatorName = nameof(DefaultNamesValidator),
                 };
+
+                result.IsValid = false;
+                result.Errors.Add(error);
             }
 
-            return new ValidationResult()
-            {
-                IsValid = true,
-                ErrorType = ValidationErrorType.None,
-            };
+            return result;
         }
     }
 }

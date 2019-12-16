@@ -2,15 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Naming
 {
-    public class SuggestedDirectoryNameValidator : Validator<string>
+    public class FolderNameValidator : Validator<string>
     {
         // config should be the path of an existing folder
-        public SuggestedDirectoryNameValidator(string config)
+        public FolderNameValidator(string config)
             : base(config)
         {
         }
@@ -18,6 +20,8 @@ namespace Microsoft.Templates.Core
         // Can a folder with the suggested name be created in the "config" folder
         public override ValidationResult Validate(string suggestedName)
         {
+            var result = new ValidationResult();
+
             // if the config directory doesn't exist then there's definitely not anything already in it with the suggested name
             var suggestedDirectoryExists = Directory.Exists(Config);
 
@@ -28,25 +32,22 @@ namespace Microsoft.Templates.Core
                                                       .Select(d => new DirectoryInfo(d).Name)
                                                       .ToList();
 
-                suggestedDirectoryExists = existingSubdirectories.Contains(suggestedName);
+                suggestedDirectoryExists = existingSubdirectories.Contains(suggestedName, StringComparer.OrdinalIgnoreCase);
             }
 
             if (suggestedDirectoryExists)
             {
-                return new ValidationResult
+                var error = new ValidationError()
                 {
-                    IsValid = false,
                     ErrorType = ValidationErrorType.AlreadyExists,
+                    ValidatorName = nameof(FolderNameValidator),
                 };
+
+                result.IsValid = false;
+                result.Errors.Add(error);
             }
-            else
-            {
-                return new ValidationResult
-                {
-                    IsValid = true,
-                    ErrorType = ValidationErrorType.None,
-                };
-            }
+
+            return result;
         }
     }
 }

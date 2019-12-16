@@ -1,26 +1,29 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-namespace Microsoft.Templates.Core
+using System.Collections.Generic;
+
+namespace Microsoft.Templates.Core.Naming
 {
     public class EmptyNameValidator : Validator
     {
         public override ValidationResult Validate(string suggestedName)
         {
+            var result = new ValidationResult();
+
             if (string.IsNullOrEmpty(suggestedName))
             {
-                return new ValidationResult()
+                var error = new ValidationError()
                 {
-                    IsValid = false,
-                    ErrorType = ValidationErrorType.Empty,
+                    ErrorType = ValidationErrorType.EmptyName,
+                    ValidatorName = nameof(EmptyNameValidator),
                 };
+
+                result.IsValid = false;
+                result.Errors.Add(error);
             }
 
-            return new ValidationResult()
-            {
-                IsValid = true,
-                ErrorType = ValidationErrorType.None,
-            };
+            return result;
         }
     }
 }

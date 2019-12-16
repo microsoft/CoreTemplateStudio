@@ -13,10 +13,12 @@ using System.Threading.Tasks;
 
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Template;
+using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Extensions;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Locations;
+using Microsoft.Templates.Core.Naming;
 using Microsoft.Templates.Core.Resources;
 using Newtonsoft.Json;
 
@@ -32,11 +34,19 @@ namespace Microsoft.Templates.Core
 
         private const string All = "all";
 
+        private const string ProjectNameValidationConfigFile = "projectNameValidation.config.json";
+
+        private const string ItemNameValidationConfigFile = "itemNameValidation.config.json";
+
         private static readonly string[] SupportedIconTypes = { ".jpg", ".jpeg", ".png", ".xaml", ".svg" };
 
         public string CurrentPlatform { get; set; }
 
         public string CurrentLanguage { get; set; }
+
+        public ProjectNameValidationConfig ProjectNameValidationConfig { get; private set; }
+
+        public ItemNameValidationConfig ItemNameValidationConfig { get; private set; }
 
         public TemplatesSynchronization Sync { get; private set; }
 
@@ -71,6 +81,9 @@ namespace Microsoft.Templates.Core
             if (!_cts.Token.IsCancellationRequested)
             {
                 await Sync.EnsureContentAsync(force, _cts.Token);
+
+                GetNamingConfigs();
+
                 if (!_cts.Token.IsCancellationRequested)
                 {
                     await Sync.RefreshTemplateCacheAsync(force);
@@ -545,6 +558,37 @@ namespace Microsoft.Templates.Core
             if (File.Exists(iconFile))
             {
                 mInfo.Icon = iconFile;
+            }
+        }
+
+        private void GetNamingConfigs()
+        {
+            if (ProjectNameValidationConfig == null)
+            {
+                var projectNameValidationConfigFile = Path.Combine(CurrentContentFolder, CurrentPlatform, ProjectNameValidationConfigFile);
+                if (File.Exists(projectNameValidationConfigFile))
+                {
+                    var projectNameValidationConfigString = File.ReadAllText(projectNameValidationConfigFile);
+                    ProjectNameValidationConfig = JsonConvert.DeserializeObject<ProjectNameValidationConfig>(projectNameValidationConfigString);
+                }
+                else
+                {
+                    AppHealth.Current.Error.TrackAsync(string.Format(StringRes.NamingErrorConfigFileNotFound, projectNameValidationConfigFile)).FireAndForget();
+                }
+            }
+
+            if (ItemNameValidationConfig == null)
+            {
+                var itemNameValidationConfigFile = Path.Combine(CurrentContentFolder, CurrentPlatform, ItemNameValidationConfigFile);
+                if (File.Exists(itemNameValidationConfigFile))
+                {
+                    var itemNameValidationConfigString = File.ReadAllText(itemNameValidationConfigFile);
+                    ItemNameValidationConfig = JsonConvert.DeserializeObject<ItemNameValidationConfig>(itemNameValidationConfigString);
+                }
+                else
+                {
+                    AppHealth.Current.Error.TrackAsync(string.Format(StringRes.NamingErrorConfigFileNotFound, itemNameValidationConfigFile)).FireAndForget();
+                }
             }
         }
 

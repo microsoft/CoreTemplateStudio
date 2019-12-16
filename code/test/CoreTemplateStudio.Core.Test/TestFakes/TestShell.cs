@@ -38,6 +38,11 @@ namespace Microsoft.Templates.Core.Test.TestFakes
             return TestCertificateService.Instance.CreateCertificate(publisherName);
         }
 
+        public override bool GetActiveProjectIsWts()
+        {
+            return true;
+        }
+
         public override string GetActiveProjectLanguage()
         {
             return string.Empty;

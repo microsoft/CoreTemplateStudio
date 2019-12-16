@@ -39,6 +39,11 @@ namespace Microsoft.Templates.Cli.Utilities
             return CliCertificateService.Instance.CreateCertificate(publisherName);
         }
 
+        public override bool GetActiveProjectIsWts()
+        {
+            return true;
+        }
+
         public override string GetActiveProjectLanguage()
         {
             return string.Empty;

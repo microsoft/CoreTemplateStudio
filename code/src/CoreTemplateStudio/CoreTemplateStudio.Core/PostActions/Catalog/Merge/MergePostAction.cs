@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Templates.Core.Extensions;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Naming;
 using Microsoft.Templates.Core.Resources;
 
 namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
@@ -85,12 +86,15 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
         {
             var validator = new List<Validator>
             {
-                new FileExistsValidator(Path.GetDirectoryName(Config.FilePath)),
+                new FileNameValidator(Path.GetDirectoryName(Config.FilePath)),
             };
 
             // Change filename from .postaction to .failedpostaction, .failedpostaction1,...
             var splittedFileName = Path.GetFileName(Config.FilePath).Split('.');
-            splittedFileName[0] = Naming.Infer(splittedFileName[0].Replace(suffix, MergeConfiguration.FailedPostactionSuffix), validator);
+            var suggestedFailedFileName = splittedFileName[0].Replace(suffix, MergeConfiguration.FailedPostactionSuffix);
+
+            splittedFileName[0] = NamingService.Infer(suggestedFailedFileName, new List<Validator> { new FileNameValidator(Path.GetDirectoryName(Config.FilePath)) });
+
             var failedFileName = Path.Combine(Path.GetDirectoryName(Config.FilePath), string.Join(".", splittedFileName));
 
             Fs.SafeMoveFile(Config.FilePath, failedFileName);

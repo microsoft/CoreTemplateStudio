@@ -34,7 +34,7 @@ namespace Microsoft.Templates.Core.Gen
         public async Task UnsafeGenerateNewItemAsync(TemplateType templateType, UserSelection userSelection)
         {
             VerifyGenContextPaths();
-            ValidateUserSelection(userSelection);
+            ValidateUserSelection(userSelection, false);
 
             var genItems = GenComposer.ComposeNewItem(userSelection).ToList();
 

@@ -12,6 +12,7 @@ using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Template;
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Naming;
 using Microsoft.Templates.Core.PostActions;
 using Microsoft.Templates.Core.Resources;
 using Microsoft.Templates.Core.Templates;
@@ -148,11 +149,43 @@ namespace Microsoft.Templates.Core.Gen
             }
         }
 
-        internal static void ValidateUserSelection(UserSelection userSelection)
+        internal static void ValidateUserSelection(UserSelection userSelection, bool isNewProject)
         {
+            if (isNewProject)
+            {
+                var rootDir = Directory.GetParent(Directory.GetParent(GenContext.Current.DestinationPath).FullName).FullName;
+
+                var projectNameService = new ProjectNameService(GenContext.ToolBox.Repo.ProjectNameValidationConfig, () => Fs.GetExistingFolderNames(rootDir));
+
+                var result = projectNameService.Validate(GenContext.Current.ProjectName);
+                {
+                    if (!result.IsValid)
+                    {
+                        var errors = string.Join(Environment.NewLine, result.Errors.Select(e => $"Error: {e.ErrorType}; Validator: {e.ValidatorName}."));
+                        throw new InvalidDataException(string.Format(StringRes.ErrorProjectNameValidationFailed, GenContext.Current.ProjectName, Environment.NewLine + errors));
+                    }
+                }
+            }
+
             foreach (var item in userSelection.Items)
             {
                 var template = GenContext.ToolBox.Repo.Find(t => t.Identity == item.TemplateId);
+
+                if (template.GetItemNameEditable())
+                {
+                    Func<IEnumerable<string>> existingNames = () => userSelection.Items.Where(t => t.TemplateId != template.Identity).Select(n => n.Name);
+
+                    var itemNameService = new ItemNameService(GenContext.ToolBox.Repo.ItemNameValidationConfig, existingNames);
+
+                    var validationResult = itemNameService.Validate(item.Name);
+                    {
+                        if (!validationResult.IsValid)
+                        {
+                            var errors = string.Join(Environment.NewLine, validationResult.Errors.Select(e => $"Error: {e.ErrorType}; Validator: {e.ValidatorName}."));
+                            throw new InvalidDataException(string.Format(StringRes.ErrorNamingValidationFailed, item.Name, Environment.NewLine + errors));
+                        }
+                    }
+                }
 
                 var dependencies = GenContext.ToolBox.Repo.GetDependencies(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null, new List<ITemplateInfo>());
 

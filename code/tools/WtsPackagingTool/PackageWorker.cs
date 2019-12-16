@@ -103,7 +103,7 @@ namespace WtsPackagingTool
                     List<DirectoryInfo> toCopy = exclusionFilters.Count > 0 ? includedDirs : allDirs;
                     toCopy.Add(new DirectoryInfo(Path.Combine(prepareDir, "_catalog")));
 
-                    MakeCopy(toCopy, prepareDir, resultDir, version, output);
+                    MakeCopy(toCopy, prepareDir, platform, resultDir, version, output);
                 }
                 else
                 {
@@ -240,8 +240,24 @@ namespace WtsPackagingTool
             }
         }
 
-        private static void MakeCopy(List<DirectoryInfo> toCopy, string prepareDir, string resultDir, string version, TextWriter output)
+        private static void MakeCopy(List<DirectoryInfo> toCopy, string prepareDirPath, string platform, string resultDir, string version, TextWriter output)
         {
+            var prepareDir = new DirectoryInfo(prepareDirPath);
+            var platformDir = new DirectoryInfo(Path.Combine(prepareDirPath, platform));
+            var prepareDirParent = prepareDir.Parent.FullName;
+
+            output.WriteLine();
+            output.WriteCommandText("Copying config files...");
+            output.WriteLine();
+
+            foreach (var file in platformDir.GetFiles("*.config.json", SearchOption.TopDirectoryOnly))
+            {
+                var targetFolder = Path.GetDirectoryName(file.FullName.Replace(prepareDirParent, resultDir));
+
+                output.WriteVerbose($"Copying file {file.FullName} to {targetFolder}");
+                Fs.SafeCopyFile(file.FullName, targetFolder, true);
+            }
+
             output.WriteLine();
             output.WriteCommandText("Copying directories...");
             output.WriteLine();
@@ -250,14 +266,12 @@ namespace WtsPackagingTool
             int countFiles = 0;
 
             ConsoleHelper.HideCursor();
-            prepareDir = Path.GetFullPath(prepareDir);
-            var prepareDirPath = new DirectoryInfo(prepareDir).Parent.FullName;
 
             toCopy.ForEach(d =>
             {
                 foreach (var file in d.GetFiles("*", SearchOption.AllDirectories))
                 {
-                    var targetFolder = Path.GetDirectoryName(file.FullName.Replace(prepareDirPath, resultDir));
+                    var targetFolder = Path.GetDirectoryName(file.FullName.Replace(prepareDirParent, resultDir));
 
                     output.WriteVerbose($"Copying file {file.FullName} to {targetFolder}");
                     Fs.SafeCopyFile(file.FullName, targetFolder, true);
@@ -271,10 +285,10 @@ namespace WtsPackagingTool
             });
             output.WriteLine();
 
-            File.WriteAllText(Path.Combine(prepareDir.Replace(prepareDirPath, resultDir), "version.txt"), version, System.Text.Encoding.UTF8);
+            File.WriteAllText(Path.Combine(prepareDirPath.Replace(prepareDirParent, resultDir), "version.txt"), version, System.Text.Encoding.UTF8);
 
             output.WriteLine();
-            output.WriteCommandText($"Preparation for directory '{prepareDir}' done in '{resultDir}' ({countDirs} dirs and {countFiles} files).");
+            output.WriteCommandText($"Preparation for directory '{prepareDirPath}' done in '{resultDir}' ({countDirs} dirs and {countFiles} files).");
 
             ConsoleHelper.ShowCursor();
         }
