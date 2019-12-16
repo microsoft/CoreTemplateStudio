@@ -29,7 +29,7 @@ Under the [code/](../code/) folder contents are organized using the following fo
 
 CoreTS's target framework is .NET Standard 2.0. CoreTS CLI's target frameworkk is .NET Core 3.1.
 
-For template cache and genration it relies on [dotnet templating](https://github.com/dotnet/templating).
+For template cache and generation it relies on [dotnet templating](https://github.com/dotnet/templating).
 
 ## Core project
 
@@ -53,9 +53,7 @@ During the generation the GenContext class provides access to:
 
 ## Cli Project
 
-The Cli project is in charge of:
-
-- Providing an entry point to the core project for external callers. Communicating between the core and the caller is done via commands using CommandLineParser.
+The Cli project is in charge of providing an entry point to the core project for external callers. Communicating between the core and the caller is done via commands using CommandLineParser.
 
 CoreTS Cli exposes the following commands:
 
