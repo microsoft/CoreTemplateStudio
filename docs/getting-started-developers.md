@@ -1,25 +1,36 @@
 # Getting started with the generator codebase
 
-This document will go over how to get set up, and the file structure of the project. Which is useful information if you are interested in [contributing](../CONTRIBUTING.md).
+This document will go over the structure and responsibilty of the projects contained in this repo. You should read this document if you are interested in [contributing](../CONTRIBUTING.md) to this repo.
 
 ## Repo Solutions
 
-Under the [code/src/CoreTemplateStudio](../code/src/CoreTemplateStudio) folder, the repo has different solutions to aid developers get focused on certain development areas:
+Under the [code/](../code/) folder, the repo has the following solution files:
 
-- **CoreTemplateStudio.Core.sln**: This solution contains the Core assembly. Use this solution when common core code is developed.
-- **CoreTemplateStudi.Cli.sln**: This solution contains the Cli and Core assemblies. Use this solution when the Cli code is developed.
+- **Big.sln**: This is the solution which contains all the projects available, including test projects.
+- **Core.sln**: This solution is focussed on the Core assembly. Use this solution when common core code is developed that requires no changes on the CLI.
+- **Tools.sln** : This solution is focussed on the Tools contained in the repo. Use this solution to work on Tools as WtsPackagingTool.
 
-Under the [code/test/](../code/test) folder, the repo has additional solutions related to tests:
+## Inside the Code folder
 
-- **CoreTemplateStudio.Core.Test.sln**: This solution contains the Core assembly + tests: Use this solution when ensuring that your newly developed code works and doesn't break anything, or if you are creating new tests for the core.
+Under the [code/](../code/) folder contents are organized using the following folders:
+```layout
 
-- **CoreTemplateStudio.Cli.Test.sln**: This solution contains the Cli + Core assembly + tests: Use this solution when ensuring that your newly developed code works and doesn't break anything, or if you are creating new tests for the Cli.
+├── src
+│  ├── CoreTemplateStudio 
+│  │ ├── CoreTemplateStudio.Cli: Command line project that allows access to core, more details below
+│  │ └── CoreTemplateStudio.Core: Core Project, in charge of managing template repository and generation, more details below
+│  └── Utilities: CoreTS functionalities that (for now) require .net framework.
+├── test
+│ ├── CoreTemplateStudio.Cli.Test: Tests for cli project
+│ ├── CoreTemplateStudio.Core.Test: Tests for core project
+│ └── Utilities.Test: Tests for utilities project
+└── tools: common tooling required for testing / validations / template packaging.
+```
+## Target Framework and Dependencies
 
-## Dependencies
+CoreTS's target framework is .NET Standard 2.0. CoreTS CLI's target frameworkk is .NET Core 3.1.
 
-This project depends on the .NET Core 2.1 SDK with ASP.NET Core, and nuget packages from [dotnet templating](https://github.com/dotnet/templating).
-
-The nuget packages can be installed by doing `dotnet restore`. If you are using Visual Studio to develop, this should be done automatically. 
+For template cache and generation it relies on [dotnet templating](https://github.com/dotnet/templating).
 
 ## Core project
 
@@ -43,7 +54,185 @@ During the generation the GenContext class provides access to:
 
 ## Cli Project
 
-The Cli project is in charge of:
+The Cli project is in charge of providing an entry point to the core project for external callers. Communicating between the core and the caller is done via commands using CommandLineParser.
 
-- Communicating between the core and the caller given queries or payloads.
-- Providing a more abstract layer between the core and the caller.
+CoreTS Cli exposes the following commands:
+
+### Sync Command: 
+
+The Sync command builds the GenContext and synchronizes the templates available in the provided path. 
+
+`
+sync -p path
+`
+
+where
+
+- path: 
+ should point to the folder the .mstx file is located. 
+ (If the cli is launched in debug mode parh should point to a local template's directory, to synchronize a LocalTemplateSource)
+
+Sample usage: 
+
+For release with .mstx in the same folder as cli:
+
+`
+sync -p .. 
+`
+
+For debug:
+
+`
+sync -p C:\Projects\WebTemplateStudio
+`
+
+
+### Get Project Types Command: 
+
+Returns metadata info for all available project types for the current platform.
+
+`
+getprojecttypes
+`
+
+Sample usage: 
+
+`
+getprojecttypes
+`
+
+
+### Get Frameworks Command: 
+Returns metadata info for all available frontend and backend frameworks for the current platform and the selected project type.
+
+`
+getframeworks -p projectType
+`
+
+where
+
+- projectType: Name of the selected project type.
+
+Sample usage: 
+
+`
+getframeworks -p FullStackWebApp
+`
+
+### Get Pages Command: 
+Returns all page templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getpages -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getpages -p FullStackWebApp -f React -b Node
+`
+
+### Get Features Command: 
+Returns all page templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getfeatures -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getfeatures -p FullStackWebApp -f React -b Node
+`
+
+### Get Services Command: 
+Returns all services templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getservices -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getservices -p FullStackWebApp -f React -b Node
+`
+
+### Get Testings Command: 
+Returns all testings templates available for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+gettestings -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+gettestings -p FullStackWebApp -f React -b Node
+`
+
+### Get Layouts Command: 
+Returns layout information for the selected project type, frontend and backend frameworks for the current platform.
+Depending on the projectType, you can either pass only frontend or backendframework or both.
+
+`
+getlayouts -p projectType -f frontendFramework -b backendFramework
+`
+
+where:
+- projectType: Name of the selected project type.
+- frontendFramework: Name of the selected frontend framework.
+- backendFramework: Name of the selected backend framework.
+
+Sample usage: 
+
+`
+getlayouts -p FullStackWebApp -f React -b Node
+`
+
+### Generate Command: 
+Performs project generation for the provided user selection.
+
+`
+generate -d userSelectionJsonData
+`
+
+where:
+- userSelectionJsonData: Json with the userSelection
+
+Sample usage: 
+
+`
+generate -d {"projectName":"testProject","genPath":"C:/Users/MyUser/projects","projectType":"FullStackWebApp","frontendFramework":"React","backendFramework":"Node","language":"Any","platform":"Web","homeName":"Test","pages":[{"name":"Blank","templateid":"wts.Page.React.Blank"},{"name":"Grid","templateid":"wts.Page.React.Grid"},{"name":"Master Detail","templateid":"wts.Page.React.MasterDetail"},{"name":"List","templateid":"wts.Page.React.List"}],"features":[]}
+`
+
+### Close Command: close
+Closes the Cli 
+
+`
+close
+`
