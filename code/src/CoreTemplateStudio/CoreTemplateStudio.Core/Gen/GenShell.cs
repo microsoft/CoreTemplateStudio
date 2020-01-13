@@ -107,5 +107,7 @@ namespace Microsoft.Templates.Core.Gen
         }
 
         public abstract string CreateCertificate(string publisherName);
+
+        public abstract bool IsSdkInstalled(string name);
     }
 }

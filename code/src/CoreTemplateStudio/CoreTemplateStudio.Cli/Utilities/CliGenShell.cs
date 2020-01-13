@@ -136,5 +136,10 @@ namespace Microsoft.Templates.Cli.Utilities
         public override void WriteOutput(string data)
         {
         }
+
+        public override bool IsSdkInstalled(string name)
+        {
+            return false;
+        }
     }
 }
