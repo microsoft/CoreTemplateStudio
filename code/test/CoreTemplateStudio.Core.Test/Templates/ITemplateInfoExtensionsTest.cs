@@ -507,6 +507,29 @@ namespace Microsoft.Templates.Core.Test
 
         [Theory]
         [MemberData(nameof(GetAllLanguages))]
+        public void GetRequiredSdks(string language)
+        {
+            SetUpFixtureForTesting(language);
+
+            var target = GetTargetByName("ProjectTemplate");
+
+            var result = target.GetRequiredSdks().ToList();
+            Assert.NotNull(result);
+
+            Assert.Collection(
+                result,
+                e1 =>
+                {
+                    Assert.Equal("sdk1", e1);
+                },
+                e2 =>
+                {
+                    Assert.Equal("sdk2", e2);
+                });
+        }
+
+        [Theory]
+        [MemberData(nameof(GetAllLanguages))]
         public void GetLicenses_unspecified(string language)
         {
             SetUpFixtureForTesting(language);
