@@ -128,7 +128,7 @@ namespace Microsoft.Templates.Core.Gen
                 foreach (var d in toBeDeleted)
                 {
                     Fs.SafeDeleteDirectory(d.FullName);
-                    if (!d.Parent.GetDirectories().Any())
+                    if (Directory.Exists(d.Parent.FullName) && !d.Parent.GetDirectories().Any())
                     {
                         Fs.SafeDeleteDirectory(d.Parent.FullName);
                     }
