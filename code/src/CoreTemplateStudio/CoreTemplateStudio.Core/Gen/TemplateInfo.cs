@@ -50,6 +50,8 @@ namespace Microsoft.Templates.Core.Gen
 
         public IEnumerable<TemplateInfo> Exclusions { get; set; } = new List<TemplateInfo>();
 
+        public IEnumerable<string> RequiredSdks { get; set; } = new List<string>();
+
         public TemplateType TemplateType { get; set; }
 
         public bool RightClickEnabled { get; set; }
