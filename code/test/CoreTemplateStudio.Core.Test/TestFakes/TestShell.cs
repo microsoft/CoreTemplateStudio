@@ -134,5 +134,10 @@ namespace Microsoft.Templates.Core.Test.TestFakes
         public override void WriteOutput(string data)
         {
         }
+
+        public override bool IsSdkInstalled(string name)
+        {
+            return true;
+        }
     }
 }
