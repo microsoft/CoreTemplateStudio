@@ -6,6 +6,7 @@
     "platforms": [ "test" ],
     "author": "Microsoft",
     "order": "1",
-    "licenses": ""
+    "licenses": "",
+    "platform": "test"
   }
 ]

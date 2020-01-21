@@ -130,7 +130,7 @@ namespace Microsoft.Templates.Core
         public IEnumerable<MetadataInfo> GetProjectTypes(string platform)
         {
             var projectTypes = GetSupportedProjectTypes(platform);
-            return GetMetadataInfo("projectTypes").Where(m => m.Platforms.Contains(platform) && projectTypes.Contains(m.Name));
+            return GetMetadataInfo("projectTypes").Where(m => m.Platform == platform && projectTypes.Contains(m.Name));
         }
 
         public IEnumerable<MetadataInfo> GetFrontEndFrameworks(string platform, string projectType)
@@ -138,7 +138,7 @@ namespace Microsoft.Templates.Core
             var frameworks = GetSupportedFx(platform, projectType);
 
             var results = GetMetadataInfo("frontendframeworks")
-                .Where(f => f.Platforms.Contains(platform)
+                .Where(f => f.Platform == platform
                             && frameworks.Any(fx => fx.Name == f.Name && fx.Type == FrameworkTypes.FrontEnd));
 
             results.ToList().ForEach(meta => meta.Tags["type"] = "frontend");
@@ -150,7 +150,7 @@ namespace Microsoft.Templates.Core
             var frameworks = GetSupportedFx(platform, projectType);
 
             var results = GetMetadataInfo("backendframeworks")
-                .Where(f => f.Platforms.Contains(platform)
+                .Where(f => f.Platform == platform
                             && frameworks.Any(fx => fx.Name == f.Name && fx.Type == FrameworkTypes.BackEnd));
 
             results.ToList().ForEach(meta => meta.Tags["type"] = "backend");
@@ -458,7 +458,7 @@ namespace Microsoft.Templates.Core
 
         private IEnumerable<MetadataInfo> GetMetadataInfo(string type)
         {
-            var folderName = Path.Combine(Sync?.CurrentContent.Path, Catalog);
+            var folderName = Path.Combine(Sync?.CurrentContent.Path, CurrentPlatform, Catalog);
 
             if (!Directory.Exists(folderName))
             {

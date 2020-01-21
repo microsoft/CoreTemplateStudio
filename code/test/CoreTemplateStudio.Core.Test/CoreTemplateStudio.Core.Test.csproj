@@ -15,12 +15,12 @@
   <ItemGroup>
     <None Remove="TestData\Templates\test\itemNameValidation.config.json" />
     <None Remove="TestData\Templates\test\projectNameValidation.config.json" />
-    <None Remove="TestData\Templates\_catalog\backendframeworks.json" />
-    <None Remove="TestData\Templates\_catalog\en-US.backendframeworks.json" />
-    <None Remove="TestData\Templates\_catalog\es-ES.backendframeworks.json" />
-    <None Remove="TestData\Templates\_catalog\frontendframeworks\en-US.TestFramework.md" />
-    <None Remove="TestData\Templates\_catalog\frontendframeworks\es-ES.TestFramework.md" />
-    <None Remove="TestData\Templates\_catalog\frontendframeworks\TestFramework.md" />
+    <None Remove="TestData\Templates\test\_catalog\backendframeworks.json" />
+    <None Remove="TestData\Templates\test\_catalog\en-US.backendframeworks.json" />
+    <None Remove="TestData\Templates\test\_catalog\es-ES.backendframeworks.json" />
+    <None Remove="TestData\Templates\test\_catalog\frontendframeworks\en-US.TestFramework.md" />
+    <None Remove="TestData\Templates\test\_catalog\frontendframeworks\es-ES.TestFramework.md" />
+    <None Remove="TestData\Templates\test\_catalog\frontendframeworks\TestFramework.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,12 +73,12 @@
     <Content Include="TestData\Templates\test\TelemetryName.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\test\UnspecifiedTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\test\UnspecifiedTemplate\.template.config\template.json" />
-    <Content Include="TestData\Templates\_catalog\backendframeworks.json" />
-    <Content Include="TestData\Templates\_catalog\en-US.backendframeworks.json" />
-    <Content Include="TestData\Templates\_catalog\es-ES.backendframeworks.json" />
-    <Content Include="TestData\Templates\_catalog\frontendframeworks\en-US.TestFramework.md" />
-    <Content Include="TestData\Templates\_catalog\frontendframeworks\es-ES.TestFramework.md" />
-    <Content Include="TestData\Templates\_catalog\frontendframeworks\TestFramework.md" />
+    <Content Include="TestData\Templates\test\_catalog\backendframeworks.json" />
+    <Content Include="TestData\Templates\test\_catalog\en-US.backendframeworks.json" />
+    <Content Include="TestData\Templates\test\_catalog\es-ES.backendframeworks.json" />
+    <Content Include="TestData\Templates\test\_catalog\frontendframeworks\en-US.TestFramework.md" />
+    <Content Include="TestData\Templates\test\_catalog\frontendframeworks\es-ES.TestFramework.md" />
+    <Content Include="TestData\Templates\test\_catalog\frontendframeworks\TestFramework.md" />
     <Content Include="TestData\TestProject\Test.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -96,7 +96,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    
+
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta009">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -122,7 +122,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Include="Packaging\SampleConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -138,7 +138,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="..\..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
@@ -217,7 +217,7 @@
     <None Include="TestData\GenerationSummary_expected.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-        <None Include="TestData\Steps to include new item generation_expected.md">
+    <None Include="TestData\Steps to include new item generation_expected.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="TestData\Merge\Source_gpostaction.cs">
@@ -251,7 +251,7 @@
     <None Include="TestData\TestJson\**\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    
+
     <AdditionalFiles Include="..\..\StyleCop.json">
       <Link>StyleCop.json</Link>
     </AdditionalFiles>
@@ -272,18 +272,18 @@
     <None Include="Packaging\SampleConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="TestData\Templates\_catalog\en-US.frontendframeworks.json" />
-    <Content Include="TestData\Templates\_catalog\es-ES.frontendframeworks.json" />
-    <Content Include="TestData\Templates\_catalog\frontendframeworks.json" />
-    <Content Include="TestData\Templates\_catalog\backendframeworks\en-US.TestFramework.md" />
-    <Content Include="TestData\Templates\_catalog\backendframeworks\es-ES.TestFramework.md" />
-    <Content Include="TestData\Templates\_catalog\backendframeworks\TestFramework.md" />
-    <Content Include="TestData\Templates\_catalog\en-US.projectTypes.json" />
-    <Content Include="TestData\Templates\_catalog\es-ES.projectTypes.json" />
-    <Content Include="TestData\Templates\_catalog\projectTypes.json" />
-    <Content Include="TestData\Templates\_catalog\projectTypes\en-US.TestProjectType.md" />
-    <Content Include="TestData\Templates\_catalog\projectTypes\es-ES.TestProjectType.md" />
-    <Content Include="TestData\Templates\_catalog\projectTypes\TestProjectType.md" />
+    <Content Include="TestData\Templates\test\_catalog\en-US.frontendframeworks.json" />
+    <Content Include="TestData\Templates\test\_catalog\es-ES.frontendframeworks.json" />
+    <Content Include="TestData\Templates\test\_catalog\frontendframeworks.json" />
+    <Content Include="TestData\Templates\test\_catalog\backendframeworks\en-US.TestFramework.md" />
+    <Content Include="TestData\Templates\test\_catalog\backendframeworks\es-ES.TestFramework.md" />
+    <Content Include="TestData\Templates\test\_catalog\backendframeworks\TestFramework.md" />
+    <Content Include="TestData\Templates\test\_catalog\en-US.projectTypes.json" />
+    <Content Include="TestData\Templates\test\_catalog\es-ES.projectTypes.json" />
+    <Content Include="TestData\Templates\test\_catalog\projectTypes.json" />
+    <Content Include="TestData\Templates\test\_catalog\projectTypes\en-US.TestProjectType.md" />
+    <Content Include="TestData\Templates\test\_catalog\projectTypes\es-ES.TestProjectType.md" />
+    <Content Include="TestData\Templates\test\_catalog\projectTypes\TestProjectType.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -331,10 +331,10 @@
     <None Include="TestData\Templates\test\ProjectTemplate\.template.config\description.md" />
   </ItemGroup>
   <ItemGroup>
-  <None Update="xunit.runner.json"> 
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </None>
-</ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Include="TestData\Merge\Style_fail.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
