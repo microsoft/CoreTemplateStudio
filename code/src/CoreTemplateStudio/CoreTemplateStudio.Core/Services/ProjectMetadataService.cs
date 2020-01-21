@@ -30,20 +30,19 @@ namespace Microsoft.Templates.Core.Services
 
         private static readonly XNamespace NS = "http://schemas.microsoft.com/appx/developer/windowsTemplateStudio";
 
-        public static ProjectMetadata GetProjectMetadata()
+        public static ProjectMetadata GetProjectMetadata(string projectPath)
         {
             var projectMetadata = new ProjectMetadata();
 
             try
             {
-                var activeProjectPath = GenContext.ToolBox.Shell.GetActiveProjectPath();
-                if (!string.IsNullOrEmpty(activeProjectPath))
+                if (!string.IsNullOrEmpty(projectPath))
                 {
                     var metadataFileNames = new List<string>() { "Package.appxmanifest", "WTS.ProjectConfig.xml" };
-                    var metadataFile = metadataFileNames.FirstOrDefault(fileName => File.Exists(Path.Combine(activeProjectPath, fileName)));
+                    var metadataFile = metadataFileNames.FirstOrDefault(fileName => File.Exists(Path.Combine(projectPath, fileName)));
                     if (!string.IsNullOrEmpty(metadataFile))
                     {
-                        var manifest = XElement.Load(Path.Combine(activeProjectPath, metadataFile));
+                        var manifest = XElement.Load(Path.Combine(projectPath, metadataFile));
                         XNamespace ns = "http://schemas.microsoft.com/appx/developer/windowsTemplateStudio";
 
                         var metadata = manifest.Descendants().FirstOrDefault(e => e.Name.LocalName == MetadataLiteral && e.Name.Namespace == ns);
@@ -63,11 +62,11 @@ namespace Microsoft.Templates.Core.Services
             return projectMetadata;
         }
 
-        public static void SaveProjectMetadata(ProjectMetadata data)
+        public static void SaveProjectMetadata(ProjectMetadata data, string projectPath)
         {
             try
             {
-                var path = Path.Combine(GenContext.ToolBox.Shell.GetActiveProjectPath(), "Package.appxmanifest");
+                var path = Path.Combine(projectPath, "Package.appxmanifest");
                 if (File.Exists(path))
                 {
                     var manifest = XElement.Load(path);
