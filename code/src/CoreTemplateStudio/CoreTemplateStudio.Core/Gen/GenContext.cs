@@ -123,12 +123,12 @@ namespace Microsoft.Templates.Core.Gen
                 var toBeDeleted = di.GetDirectories()
                     .Where(d => Guid.TryParse(d.Name, out Guid guidID))
                     .SelectMany(d => d.GetDirectories())
-                    .Where(d => d.CreationTimeUtc.AddDays(daysToKeep) < DateTime.UtcNow);
+                    .Where(d => d.CreationTimeUtc.AddDays(daysToKeep) < DateTime.UtcNow).ToList();
 
                 foreach (var d in toBeDeleted)
                 {
                     Fs.SafeDeleteDirectory(d.FullName);
-                    if (!d.Parent.GetDirectories().Any())
+                    if (Directory.Exists(d.Parent.FullName) && !d.Parent.GetDirectories().Any())
                     {
                         Fs.SafeDeleteDirectory(d.Parent.FullName);
                     }

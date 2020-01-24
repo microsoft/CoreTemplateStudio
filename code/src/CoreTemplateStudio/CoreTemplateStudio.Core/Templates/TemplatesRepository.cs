@@ -189,6 +189,7 @@ namespace Microsoft.Templates.Core
                 TemplateType = template.GetTemplateType(),
                 RightClickEnabled = template.GetRightClickEnabled(),
                 RequiredVisualStudioWorkloads = template.GetRequiredVisualStudioWorkloads(),
+                RequiredSdks = template.GetRequiredSdks(),
             };
 
             var dependencies = GetDependencies(template, platform, projectType, frontEndFramework, backEndFramework, new List<ITemplateInfo>());

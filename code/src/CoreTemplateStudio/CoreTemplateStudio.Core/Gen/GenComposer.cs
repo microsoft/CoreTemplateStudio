@@ -62,6 +62,14 @@ namespace Microsoft.Templates.Core.Gen
             return genQueue;
         }
 
+        public static IEnumerable<string> GetAllRequiredSdks(UserSelection userSelection)
+        {
+            return Compose(userSelection)
+                    .SelectMany(s => s.Template.GetRequiredSdks())
+                    .Distinct()
+                    .ToList();
+        }
+
         private static void AddProject(UserSelection userSelection, List<GenInfo> genQueue)
         {
             var projectTemplates = GenContext.ToolBox.Repo

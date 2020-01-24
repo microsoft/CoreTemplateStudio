@@ -457,6 +457,20 @@ namespace Microsoft.Templates.Core
             return result;
         }
 
+        public static List<string> GetRequiredSdks(this ITemplateInfo ti)
+        {
+            var sdks = GetValueFromTag(ti, TagPrefix + "requiredSdks");
+
+            var result = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(sdks))
+            {
+                result.AddRange(sdks.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
         private static string GetConfigDir(ITemplateInfo ti)
         {
             CodeGen.Instance.Settings.SettingsLoader.TryGetFileFromIdAndPath(ti.ConfigMountPointId, ti.ConfigPlace, out IFile file, out IMountPoint mountPoint);
