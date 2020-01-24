@@ -101,7 +101,7 @@ namespace WtsPackagingTool
                     var resultDir = PrepareResultDir(prepareDir, version, output);
 
                     List<DirectoryInfo> toCopy = exclusionFilters.Count > 0 ? includedDirs : allDirs;
-                    toCopy.Add(new DirectoryInfo(Path.Combine(prepareDir, "_catalog")));
+                    toCopy.Add(new DirectoryInfo(Path.Combine(prepareDir, platform, "_catalog")));
 
                     MakeCopy(toCopy, prepareDir, platform, resultDir, version, output);
                 }
