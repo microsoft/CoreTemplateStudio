@@ -466,3 +466,5 @@ Sample itemNameValidation.config.json:
 
 - [Getting started with the CoreTS codebase](./getting-started-developers.md)
 - [Windows Template Studio Templates](https://github.com/microsoft/WindowsTemplateStudio/blob/master/docs/templates.md)
+- [Web Template Studio Templates](
+https://github.com/microsoft/WebTemplateStudio/blob/master/docs/contributing/templates.md)
