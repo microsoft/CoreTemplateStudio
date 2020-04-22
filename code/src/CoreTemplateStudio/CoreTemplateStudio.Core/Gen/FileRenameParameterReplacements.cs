@@ -25,8 +25,6 @@ namespace Microsoft.Templates.Core.Templates
 
         public string ReplaceInPath(string filePath)
         {
-            // Workaround as template engine is not replacing fileRename parameters correctly in file names, when used together with sourceName,
-            // working from template engine version 2.1.0, remove this workaround when using this version.
             var newPath = filePath;
             foreach (var param in FileRenameParams)
             {

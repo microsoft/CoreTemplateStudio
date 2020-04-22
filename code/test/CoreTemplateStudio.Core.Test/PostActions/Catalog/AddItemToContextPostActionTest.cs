@@ -47,7 +47,7 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
         public void AddItemToContext_Execute_Replacement()
         {
             var templateName = "Test";
-            var relativeFile = @".\Param_ProjectName\Source.cs";
+            var relativeFile = @".\Project\Source.cs";
             var destPath = Path.GetFullPath(@".\DestinationPath");
             var finalFile = Path.GetFullPath(@".\DestinationPath\Project\Source.cs");
 
