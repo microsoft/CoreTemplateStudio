@@ -4,6 +4,7 @@
   "name": "ExclusionsTemplate",
   "groupIdentity": "Microsoft.Templates.Test.ExclusionsTemplate",
   "identity": "Microsoft.Templates.Test.ExclusionsTemplate.CSharp",
+  "shortName": "ExclusionsTemplate",
   "tags": {
     "language": "C#",
     "type": "item",

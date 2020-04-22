@@ -4,6 +4,7 @@
   "name": "RequirementsTemplate",
   "groupIdentity": "Microsoft.Templates.Test.RequirementsTemplate",
   "identity": "Microsoft.Templates.Test.RequirementsTemplate.CSharp",
+  "shortName": "RequirementsTemplate",
   "tags": {
     "language": "C#",
     "type": "item",

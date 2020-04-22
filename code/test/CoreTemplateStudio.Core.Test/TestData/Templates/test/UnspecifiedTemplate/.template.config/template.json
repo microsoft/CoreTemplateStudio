@@ -4,6 +4,7 @@
   "name": "UnspecifiedTemplate",
   "groupIdentity": "Microsoft.Templates.Test.UnspecifiedTemplate",
   "identity": "Microsoft.Templates.Test.UnspecifiedTemplate.CSharp",
+  "shortName": "UnspecifiedTemplate",
   "tags": {
     "language": "C#",
     "wts.platform": "test"

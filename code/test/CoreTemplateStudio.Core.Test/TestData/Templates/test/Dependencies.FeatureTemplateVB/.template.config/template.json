@@ -4,6 +4,7 @@
   "name": "DependenciesTemplate",
   "groupIdentity": "Microsoft.Templates.Test.DependenciesTemplate",
   "identity": "Microsoft.Templates.Test.DependenciesTemplate.VB",
+  "shortName": "DependenciesTemplate",
   "tags": {
     "language": "VisualBasic",
     "type": "item",

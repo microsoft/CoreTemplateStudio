@@ -4,6 +4,7 @@
   "name": "DependenciesTemplate",
   "groupIdentity": "Microsoft.Templates.Test.DependenciesTemplate",
   "identity": "Microsoft.Templates.Test.DependenciesTemplate.CSharp",
+  "shortName": "DependenciesTemplate",
   "tags": {
     "language": "C#",
     "type": "item",

@@ -4,6 +4,7 @@
   "name": "TelemetryNameTemplate",
   "groupIdentity": "Microsoft.Templates.Test.TelemetryNameTemplate",
   "identity": "Microsoft.Templates.Test.TelemetryNameTemplate.CSharp",
+  "shortName": "TelemetryNameTemplate",
   "tags": {
     "language": "C#",
     "type": "item",

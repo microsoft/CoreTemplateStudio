@@ -4,6 +4,7 @@
   "name": "LiveTile",
   "groupIdentity": "Microsoft.Templates.Test.Naming.DefaultName",
   "identity": "Microsoft.Templates.Test.Naming.DefaultName.CSharp",
+  "shortName": "HiddenTemplate",
   "tags": {
     "language": "C#",
     "type": "item",
