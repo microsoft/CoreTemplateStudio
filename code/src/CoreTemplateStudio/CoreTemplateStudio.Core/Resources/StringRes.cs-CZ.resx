@@ -117,6 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ErrorRecursiveRequirement" xml:space="preserve">
+    <value>V šabloně {0} se šablonou {1} byl zjištěn rekurzivní požadavek.</value>
+    <comment>Recursive requirement exception message. {0}:Template id, {1}: Requirement Template id</comment>
+  </data>
+  <data name="ErrorRequirementMissing" xml:space="preserve">
+    <value>Ve výběru uživatele nebyla nalezena požadovaná šablona {0}.</value>
+    <comment>Missing requirement exception message. {0}:Requirement Template id</comment>
+  </data>
+  <data name="ErrorRequirementMultipleInstance" xml:space="preserve">
+    <value>Požadovaná položka {0} je neplatná. Požadavky je nutné nakonfigurovat jako multipleInstance = false.</value>
+    <comment>Invalid requirement exception message. {0}:Requirement Template id </comment>
+  </data>
+  <data name="ErrorRequirementNotFound" xml:space="preserve">
+    <value>Nebyla nalezena požadovaná šablona {0} pro rámec (framework) {1} a platformu {2}.</value>
+    <comment>Required Template not found exception message. {0}:Requirement Template id, {1}: framework name, {2}: platform</comment>
+  </data>
+  <data name="ErrorRequirementRightClick" xml:space="preserve">
+    <value>Požadovaná položka v šabloně {0} je neplatná. Položky, které umožňují kliknutí pravým tlačítkem, nemohou mít požadavky.</value>
+  </data>
+  <data name="ErrorRequirementType" xml:space="preserve">
+    <value>Požadovaná položka {0} je neplatná. Závislé položky musí být typu Stránka, Funkce, Služba nebo Testování.</value>
+    <comment>Invalid requirement exception message. {0}:Requirement  Template id</comment>
+  </data>
+  <data name="ErrorExcludedTemplatesFound" xml:space="preserve">
+    <value>Ve výběru uživatele byla nalezena vyloučená šablona {0}.</value>
+  </data>
+  <data name="ErrorExclusionAndDependency" xml:space="preserve">
+    <value>Vyloučená šablona {0} je definována jako vyloučená a závislá pro šablonu {1}.</value>
+  </data>
+  <data name="ErrorExclusionAndRequirement" xml:space="preserve">
+    <value>Vyloučená šablona {0} je definována jako vyloučená a požadovaná pro šablonu {1}.</value>
+  </data>
+  <data name="ErrorExclusionNotFound" xml:space="preserve">
+    <value>Nebyla nalezena vyloučená šablona {0} pro rámec (framework) {1} a platformu {2}.</value>
+    <comment>Dependency not found exception message. {0}:Dependency Template id, {1}: framework name, {2}: platform</comment>
+  </data>
+  <data name="ErrorExclusionRightClick" xml:space="preserve">
+    <value>Šablony s vyloučeními nemohou umožňovat kliknutí pravým tlačítkem.</value>
+  </data>
+  <data name="ErrorExclusionType" xml:space="preserve">
+    <value>Vyloučená položka {0} je neplatná. Vyloučené položky musí být typu Stránka, Funkce, Služba nebo Testování.</value>
+    <comment>Invalid exclusion exception message. {0}:Dependency Template id</comment>
+  </data>
+  <data name="ErrorNamingValidationFailed" xml:space="preserve">
+    <value>Název šablony {0} není platný. Chyby: {1}</value>
+  </data>
+  <data name="NamingErrorConfigFileNotFound" xml:space="preserve">
+    <value>Nebyl nalezen konfigurační soubor názvů {0}.</value>
+  </data>
+  <data name="ErrorProjectNameValidationFailed" xml:space="preserve">
+    <value>Název projektu {0} není platný. Chyby: {1}</value>
+  </data>
+  <data name="ErrorProjectAlreadyExists" xml:space="preserve">
+    <value>Projekt {0} již ve složce {1} existuje. Zvolte jiný název projektu.</value>
+  </data>
   <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
     <value>Vytváření testování {0}...</value>
     <comment>Status bar message generating testing. {0}: Testing name</comment>
@@ -522,60 +577,5 @@ Nemohly být integrovány následující změny: {2}
   <data name="ErrorProjectStartsWith" xml:space="preserve">
     <value>{0} není platný název. Název projektu nemůže začínat na {1}.</value>
     <comment>Message box text for project name can not start with.</comment>
-  </data>
-  <data name="ErrorRecursiveRequirement" xml:space="preserve">
-    <value>Recursive requirement detected on template {0} with {1}.</value>
-    <comment>Recursive requirement exception message. {0}:Template id, {1}: Requirement Template id</comment>
-  </data>
-  <data name="ErrorRequirementMissing" xml:space="preserve">
-    <value>Required template {0} not found on user selection.</value>
-    <comment>Missing requirement exception message. {0}:Requirement Template id</comment>
-  </data>
-  <data name="ErrorRequirementMultipleInstance" xml:space="preserve">
-    <value>Invalid requirement item {0}. Requirements have to be configured as multipleInstance = false.</value>
-    <comment>Invalid requirement exception message. {0}:Requirement Template id </comment>
-  </data>
-  <data name="ErrorRequirementNotFound" xml:space="preserve">
-    <value>Required template {0} not found for framework {1} and platform {2}.</value>
-    <comment>Required Template not found exception message. {0}:Requirement Template id, {1}: framework name, {2}: platform</comment>
-  </data>
-  <data name="ErrorRequirementRightClick" xml:space="preserve">
-    <value>Invalid requirement item on template {0}. Right click enabled items cannot have requirements.</value>
-  </data>
-  <data name="ErrorRequirementType" xml:space="preserve">
-    <value>Invalid requirement item {0}. Dependency items must be of type Page, Feature, Service or Testing.</value>
-    <comment>Invalid requirement exception message. {0}:Requirement  Template id</comment>
-  </data>
-  <data name="ErrorExcludedTemplatesFound" xml:space="preserve">
-    <value>Excluded template {0} found on user selection.</value>
-  </data>
-  <data name="ErrorExclusionAndDependency" xml:space="preserve">
-    <value>Exclusion template {0} is defined as exclusion and dependency for template {1}.</value>
-  </data>
-  <data name="ErrorExclusionAndRequirement" xml:space="preserve">
-    <value>Exclusion template {0} is defined as exclusion and requirement for template {1}.</value>
-  </data>
-  <data name="ErrorExclusionNotFound" xml:space="preserve">
-    <value>Exclusion template {0} not found for framework {1} and platform {2}.</value>
-    <comment>Dependency not found exception message. {0}:Dependency Template id, {1}: framework name, {2}: platform</comment>
-  </data>
-  <data name="ErrorExclusionRightClick" xml:space="preserve">
-    <value>Templates with exclusions cannot be awailable on right click.</value>
-  </data>
-  <data name="ErrorExclusionType" xml:space="preserve">
-    <value>Invalid exclusion item {0}. Exclusion items must be of type Page, Feature, Service or Testing.</value>
-    <comment>Invalid exclusion exception message. {0}:Dependency Template id</comment>
-  </data>
-  <data name="ErrorNamingValidationFailed" xml:space="preserve">
-    <value>Template name {0} is not valid. Errors: {1}</value>
-  </data>
-  <data name="NamingErrorConfigFileNotFound" xml:space="preserve">
-    <value>Could not find naming configuration file {0}.</value>
-  </data>
-  <data name="ErrorProjectNameValidationFailed" xml:space="preserve">
-    <value>Project name {0} is not valid. Errors: {1}</value>
-  </data>
-  <data name="ErrorProjectAlreadyExists" xml:space="preserve">
-    <value>"{0}" already exists in folder {1}, please choose a different project name.</value>
   </data>
 </root>

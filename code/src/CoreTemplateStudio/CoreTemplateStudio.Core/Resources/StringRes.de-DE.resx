@@ -117,6 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ErrorRecursiveRequirement" xml:space="preserve">
+    <value>Es wurde eine rekursive Anforderung für Vorlage {0} mit {1} entdeckt.</value>
+    <comment>Recursive requirement exception message. {0}:Template id, {1}: Requirement Template id</comment>
+  </data>
+  <data name="ErrorRequirementMissing" xml:space="preserve">
+    <value>Die erforderliche Vorlage {0} für die Benutzerauswahl wurde nicht gefunden.</value>
+    <comment>Missing requirement exception message. {0}:Requirement Template id</comment>
+  </data>
+  <data name="ErrorRequirementMultipleInstance" xml:space="preserve">
+    <value>Ungültiges Anforderungsobjekt {0}. Anforderungen müssen als „multipleInstance = false“ konfiguriert werden.</value>
+    <comment>Invalid requirement exception message. {0}:Requirement Template id </comment>
+  </data>
+  <data name="ErrorRequirementNotFound" xml:space="preserve">
+    <value>Die erforderliche Vorlage {0} für framework {1} und Plattform {2} wurde nicht gefunden.</value>
+    <comment>Required Template not found exception message. {0}:Requirement Template id, {1}: framework name, {2}: platform</comment>
+  </data>
+  <data name="ErrorRequirementRightClick" xml:space="preserve">
+    <value>Ungültiges Anforderungsobjekt für Vorlage {0}. Objekte, die durch Rechtsklick aufgerufen werden, können keine Anforderungen aufweisen.</value>
+  </data>
+  <data name="ErrorRequirementType" xml:space="preserve">
+    <value>Ungültiges Anforderungsobjekt {0}. Abhängigkeitsobjekte müssen den Typ „Seite“, „Feature“, „Dienst“ oder „Test“ besitzen.</value>
+    <comment>Invalid requirement exception message. {0}:Requirement  Template id</comment>
+  </data>
+  <data name="ErrorExcludedTemplatesFound" xml:space="preserve">
+    <value>Ausgeschlossene Vorlage {0} für die Benutzerauswahl gefunden.</value>
+  </data>
+  <data name="ErrorExclusionAndDependency" xml:space="preserve">
+    <value>Die Ausschlussvorlage {0} ist als Ausschluss und Abhängigkeit für Vorlage {1} definiert.</value>
+  </data>
+  <data name="ErrorExclusionAndRequirement" xml:space="preserve">
+    <value>Die Ausschlussvorlage {0} ist als Ausschluss und Anforderung für Vorlage {1} definiert.</value>
+  </data>
+  <data name="ErrorExclusionNotFound" xml:space="preserve">
+    <value>Die Ausschlussvorlage {0} für framework {1} und Plattform {2} wurde nicht gefunden.</value>
+    <comment>Dependency not found exception message. {0}:Dependency Template id, {1}: framework name, {2}: platform</comment>
+  </data>
+  <data name="ErrorExclusionRightClick" xml:space="preserve">
+    <value>Vorlagen mit Ausschlüssen können nicht durch Rechtsklick aufgerufen werden.</value>
+  </data>
+  <data name="ErrorExclusionType" xml:space="preserve">
+    <value>Ungültiges Ausschlussobjekt {0}. Ausschlussobjekte müssen den Typ „Seite“, „Feature“, „Dienst“ oder „Test“ besitzen.</value>
+    <comment>Invalid exclusion exception message. {0}:Dependency Template id</comment>
+  </data>
+  <data name="ErrorNamingValidationFailed" xml:space="preserve">
+    <value>Der Vorlagenname {0} ist nicht gültig. Fehler: {1}</value>
+  </data>
+  <data name="NamingErrorConfigFileNotFound" xml:space="preserve">
+    <value>Konfigurationsdatei {0} für die Benennung nicht gefunden.</value>
+  </data>
+  <data name="ErrorProjectNameValidationFailed" xml:space="preserve">
+    <value>Projektname {0} ist nicht gültig. Fehler: {1}</value>
+  </data>
+  <data name="ErrorProjectAlreadyExists" xml:space="preserve">
+    <value>„{0}“ ist bereits in Ordner {1} vorhanden. Wählen Sie einen anderen Projektnamen.</value>
+  </data>
   <data name="StatusBarGeneratingTestingMessage" xml:space="preserve">
     <value>Test für „{0}“ wird erstellt...</value>
     <comment>Status bar message generating testing. {0}: Testing name</comment>
@@ -522,60 +577,5 @@ Die folgenden Änderungen konnten nicht integriert werden: {2}
   <data name="ErrorProjectStartsWith" xml:space="preserve">
     <value>„{0}“ ist kein gültiger Name. Ein Projektname darf nicht mit „{1}“ beginnen.</value>
     <comment>Message box text for project name can not start with.</comment>
-  </data>
-  <data name="ErrorRecursiveRequirement" xml:space="preserve">
-    <value>Recursive requirement detected on template {0} with {1}.</value>
-    <comment>Recursive requirement exception message. {0}:Template id, {1}: Requirement Template id</comment>
-  </data>
-  <data name="ErrorRequirementMissing" xml:space="preserve">
-    <value>Required template {0} not found on user selection.</value>
-    <comment>Missing requirement exception message. {0}:Requirement Template id</comment>
-  </data>
-  <data name="ErrorRequirementMultipleInstance" xml:space="preserve">
-    <value>Invalid requirement item {0}. Requirements have to be configured as multipleInstance = false.</value>
-    <comment>Invalid requirement exception message. {0}:Requirement Template id </comment>
-  </data>
-  <data name="ErrorRequirementNotFound" xml:space="preserve">
-    <value>Required template {0} not found for framework {1} and platform {2}.</value>
-    <comment>Required Template not found exception message. {0}:Requirement Template id, {1}: framework name, {2}: platform</comment>
-  </data>
-  <data name="ErrorRequirementRightClick" xml:space="preserve">
-    <value>Invalid requirement item on template {0}. Right click enabled items cannot have requirements.</value>
-  </data>
-  <data name="ErrorRequirementType" xml:space="preserve">
-    <value>Invalid requirement item {0}. Dependency items must be of type Page, Feature, Service or Testing.</value>
-    <comment>Invalid requirement exception message. {0}:Requirement  Template id</comment>
-  </data>
-  <data name="ErrorExcludedTemplatesFound" xml:space="preserve">
-    <value>Excluded template {0} found on user selection.</value>
-  </data>
-  <data name="ErrorExclusionAndDependency" xml:space="preserve">
-    <value>Exclusion template {0} is defined as exclusion and dependency for template {1}.</value>
-  </data>
-  <data name="ErrorExclusionAndRequirement" xml:space="preserve">
-    <value>Exclusion template {0} is defined as exclusion and requirement for template {1}.</value>
-  </data>
-  <data name="ErrorExclusionNotFound" xml:space="preserve">
-    <value>Exclusion template {0} not found for framework {1} and platform {2}.</value>
-    <comment>Dependency not found exception message. {0}:Dependency Template id, {1}: framework name, {2}: platform</comment>
-  </data>
-  <data name="ErrorExclusionRightClick" xml:space="preserve">
-    <value>Templates with exclusions cannot be awailable on right click.</value>
-  </data>
-  <data name="ErrorExclusionType" xml:space="preserve">
-    <value>Invalid exclusion item {0}. Exclusion items must be of type Page, Feature, Service or Testing.</value>
-    <comment>Invalid exclusion exception message. {0}:Dependency Template id</comment>
-  </data>
-  <data name="NamingErrorConfigFileNotFound" xml:space="preserve">
-    <value>Could not find naming configuration file {0}.</value>
-  </data>
-  <data name="ErrorProjectAlreadyExists" xml:space="preserve">
-    <value>"{0}" already exists in folder {1}, please choose a different project name.</value>
-  </data>
-  <data name="ErrorNamingValidationFailed" xml:space="preserve">
-    <value>Template name {0} is not valid. Errors: {1}</value>
-  </data>
-  <data name="ErrorProjectNameValidationFailed" xml:space="preserve">
-    <value>Project name {0} is not valid. Errors: {1}</value>
   </data>
 </root>
