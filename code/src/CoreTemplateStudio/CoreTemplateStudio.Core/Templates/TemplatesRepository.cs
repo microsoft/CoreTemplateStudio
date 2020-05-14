@@ -171,6 +171,7 @@ namespace Microsoft.Templates.Core
             var templateInfo = new TemplateInfo
             {
                 TemplateId = template.Identity,
+                TemplateGroupIdentity = template.GroupIdentity,
                 Name = template.Name,
                 DefaultName = template.GetDefaultName(),
                 Description = template.Description,

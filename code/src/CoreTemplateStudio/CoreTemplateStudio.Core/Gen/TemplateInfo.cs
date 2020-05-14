@@ -14,6 +14,8 @@ namespace Microsoft.Templates.Core.Gen
     {
         public string TemplateId { get; set; }
 
+        public string TemplateGroupIdentity { get; set; }
+
         public string Name { get; set; }
 
         public string DefaultName { get; set; }
