@@ -207,9 +207,16 @@ namespace Microsoft.Templates.Core.Locations
             {
                 var installedPackage = _content.ResolveInstalledContent();
 
-                SyncStatusChanged?.Invoke(this, new SyncStatusEventArgs { Status = SyncStatus.Preparing, Version = installedPackage.Version });
+                if (installedPackage != null)
+                {
+                    SyncStatusChanged?.Invoke(this, new SyncStatusEventArgs { Status = SyncStatus.Preparing, Version = installedPackage.Version });
 
-                await _content.GetInstalledContentAsync(installedPackage, ct);
+                    await _content.GetInstalledContentAsync(installedPackage, ct);
+                }
+                else
+                {
+                    AppHealth.Current.Error.TrackAsync(StringRes.TemplatesSynchronizationErrorExtracting).FireAndForget();
+                }
             }
             catch (Exception ex) when (ex.GetType() != typeof(OperationCanceledException))
             {
