@@ -61,5 +61,7 @@ namespace Microsoft.Templates.Core.Test.Composition
         public string ThirdPartyNotices => string.Empty;
 
         public IReadOnlyDictionary<string, IBaselineInfo> BaselineInfo => null;
+
+        public bool HasScriptRunningPostActions { get; set; }
     }
 }

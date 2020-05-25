@@ -3,6 +3,7 @@
   "classifications": [ "Test" ],
   "name": "CompositionTemplate",
   "identity": "Microsoft.Templates.Test.CompositionTemplate.VB",
+  "shortName": "CompositionTemplate",
   "tags": {
     "language": "VisualBasic",
     "type": "item",

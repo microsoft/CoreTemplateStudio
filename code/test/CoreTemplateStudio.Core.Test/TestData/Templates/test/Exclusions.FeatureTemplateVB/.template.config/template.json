@@ -4,6 +4,7 @@
   "name": "ExclusionsTemplate",
   "groupIdentity": "Microsoft.Templates.Test.ExclusionsTemplate",
   "identity": "Microsoft.Templates.Test.ExclusionsTemplate.VB",
+  "shortName": "ExclusionsTemplate",
   "tags": {
     "language": "VisualBasic",
     "type": "item",

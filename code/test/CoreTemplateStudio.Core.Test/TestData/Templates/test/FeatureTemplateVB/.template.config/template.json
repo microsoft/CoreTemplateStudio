@@ -5,6 +5,7 @@
   "description": "Generic Feature description...",
   "groupIdentity": "Microsoft.Templates.Test.FeatureTemplate",
   "identity": "Microsoft.Templates.Test.FeatureTemplate.VB",
+  "shortName": "FeatureTemplate",
   "tags": {
     "language": "VisualBasic",
     "type": "item",

@@ -30,7 +30,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
         {
             var projectsToAdd = Config
                             .Where(o => !string.IsNullOrWhiteSpace(o.Path))
-                            .Select(o => Path.GetFullPath(Path.Combine(_destinationPath, o.GetOutputPath(_genParameters))))
+                            .Select(o => Path.GetFullPath(Path.Combine(_destinationPath, o.Path)))
                             .ToList();
 
             foreach (var project in projectsToAdd)

@@ -50,7 +50,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
         internal override void ExecuteInternal()
         {
             int targetProjectIndex = int.Parse(Args["files"]);
-            var projectFile = _primaryOutputs[targetProjectIndex].GetOutputPath(_parameters);
+            var projectFile = _primaryOutputs[targetProjectIndex].Path;
             string projectFileWithoutExtension = projectFile.Replace(Path.GetExtension(projectFile), string.Empty);
 
             var pfx = GenContext.ToolBox.Shell.CreateCertificate(_publisherName);

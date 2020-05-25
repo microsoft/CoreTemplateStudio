@@ -4,6 +4,7 @@
   "name": "RequirementsTemplate",
   "groupIdentity": "Microsoft.Templates.Test.RequirementsTemplate",
   "identity": "Microsoft.Templates.Test.RequirementsTemplate.VB",
+  "shortName": "RequirementsTemplate",
   "tags": {
     "language": "VisualBasic",
     "type": "item",

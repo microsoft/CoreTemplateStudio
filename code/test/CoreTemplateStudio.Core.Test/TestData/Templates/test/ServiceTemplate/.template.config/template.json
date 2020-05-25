@@ -5,6 +5,7 @@
   "description": "Generic description...",
   "groupIdentity": "Microsoft.Templates.Test.ServiceTemplate",
   "identity": "Microsoft.Templates.Test.ServiceTemplate.CSharp",
+  "shortName": "ServiceTemplate",
   "tags": {
     "language": "C#",
     "type": "item",

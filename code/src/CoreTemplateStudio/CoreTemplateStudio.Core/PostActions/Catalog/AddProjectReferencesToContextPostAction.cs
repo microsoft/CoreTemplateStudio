@@ -65,7 +65,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
             else
             {
                 int targetProjectIndex = int.Parse(Args["fileIndex"]);
-                referencedProject = Path.GetFullPath(Path.Combine(_destinationPath, _primaryOutputs[targetProjectIndex].GetOutputPath(_parameters)));
+                referencedProject = Path.GetFullPath(Path.Combine(_destinationPath, _primaryOutputs[targetProjectIndex].Path));
             }
 
             var invert = Args.ContainsKey("specifiedPathIsTarget") && bool.Parse(Args["specifiedPathIsTarget"] ?? "False");

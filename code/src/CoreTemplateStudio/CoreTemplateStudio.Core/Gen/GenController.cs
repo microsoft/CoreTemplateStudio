@@ -53,8 +53,6 @@ namespace Microsoft.Templates.Core.Gen
                     throw new GenException(genInfo.Name, genInfo.Template.Name, result.Message);
                 }
 
-                ReplaceParamsInFilePath(genInfo.GenerationPath, genInfo.Parameters);
-
                 ExecutePostActions(genInfo, result);
             }
 
@@ -64,38 +62,6 @@ namespace Microsoft.Templates.Core.Gen
             ExecuteGlobalPostActions();
 
             return genResults;
-        }
-
-        private void ReplaceParamsInFilePath(string generationPath, Dictionary<string, string> genParameters)
-        {
-            var parameterReplacements = new FileRenameParameterReplacements(genParameters);
-
-            var filesToMove = Directory.EnumerateFiles(generationPath, "*", SearchOption.AllDirectories)
-                .ToList()
-                .Where(file => parameterReplacements.FileRenameParams.Any(param => file.Contains(param.Key)));
-
-            if (filesToMove != null && filesToMove.Count() > 0)
-            {
-                foreach (var file in filesToMove)
-                {
-                    var newPath = parameterReplacements.ReplaceInPath(file);
-
-                    Fs.EnsureFolder(Directory.GetParent(newPath).FullName);
-                    Fs.SafeMoveFile(file, newPath);
-                }
-            }
-
-            var directoriesToDelete = Directory.EnumerateDirectories(generationPath, "*", SearchOption.AllDirectories)
-                .ToList()
-                .Where(file => parameterReplacements.FileRenameParams.Any(param => file.Contains(param.Key)));
-
-            if (directoriesToDelete != null && directoriesToDelete.Count() > 0)
-            {
-                foreach (var d in directoriesToDelete)
-                {
-                    Fs.SafeDeleteDirectory(d, false);
-                }
-            }
         }
 
         private static void CalculateGenerationTime(double totalTime)
