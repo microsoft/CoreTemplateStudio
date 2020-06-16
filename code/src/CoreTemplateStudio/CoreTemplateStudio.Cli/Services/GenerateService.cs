@@ -42,7 +42,7 @@ namespace Microsoft.Templates.Cli.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format(StringRes.ErrorGenerating, ex.Message));
+                throw new Exception(string.Format(StringRes.ErrorGenerating, ex.Message), ex);
             }
         }
     }
