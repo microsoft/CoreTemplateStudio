@@ -579,6 +579,6 @@ The following changes could not be integrated: {2}
     <value>"{0}" already exists in folder {1}, please choose a different project name.</value>
   </data>
   <data name="TemplatesSynchronizationError" xml:space="preserve">
-    <value>Error syncronizing templates.</value>
+    <value>Error synchronizing templates.</value>
   </data>
 </root>

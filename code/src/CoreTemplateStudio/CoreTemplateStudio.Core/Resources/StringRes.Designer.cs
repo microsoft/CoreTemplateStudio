@@ -1045,7 +1045,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error syncronizing templates..
+        ///   Looks up a localized string similar to Error synchronizing templates..
         /// </summary>
         public static string TemplatesSynchronizationError {
             get {

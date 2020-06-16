@@ -579,6 +579,6 @@ Nemohly být integrovány následující změny: {2}
     <comment>Message box text for project name can not start with.</comment>
   </data>
   <data name="TemplatesSynchronizationError" xml:space="preserve">
-    <value>Error syncronizing templates.</value>
+    <value>Error synchronizing templates.</value>
   </data>
 </root>
