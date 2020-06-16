@@ -1,7 +1,7 @@
 ﻿{
   "Environment": "LocalEnv",
   "CdnUrl": "",
-  "RemoteTelemetryKey": "VSIX Key",
+  "RemoteTelemetryKey": "",
   "LogFileFolderPath": "CoreTS\\Logs",
   "CustomTelemetryEndpoint": "",
   "RepositoryFolderName": "CoreTS",

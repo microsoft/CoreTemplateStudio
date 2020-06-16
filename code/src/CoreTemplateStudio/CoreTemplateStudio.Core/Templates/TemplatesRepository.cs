@@ -82,21 +82,14 @@ namespace Microsoft.Templates.Core
             {
                 await Sync.EnsureContentAsync(force, _cts.Token);
 
-                if (!string.IsNullOrEmpty(CurrentContentFolder))
-                {
-                    GetNamingConfigs();
+                GetNamingConfigs();
 
-                    if (!_cts.Token.IsCancellationRequested)
-                    {
-                        await Sync.RefreshTemplateCacheAsync(force);
-                    }
-
-                    Sync.CheckForWizardUpdates();
-                }
-                else
+                if (!_cts.Token.IsCancellationRequested)
                 {
-                    throw new TemplateSynchronizationException("Could not sync templates");
+                    await Sync.RefreshTemplateCacheAsync(force);
                 }
+
+                Sync.CheckForWizardUpdates();
             }
         }
 
