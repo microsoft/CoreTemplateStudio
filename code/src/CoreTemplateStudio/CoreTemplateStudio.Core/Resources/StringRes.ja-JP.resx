@@ -578,4 +578,7 @@
     <value>"{0}" は有効な名前ではありません。プロジェクト名の先頭に "{1}" を使用することはできません。</value>
     <comment>Message box text for project name can not start with.</comment>
   </data>
+  <data name="TemplatesSynchronizationError" xml:space="preserve">
+    <value>Error syncronizing templates.</value>
+  </data>
 </root>

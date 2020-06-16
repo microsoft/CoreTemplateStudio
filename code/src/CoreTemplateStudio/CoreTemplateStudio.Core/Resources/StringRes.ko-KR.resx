@@ -578,4 +578,7 @@
     <value>"{0}" 이름은 유효하지 않습니다. 프로젝트 이름은 "{1}"(으)로 시작할 수 없습니다.</value>
     <comment>Message box text for project name can not start with.</comment>
   </data>
+  <data name="TemplatesSynchronizationError" xml:space="preserve">
+    <value>Error syncronizing templates.</value>
+  </data>
 </root>
