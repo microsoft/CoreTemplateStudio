@@ -61,7 +61,14 @@ namespace Microsoft.Templates.Core.Locations
                             await ExtractInstalledContentAsync(ct);
                         }
 
-                        TelemetryService.Current.SetContentVersionToContext(CurrentContent.Version);
+                        if (CurrentContent != null)
+                        {
+                            TelemetryService.Current.SetContentVersionToContext(CurrentContent.Version);
+                        }
+                        else
+                        {
+                            AppHealth.Current.Error.TrackAsync(StringRes.TemplatesSynchronizationErrorExtracting).FireAndForget();
+                        }
                     }
                     finally
                     {
