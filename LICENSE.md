@@ -1,4 +1,10 @@
-    MIT License
+# Core Template Studio
+
+Copyright (c) .NET Foundation and Contributors.
+
+All rights reserved.
+
+## MIT License
 
     Copyright (c) Microsoft Corporation. All rights reserved.
 
