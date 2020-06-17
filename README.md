@@ -9,8 +9,7 @@ Core Template Studio is a .NET Standard 2.0 project that handles all of the temp
 | Branch  |                                                                                                                Build Status                                                                                                                |
 | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | dev     |     [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=dev)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=dev)     |
-| staging | [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=staging)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=staging) |
-| master  |  [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=master)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=master)  |
+| release | [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=release)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=release) |
 
 # Documentation
 
