@@ -50,6 +50,7 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<ICommandHandler<GetFeaturesCommand>, GetFeaturesHandler>();
             services.AddSingleton<ICommandHandler<GetServicesCommand>, GetServicesHandler>();
             services.AddSingleton<ICommandHandler<GetTestingsCommand>, GetTestingsHandler>();
+            services.AddSingleton<ICommandHandler<GetAllLicencesCommand>, GetAllLicencesHandler>();
             services.AddSingleton<ICommandHandler<GenerateCommand>, GenerateHandler>();
 
             // Validators
@@ -61,6 +62,7 @@ namespace Microsoft.Templates.Cli
             services.AddSingleton<IValidator<GetFeaturesCommand>, GetFeaturesValidator>();
             services.AddSingleton<IValidator<GetServicesCommand>, GetServicesValidator>();
             services.AddSingleton<IValidator<GetTestingsCommand>, GetTestingsValidator>();
+            services.AddSingleton<IValidator<GetAllLicencesCommand>, GetAllLicencesValidator>();
             services.AddSingleton<IValidator<GenerateCommand>, GenerateValidator>();
 
             // App entry point
