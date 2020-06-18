@@ -214,6 +214,22 @@ Sample usage:
 getlayouts -p FullStackWebApp -f React -b Node
 `
 
+### Get All Licences Command: 
+Gets all licences from user selection. (Selected templates and compositions)
+
+`
+getalllicences -d userSelectionJsonData
+`
+
+where:
+- userSelectionJsonData: Json with the userSelection
+
+Sample usage: 
+
+`
+getalllicences -d {"projectName":"testProject","genPath":"C:/Users/MyUser/projects","projectType":"FullStackWebApp","frontendFramework":"React","backendFramework":"Node","language":"Any","platform":"Web","homeName":"Test","pages":[{"name":"Blank","templateid":"wts.Page.React.Blank"},{"name":"Grid","templateid":"wts.Page.React.Grid"},{"name":"Master Detail","templateid":"wts.Page.React.MasterDetail"},{"name":"List","templateid":"wts.Page.React.List"}],"features":[]}
+`
+
 ### Generate Command: 
 Performs project generation for the provided user selection.
 
