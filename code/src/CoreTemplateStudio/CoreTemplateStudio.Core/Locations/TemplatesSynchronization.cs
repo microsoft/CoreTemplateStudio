@@ -95,7 +95,7 @@ namespace Microsoft.Templates.Core.Locations
 
                     await PurgeContentAsync();
 
-                    TelemetryService.Current.SetContentVersionToContext(CurrentContent.Version);
+                    TelemetryService.Current.SetContentVersionToContext(CurrentContent?.Version);
                 }
                 finally
                 {
