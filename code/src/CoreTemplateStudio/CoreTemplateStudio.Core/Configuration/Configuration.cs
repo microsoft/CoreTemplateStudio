@@ -46,7 +46,7 @@ namespace Microsoft.Templates.Core
 
         public string CustomTelemetryEndpoint { get; set; } = string.Empty;
 
-        public string GitHubDocsUrl { get; set; } = "https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/";
+        public string GitHubDocsUrl { get; set; } = string.Empty;
 
         public static string LoadedConfigFile { get; private set; }
 

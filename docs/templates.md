@@ -291,7 +291,7 @@ For example, consider a SplitView project type with MVVM Basic framework, and ad
             <!--
               TODO WTS: Change the symbols for each item as appropriate for your app
               More on Segoe UI Symbol icons: https://docs.microsoft.com/windows/uwp/style/segoe-ui-symbol-font
-              Or to use an IconElement instead of a Symbol see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/UWP/projectTypes/navigationpane.md
+              Or to use an IconElement instead of a Symbol see https://github.com/Microsoft/WindowsTemplateStudio/blob/release/docs/UWP/projectTypes/navigationpane.md
               Edit String/en-US/Resources.resw: Add a menu item title for each page
             -->
             <NavigationViewItem x:Uid="Shell_Main" Icon="Document" helpers:NavHelper.NavigateTo="views:MainPage" />
@@ -465,6 +465,5 @@ Sample itemNameValidation.config.json:
 ## Learn more
 
 - [Getting started with the CoreTS codebase](./getting-started-developers.md)
-- [Windows Template Studio - Templates Docs](https://github.com/microsoft/WindowsTemplateStudio/blob/master/docs/templates.md)
-- [Web Template Studio - Templates Docs](
-https://github.com/microsoft/WebTemplateStudio/blob/master/docs/contributing/templates.md)
+- [Windows Template Studio - Templates Docs](https://github.com/microsoft/WindowsTemplateStudio/blob/release/docs/templates.md)
+- [Web Template Studio - Templates Docs](https://github.com/microsoft/WebTemplateStudio/blob/release/docs/contributing/templates.md)
