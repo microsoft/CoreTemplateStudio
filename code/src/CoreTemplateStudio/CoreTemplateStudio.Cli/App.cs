@@ -59,6 +59,7 @@ namespace Microsoft.Templates.Cli
                         GetFeaturesCommand,
                         GetServicesCommand,
                         GetTestingsCommand,
+                        GetAllLicencesCommand,
                         GenerateCommand,
                         CloseCommand>(args);
 
@@ -71,6 +72,7 @@ namespace Microsoft.Templates.Cli
                         (GetFeaturesCommand opts) => _dispatcher.DispatchAsync(opts),
                         (GetServicesCommand opts) => _dispatcher.DispatchAsync(opts),
                         (GetTestingsCommand opts) => _dispatcher.DispatchAsync(opts),
+                        (GetAllLicencesCommand opts) => _dispatcher.DispatchAsync(opts),
                         (GenerateCommand opts) => _dispatcher.DispatchAsync(opts),
                         (CloseCommand opts) => Task.FromResult(1),
                         errors =>

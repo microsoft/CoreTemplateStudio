@@ -15,6 +15,7 @@ namespace Microsoft.Templates.Cli.Models
         GetFeaturesResult,
         GetServicesResult,
         GetTestingResult,
+        GetAllLicencesResult,
         GenerateProgress,
         GenerateResult,
     }
