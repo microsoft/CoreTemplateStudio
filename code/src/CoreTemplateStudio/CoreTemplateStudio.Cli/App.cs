@@ -19,7 +19,6 @@ namespace Microsoft.Templates.Cli
 {
     public class App
     {
-        private readonly string promptSymbol = $"{Environment.NewLine}>> ";
         private readonly string splitPattern = "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
         private readonly ICommandDispatcher _dispatcher;
         private readonly IMessageService _messageService;
