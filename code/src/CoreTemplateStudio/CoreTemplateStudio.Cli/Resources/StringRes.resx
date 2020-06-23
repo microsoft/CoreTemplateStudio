@@ -165,6 +165,9 @@
   <data name="ErrorSyncingTemplates" xml:space="preserve">
     <value>Error syncing templates. {0}</value>
   </data>
+  <data name="ErrorSyncingTemplatesNoContentFolder" xml:space="preserve">
+    <value>Error synchronizing templates. No content folder available.</value>
+  </data>
   <data name="ReceivedCommand" xml:space="preserve">
     <value>Received Command: {0}</value>
   </data>

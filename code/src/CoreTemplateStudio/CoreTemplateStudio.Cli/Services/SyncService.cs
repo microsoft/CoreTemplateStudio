@@ -56,14 +56,21 @@ namespace Microsoft.Templates.Cli.Services
                 GenContext.ToolBox.Repo.Sync.SyncStatusChanged += OnSyncStatusChanged;
                 await GenContext.ToolBox.Repo.SynchronizeAsync(true);
 
-                return new SyncModel()
+                if (!string.IsNullOrEmpty(GenContext.ToolBox.Repo.CurrentContentFolder))
                 {
-                    TemplatesVersion = GenContext.ToolBox.TemplatesVersion,
-                    WasUpdated = _wasUpdated,
-                    ProjectNameValidationConfig = GenContext.ToolBox.Repo.ProjectNameValidationConfig,
-                    ItemNameValidationConfig = GenContext.ToolBox.Repo.ItemNameValidationConfig,
-                    DefaultNames = GetDefaultNames(),
-                };
+                    return new SyncModel()
+                    {
+                        TemplatesVersion = GenContext.ToolBox.TemplatesVersion,
+                        WasUpdated = _wasUpdated,
+                        ProjectNameValidationConfig = GenContext.ToolBox.Repo.ProjectNameValidationConfig,
+                        ItemNameValidationConfig = GenContext.ToolBox.Repo.ItemNameValidationConfig,
+                        DefaultNames = GetDefaultNames(),
+                    };
+                }
+                else
+                {
+                    throw new Exception(StringRes.ErrorSyncingTemplatesNoContentFolder);
+                }
             }
             catch (Exception ex)
             {

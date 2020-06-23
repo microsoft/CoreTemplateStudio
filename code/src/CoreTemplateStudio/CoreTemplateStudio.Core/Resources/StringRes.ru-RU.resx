@@ -578,4 +578,7 @@
     <value>Имя "{0}" недопустимо. Имя проекта не может начинаться с "{1}".</value>
     <comment>Message box text for project name can not start with.</comment>
   </data>
+  <data name="TemplatesSynchronizationError" xml:space="preserve">
+    <value>Error synchronizing templates.</value>
+  </data>
 </root>

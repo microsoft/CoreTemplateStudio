@@ -61,7 +61,14 @@ namespace Microsoft.Templates.Core.Locations
                             await ExtractInstalledContentAsync(ct);
                         }
 
-                        TelemetryService.Current.SetContentVersionToContext(CurrentContent.Version);
+                        if (CurrentContent != null)
+                        {
+                            TelemetryService.Current.SetContentVersionToContext(CurrentContent.Version);
+                        }
+                        else
+                        {
+                            AppHealth.Current.Error.TrackAsync(StringRes.TemplatesSynchronizationErrorExtracting).FireAndForget();
+                        }
                     }
                     finally
                     {
@@ -88,7 +95,7 @@ namespace Microsoft.Templates.Core.Locations
 
                     await PurgeContentAsync();
 
-                    TelemetryService.Current.SetContentVersionToContext(CurrentContent.Version);
+                    TelemetryService.Current.SetContentVersionToContext(CurrentContent?.Version);
                 }
                 finally
                 {

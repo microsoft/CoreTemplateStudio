@@ -578,4 +578,7 @@ Aşağıdaki değişiklikler tümleştirilemedi: {2}
     <value>"{0}" geçerli bir ad değil. Proje adı "{1}" ile başlayamaz.</value>
     <comment>Message box text for project name can not start with.</comment>
   </data>
+  <data name="TemplatesSynchronizationError" xml:space="preserve">
+    <value>Error synchronizing templates.</value>
+  </data>
 </root>

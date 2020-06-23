@@ -104,7 +104,7 @@ namespace Microsoft.Templates.Core.Locations
 
             if (Directory.Exists(workingFolder))
             {
-                Fs.SafeDeleteDirectory(workingFolder);
+                Fs.SafeDeleteDirectory(workingFolder, false);
             }
 
             await Task.Run(() =>

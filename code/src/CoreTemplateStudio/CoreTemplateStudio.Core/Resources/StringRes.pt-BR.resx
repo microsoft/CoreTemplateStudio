@@ -578,4 +578,7 @@ As seguintes alterações não puderam ser integradas: {2}
     <value>"{0}" não é um nome válido. O nome do projeto não pode iniciar com "{1}".</value>
     <comment>Message box text for project name can not start with.</comment>
   </data>
+  <data name="TemplatesSynchronizationError" xml:space="preserve">
+    <value>Error synchronizing templates.</value>
+  </data>
 </root>
