@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/platform-linux--64%20%7C%20win--64%20%7C%20osx--64%20-lightgrey.svg" alt="Platforms Supported: MacOSX, Linux, Windows"/> <a href="https://www.repostatus.org/#active"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed." /></a> <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: We are using the MIT License"></a> <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="We are welcoming PRS!"></a>
 
-Core Template Studio is a .NET Standard 2.0 project that handles all of the template synchronization and code generation (composition, generation + postaction execution) for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)** and **[WebTemplateStudio](https://github.com/Microsoft/WebTemplateStudio)**. The project has two parts: a .NET Standard core and its corresponding Cli that exposes the core.
+Core Template Studio is a .NET Standard 2.0 project that handles all of the template synchronization and code generation (composition, generation + postaction execution) for **[WindowsTemplateStudio](https://github.com/Microsoft/WindowsTemplateStudio)** and **[WebTemplateStudio](https://github.com/Microsoft/WebTemplateStudio)**. The main project has two parts: a .NET Standard core and its corresponding Cli that exposes the core. There's also a tools folder containing helper tools as the WtsPackagingTool.
 
 ## Build Status
 
@@ -11,7 +11,10 @@ Core Template Studio is a .NET Standard 2.0 project that handles all of the temp
 | dev     |     [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=dev)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=dev)     |
 | release | [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=release)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=release) |
 
-# Documentation
+## Branches
+Our default branch is dev, and all PR's should go to the dev branch. While there are no releases of CoreTS, we still have a release branch on CoreTS as this is where the submodules on WebTS and WinTS point to. When adding new functionality or changing existing code make sure the changes are compatible with both Windows Template Studio and Web Template Studio. All changes have to be tested in both Windows Template Studio and Web Template Studio before being merged into the release branch.
+
+## Documentation
 
 - [Getting started with the codebase](./docs/getting-started-developers.md).
 
@@ -24,7 +27,7 @@ Core Template Studio is a .NET Standard 2.0 project that handles all of the temp
 
 ## Limitations
 
-- Currently does not support Package download and verification from the CDN.
+- Currently .NET Standard does not support Package verification using PackageDigitalSignatureManager. This functionality was moved to the Utilities project (.NET framework) to be consumed from Windows Template Studio. The CLI (.NET Core 3.1) does not allow to download template packages from the CDN due to this limitation. Tracking issue is #131. 
 
 ## Feedback, Requests and Roadmap
 
