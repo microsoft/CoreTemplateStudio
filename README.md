@@ -12,7 +12,7 @@ Core Template Studio is a .NET Standard 2.0 project that handles all of the temp
 | release | [![Build Status](https://winappstudio.visualstudio.com/DefaultCollection/WTS/_apis/build/status/CoreTemplateStudio-%20CI?branchName=release)](https://winappstudio.visualstudio.com/WTS/_build/latest?definitionId=156&branchName=release) |
 
 ## Branches
-Our default branch is dev, and all PR's should go to the dev branch. While there are no releases of CoreTS, we still have a release branch on CoreTS as this is where the submodules on WebTS and WinTS point to. When adding new functionality or changing existing code make sure the changes are compatible with both Windows Template Studio and Web Template Studio. All changes have to be tested in both Windows Template Studio and Web Template Studio before being merged into the release branch.
+Our default branch is dev and all PR's should go to the dev branch. While there are no releases of CoreTS, we still have a release branch on CoreTS as this is where the submodules on Web Template Studio and Windows Template Studio point to. When adding new functionality or changing existing code make sure the changes are compatible with both Windows Template Studio and Web Template Studio. All changes have to be tested in both Windows Template Studio and Web Template Studio before being merged into the release branch.
 
 ## Documentation
 
@@ -27,7 +27,7 @@ Our default branch is dev, and all PR's should go to the dev branch. While there
 
 ## Limitations
 
-- Currently .NET Standard does not support Package verification using PackageDigitalSignatureManager. This functionality was moved to the Utilities project (.NET framework) to be consumed from Windows Template Studio. The CLI (.NET Core 3.1) does not allow to download template packages from the CDN due to this limitation. Tracking issue is #131. 
+- Currently .NET Standard does not support Package verification using PackageDigitalSignatureManager. This functionality was moved to the Utilities project (.NET framework) to be consumed from Windows Template Studio. The CLI (.NET Core 3.1) does not allow to download template packages from the CDN due to this limitation. Tracking issue is for adding this in once it is supported is #131. 
 
 ## Feedback, Requests and Roadmap
 
