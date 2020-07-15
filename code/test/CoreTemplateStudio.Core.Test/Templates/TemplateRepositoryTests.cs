@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Linq;
 using Microsoft.Templates.Core.Gen;
-
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Templates
@@ -12,7 +12,7 @@ namespace Microsoft.Templates.Core.Test.Templates
     [Trait("ExecutionSet", "Minimum")]
     public class TemplateRepositoryTests
     {
-        private TemplatesFixture _fixture;
+        private readonly TemplatesFixture _fixture;
         private TemplatesRepository _repo;
         private const string TestPlatform = "test";
 
@@ -112,12 +112,7 @@ namespace Microsoft.Templates.Core.Test.Templates
 
             var features = _repo.GetTemplatesInfo(TemplateType.Feature, TestPlatform, "pt1", "fx1");
 
-            Assert.Collection(
-                features,
-                f1 =>
-                {
-                    Assert.Equal("FeatureTemplate", f1.Name);
-                });
+            Assert.Contains(features, f => f.Name == "FeatureTemplate");
         }
 
         [Fact]

@@ -24,8 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="TestData\Templates\test\Dependencies.FeatureTemplate.dp2\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Dependencies.FeatureTemplate.dp1\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Exclusions.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Exclusions.FeatureTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Requirements.FeatureTemplate.r2\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\Requirements.FeatureTemplate.r1\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Requirements.FeatureTemplateVB\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Requirements.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\test\TestingTemplateVB\.template.config\description.md" />
@@ -151,6 +155,7 @@
     <Compile Include="Diagnostics\TelemetryServiceTest.cs" />
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Gen\GenComposerTests.cs" />
     <Compile Include="Naming\ItemNameServiceTests.cs" />
     <Compile Include="Naming\ProjectNameServiceTests.cs" />
     <Compile Include="Naming\Validators\DefaultNamesValidatorTests.cs" />

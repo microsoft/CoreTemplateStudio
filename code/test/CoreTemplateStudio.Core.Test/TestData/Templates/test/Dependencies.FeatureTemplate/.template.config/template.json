@@ -13,5 +13,16 @@
     "wts.dependencies": "dp1|dp2"
   },
   "sourceName": "App_Name",
-  "preferNameDirectory": true
+  "preferNameDirectory": true,
+  "symbols": {
+    "dp1": {
+      "type": "parameter",
+      "replaces": "Param_dp1"
+    },
+    "dp2": {
+      "type": "parameter",
+      "replaces": "Param_dp2"
+    }
+
+  }
 }
