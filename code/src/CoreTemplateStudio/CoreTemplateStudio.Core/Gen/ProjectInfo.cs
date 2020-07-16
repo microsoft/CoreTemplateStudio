@@ -18,5 +18,7 @@ namespace Microsoft.Templates.Core.Gen
         public List<NugetReference> NugetReferences { get; } = new List<NugetReference>();
 
         public List<ProjectReference> ProjectReferences { get; } = new List<ProjectReference>();
+
+        public List<ProjectConfiguration> ProjectConfigurations { get; } = new List<ProjectConfiguration>();
     }
 }
