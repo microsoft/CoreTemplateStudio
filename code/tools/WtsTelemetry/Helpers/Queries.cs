@@ -43,7 +43,12 @@ queryTable
 
         public string Projects(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsProjectType", platform);
 
+        // TODO: Remove WtsFramework and use WtsFrontendFramework
         public string Frameworks(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFramework", platform);
+
+        public string FrontendFrameworks(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFrontendFramework", platform);
+
+        public string BackendFrameworks(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsBackendFramework", platform);
 
         public string Pages(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsPageGen", "WtsTemplateName", platform);
 
