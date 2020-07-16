@@ -9,7 +9,8 @@ namespace WtsTelemetry.Helpers
         private StringBuilder stringBuilder = new StringBuilder();
         private readonly string title;
 
-        public MarkdownBuilder (string title) {
+        public MarkdownBuilder(string title)
+        {
             this.title = title;
         }
 
@@ -42,7 +43,7 @@ namespace WtsTelemetry.Helpers
                     stringBuilder.AppendLine();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 stringBuilder.AppendLine($"Error to process {title} table.");
                 stringBuilder.AppendLine($"Entry data: {json}.");

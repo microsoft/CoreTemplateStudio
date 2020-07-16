@@ -8,8 +8,6 @@ namespace WtsTelemetry.Services
 {
     public class ApplicationInsightService
     {
-        private const string Uwp = "Uwp";
-        private const string Wpf = "Wpf";
         private const string URL = "https://api.applicationinsights.io/v1/apps/{0}/query?query={1}";
         private readonly string appId;
         private readonly string apiKey;
@@ -23,28 +21,43 @@ namespace WtsTelemetry.Services
 
         public WinTSData GetWinTSData(int year, int month)
         {
-            var queries = new Queries(year, month);
+            var uwpQueries = new Queries(Platforms.Uwp, year, month);
+            var wpfQueries = new Queries(Platforms.Wpf, year, month);
             return new WinTSData
             {
-                Uwp = GetWinTSPlatformData(Uwp, queries),
-                Wpf = GetWinTSPlatformData(Wpf, queries),
-                entryPoint = GetData(queries.EntryPoints),
-                Language = GetData(queries.Languages),
+                Uwp = GetWinTSPlatformData(uwpQueries),
+                Wpf = GetWinTSPlatformData(wpfQueries),
+                entryPoint = GetData(uwpQueries.EntryPoints),
+                Language = GetData(uwpQueries.Languages),
                 Year = year,
                 Month = month
             };
         }
 
-        private WinTSPlatformData GetWinTSPlatformData(string platform, Queries queries)
+        public WebTSData GetWebTSData(int year, int month)
+        {
+            var queries = new Queries(Platforms.Web, year, month);
+            return new WebTSData
+            {
+                FrontendFrameworks = GetData(queries.FrontendFrameworks),
+                BackendFrameworks = GetData(queries.BackendFrameworks),
+                Pages = GetData(queries.Pages),
+                Services = GetData(queries.Features),
+                Year = year,
+                Month = month
+            };
+        }
+
+        private WinTSPlatformData GetWinTSPlatformData(Queries queries)
         {
             return new WinTSPlatformData
             {
-                Project = GetData(queries.Projects(platform)),
-                Frameworks = GetData(queries.Frameworks(platform)),
-                Pages = GetData(queries.Pages(platform)),
-                Features = GetData(queries.Features(platform)),
-                Services = GetData(queries.Services(platform)),
-                Testing = GetData(queries.Testing(platform)),
+                Project = GetData(queries.Projects),
+                Frameworks = GetData(queries.Frameworks),
+                Pages = GetData(queries.Pages),
+                Features = GetData(queries.Features),
+                Services = GetData(queries.Services),
+                Testing = GetData(queries.Testing),
             };
         }
 

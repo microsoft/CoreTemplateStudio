@@ -8,9 +8,6 @@ namespace WtsTelemetry
 {
     public static class WinTSTelemetry
     {
-        private const string Uwp = "Uwp";
-        private const string Wpf = "Wpf";
-
         // Every minute: 0 * * * * *
         // Every 5 minutes: 0 */5 * * * *
         // Every day: 0 0 0 * * *

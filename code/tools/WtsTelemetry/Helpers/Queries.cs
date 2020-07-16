@@ -34,29 +34,31 @@ queryTable
 
         private readonly int year;
         private readonly int month;
+        private readonly string platform;
 
-        public Queries(int year, int month)
+        public Queries(string platform, int year, int month)
         {
+            this.platform = platform;
             this.year = year;
             this.month = month;
         }
 
-        public string Projects(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsProjectType", platform);
+        public string Projects => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsProjectType", platform);
 
         // TODO: Remove WtsFramework and use WtsFrontendFramework
-        public string Frameworks(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFramework", platform);
+        public string Frameworks => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFramework", platform);
 
-        public string FrontendFrameworks(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFrontendFramework", platform);
+        public string FrontendFrameworks => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFrontendFramework", platform);
 
-        public string BackendFrameworks(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsBackendFramework", platform);
+        public string BackendFrameworks => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsBackendFramework", platform);
 
-        public string Pages(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsPageGen", "WtsTemplateName", platform);
+        public string Pages => string.Format(DataByCategoryQuery, year, month, "WtsPageGen", "WtsTemplateName", platform);
 
-        public string Features(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsFeatureGen", "WtsTemplateName", platform);
+        public string Features => string.Format(DataByCategoryQuery, year, month, "WtsFeatureGen", "WtsTemplateName", platform);
 
-        public string Services(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsServiceGen", "WtsTemplateName", platform);
+        public string Services => string.Format(DataByCategoryQuery, year, month, "WtsServiceGen", "WtsTemplateName", platform);
 
-        public string Testing(string platform) => string.Format(DataByCategoryQuery, year, month, "WtsTestingGen", "WtsTemplateName", platform);
+        public string Testing => string.Format(DataByCategoryQuery, year, month, "WtsTestingGen", "WtsTemplateName", platform);
 
         public string EntryPoints => string.Format(DataQuery, year, month, "WtsWizard", "WtsWizardType");
 
