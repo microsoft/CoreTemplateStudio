@@ -15,6 +15,22 @@ using Microsoft.Templates.Core.Templates;
 
 namespace Microsoft.Templates.Core.PostActions.Catalog
 {
+    // This is a Template Defined Post-Action with the following configuration in the template.
+    //   "postActions": [
+    //    {
+    //        "description": "Unset deploy of XamlIslandAppProj",
+    //        "manualInstructions": [ ],
+    //        "actionId": "F74F9FBA-D4F5-494E-970E-D99DF5E3F4F3",
+    //        "args": {
+    //            "projectName": "Param_ProjectName.XamlIslandApp\\Param_ProjectName.XamlIslandApp.csproj",
+    //            "deploy": "false"
+    //        },
+    //        "continueOnError": "true"
+    //    }
+    //  ]
+    // Expected args:
+    //    - projectName -> The name of the project which configuration will be changed (project name as specified in the solution file)
+    //    - deploy -> Value of the Deploy configuration
     public class AddProjectConfigurationToContextPostaction : TemplateDefinedPostAction
     {
         public const string Id = "F74F9FBA-D4F5-494E-970E-D99DF5E3F4F3";
@@ -36,12 +52,12 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
         {
             var parameterReplacements = new FileRenameParameterReplacements(_parameters);
 
-            var projectPath = parameterReplacements.ReplaceInPath(Args["projectName"]);
+            var projectName = parameterReplacements.ReplaceInPath(Args["projectName"]);
 
             var projectConfiguration = new ProjectConfiguration
             {
-                Project = projectPath,
-                SetDeploy = bool.Parse(Args["setDeploy"]),
+                Project = projectName,
+                SetDeploy = bool.Parse(Args["deploy"]),
             };
 
             if (!GenContext.Current.ProjectInfo.ProjectConfigurations.Any(n => n.Equals(projectConfiguration)))
