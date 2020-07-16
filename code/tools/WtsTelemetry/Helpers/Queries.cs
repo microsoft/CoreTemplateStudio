@@ -1,6 +1,6 @@
-namespace WtsTelemetry.Services
+namespace WtsTelemetry.Helpers
 {
-    public class QueryService
+    public class Queries
     {
         private readonly string DataQuery = @"
 let startDatetime = startofmonth(datetime({0}-{1}-01));
@@ -35,7 +35,7 @@ queryTable
         private readonly int year;
         private readonly int month;
 
-        public QueryService(int year, int month)
+        public Queries(int year, int month)
         {
             this.year = year;
             this.month = month;
