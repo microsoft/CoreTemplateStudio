@@ -270,12 +270,15 @@ Currently we support the following types of [Post-Actions](../code/src/Core/Post
   - **Add SDK Reference To Project**: this post-action is executed to add a SDK reference to the project.
   - **Add Json Dictionary Item**: this post-action is executed to add an item to an existing json dictionary in a json file.
   - **Generate Test Certificate**: generate the test certificate for the UWP application and configure it in the application manifest.
+  - **Add Project Configuration**: this postaction allows to add a specific project configuration which overrides the default project configuration in a siolution.
 
 - Other postactions:
   - **Merge**: merges the source code from one file into another. This Post-Action requires a special (_postaction) configuration in the templates files.
   - **SearchAndReplace**: searches for the source code defined in the postaction file and replaces it with the specified code. This Post-Action requires a special (_searchreplace) configuration in the templates files.
   - **Sort Namespaces**: this post action re-orders the `using` statements at the top of the generated C# source files and the `import` statements in VB files.
-  * **Set Default Solution Configuration**: sets the default solution configuration in the Visual Studio sln file. With this post-action we change the default solution configuration from Debug|ARM to Debug|x86.
+  - **Set Default Solution Configuration**: sets the default solution configuration in the Visual Studio sln file. With this post-action we change the default solution configuration from Debug|ARM to Debug|x86.
+  - **Change Solution Configuration**: Changes the default solution configuration in the Visual Studio sln file with the information configured in the `Add Project Configuration` Postaction.
+
 
 ### Merge Post-Action
 
