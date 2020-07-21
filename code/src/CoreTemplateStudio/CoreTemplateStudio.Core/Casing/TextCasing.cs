@@ -22,6 +22,8 @@ namespace Microsoft.Templates.Core.Casing
                     return value.ToKebabCase();
                 case CasingType.Pascal:
                     return value.ToPascalCase();
+                case CasingType.Lower:
+                    return value.ToLowerCase();
                 default:
                     return value;
             }
