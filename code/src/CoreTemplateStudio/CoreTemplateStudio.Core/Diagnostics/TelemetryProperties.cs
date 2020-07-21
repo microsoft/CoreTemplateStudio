@@ -18,6 +18,10 @@ namespace Microsoft.Templates.Core.Diagnostics
 
         public static string Framework { get; private set; } = TelemetryEvents.Prefix + "Framework";
 
+        public static string FrontendFramework { get; private set; } = TelemetryEvents.Prefix + "FrontendFramework";
+
+        public static string BackendFramework { get; private set; } = TelemetryEvents.Prefix + "BackendFramework";
+
         public static string TemplateName { get; private set; } = TelemetryEvents.Prefix + "TemplateName";
 
         public static string GenEngineStatus { get; private set; } = TelemetryEvents.Prefix + "GenEngineStatus";
