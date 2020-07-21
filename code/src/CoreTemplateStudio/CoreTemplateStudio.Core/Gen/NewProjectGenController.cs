@@ -37,12 +37,10 @@ namespace Microsoft.Templates.Core.Gen
             var genResults = await GenerateItemsAsync(genItems, false);
             chrono.Stop();
 
-            // TODO: Adapt telemetry to properly handle backend
-            string appFx = userSelection.FrontEndFramework + (string.IsNullOrEmpty(userSelection.BackEndFramework) ? string.Empty : userSelection.BackEndFramework);
-            TrackTelemetry(genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, appFx, userSelection.Platform, userSelection.Language);
+            TrackTelemetry(genItems, genResults, chrono.Elapsed.TotalSeconds, userSelection.ProjectType, userSelection.FrontEndFramework, userSelection.BackEndFramework, userSelection.Platform, userSelection.Language);
         }
 
-        private static void TrackTelemetry(IEnumerable<GenInfo> genItems, Dictionary<string, TemplateCreationResult> genResults, double timeSpent, string appProjectType, string appFx, string appPlatform, string language)
+        private static void TrackTelemetry(IEnumerable<GenInfo> genItems, Dictionary<string, TemplateCreationResult> genResults, double timeSpent, string appProjectType, string appFrontendFramework, string appBackendFramework, string appPlatform, string language)
         {
             try
             {
@@ -54,11 +52,11 @@ namespace Microsoft.Templates.Core.Gen
 
                     if (genInfo.Template.GetTemplateType() == TemplateType.Project)
                     {
-                        AppHealth.Current.Telemetry.TrackProjectGenAsync(genInfo.Template, appProjectType, appFx, appPlatform, genResults[resultsKey], GenContext.ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName), language, genItemsTelemetryData, timeSpent, GenContext.Current.ProjectMetrics).FireAndForget();
+                        AppHealth.Current.Telemetry.TrackProjectGenAsync(genInfo.Template, appProjectType, appFrontendFramework, appBackendFramework, appPlatform, genResults[resultsKey], GenContext.ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName), language, genItemsTelemetryData, timeSpent, GenContext.Current.ProjectMetrics).FireAndForget();
                     }
                     else
                     {
-                        AppHealth.Current.Telemetry.TrackItemGenAsync(genInfo.Template, GenSourceEnum.NewProject, appProjectType, appFx, appPlatform, genResults[resultsKey]).FireAndForget();
+                        AppHealth.Current.Telemetry.TrackItemGenAsync(genInfo.Template, GenSourceEnum.NewProject, appProjectType, appFrontendFramework, appBackendFramework, appPlatform, genResults[resultsKey]).FireAndForget();
                     }
                 }
             }
