@@ -105,6 +105,7 @@ namespace Microsoft.Templates.Core.Gen
             GenContext.Current.ProjectInfo.SdkReferences.Clear();
             GenContext.Current.ProjectInfo.ProjectReferences.Clear();
             GenContext.Current.ProjectInfo.ProjectItems.Clear();
+            GenContext.Current.ProjectInfo.ProjectConfigurations.Clear();
             GenContext.Current.FilesToOpen.Clear();
 
             var directory = Directory.GetParent(GenContext.Current.GenerationOutputPath).FullName;

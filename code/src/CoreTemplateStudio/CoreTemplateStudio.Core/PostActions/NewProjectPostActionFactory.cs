@@ -41,6 +41,7 @@ namespace Microsoft.Templates.Core.PostActions
             postActions.Add(new SortUsingsPostAction(paths));
             postActions.Add(new SortImportsPostAction(paths));
             postActions.Add(new AddContextItemsToSolutionAndProjectPostAction());
+            postActions.Add(new ChangeSolutionConfigurationPostAction());
             postActions.Add(new SetDefaultSolutionConfigurationPostAction());
 
             return postActions;

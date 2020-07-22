@@ -4,6 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Configurations>Debug;Release;Analyze</Configurations>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
+    <DefineConstants>NOT_WINDOWS</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="..\..\..\StyleCop.json" Link="StyleCop.json" />
@@ -20,7 +24,7 @@
     <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.3.0" />
-    <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
+    <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" Condition="'$(OS)' != 'Windows_NT'" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta009">
       <PrivateAssets>all</PrivateAssets>

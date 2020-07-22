@@ -116,6 +116,10 @@ namespace Microsoft.Templates.Cli.Utilities
         {
         }
 
+        public override void ChangeSolutionConfiguration(IEnumerable<ProjectConfiguration> projectConfigurations)
+        {
+        }
+
         public override void SetDefaultSolutionConfiguration(string configurationName, string platformName, string projectGuid)
         {
         }

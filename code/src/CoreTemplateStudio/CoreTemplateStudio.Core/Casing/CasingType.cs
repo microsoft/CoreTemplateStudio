@@ -9,5 +9,6 @@ namespace Microsoft.Templates.Core.Casing
         Camel,
         Kebab,
         Pascal,
+        Lower,
     }
 }
