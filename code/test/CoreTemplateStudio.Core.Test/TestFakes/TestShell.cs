@@ -115,6 +115,10 @@ namespace Microsoft.Templates.Core.Test.TestFakes
         {
         }
 
+        public override void ChangeSolutionConfiguration(IEnumerable<ProjectConfiguration> projectConfigurations)
+        {
+        }
+
         public override void SetDefaultSolutionConfiguration(string configurationName, string platformName, string projectGuid)
         {
         }

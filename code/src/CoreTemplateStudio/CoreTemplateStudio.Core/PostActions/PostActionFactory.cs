@@ -73,6 +73,9 @@ namespace Microsoft.Templates.Core.PostActions
                     case AddSdkReferencesToContextPostAction.Id:
                         postActions.Add(new AddSdkReferencesToContextPostAction(genInfo.Template.Identity, postaction, genInfo.Parameters, genInfo.DestinationPath));
                         break;
+                    case AddProjectConfigurationToContextPostaction.Id:
+                        postActions.Add(new AddProjectConfigurationToContextPostaction(genInfo.Template.Identity, postaction, genInfo.Parameters, genInfo.DestinationPath));
+                        break;
                 }
             }
         }

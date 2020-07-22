@@ -26,6 +26,8 @@ namespace Microsoft.Templates.Core.Gen
 
         public abstract Guid GetProjectGuidByName(string projectName);
 
+        public abstract void ChangeSolutionConfiguration(IEnumerable<ProjectConfiguration> projectConfigurations);
+
         public abstract void SetDefaultSolutionConfiguration(string configurationName, string platformName, string projectName);
 
         public abstract void ShowModal(IWindow shell);
