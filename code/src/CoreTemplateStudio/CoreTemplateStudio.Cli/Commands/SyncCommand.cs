@@ -11,13 +11,14 @@ namespace Microsoft.Templates.Cli.Commands
     [Verb("sync", HelpText = "Sync templates and update UI.")]
     public class SyncCommand : ICommand
     {
-        public SyncCommand(string path)
+        public SyncCommand(string path, string platform)
         {
 #if DEBUG
             Path = path;
 #else
             Path = @"..";
 #endif
+            Platform = platform;
         }
 
         [Option('p', "path", Required = true, HelpText = "Sync templates path")]
@@ -25,7 +26,8 @@ namespace Microsoft.Templates.Cli.Commands
 
         public string FullPath => GetFullPath();
 
-        public string Platform => "Web";
+        [Option('t', "template-platform", Required = true, HelpText = "Sync templates platform")]
+        public string Platform { get;  }
 
         public string Language => "Any";
 
