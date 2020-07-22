@@ -185,6 +185,9 @@ namespace Microsoft.Templates.Core
                         case "CAMEL":
                             result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Camel });
                             break;
+                        case "LOWER":
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Lower });
+                            break;
                         default:
                             break;
                     }
