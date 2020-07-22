@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 
 using Microsoft.Win32.SafeHandles;
 
-using Mono.Unix.Native;
-
 namespace Microsoft.Templates.Core.Locations
 {
     internal static class JunctionNativeMethods
@@ -272,12 +270,14 @@ namespace Microsoft.Templates.Core.Locations
 
         private static void CreateJuntionOtherPlatforms(string sourceDir, string targetDir)
         {
+#if NOT_WINDOWS //Mono.Posix is only used to create the junction to local templates on OS different from Windows
             Directory.CreateDirectory(Path.Combine(targetDir, ".."));
-            int i = Syscall.symlink(sourceDir, targetDir);
+            int i = Mono.Unix.Native.Syscall.symlink(sourceDir, targetDir);
             if (i == -1)
             {
-                Console.WriteLine(Stdlib.GetLastError());
+                Console.WriteLine(Mono.Unix.Native.Stdlib.GetLastError());
             }
+#endif
         }
 
         /// <summary>

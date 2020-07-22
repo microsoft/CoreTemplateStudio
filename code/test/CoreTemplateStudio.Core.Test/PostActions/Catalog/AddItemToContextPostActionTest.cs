@@ -34,8 +34,10 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 GenerationOutputPath = destPath,
             };
 
-            List<FakeCreationPath> testPrimaryOutputs = new List<FakeCreationPath>();
-            testPrimaryOutputs.Add(new FakeCreationPath() { Path = relativeFile });
+            List<FakeCreationPath> testPrimaryOutputs = new List<FakeCreationPath>
+            {
+                new FakeCreationPath() { Path = relativeFile },
+            };
 
             var mergePostAction = new AddItemToContextPostAction(templateName, testPrimaryOutputs, new Dictionary<string, string>(), destPath);
             mergePostAction.Execute();
@@ -57,11 +59,15 @@ namespace Microsoft.Templates.Core.Test.PostActions.Catalog
                 GenerationOutputPath = destPath,
             };
 
-            List<FakeCreationPath> testPrimaryOutputs = new List<FakeCreationPath>();
-            testPrimaryOutputs.Add(new FakeCreationPath() { Path = relativeFile });
+            List<FakeCreationPath> testPrimaryOutputs = new List<FakeCreationPath>
+            {
+                new FakeCreationPath() { Path = relativeFile },
+            };
 
-            var genParams = new Dictionary<string, string>();
-            genParams.Add("wts.projectName", "Project");
+            var genParams = new Dictionary<string, string>
+            {
+                { "wts.projectName", "Project" },
+            };
 
             var mergePostAction = new AddItemToContextPostAction(templateName, testPrimaryOutputs, genParams, destPath);
             mergePostAction.Execute();

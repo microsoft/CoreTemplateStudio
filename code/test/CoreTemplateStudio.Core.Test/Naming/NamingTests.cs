@@ -16,7 +16,7 @@ namespace Microsoft.Templates.Core.Test
     [Trait("Type", "Naming")]
     public class NamingTests
     {
-        private TemplatesFixture _fixture;
+        private readonly TemplatesFixture _fixture;
 
         public NamingTests(TemplatesFixture fixture)
         {

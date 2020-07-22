@@ -83,17 +83,7 @@ namespace Microsoft.Templates.Core.Gen
 
             foreach (var projectTemplate in projectTemplates)
             {
-                var genProject = CreateGenInfo(GenContext.Current.ProjectName, projectTemplate, genQueue, false);
-
-                genProject.Parameters.Add(GenParams.Username, Environment.UserName);
-                genProject.Parameters.Add(GenParams.WizardVersion, string.Concat("v", GenContext.ToolBox.WizardVersion));
-                genProject.Parameters.Add(GenParams.TemplatesVersion, string.Concat("v", GenContext.ToolBox.TemplatesVersion));
-                genProject.Parameters.Add(GenParams.ProjectType, userSelection.ProjectType);
-                genProject.Parameters.Add(GenParams.FrontEndFramework, userSelection.FrontEndFramework);
-                genProject.Parameters.Add(GenParams.BackEndFramework, userSelection.BackEndFramework);
-                genProject.Parameters.Add(GenParams.Platform, userSelection.Platform);
-                genProject.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
-                genProject.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
+                var genProject = CreateGenInfo(GenContext.Current.ProjectName, projectTemplate, genQueue, userSelection, false);
 
                 AddCasingParams(GenContext.Current.ProjectName, projectTemplate, genProject);
             }
@@ -108,20 +98,7 @@ namespace Microsoft.Templates.Core.Gen
                     var template = GenContext.ToolBox.Repo.Find(t => t.Identity == selectedTemplate.TemplateId);
                     AddRequiredTemplates(template, genQueue, userSelection, newItemGeneration);
                     AddDependencyTemplates(template, genQueue, userSelection, newItemGeneration);
-                    var genInfo = CreateGenInfo(selectedTemplate.Name, template, genQueue, newItemGeneration);
-                    genInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
-                    genInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
-
-                    if (template.GetTemplateOutputType() == TemplateOutputType.Project)
-                    {
-                        genInfo?.Parameters.Add(GenParams.WizardVersion, string.Concat("v", GenContext.ToolBox.WizardVersion));
-                        genInfo?.Parameters.Add(GenParams.TemplatesVersion, string.Concat("v", GenContext.ToolBox.TemplatesVersion));
-                        genInfo?.Parameters.Add(GenParams.ProjectType, userSelection.ProjectType);
-                        genInfo?.Parameters.Add(GenParams.FrontEndFramework, userSelection.FrontEndFramework);
-                        genInfo?.Parameters.Add(GenParams.BackEndFramework, userSelection.BackEndFramework);
-                        genInfo?.Parameters.Add(GenParams.Platform, userSelection.Platform);
-                        genInfo?.Parameters.Add(GenParams.Username, Environment.UserName);
-                    }
+                    var genInfo = CreateGenInfo(selectedTemplate.Name, template, genQueue, userSelection, newItemGeneration);
 
                     foreach (var dependency in genInfo?.Template.GetDependencyList())
                     {
@@ -150,9 +127,7 @@ namespace Microsoft.Templates.Core.Gen
                     if (!genQueue.Any(t => t.Name == dependencyTemplate.Name && t.Template.Identity == dependencyTemplate.TemplateId))
                     {
                         var dependencyTemplateInfo = GenContext.ToolBox.Repo.Find(t => t.Identity == dependencyTemplate.TemplateId);
-                        var depGenInfo = CreateGenInfo(dependencyTemplate.Name, dependencyTemplateInfo, genQueue, newItemGeneration);
-                        depGenInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
-                        depGenInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+                        var depGenInfo = CreateGenInfo(dependencyTemplate.Name, dependencyTemplateInfo, genQueue, userSelection, newItemGeneration);
 
                         AddCasingParams(dependencyTemplate.Name, dependencyTemplateInfo, depGenInfo);
                     }
@@ -177,9 +152,7 @@ namespace Microsoft.Templates.Core.Gen
                     if (!genQueue.Any(t => t.Name == requirementTemplate.Name && t.Template.Identity == requirementTemplate.TemplateId))
                     {
                         var requirementTemplateInfo = GenContext.ToolBox.Repo.Find(t => t.Identity == requirementTemplate.TemplateId);
-                        var depGenInfo = CreateGenInfo(requirementTemplate.Name, requirementTemplateInfo, genQueue, newItemGeneration);
-                        depGenInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
-                        depGenInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+                        var depGenInfo = CreateGenInfo(requirementTemplate.Name, requirementTemplateInfo, genQueue, userSelection, newItemGeneration);
 
                         AddCasingParams(requirementTemplate.Name, requirementTemplateInfo, depGenInfo);
                     }
@@ -251,7 +224,7 @@ namespace Microsoft.Templates.Core.Gen
                     mainGenInfo.Parameters.Add(export.Key, export.Value);
                 }
 
-                var genInfo = CreateGenInfo(mainGenInfo.Name, targetTemplate, queue, newItemGeneration);
+                var genInfo = CreateGenInfo(mainGenInfo.Name, targetTemplate, queue, userSelection, newItemGeneration);
 
                 foreach (var param in mainGenInfo.Parameters)
                 {
@@ -274,15 +247,50 @@ namespace Microsoft.Templates.Core.Gen
 #endif
         }
 
-        private static GenInfo CreateGenInfo(string name, ITemplateInfo template, List<GenInfo> queue, bool newItemGeneration)
+        private static GenInfo CreateGenInfo(string name, ITemplateInfo template, List<GenInfo> queue, UserSelection userSelection, bool newItemGeneration)
         {
             var genInfo = new GenInfo(name, template);
 
             queue.Add(genInfo);
 
-            AddDefaultParams(genInfo, newItemGeneration);
+            AddDefaultParams(genInfo, userSelection, newItemGeneration);
+
+            if (template.GetTemplateOutputType() == TemplateOutputType.Project)
+            {
+                AddProjectParams(genInfo, userSelection);
+            }
 
             return genInfo;
+        }
+
+        private static void AddDefaultParams(GenInfo genInfo, UserSelection userSelection, bool newItemGeneration)
+        {
+            var ns = string.Empty;
+
+            if (newItemGeneration)
+            {
+                ns = GenContext.ToolBox.Shell.GetActiveProjectNamespace();
+            }
+
+            if (string.IsNullOrEmpty(ns))
+            {
+                ns = GenContext.Current.SafeProjectName;
+            }
+
+            genInfo?.Parameters.Add(GenParams.RootNamespace, ns);
+            genInfo?.Parameters.Add(GenParams.ProjectName, GenContext.Current.ProjectName);
+            genInfo?.Parameters.Add(GenParams.HomePageName, userSelection.HomeName);
+        }
+
+        private static void AddProjectParams(GenInfo projectGenInfo, UserSelection userSelection)
+        {
+            projectGenInfo?.Parameters.Add(GenParams.Username, Environment.UserName);
+            projectGenInfo?.Parameters.Add(GenParams.WizardVersion, string.Concat("v", GenContext.ToolBox.WizardVersion));
+            projectGenInfo?.Parameters.Add(GenParams.TemplatesVersion, string.Concat("v", GenContext.ToolBox.TemplatesVersion));
+            projectGenInfo?.Parameters.Add(GenParams.ProjectType, userSelection.ProjectType);
+            projectGenInfo?.Parameters.Add(GenParams.FrontEndFramework, userSelection.FrontEndFramework);
+            projectGenInfo?.Parameters.Add(GenParams.BackEndFramework, userSelection.BackEndFramework);
+            projectGenInfo?.Parameters.Add(GenParams.Platform, userSelection.Platform);
         }
 
         private static void AddCasingParams(string name, ITemplateInfo template, GenInfo genInfo)
@@ -301,23 +309,6 @@ namespace Microsoft.Templates.Core.Gen
                     }
                 }
             }
-        }
-
-        private static void AddDefaultParams(GenInfo genInfo, bool newItemGeneration)
-        {
-            var ns = string.Empty;
-
-            if (newItemGeneration)
-            {
-                ns = GenContext.ToolBox.Shell.GetActiveProjectNamespace();
-            }
-
-            if (string.IsNullOrEmpty(ns))
-            {
-                ns = GenContext.Current.SafeProjectName;
-            }
-
-            genInfo.Parameters.Add(GenParams.RootNamespace, ns);
         }
     }
 }

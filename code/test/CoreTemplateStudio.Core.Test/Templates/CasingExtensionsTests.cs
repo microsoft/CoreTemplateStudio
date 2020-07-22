@@ -61,5 +61,20 @@ namespace Microsoft.Templates.Core.Test
             Assert.Equal("masterUI", camelCasingService.Transform("master UI"));
             Assert.Equal("masterUI", camelCasingService.Transform("Master_UI"));
         }
+
+        [Fact]
+        public void Test_TransformToLowerCase()
+        {
+            var lowerCasingService = new TextCasing() { Type = CasingType.Lower };
+
+            Assert.Equal("masterdetail", lowerCasingService.Transform("MasterDetail"));
+            Assert.Equal("masterdetail", lowerCasingService.Transform("Master_Detail"));
+            Assert.Equal("masterdetail", lowerCasingService.Transform("Master Detail"));
+            Assert.Equal("masterdetail", lowerCasingService.Transform(" Master Detail "));
+            Assert.Equal("masterdetail1", lowerCasingService.Transform("master detail 1"));
+            Assert.Equal("masterui", lowerCasingService.Transform("MasterUI"));
+            Assert.Equal("masterui", lowerCasingService.Transform("master UI"));
+            Assert.Equal("masterui", lowerCasingService.Transform("Master_UI"));
+        }
     }
 }

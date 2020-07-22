@@ -28,6 +28,11 @@ namespace Microsoft.Templates.Core.Casing
             return Transform(name, null, ToUpperCaseExceptFirstLetter);
         }
 
+        public static string ToLowerCase(this string name)
+        {
+            return Transform(name, null).ToLower();
+        }
+
         private static char ToUpperCase(char c, int i)
         {
             return char.ToUpper(c);
