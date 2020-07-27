@@ -79,7 +79,7 @@ namespace Microsoft.Templates.Core.Gen
                               userSelection.ProjectType,
                               userSelection.FrontEndFramework,
                               userSelection.BackEndFramework)
-                .OrderBy(projectTemplate => projectTemplate.Identity);
+                .OrderBy(projectTemplate => projectTemplate.GetCompositionOrder());
 
             foreach (var projectTemplate in projectTemplates)
             {
