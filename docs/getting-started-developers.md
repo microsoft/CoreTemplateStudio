@@ -63,7 +63,7 @@ CoreTS Cli exposes the following commands:
 The Sync command builds the GenContext and synchronizes the templates available in the provided path. 
 
 `
-sync -p path
+sync -p path -t target-platform
 `
 
 where
@@ -71,6 +71,8 @@ where
 - path: 
  should point to the folder the .mstx file is located. 
  (If the cli is launched in debug mode parh should point to a local template's directory, to synchronize a LocalTemplateSource)
+- template-platform:
+ Name of the selected template-platform (f.ex Web)
 
 Sample usage: 
 
@@ -83,7 +85,7 @@ sync -p ..
 For debug:
 
 `
-sync -p C:\Projects\WebTemplateStudio
+sync -p C:\Projects\WebTemplateStudio -t "Web"
 `
 
 
