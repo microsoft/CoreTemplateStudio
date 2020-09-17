@@ -507,13 +507,13 @@ namespace Microsoft.Templates.Core.Test
 
         [Theory]
         [MemberData(nameof(GetAllLanguages))]
-        public void GetRequiredSdks(string language)
+        public void GetRequiredVersions(string language)
         {
             SetUpFixtureForTesting(language);
 
             var target = GetTargetByName("ProjectTemplate");
 
-            var result = target.GetRequiredSdks().ToList();
+            var result = target.GetRequiredVersions().ToList();
             Assert.NotNull(result);
 
             Assert.Collection(
