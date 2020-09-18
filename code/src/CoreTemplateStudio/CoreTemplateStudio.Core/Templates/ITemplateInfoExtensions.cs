@@ -460,9 +460,9 @@ namespace Microsoft.Templates.Core
             return result;
         }
 
-        public static List<string> GetRequiredSdks(this ITemplateInfo ti)
+        public static List<string> GetRequiredVersions(this ITemplateInfo ti)
         {
-            var sdks = GetValueFromTag(ti, TagPrefix + "requiredSdks");
+            var sdks = GetValueFromTag(ti, TagPrefix + "requiredVersions");
 
             var result = new List<string>();
 
