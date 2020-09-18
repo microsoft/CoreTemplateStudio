@@ -109,7 +109,7 @@ The replacements are done based on the configuration established in the `templat
     "wts.isGroupExclusiveSelection": "",            // Determines if the templates in the same group are mutually exclusive or not
     "wts.defaultInstance":"",                       // Default name for template
     "wts.multipleInstance":"",                      // If set to 'true' various instances of this template can be selected
-    "wts.requiredSdks":""                           // Determines if the templates needs any required Sdks to be installed on the machine
+    "wts.requiredVersions":""                       // Determines if the templates needs any required software versions to be installed on the machine
   },
   "sourceName": "BlankView",                        // The generation engine will replace any occurrence of "BlankView" by the parameter provided in the source file name.
   "preferNameDirectory": true,
