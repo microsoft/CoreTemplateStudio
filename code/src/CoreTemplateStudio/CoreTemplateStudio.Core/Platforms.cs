@@ -15,11 +15,14 @@ namespace Microsoft.Templates.Core
 
         public const string Wpf = "Wpf";
 
+        public const string WinUI = "WinUI";
+
         public static IEnumerable<string> GetAllPlatforms()
         {
             yield return Platforms.Uwp;
             yield return Platforms.Web;
             yield return Platforms.Wpf;
+            yield return Platforms.WinUI;
         }
 
         public static bool IsValidPlatform(string platform)

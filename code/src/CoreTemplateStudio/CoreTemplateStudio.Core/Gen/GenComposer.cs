@@ -62,10 +62,10 @@ namespace Microsoft.Templates.Core.Gen
             return genQueue;
         }
 
-        public static IEnumerable<string> GetAllRequiredSdks(UserSelection userSelection)
+        public static IEnumerable<string> GetAllRequiredVersions(UserSelection userSelection)
         {
             return Compose(userSelection)
-                    .SelectMany(s => s.Template.GetRequiredSdks())
+                    .SelectMany(s => s.Template.GetRequiredVersions())
                     .Distinct()
                     .ToList();
         }

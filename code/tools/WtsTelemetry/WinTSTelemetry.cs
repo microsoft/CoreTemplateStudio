@@ -14,7 +14,7 @@ namespace WtsTelemetry
         // every monday at 09:00:00: 0 0 9 * * MON
         // every 1st of month (monthly): 0 0 0 1 * *
         [FunctionName("WinTSTelemetry")]
-        public static void Run([TimerTrigger("0 * * * * *")] TimerInfo myTimer, ILogger log, [SendGrid] out SendGridMessage message)
+        public static void Run([TimerTrigger("0 0 0 1 * *")] TimerInfo myTimer, ILogger log, [SendGrid] out SendGridMessage message)
         {
             var year = DateTime.Today.AddMonths(-1).Year;
             var month = DateTime.Today.AddMonths(-1).Month;
