@@ -29,6 +29,7 @@ namespace WtsTelemetry.Services
                 Wpf = GetWinTSPlatformData(wpfQueries),
                 entryPoint = GetData(uwpQueries.EntryPoints),
                 Language = GetData(uwpQueries.Languages),
+                Platform = GetData(uwpQueries.Platforms),
                 Year = year,
                 Month = month
             };
