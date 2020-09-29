@@ -63,5 +63,8 @@ queryTable
         public string EntryPoints => string.Format(DataQuery, year, month, "WtsWizard", "WtsWizardType");
 
         public string Languages => string.Format(DataQuery, year, month, "WtsProjectGen", "WtsLanguage");
+
+        public string Platforms => string.Format(DataQuery, year, month, "WtsProjectGen", "WtsCategory");
+
     }
 }
