@@ -123,10 +123,10 @@ namespace Microsoft.Templates.Core.Diagnostics
         {
             var info = genShell.GetVSTelemetryInfo();
 
-            _client.Context.Properties.Add(TelemetryProperties.VisualStudioEdition, info.VisualStudioEdition);
-            _client.Context.Properties.Add(TelemetryProperties.VisualStudioExeVersion, info.VisualStudioExeVersion);
-            _client.Context.Properties.Add(TelemetryProperties.VisualStudioCulture, info.VisualStudioCulture);
-            _client.Context.Properties.Add(TelemetryProperties.VisualStudioManifestId, info.VisualStudioManifestId);
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioEdition, info.VisualStudioEdition);
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioExeVersion, info.VisualStudioExeVersion);
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioCulture, info.VisualStudioCulture);
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioManifestId, info.VisualStudioManifestId);
 
             return info.OptedIn;
         }
@@ -149,35 +149,35 @@ namespace Microsoft.Templates.Core.Diagnostics
 
             _client.Context.Session.Id = Guid.NewGuid().ToString();
             _client.Context.Component.Version = GetVersion();
-            _client.Context.Properties.Add(TelemetryProperties.WizardFileVersion, GetFileVersion());
+            _client.Context.GlobalProperties.Add(TelemetryProperties.WizardFileVersion, GetFileVersion());
         }
 
         public void SetContentVersionToContext(Version contentVersion)
         {
-            if (contentVersion != null && _client != null && _client.Context != null && _client.Context.Properties != null)
+            if (contentVersion != null && _client != null && _client.Context != null && _client.Context.GlobalProperties != null)
             {
-                if (!_client.Context.Properties.ContainsKey(TelemetryProperties.WizardContentVersion))
+                if (!_client.Context.GlobalProperties.ContainsKey(TelemetryProperties.WizardContentVersion))
                 {
-                    _client.Context.Properties.Add(TelemetryProperties.WizardContentVersion, contentVersion.ToString());
+                    _client.Context.GlobalProperties.Add(TelemetryProperties.WizardContentVersion, contentVersion.ToString());
                 }
                 else
                 {
-                    _client.Context.Properties[TelemetryProperties.WizardContentVersion] = contentVersion.ToString();
+                    _client.Context.GlobalProperties[TelemetryProperties.WizardContentVersion] = contentVersion.ToString();
                 }
             }
         }
 
         public void SetContentVsProductVersionToContext(string vsProductVersion)
         {
-            if (!string.IsNullOrEmpty(vsProductVersion) && _client != null && _client.Context != null && _client.Context.Properties != null)
+            if (!string.IsNullOrEmpty(vsProductVersion) && _client != null && _client.Context != null && _client.Context.GlobalProperties != null)
             {
-                if (!_client.Context.Properties.ContainsKey(TelemetryProperties.VisualStudioProductVersion))
+                if (!_client.Context.GlobalProperties.ContainsKey(TelemetryProperties.VisualStudioProductVersion))
                 {
-                    _client.Context.Properties.Add(TelemetryProperties.VisualStudioProductVersion, vsProductVersion);
+                    _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioProductVersion, vsProductVersion);
                 }
                 else
                 {
-                    _client.Context.Properties[TelemetryProperties.VisualStudioProductVersion] = vsProductVersion;
+                    _client.Context.GlobalProperties[TelemetryProperties.VisualStudioProductVersion] = vsProductVersion;
                 }
             }
         }
