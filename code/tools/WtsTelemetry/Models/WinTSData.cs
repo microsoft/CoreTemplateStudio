@@ -8,6 +8,7 @@ namespace WtsTelemetry.Models
         public WinTSPlatformData Wpf { get; set; }
         public string entryPoint { get; set; }
         public string Language { get; set; }
+        public string Platform { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
 
@@ -15,6 +16,7 @@ namespace WtsTelemetry.Models
         {
             return new MarkdownBuilder("Windows Template Studio")
                         .AddHeader(Year, Month)
+                        .AddTable("Category", "Type", Platform)
                         .AddTable("Project Type (Uwp)", "Project", Uwp.Project)
                         .AddTable("Project Type (Wpf)", "Project", Wpf.Project)
                         .AddTable("Framework (Uwp)", "Framework Type", Uwp.Frameworks)
