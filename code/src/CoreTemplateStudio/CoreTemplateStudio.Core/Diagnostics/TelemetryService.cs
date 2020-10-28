@@ -122,7 +122,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 IsEnabled = false;
                 config.DisableTelemetry = true;
 
-                Trace.TraceError($"Exception instantiating TelemetryClient:\n\r{ex.ToString()}");
+                Trace.TraceError($"Exception instantiating TelemetryClient:\n\r{ex}");
             }
         }
 
