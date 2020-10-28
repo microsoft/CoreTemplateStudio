@@ -27,7 +27,7 @@ Our default branch is dev and all PR's should go to the dev branch. While there 
 
 ## Limitations
 
-- Currently .NET Standard does not support Package verification using PackageDigitalSignatureManager. This functionality was moved to the Utilities project (.NET framework) to be consumed from Windows Template Studio. The CLI (.NET Core 3.1) does not allow to download template packages from the CDN due to this limitation. Tracking issue is for adding this in once it is supported is #131. 
+- Currently .NET Standard does not support Package verification using PackageDigitalSignatureManager. This functionality was moved to the Utilities project (.NET framework) to be consumed from Windows Template Studio. The CLI (.NET Core 3.1) does not allow to download template packages from the CDN due to this limitation. Tracking issue for adding this in once it is supported is issue [#131](https://github.com/microsoft/CoreTemplateStudio/issues/131). 
 
 ## Feedback, Requests and Roadmap
 
