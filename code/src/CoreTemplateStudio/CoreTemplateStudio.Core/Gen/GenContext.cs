@@ -19,9 +19,9 @@ namespace Microsoft.Templates.Core.Gen
 {
     public class GenContext
     {
-        private static IContextProvider _currentContext;
+        private static readonly string _tempGenerationFolder = Path.Combine(Path.GetTempPath(), Configuration.Current.TempGenerationFolderPath);
 
-        private static string _tempGenerationFolder = Path.Combine(Path.GetTempPath(), Configuration.Current.TempGenerationFolderPath);
+        private static IContextProvider _currentContext;
 
         public static GenToolBox ToolBox { get; set; }
 
