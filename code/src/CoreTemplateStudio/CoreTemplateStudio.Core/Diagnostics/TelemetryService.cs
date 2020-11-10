@@ -18,7 +18,7 @@ namespace Microsoft.Templates.Core.Diagnostics
     {
         public bool IsEnabled { get; private set; }
 
-        private Configuration _currentConfig;
+        private readonly Configuration _currentConfig;
         private TelemetryClient _client;
 
         private static TelemetryService _current;
@@ -81,54 +81,57 @@ namespace Microsoft.Templates.Core.Diagnostics
 
         public void IntializeTelemetryClient(GenShell genShell)
         {
+            if (_client != null)
+            {
+                return;
+            }
+
+            var config = TelemetryConfiguration.CreateDefault();
+
             try
             {
-                _client = new TelemetryClient()
-                {
-                    InstrumentationKey = _currentConfig.RemoteTelemetryKey,
-                };
+                config.InstrumentationKey = _currentConfig.RemoteTelemetryKey;
 
-                if (VsTelemetryIsOptedIn(genShell) && RemoteKeyAvailable())
+                var vstelemetryInfo = genShell.GetVSTelemetryInfo();
+                if (vstelemetryInfo.OptedIn && RemoteKeyAvailable())
                 {
                     if (!string.IsNullOrEmpty(_currentConfig.CustomTelemetryEndpoint))
                     {
-                        TelemetryConfiguration.Active.TelemetryChannel.EndpointAddress = _currentConfig.CustomTelemetryEndpoint;
+                        config.TelemetryChannel.EndpointAddress = _currentConfig.CustomTelemetryEndpoint;
                     }
-
-                    SetSessionData();
-
-                    _client.TrackEvent(TelemetryEvents.SessionStart);
 
                     IsEnabled = true;
 #if DEBUG
-                    TelemetryConfiguration.Active.TelemetryChannel.DeveloperMode = true;
+                    config.TelemetryChannel.DeveloperMode = true;
 #endif
                 }
                 else
                 {
                     IsEnabled = false;
-                    TelemetryConfiguration.Active.DisableTelemetry = true;
+                    config.DisableTelemetry = true;
                 }
+
+                _client = new TelemetryClient(config);
+                SetSessionData();
+                SetVSTelemetryInfo(vstelemetryInfo);
+
+                _client.TrackEvent(TelemetryEvents.SessionStart);
             }
             catch (Exception ex)
             {
                 IsEnabled = false;
-                TelemetryConfiguration.Active.DisableTelemetry = true;
+                config.DisableTelemetry = true;
 
-                Trace.TraceError($"Exception instantiating TelemetryClient:\n\r{ex.ToString()}");
+                Trace.TraceError($"Exception instantiating TelemetryClient:\n\r{ex}");
             }
         }
 
-        private bool VsTelemetryIsOptedIn(GenShell genShell)
+        private void SetVSTelemetryInfo(VSTelemetryInfo vstelemetryInfo)
         {
-            var info = genShell.GetVSTelemetryInfo();
-
-            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioEdition, info.VisualStudioEdition);
-            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioExeVersion, info.VisualStudioExeVersion);
-            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioCulture, info.VisualStudioCulture);
-            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioManifestId, info.VisualStudioManifestId);
-
-            return info.OptedIn;
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioEdition, vstelemetryInfo.VisualStudioEdition);
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioExeVersion, vstelemetryInfo.VisualStudioExeVersion);
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioCulture, vstelemetryInfo.VisualStudioCulture);
+            _client.Context.GlobalProperties.Add(TelemetryProperties.VisualStudioManifestId, vstelemetryInfo.VisualStudioManifestId);
         }
 
         private void SetSessionData()
