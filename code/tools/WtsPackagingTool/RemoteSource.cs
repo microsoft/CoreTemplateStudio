@@ -4,16 +4,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Storage;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
 using Microsoft.Templates.Core.Locations;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage.Blob;
 using WtsPackagingTool.CommandOptions;
 
 namespace WtsPackagingTool
@@ -24,19 +27,21 @@ namespace WtsPackagingTool
         {
             string env = environment.ToString().ToLowerInvariant();
 
-            CloudBlobContainer container = GetContainerAnonymous(storageAccount, env);
+            BlobContainerClient container = GetContainerAnonymous(storageAccount, env);
             var remoteElements = RemoteSource.GetAllElements(container);
             var remotePackages = remoteElements.Where(e => e != null && e.Name.StartsWith(env, StringComparison.OrdinalIgnoreCase) && e.Name.EndsWith(".mstx", StringComparison.OrdinalIgnoreCase))
                 .Select((e) =>
-                    new TemplatesPackageInfo()
-                    {
-                        Name = e.Name,
-                        Bytes = e.Properties.Length,
-                        Date = e.Properties.LastModified.Value.DateTime,
-                        Platform = e.Metadata.ContainsKey("platform") ? e.Metadata["platform"] : string.Empty,
-                        Language = e.Metadata.ContainsKey("language") ? e.Metadata["language"] : string.Empty,
-                        WizardVersions = e.Metadata.ContainsKey("wizardversion") ? e.Metadata["wizardversion"].Split(';').Select(v => new Version(v)).ToList() : new List<Version>(),
-                    })
+                     {
+                         return new TemplatesPackageInfo()
+                         {
+                             Name = e.Name,
+                             Bytes = e.Properties.ContentLength.Value,
+                             Date = e.Properties.LastModified.Value.DateTime,
+                             Platform = e.Metadata.ContainsKey("platform") ? e.Metadata["platform"] : string.Empty,
+                             Language = e.Metadata.ContainsKey("language") ? e.Metadata["language"] : string.Empty,
+                             WizardVersions = e.Metadata.ContainsKey("wizardversion") ? e.Metadata["wizardversion"].Split(';').Select(v => new Version(v)).ToList() : new List<Version>(),
+                         };
+                     })
                 .OrderByDescending(e => e.Date)
                 .OrderByDescending(e => e.Version)
                 .GroupBy(e => new { e.MainVersion, e.Language, e.Platform })
@@ -118,53 +123,42 @@ namespace WtsPackagingTool
             return parsedEnv;
         }
 
-        private static CloudBlobContainer GetContainer(string account, string key, string container)
+        private static BlobContainerClient GetContainer(string account, string key, string container)
         {
-            StorageCredentials credentials = new StorageCredentials(account, key);
+            StorageSharedKeyCredential credentials = new StorageSharedKeyCredential(account, key);
 
-            CloudStorageAccount storageAccount = new CloudStorageAccount(credentials, true);
+            BlobServiceClient blobClient = new BlobServiceClient(new Uri($"https://{account}.blob.core.windows.net"), credentials);
 
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-            CloudBlobContainer blobContainer = blobClient.GetContainerReference(container);
+            BlobContainerClient blobContainer = blobClient.GetBlobContainerClient(container);
 
             return blobContainer;
         }
 
-        private static CloudBlobContainer GetContainerAnonymous(string account, string container)
+        private static BlobContainerClient GetContainerAnonymous(string account, string container)
         {
-            CloudBlobClient blobClient = new CloudBlobClient(new Uri($"https://{account}.blob.core.windows.net"));
+            BlobServiceClient blobClient = new BlobServiceClient(new Uri($"https://{account}.blob.core.windows.net"));
 
-            CloudBlobContainer blobContainer = blobClient.GetContainerReference(container);
+            BlobContainerClient blobContainer = blobClient.GetBlobContainerClient(container);
 
             return blobContainer;
         }
 
-        private static IEnumerable<CloudBlockBlob> GetAllElements(CloudBlobContainer container)
-        {
-            BlobContinuationToken token = new BlobContinuationToken();
-
-            List<CloudBlockBlob> result = new List<CloudBlockBlob>();
-
-            while (token != null)
-            {
-                result.AddRange(GetElements(container, ref token));
-            }
-
-            return result;
-        }
-
-        private static IEnumerable<CloudBlockBlob> GetElements(CloudBlobContainer container, ref BlobContinuationToken token)
+        private static IEnumerable<BlobItem> GetAllElements(BlobContainerClient container)
         {
             if (!container.Exists())
             {
                 throw new ArgumentException($"The container {container.Uri} does not exists or is not public.");
             }
 
-            BlobResultSegment result = container.ListBlobsSegmented(string.Empty, true, BlobListingDetails.Metadata, null, token, null, null);
+            var resultSegment = container.GetBlobs(BlobTraits.Metadata, BlobStates.None).AsPages(default, 1000);
 
-            token = result.ContinuationToken;
-            return result.Results.Select((i) => i as CloudBlockBlob);
+            foreach (Azure.Page<BlobItem> blobPage in resultSegment)
+            {
+                foreach (BlobItem blobItem in blobPage.Values)
+                {
+                    yield return blobItem;
+                }
+            }
         }
 
         private static string GetBlobName(string env, string sourceFile, string version)
@@ -192,36 +186,32 @@ namespace WtsPackagingTool
             return blobName;
         }
 
-        private static string UploadElement(CloudBlobContainer container, string sourceFile, string blobName, Dictionary<string, string> metaData)
+        private static string UploadElement(BlobContainerClient container, string sourceFile, string blobName, Dictionary<string, string> metaData)
         {
-            CloudBlockBlob blob = container.GetBlockBlobReference(blobName);
-            if (metaData != null)
+            BlockBlobClient blob = container.GetBlockBlobClient(blobName);
+
+            var totalFileSize = new FileInfo(sourceFile).Length;
+            var stopwatch = Stopwatch.StartNew();
+
+            using (var fileStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                foreach (var item in metaData)
+                BlobUploadOptions uploadOptions = new BlobUploadOptions()
                 {
-                    blob.Metadata.Add(item.Key, item.Value);
+                    TransferOptions = new StorageTransferOptions()
+                    {
+                        MaximumConcurrency = 4,
+                    },
+                };
+
+                blob.Upload(fileStream, uploadOptions);
+                if (metaData != null)
+                {
+                    blob.SetMetadata(metaData);
                 }
             }
 
-            using (var fileStreame = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                BlobRequestOptions options = new BlobRequestOptions();
-                options.ParallelOperationThreadCount = 4;
-
-                OperationContext context = new OperationContext();
-
-                blob.UploadFromStream(fileStreame, null, options, context);
-
-                float bytes = 0;
-                foreach (var result in context.RequestResults)
-                {
-                    bytes += result.EgressBytes;
-                }
-
-                TimeSpan elapsed = context.EndTime - context.StartTime;
-
-                return $"Uploaded {Math.Round(bytes / 1024f, 2)} Kbytes in {elapsed.TotalSeconds} seconds.";
-            }
+            stopwatch.Stop();
+            return $"Uploaded {Math.Round(totalFileSize / 1024f, 2)} Kbytes in {stopwatch.Elapsed.TotalSeconds} seconds.";
         }
     }
 }

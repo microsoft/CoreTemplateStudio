@@ -17,12 +17,18 @@ namespace Microsoft.Templates.Core
 
         public const string WinUI = "WinUI";
 
+        public const string ReactNative = "RN";
+
         public static IEnumerable<string> GetAllPlatforms()
         {
-            yield return Platforms.Uwp;
-            yield return Platforms.Web;
-            yield return Platforms.Wpf;
-            yield return Platforms.WinUI;
+            return new[]
+            {
+                Uwp,
+                Web,
+                Wpf,
+                WinUI,
+                ReactNative,
+            };
         }
 
         public static bool IsValidPlatform(string platform)
