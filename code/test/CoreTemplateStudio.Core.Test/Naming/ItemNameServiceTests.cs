@@ -154,7 +154,7 @@ namespace Microsoft.Templates.Core.Test
         {
             foreach (var language in ProgrammingLanguages.GetAllLanguages())
             {
-                if (language != ProgrammingLanguages.Any)
+                if (language != ProgrammingLanguages.Any && language != ProgrammingLanguages.Cpp)
                 {
                     yield return new object[] { language };
                 }
