@@ -13,11 +13,14 @@ namespace Microsoft.Templates.Core
 
         public const string VisualBasic = "VisualBasic";
 
+        public const string Cpp = "C++";
+
         public const string Any = "Any";
 
         public static IEnumerable<string> GetAllLanguages()
         {
             yield return ProgrammingLanguages.CSharp;
+            yield return ProgrammingLanguages.Cpp;
             yield return ProgrammingLanguages.VisualBasic;
             yield return ProgrammingLanguages.Any;
         }
@@ -28,6 +31,8 @@ namespace Microsoft.Templates.Core
             {
                 case CSharp:
                     return "CS";
+                case Cpp:
+                    return "Cpp";
                 case VisualBasic:
                     return "VB";
                 default:
