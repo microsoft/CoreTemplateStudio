@@ -22,6 +22,7 @@ namespace Microsoft.Templates.Core.Services
         private const string FrameworkLiteral = "framework";
         private const string TemplatesVersionLiteral = "templatesVersion";
         private const string PlatformLiteral = "platform";
+        private const string AppModelLiteral = "appmodel";
         private const string MetadataLiteral = "Metadata";
         private const string NameAttribLiteral = "Name";
         private const string ValueAttribLiteral = "Value";
@@ -50,6 +51,7 @@ namespace Microsoft.Templates.Core.Services
                         projectMetadata.ProjectType = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == ProjectTypeLiteral)?.Attribute(ValueAttribLiteral)?.Value;
                         projectMetadata.Framework = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == FrameworkLiteral)?.Attribute(ValueAttribLiteral)?.Value;
                         projectMetadata.Platform = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == PlatformLiteral)?.Attribute(ValueAttribLiteral)?.Value;
+                        projectMetadata.AppModel = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == AppModelLiteral)?.Attribute(ValueAttribLiteral)?.Value;
                         projectMetadata.TemplatesVersion = metadata?.Descendants().FirstOrDefault(m => m.Attribute(NameAttribLiteral)?.Value == TemplatesVersionLiteral)?.Attribute(VersionAttribLiteral)?.Value;
                     }
                 }
@@ -81,7 +83,8 @@ namespace Microsoft.Templates.Core.Services
                         .TryAddMetadaElement(GeneratorLiteral, WindowsTemplateStudioLiteral)
                         .TryAddMetadaElement(ProjectTypeLiteral, data.ProjectType)
                         .TryAddMetadaElement(FrameworkLiteral, data.Framework)
-                        .TryAddMetadaElement(PlatformLiteral, data.Platform);
+                        .TryAddMetadaElement(PlatformLiteral, data.Platform)
+                        .TryAddMetadaElement(AppModelLiteral, data.AppModel);
 
                     manifest.Save(path);
                 }
@@ -117,5 +120,7 @@ namespace Microsoft.Templates.Core.Services
         public string Framework { get; set; }
 
         public string Platform { get; set; }
+
+        public string AppModel { get; set; }
     }
 }

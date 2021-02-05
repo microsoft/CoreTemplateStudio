@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -134,46 +135,57 @@ namespace Microsoft.Templates.Core
                         .FirstOrDefault(predicate);
         }
 
-        public IEnumerable<MetadataInfo> GetProjectTypes(string platform)
+        public IEnumerable<MetadataInfo> GetProjectTypes(UserSelectionContext context)
         {
-            var projectTypes = GetSupportedProjectTypes(platform);
-            return GetMetadataInfo("projectTypes").Where(m => m.Platform == platform && projectTypes.Contains(m.Name));
+            var projectTypes = GetSupportedProjectTypes(context);
+            return GetMetadataInfo("projectTypes").Where(m => m.Platform == context.Platform && projectTypes.Contains(m.Name));
         }
 
-        public IEnumerable<MetadataInfo> GetFrontEndFrameworks(string platform, string projectType)
+        public IEnumerable<MetadataInfo> GetFrontEndFrameworks(UserSelectionContext context)
         {
-            var frameworks = GetSupportedFx(platform, projectType);
+            if (string.IsNullOrEmpty(context.ProjectType))
+            {
+                throw new ArgumentNullException(nameof(context.ProjectType));
+            }
+
+            var frameworks = GetSupportedFx(context);
 
             var results = GetMetadataInfo("frontendframeworks")
-                .Where(f => f.Platform == platform
+                .Where(f => f.Platform == context.Platform
                             && frameworks.Any(fx => fx.Name == f.Name && fx.Type == FrameworkTypes.FrontEnd));
 
             results.ToList().ForEach(meta => meta.Tags["type"] = "frontend");
             return results;
         }
 
-        public IEnumerable<MetadataInfo> GetBackEndFrameworks(string platform, string projectType)
+        public IEnumerable<MetadataInfo> GetBackEndFrameworks(UserSelectionContext context)
         {
-            var frameworks = GetSupportedFx(platform, projectType);
+            if (string.IsNullOrEmpty(context.ProjectType))
+            {
+                throw new ArgumentNullException(nameof(context.ProjectType));
+            }
+
+            var frameworks = GetSupportedFx(context);
 
             var results = GetMetadataInfo("backendframeworks")
-                .Where(f => f.Platform == platform
+                .Where(f => f.Platform == context.Platform
                             && frameworks.Any(fx => fx.Name == f.Name && fx.Type == FrameworkTypes.BackEnd));
 
             results.ToList().ForEach(meta => meta.Tags["type"] = "backend");
             return results;
         }
 
-        public IEnumerable<ITemplateInfo> GetTemplates(TemplateType type, string platform, string projectType, string frontEndFramework = null, string backEndFramework = null)
+        public IEnumerable<ITemplateInfo> GetTemplates(TemplateType type, UserSelectionContext context)
         {
             return Get(t => t.GetTemplateType() == type
-                && t.GetPlatform().Equals(platform, StringComparison.OrdinalIgnoreCase)
-                && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
-                && IsMatchFrontEnd(t, frontEndFramework)
-                && IsMatchBackEnd(t, backEndFramework));
+                && t.GetPlatform().Equals(context.Platform, StringComparison.OrdinalIgnoreCase)
+                && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
+                && IsMatchFrontEnd(t, context.FrontEndFramework)
+                && IsMatchBackEnd(t, context.BackEndFramework)
+                && IsMatchAppModel(t, context.AppModel));
         }
 
-        public TemplateInfo GetTemplateInfo(ITemplateInfo template, string platform, string projectType, string frontEndFramework = null, string backEndFramework = null)
+        public TemplateInfo GetTemplateInfo(ITemplateInfo template, UserSelectionContext context)
         {
             var templateInfo = new TemplateInfo
             {
@@ -200,55 +212,56 @@ namespace Microsoft.Templates.Core
                 RequiredVersions = template.GetRequiredVersions(),
             };
 
-            var dependencies = GetDependencies(template, platform, projectType, frontEndFramework, backEndFramework, new List<ITemplateInfo>());
-            templateInfo.Dependencies = GetTemplatesInfo(dependencies, platform, projectType, frontEndFramework, backEndFramework);
+            var dependencies = GetDependencies(template, context, new List<ITemplateInfo>());
+            templateInfo.Dependencies = GetTemplatesInfo(dependencies, context);
 
-            var requirements = GetRequirements(template, platform, projectType, frontEndFramework, backEndFramework);
-            templateInfo.Requirements = GetTemplatesInfo(requirements, platform, projectType, frontEndFramework, backEndFramework);
+            var requirements = GetRequirements(template, context);
+            templateInfo.Requirements = GetTemplatesInfo(requirements, context);
 
-            var exclusions = GetExclusions(template, platform, projectType, frontEndFramework, backEndFramework);
-            templateInfo.Exclusions = GetTemplatesInfo(exclusions, platform, projectType, frontEndFramework, backEndFramework);
+            var exclusions = GetExclusions(template, context);
+            templateInfo.Exclusions = GetTemplatesInfo(exclusions, context);
 
             return templateInfo;
         }
 
-        public IEnumerable<TemplateInfo> GetTemplatesInfo(TemplateType type, string platform, string projectType, string frontEndFramework = null, string backEndFramework = null)
+        public IEnumerable<TemplateInfo> GetTemplatesInfo(TemplateType type, UserSelectionContext context)
         {
-            var templates = GetTemplates(type, platform, projectType, frontEndFramework, backEndFramework);
-            return GetTemplatesInfo(templates, platform, projectType, frontEndFramework, backEndFramework);
+            var templates = GetTemplates(type, context);
+            return GetTemplatesInfo(templates, context);
         }
 
-        public IEnumerable<TemplateInfo> GetTemplatesInfo(IEnumerable<ITemplateInfo> templates, string platform, string projectType, string frontEndFramework = null, string backEndFramework = null)
+        public IEnumerable<TemplateInfo> GetTemplatesInfo(IEnumerable<ITemplateInfo> templates, UserSelectionContext context)
         {
             foreach (var template in templates)
             {
-                yield return GetTemplateInfo(template, platform, projectType, frontEndFramework, backEndFramework);
+                yield return GetTemplateInfo(template, context);
             }
         }
 
-        public IEnumerable<LayoutInfo> GetLayoutTemplates(string platform, string projectType, string frontEndFramework, string backEndFramework)
+        public IEnumerable<LayoutInfo> GetLayoutTemplates(UserSelectionContext context)
         {
-            var projectTemplates = GetTemplates(TemplateType.Project, platform, projectType, frontEndFramework, backEndFramework);
+            var projectTemplates = GetTemplates(TemplateType.Project, context);
 
             foreach (var projectTemplate in projectTemplates)
             {
                 var layout = projectTemplate?
                 .GetLayout()
-                .Where(l => l.ProjectType == null || l.ProjectType.GetMultiValue().Contains(projectType));
+                .Where(l => l.ProjectType == null || l.ProjectType.GetMultiValue().Contains(context.ProjectType));
 
                 if (layout != null)
                 {
                     foreach (var item in layout)
                     {
                         var template = Find(t => t.GroupIdentity == item.TemplateGroupIdentity
-                                                                && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
-                                                                && IsMatchFrontEnd(t, frontEndFramework)
-                                                                && IsMatchBackEnd(t, backEndFramework)
-                                                                && t.GetPlatform() == platform);
+                                                                && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
+                                                                && IsMatchFrontEnd(t, context.FrontEndFramework)
+                                                                && IsMatchBackEnd(t, context.BackEndFramework)
+                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && t.GetPlatform() == context.Platform);
 
                         if (template == null)
                         {
-                            LogOrAlertException(string.Format(StringRes.ErrorLayoutNotFound, item.TemplateGroupIdentity, frontEndFramework, backEndFramework, platform));
+                            LogOrAlertException(string.Format(StringRes.ErrorLayoutNotFound, item.TemplateGroupIdentity, context.FrontEndFramework, context.BackEndFramework, context.Platform));
                         }
                         else
                         {
@@ -259,7 +272,7 @@ namespace Microsoft.Templates.Core
                             }
                             else
                             {
-                                var templateInfo = GetTemplateInfo(template, platform, projectType, frontEndFramework, backEndFramework);
+                                var templateInfo = GetTemplateInfo(template, context);
                                 yield return new LayoutInfo() { Layout = item, Template = templateInfo };
                             }
                         }
@@ -268,33 +281,35 @@ namespace Microsoft.Templates.Core
             }
         }
 
-        public IEnumerable<TemplateLicense> GetAllLicences(string templateId, string platform, string projectType, string frontEndFramework, string backEndFramework)
+        public IEnumerable<TemplateLicense> GetAllLicences(string templateId, UserSelectionContext context)
         {
             var templates = new List<ITemplateInfo>();
 
             var template = Find(t => t.Identity == templateId);
             templates.Add(template);
-            templates.AddRange(GetDependencies(template, platform, projectType, frontEndFramework, backEndFramework, new List<ITemplateInfo>()));
+            templates.AddRange(GetDependencies(template, context, new List<ITemplateInfo>()));
             return templates.SelectMany(s => s.GetLicenses())
                 .Distinct(new TemplateLicenseEqualityComparer())
                 .ToList();
         }
 
-        private IEnumerable<string> GetSupportedProjectTypes(string platform)
+        private IEnumerable<string> GetSupportedProjectTypes(UserSelectionContext context)
         {
             return GetAll()
                 .Where(t => t.GetTemplateType() == TemplateType.Project
-                                && t.GetPlatform() == platform)
+                                && IsMatchAppModel(t, context.AppModel)
+                                && t.GetPlatform() == context.Platform)
                 .SelectMany(t => t.GetProjectTypeList())
                 .Distinct();
         }
 
-        private IEnumerable<SupportedFramework> GetSupportedFx(string platform, string projectType)
+        private IEnumerable<SupportedFramework> GetSupportedFx(UserSelectionContext context)
         {
             var filtered = GetAll()
                           .Where(t => t.GetTemplateType() == TemplateType.Project
-                          && t.GetProjectTypeList().Contains(projectType)
-                          && t.GetPlatform().Equals(platform, StringComparison.OrdinalIgnoreCase)).ToList();
+                          && t.GetProjectTypeList().Contains(context.ProjectType)
+                          && IsMatchAppModel(t, context.AppModel)
+                          && t.GetPlatform().Equals(context.Platform, StringComparison.OrdinalIgnoreCase)).ToList();
 
             var result = new List<SupportedFramework>();
             result.AddRange(filtered.SelectMany(t => t.GetFrontEndFrameworkList()).Select(name => new SupportedFramework(name, FrameworkTypes.FrontEnd)).ToList());
@@ -304,21 +319,22 @@ namespace Microsoft.Templates.Core
             return result;
         }
 
-        public IEnumerable<ITemplateInfo> GetDependencies(ITemplateInfo template, string platform, string projectType, string frontEndFramework, string backEndFramework, IList<ITemplateInfo> dependencyList)
+        public IEnumerable<ITemplateInfo> GetDependencies(ITemplateInfo template, UserSelectionContext context, IList<ITemplateInfo> dependencyList)
         {
             var dependencies = template.GetDependencyList();
 
             foreach (var dependency in dependencies)
             {
                 var dependencyTemplate = Find(t => t.Identity == dependency
-                                                                && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
-                                                                && IsMatchFrontEnd(t, frontEndFramework)
-                                                                && IsMatchBackEnd(t, backEndFramework)
-                                                                && t.GetPlatform() == platform);
+                                                                && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
+                                                                && IsMatchFrontEnd(t, context.FrontEndFramework)
+                                                                && IsMatchBackEnd(t, context.BackEndFramework)
+                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && t.GetPlatform() == context.Platform);
 
                 if (dependencyTemplate == null)
                 {
-                    LogOrAlertException(string.Format(StringRes.ErrorDependencyNotFound, dependency, frontEndFramework, backEndFramework, platform));
+                    LogOrAlertException(string.Format(StringRes.ErrorDependencyNotFound, dependency, context.FrontEndFramework, context.BackEndFramework, context.Platform));
                 }
                 else
                 {
@@ -343,7 +359,7 @@ namespace Microsoft.Templates.Core
                             dependencyList.Add(dependencyTemplate);
                         }
 
-                        GetDependencies(dependencyTemplate, platform, projectType, frontEndFramework, backEndFramework, dependencyList);
+                        GetDependencies(dependencyTemplate, context, dependencyList);
                     }
                 }
             }
@@ -351,7 +367,7 @@ namespace Microsoft.Templates.Core
             return dependencyList;
         }
 
-        public IEnumerable<ITemplateInfo> GetRequirements(ITemplateInfo template, string platform, string projectType, string frontEndFramework, string backEndFramework)
+        public IEnumerable<ITemplateInfo> GetRequirements(ITemplateInfo template, UserSelectionContext context)
         {
             var requirementsList = new List<ITemplateInfo>();
             var requirements = template.GetRequirementsList();
@@ -359,14 +375,15 @@ namespace Microsoft.Templates.Core
             foreach (var requirement in requirements)
             {
                 var requirementTemplate = Find(t => t.Identity == requirement
-                                                                && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
-                                                                && IsMatchFrontEnd(t, frontEndFramework)
-                                                                && IsMatchBackEnd(t, backEndFramework)
-                                                                && t.GetPlatform() == platform);
+                                                                && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
+                                                                && IsMatchFrontEnd(t, context.FrontEndFramework)
+                                                                && IsMatchBackEnd(t, context.BackEndFramework)
+                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && t.GetPlatform() == context.Platform);
 
                 if (requirementTemplate == null)
                 {
-                    LogOrAlertException(string.Format(StringRes.ErrorRequirementNotFound, requirementTemplate, frontEndFramework, backEndFramework, platform));
+                    LogOrAlertException(string.Format(StringRes.ErrorRequirementNotFound, requirementTemplate, context.FrontEndFramework, context.BackEndFramework, context.Platform));
                 }
                 else
                 {
@@ -401,7 +418,7 @@ namespace Microsoft.Templates.Core
             return requirementsList;
         }
 
-        public IEnumerable<ITemplateInfo> GetExclusions(ITemplateInfo template, string platform, string projectType, string frontEndFramework, string backEndFramework)
+        public IEnumerable<ITemplateInfo> GetExclusions(ITemplateInfo template, UserSelectionContext context)
         {
             var exclusionsList = new List<ITemplateInfo>();
             var exclusions = template.GetExclusionsList();
@@ -409,14 +426,15 @@ namespace Microsoft.Templates.Core
             foreach (var exclusion in exclusions)
             {
                 var exclusionTemplate = Find(t => t.GroupIdentity == exclusion
-                                                                && (t.GetProjectTypeList().Contains(projectType) || t.GetProjectTypeList().Contains(All))
-                                                                && IsMatchFrontEnd(t, frontEndFramework)
-                                                                && IsMatchBackEnd(t, backEndFramework)
-                                                                && t.GetPlatform() == platform);
+                                                                && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
+                                                                && IsMatchFrontEnd(t, context.FrontEndFramework)
+                                                                && IsMatchBackEnd(t, context.BackEndFramework)
+                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && t.GetPlatform() == context.Platform);
 
                 if (exclusionTemplate == null)
                 {
-                    LogOrAlertException(string.Format(StringRes.ErrorExclusionNotFound, exclusionTemplate, frontEndFramework, backEndFramework, platform));
+                    LogOrAlertException(string.Format(StringRes.ErrorExclusionNotFound, exclusionTemplate, context.FrontEndFramework, context.BackEndFramework, context.Platform));
                 }
                 else
                 {
@@ -463,6 +481,13 @@ namespace Microsoft.Templates.Core
             return string.IsNullOrEmpty(backEndFramework)
                     || info.GetBackEndFrameworkList().Contains(backEndFramework, StringComparer.OrdinalIgnoreCase)
                     || info.GetBackEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private bool IsMatchAppModel(ITemplateInfo info, string appModel)
+        {
+            return string.IsNullOrEmpty(appModel)
+                    || info.GetAppModelList().Contains(appModel, StringComparer.OrdinalIgnoreCase)
+                    || info.GetAppModelList().Contains(All, StringComparer.OrdinalIgnoreCase);
         }
 
         private IEnumerable<MetadataInfo> GetMetadataInfo(string type)

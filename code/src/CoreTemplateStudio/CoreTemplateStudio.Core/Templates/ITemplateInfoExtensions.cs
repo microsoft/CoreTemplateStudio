@@ -225,6 +225,20 @@ namespace Microsoft.Templates.Core
             return result;
         }
 
+        public static List<string> GetAppModelList(this ITemplateInfo ti)
+        {
+            var appModels = GetValueFromTag(ti, TagPrefix + "appmodel");
+
+            var result = new List<string>();
+
+            if (!string.IsNullOrEmpty(appModels))
+            {
+                result.AddRange(appModels.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
         public static string GetPlatform(this ITemplateInfo ti)
         {
             return GetValueFromTag(ti, TagPrefix + "platform") ?? string.Empty;
