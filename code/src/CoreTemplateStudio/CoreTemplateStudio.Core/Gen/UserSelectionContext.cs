@@ -34,6 +34,7 @@ namespace Microsoft.Templates.Core.Gen
                 throw new ArgumentNullException(nameof(platform));
             }
 
+            Language = language;
             Platform = platform;
         }
     }
