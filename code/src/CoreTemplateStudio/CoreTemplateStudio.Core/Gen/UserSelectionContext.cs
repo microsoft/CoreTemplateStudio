@@ -16,45 +16,25 @@ namespace Microsoft.Templates.Core.Gen
 
         public string BackEndFramework { get; set; }
 
-        public string Platform { get; set; }
+        public string Platform { get; private set; }
 
         public string AppModel { get; set; }
 
         public string Language { get; private set; }
 
-        public UserSelectionContext(string language)
+        public UserSelectionContext(string language, string platform)
         {
             if (string.IsNullOrWhiteSpace(language))
             {
                 throw new ArgumentNullException(nameof(language));
             }
 
-            Language = language;
-        }
-
-        public UserSelectionContext(string language, string platform)
-           : this(language)
-        {
             if (string.IsNullOrWhiteSpace(platform))
             {
                 throw new ArgumentNullException(nameof(platform));
             }
 
             Platform = platform;
-        }
-
-        public UserSelectionContext(string language, string platform, string appModel)
-            : this(language, platform)
-        {
-            AppModel = appModel;
-        }
-
-        public UserSelectionContext(string language, string platform, string appModel, string projecttype, string frontendframework, string backendframework)
-            : this(language, platform, appModel)
-        {
-            ProjectType = projecttype;
-            FrontEndFramework = frontendframework;
-            BackEndFramework = backendframework;
         }
     }
 }

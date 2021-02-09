@@ -43,7 +43,13 @@ namespace Microsoft.Templates.Cli.Models
 
         public UserSelection ToUserSelection()
         {
-            var context = new UserSelectionContext(Language, Platform, string.Empty, ProjectType, FrontendFramework, BackendFramework);
+            var context = new UserSelectionContext(Language, Platform)
+            {
+                ProjectType = ProjectType,
+                FrontEndFramework = FrontendFramework,
+                BackEndFramework = BackendFramework,
+            };
+
             var userSelection = new UserSelection(context);
 
             Pages.ForEach(p => userSelection.Pages.Add(p.ToGenerationItem()));

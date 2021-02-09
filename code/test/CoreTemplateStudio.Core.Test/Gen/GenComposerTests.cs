@@ -33,7 +33,12 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test", string.Empty, "pt1", "fx1", string.Empty);
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
+
             var userSelection = new UserSelection(context)
             {
                 HomeName = "TestHome",
@@ -54,7 +59,11 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test", string.Empty, "pt1", "fx1", string.Empty);
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
 
             var userSelection = new UserSelection(context)
             {
@@ -85,7 +94,11 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test", string.Empty, "pt1", "fx1", string.Empty);
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
 
             var userSelection = new UserSelection(context)
             {
@@ -109,7 +122,11 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test", string.Empty, "pt1", "fx1", string.Empty);
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
 
             var userSelection = new UserSelection(context)
             {
@@ -135,7 +152,11 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test", string.Empty, "pt1", "fx1", string.Empty);
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+               ProjectType = "pt1",
+               FrontEndFramework = "fx1",
+            };
 
             var userSelection = new UserSelection(context)
             {
