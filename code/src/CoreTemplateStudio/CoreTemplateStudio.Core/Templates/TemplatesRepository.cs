@@ -177,6 +177,11 @@ namespace Microsoft.Templates.Core
 
         public IEnumerable<ITemplateInfo> GetTemplates(TemplateType type, UserSelectionContext context)
         {
+            if (string.IsNullOrEmpty(context.ProjectType))
+            {
+                throw new ArgumentNullException(nameof(context.ProjectType));
+            }
+
             return Get(t => t.GetTemplateType() == type
                 && t.GetPlatform().Equals(context.Platform, StringComparison.OrdinalIgnoreCase)
                 && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
@@ -240,6 +245,11 @@ namespace Microsoft.Templates.Core
 
         public IEnumerable<LayoutInfo> GetLayoutTemplates(UserSelectionContext context)
         {
+            if (string.IsNullOrEmpty(context.ProjectType))
+            {
+                throw new ArgumentNullException(nameof(context.ProjectType));
+            }
+
             var projectTemplates = GetTemplates(TemplateType.Project, context);
 
             foreach (var projectTemplate in projectTemplates)
@@ -321,6 +331,11 @@ namespace Microsoft.Templates.Core
 
         public IEnumerable<ITemplateInfo> GetDependencies(ITemplateInfo template, UserSelectionContext context, IList<ITemplateInfo> dependencyList)
         {
+            if (string.IsNullOrEmpty(context.ProjectType))
+            {
+                throw new ArgumentNullException(nameof(context.ProjectType));
+            }
+
             var dependencies = template.GetDependencyList();
 
             foreach (var dependency in dependencies)
@@ -369,6 +384,11 @@ namespace Microsoft.Templates.Core
 
         public IEnumerable<ITemplateInfo> GetRequirements(ITemplateInfo template, UserSelectionContext context)
         {
+            if (string.IsNullOrEmpty(context.ProjectType))
+            {
+                throw new ArgumentNullException(nameof(context.ProjectType));
+            }
+
             var requirementsList = new List<ITemplateInfo>();
             var requirements = template.GetRequirementsList();
 
@@ -420,6 +440,11 @@ namespace Microsoft.Templates.Core
 
         public IEnumerable<ITemplateInfo> GetExclusions(ITemplateInfo template, UserSelectionContext context)
         {
+            if (string.IsNullOrEmpty(context.ProjectType))
+            {
+                throw new ArgumentNullException(nameof(context.ProjectType));
+            }
+
             var exclusionsList = new List<ITemplateInfo>();
             var exclusions = template.GetExclusionsList();
 
