@@ -20,6 +20,8 @@ namespace Microsoft.Templates.Core.Casing
                     return value.ToCamelCase();
                 case CasingType.Kebab:
                     return value.ToKebabCase();
+                case CasingType.Snake:
+                    return value.ToSnakeCase();
                 case CasingType.Pascal:
                     return value.ToPascalCase();
                 case CasingType.Lower:

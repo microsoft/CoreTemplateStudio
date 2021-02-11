@@ -32,6 +32,24 @@ namespace Microsoft.Templates.Core.Test
         }
 
         [Fact]
+        public void Test_TransformToSnake()
+        {
+            var snakeCasingService = new TextCasing() { Type = CasingType.Snake };
+
+            Assert.Equal("master_detail", snakeCasingService.Transform("MasterDetail"));
+            Assert.Equal("master_detail", snakeCasingService.Transform("Master_Detail"));
+            Assert.Equal("master_detail", snakeCasingService.Transform("Master Detail"));
+            Assert.Equal("master_detail", snakeCasingService.Transform(" Master Detail "));
+            Assert.Equal("master_detail", snakeCasingService.Transform("master detail"));
+            Assert.Equal("master_detail_123_abc", snakeCasingService.Transform("master   -  detail 123 abc"));
+
+            Assert.Equal("master_detail_1", snakeCasingService.Transform("MasterDetail1"));
+            Assert.Equal("master_ui", snakeCasingService.Transform("MasterUI"));
+            Assert.Equal("master_ui", snakeCasingService.Transform("Master UI"));
+            Assert.Equal("master_ui", snakeCasingService.Transform("Master_UI"));
+        }
+
+        [Fact]
         public void Test_TransformToPascalCase()
         {
             var pascalCasingService = new TextCasing() { Type = CasingType.Pascal };

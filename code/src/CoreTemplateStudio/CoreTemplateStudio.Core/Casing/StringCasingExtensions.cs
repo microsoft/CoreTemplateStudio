@@ -18,6 +18,11 @@ namespace Microsoft.Templates.Core.Casing
             return Transform(name, '-').ToLower();
         }
 
+        public static string ToSnakeCase(this string name)
+        {
+            return Transform(name, '_').ToLower();
+        }
+
         public static string ToPascalCase(this string name)
         {
             return Transform(name, null, ToUpperCase);
