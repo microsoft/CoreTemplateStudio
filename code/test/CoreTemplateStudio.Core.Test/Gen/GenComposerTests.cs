@@ -139,10 +139,12 @@ namespace Microsoft.Templates.Core.Test.Gen
             AssertBasicParameters(genQueue);
 
             var kebabCase = new KeyValuePair<string, string>("wts.sourceName.casing.kebab", "main-page");
+            var snakeCase = new KeyValuePair<string, string>("wts.sourceName.casing.snake", "main_page");
             var camelCase = new KeyValuePair<string, string>("wts.sourceName.casing.camel", "mainPage");
             var pascalCase = new KeyValuePair<string, string>("wts.sourceName.casing.pascal", "MainPage");
 
             Assert.True(genQueue.Where(g => g.Name == "MainPage").All(g => g.Parameters.Contains(kebabCase)));
+            Assert.True(genQueue.Where(g => g.Name == "MainPage").All(g => g.Parameters.Contains(snakeCase)));
             Assert.True(genQueue.Where(g => g.Name == "MainPage").All(g => g.Parameters.Contains(camelCase)));
             Assert.True(genQueue.Where(g => g.Name == "MainPage").All(g => g.Parameters.Contains(pascalCase)));
         }
