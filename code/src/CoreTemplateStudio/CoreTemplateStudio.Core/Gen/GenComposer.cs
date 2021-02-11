@@ -178,9 +178,12 @@ namespace Microsoft.Templates.Core.Gen
                 context.Add(new QueryableProperty("backendframework", userSelection.Context.BackEndFramework));
             }
 
-            if (!string.IsNullOrEmpty(userSelection.Context.AppModel))
+            if (userSelection.Context.PropertyBag.Any())
             {
-                context.Add(new QueryableProperty("appmodel", userSelection.Context.AppModel));
+                foreach (var property in userSelection.Context.PropertyBag)
+                {
+                    context.Add(new QueryableProperty(property.Key.ToLowerInvariant(), property.Value));
+                }
             }
 
             var combinedQueue = new List<GenInfo>();
@@ -291,7 +294,14 @@ namespace Microsoft.Templates.Core.Gen
             projectGenInfo?.Parameters.Add(GenParams.FrontEndFramework, userSelection.Context.FrontEndFramework ?? string.Empty);
             projectGenInfo?.Parameters.Add(GenParams.BackEndFramework, userSelection.Context.BackEndFramework ?? string.Empty);
             projectGenInfo?.Parameters.Add(GenParams.Platform, userSelection.Context.Platform);
-            projectGenInfo?.Parameters.Add(GenParams.AppModel, userSelection.Context.AppModel ?? string.Empty);
+
+            if (userSelection.Context.PropertyBag.Any())
+            {
+                foreach (var property in userSelection.Context.PropertyBag)
+                {
+                    projectGenInfo?.Parameters.Add($"{GenParams.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
+                }
+            }
         }
 
         private static void AddCasingParams(string name, ITemplateInfo template, GenInfo genInfo)

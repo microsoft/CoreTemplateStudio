@@ -187,7 +187,7 @@ namespace Microsoft.Templates.Core
                 && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
                 && IsMatchFrontEnd(t, context.FrontEndFramework)
                 && IsMatchBackEnd(t, context.BackEndFramework)
-                && IsMatchAppModel(t, context.AppModel));
+                && IsMatchPropertyBag(t, context.PropertyBag));
         }
 
         public TemplateInfo GetTemplateInfo(ITemplateInfo template, UserSelectionContext context)
@@ -266,7 +266,7 @@ namespace Microsoft.Templates.Core
                                                                 && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
                                                                 && IsMatchFrontEnd(t, context.FrontEndFramework)
                                                                 && IsMatchBackEnd(t, context.BackEndFramework)
-                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && IsMatchPropertyBag(t, context.PropertyBag)
                                                                 && t.GetPlatform() == context.Platform);
 
                         if (template == null)
@@ -307,7 +307,7 @@ namespace Microsoft.Templates.Core
         {
             return GetAll()
                 .Where(t => t.GetTemplateType() == TemplateType.Project
-                                && IsMatchAppModel(t, context.AppModel)
+                                && IsMatchPropertyBag(t, context.PropertyBag)
                                 && t.GetPlatform() == context.Platform)
                 .SelectMany(t => t.GetProjectTypeList())
                 .Distinct();
@@ -318,7 +318,7 @@ namespace Microsoft.Templates.Core
             var filtered = GetAll()
                           .Where(t => t.GetTemplateType() == TemplateType.Project
                           && t.GetProjectTypeList().Contains(context.ProjectType)
-                          && IsMatchAppModel(t, context.AppModel)
+                          && IsMatchPropertyBag(t, context.PropertyBag)
                           && t.GetPlatform().Equals(context.Platform, StringComparison.OrdinalIgnoreCase)).ToList();
 
             var result = new List<SupportedFramework>();
@@ -344,7 +344,7 @@ namespace Microsoft.Templates.Core
                                                                 && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
                                                                 && IsMatchFrontEnd(t, context.FrontEndFramework)
                                                                 && IsMatchBackEnd(t, context.BackEndFramework)
-                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && IsMatchPropertyBag(t, context.PropertyBag)
                                                                 && t.GetPlatform() == context.Platform);
 
                 if (dependencyTemplate == null)
@@ -398,7 +398,7 @@ namespace Microsoft.Templates.Core
                                                                 && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
                                                                 && IsMatchFrontEnd(t, context.FrontEndFramework)
                                                                 && IsMatchBackEnd(t, context.BackEndFramework)
-                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && IsMatchPropertyBag(t, context.PropertyBag)
                                                                 && t.GetPlatform() == context.Platform);
 
                 if (requirementTemplate == null)
@@ -454,7 +454,7 @@ namespace Microsoft.Templates.Core
                                                                 && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
                                                                 && IsMatchFrontEnd(t, context.FrontEndFramework)
                                                                 && IsMatchBackEnd(t, context.BackEndFramework)
-                                                                && IsMatchAppModel(t, context.AppModel)
+                                                                && IsMatchPropertyBag(t, context.PropertyBag)
                                                                 && t.GetPlatform() == context.Platform);
 
                 if (exclusionTemplate == null)
@@ -508,11 +508,16 @@ namespace Microsoft.Templates.Core
                     || info.GetBackEndFrameworkList().Contains(All, StringComparer.OrdinalIgnoreCase);
         }
 
-        private bool IsMatchAppModel(ITemplateInfo info, string appModel)
+        private bool IsMatchPropertyBag(ITemplateInfo info, Dictionary<string, string> propertyBag)
         {
-            return string.IsNullOrEmpty(appModel)
-                    || info.GetAppModelList().Contains(appModel, StringComparer.OrdinalIgnoreCase)
-                    || info.GetAppModelList().Contains(All, StringComparer.OrdinalIgnoreCase);
+            if (propertyBag == null || !propertyBag.Any())
+            {
+                return true;
+            }
+
+            return propertyBag.Any(p =>
+                info.GetPropertyBagValuesList(p.Key).Contains(p.Value, StringComparer.OrdinalIgnoreCase) ||
+                info.GetPropertyBagValuesList(p.Key).Contains(All, StringComparer.OrdinalIgnoreCase));
         }
 
         private IEnumerable<MetadataInfo> GetMetadataInfo(string type)

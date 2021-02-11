@@ -18,7 +18,7 @@ namespace Microsoft.Templates.Core.Gen
 
         public string Platform { get; private set; }
 
-        public string AppModel { get; set; }
+        public Dictionary<string, string> PropertyBag { get; set; } = new Dictionary<string, string>();
 
         public string Language { get; private set; }
 

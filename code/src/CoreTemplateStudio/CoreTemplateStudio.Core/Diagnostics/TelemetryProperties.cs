@@ -56,7 +56,7 @@ namespace Microsoft.Templates.Core.Diagnostics
 
         public static string VsProjectCategory { get; private set; } = TelemetryEvents.Prefix + "Category";
 
-        public static string VsProjectSubCategory { get; private set; } = TelemetryEvents.Prefix + "SubCategory";
+        public static string GenerationPropertiesPrefix { get; private set; } = TelemetryEvents.Prefix + "GenerationProperties";
 
         public static string NewItemType { get; private set; } = TelemetryEvents.Prefix + "NewItemType";
 

@@ -94,10 +94,13 @@ namespace Microsoft.Templates.Core.Gen
                 sb.AppendLine();
             }
 
-            if (!string.IsNullOrEmpty(Context.AppModel))
+            if (Context.PropertyBag.Any())
             {
-                sb.AppendFormat("App Model: '{0}'", Context.AppModel);
-                sb.AppendLine();
+                foreach (var property in Context.PropertyBag)
+                {
+                    sb.AppendFormat($"{property.Key.ToLowerInvariant()}", property.Value);
+                    sb.AppendLine();
+                }
             }
 
             if (Pages.Any())

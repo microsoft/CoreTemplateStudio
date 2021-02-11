@@ -225,15 +225,15 @@ namespace Microsoft.Templates.Core
             return result;
         }
 
-        public static List<string> GetAppModelList(this ITemplateInfo ti)
+        public static List<string> GetPropertyBagValuesList(this ITemplateInfo ti, string propertyKey)
         {
-            var appModels = GetValueFromTag(ti, TagPrefix + "appmodel");
+            var propertyValues = GetValueFromTag(ti, TagPrefix + propertyKey);
 
             var result = new List<string>();
 
-            if (!string.IsNullOrEmpty(appModels))
+            if (!string.IsNullOrEmpty(propertyValues))
             {
-                result.AddRange(appModels.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                result.AddRange(propertyValues.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             }
 
             return result;

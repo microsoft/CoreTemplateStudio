@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.TemplateEngine.Abstractions;
@@ -124,9 +125,16 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.VisualStudioActiveProjectGuid, vsProjectId.ToString() },
                 { TelemetryProperties.Language, context.Language },
                 { TelemetryProperties.VsProjectCategory, context.Platform },
-                { TelemetryProperties.VsProjectSubCategory, context.AppModel },
                 { TelemetryProperties.NewItemType, itemTypeString },
             };
+
+            if (context.PropertyBag.Any())
+            {
+                foreach (var property in context.PropertyBag)
+                {
+                    properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
+                }
+            }
 
             var metrics = new Dictionary<string, double>();
 
@@ -188,8 +196,15 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.Language, context.Language },
                 { TelemetryProperties.VisualStudioActiveProjectGuid, vsProjectId.ToString() },
                 { TelemetryProperties.VsProjectCategory, context.Platform },
-                { TelemetryProperties.VsProjectSubCategory, context.AppModel },
             };
+
+            if (context.PropertyBag.Any())
+            {
+                foreach (var property in context.PropertyBag)
+                {
+                    properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
+                }
+            }
 
             var metrics = new Dictionary<string, double>();
 
@@ -254,8 +269,15 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.GenSource, genSource.ToString() },
                 { TelemetryProperties.ProjectType, context.ProjectType },
                 { TelemetryProperties.VsProjectCategory, context.Platform },
-                { TelemetryProperties.VsProjectSubCategory, context.AppModel },
             };
+
+            if (context.PropertyBag.Any())
+            {
+                foreach (var property in context.PropertyBag)
+                {
+                    properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
+                }
+            }
 
             await TelemetryService.Current.TrackEventAsync(eventToTrack, properties).ConfigureAwait(false);
         }
