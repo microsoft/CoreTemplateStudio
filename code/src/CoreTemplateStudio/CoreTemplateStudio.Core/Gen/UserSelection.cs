@@ -94,13 +94,10 @@ namespace Microsoft.Templates.Core.Gen
                 sb.AppendLine();
             }
 
-            if (Context.PropertyBag.Any())
+            foreach (var property in Context.PropertyBag)
             {
-                foreach (var property in Context.PropertyBag)
-                {
-                    sb.AppendFormat($"{property.Key.ToLowerInvariant()}", property.Value);
-                    sb.AppendLine();
-                }
+                sb.AppendFormat($"{property.Key.ToLowerInvariant()}", property.Value);
+                sb.AppendLine();
             }
 
             if (Pages.Any())

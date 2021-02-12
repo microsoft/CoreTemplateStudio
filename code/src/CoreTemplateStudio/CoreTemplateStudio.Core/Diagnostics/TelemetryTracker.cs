@@ -128,12 +128,9 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.NewItemType, itemTypeString },
             };
 
-            if (context.PropertyBag.Any())
+            foreach (var property in context.PropertyBag)
             {
-                foreach (var property in context.PropertyBag)
-                {
-                    properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
-                }
+                properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
             }
 
             var metrics = new Dictionary<string, double>();
@@ -198,12 +195,9 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.VsProjectCategory, context.Platform },
             };
 
-            if (context.PropertyBag.Any())
+            foreach (var property in context.PropertyBag)
             {
-                foreach (var property in context.PropertyBag)
-                {
-                    properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
-                }
+                properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
             }
 
             var metrics = new Dictionary<string, double>();
@@ -271,12 +265,9 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.VsProjectCategory, context.Platform },
             };
 
-            if (context.PropertyBag.Any())
+            foreach (var property in context.PropertyBag)
             {
-                foreach (var property in context.PropertyBag)
-                {
-                    properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
-                }
+                properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
             }
 
             await TelemetryService.Current.TrackEventAsync(eventToTrack, properties).ConfigureAwait(false);

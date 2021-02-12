@@ -178,12 +178,9 @@ namespace Microsoft.Templates.Core.Gen
                 context.Add(new QueryableProperty("backendframework", userSelection.Context.BackEndFramework));
             }
 
-            if (userSelection.Context.PropertyBag.Any())
+            foreach (var property in userSelection.Context.PropertyBag)
             {
-                foreach (var property in userSelection.Context.PropertyBag)
-                {
-                    context.Add(new QueryableProperty(property.Key.ToLowerInvariant(), property.Value));
-                }
+                context.Add(new QueryableProperty(property.Key.ToLowerInvariant(), property.Value));
             }
 
             var combinedQueue = new List<GenInfo>();
@@ -295,12 +292,9 @@ namespace Microsoft.Templates.Core.Gen
             projectGenInfo?.Parameters.Add(GenParams.BackEndFramework, userSelection.Context.BackEndFramework ?? string.Empty);
             projectGenInfo?.Parameters.Add(GenParams.Platform, userSelection.Context.Platform);
 
-            if (userSelection.Context.PropertyBag.Any())
+            foreach (var property in userSelection.Context.PropertyBag)
             {
-                foreach (var property in userSelection.Context.PropertyBag)
-                {
-                    projectGenInfo?.Parameters.Add($"{GenParams.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
-                }
+                projectGenInfo?.Parameters.Add($"{GenParams.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
             }
         }
 

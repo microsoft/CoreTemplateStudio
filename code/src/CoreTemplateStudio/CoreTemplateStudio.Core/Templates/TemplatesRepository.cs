@@ -515,7 +515,7 @@ namespace Microsoft.Templates.Core
                 return true;
             }
 
-            return propertyBag.Any(p =>
+            return propertyBag.All(p =>
                 info.GetPropertyBagValuesList(p.Key).Contains(p.Value, StringComparer.OrdinalIgnoreCase) ||
                 info.GetPropertyBagValuesList(p.Key).Contains(All, StringComparer.OrdinalIgnoreCase));
         }
