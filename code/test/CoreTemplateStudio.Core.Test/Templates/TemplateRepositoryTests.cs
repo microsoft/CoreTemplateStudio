@@ -106,6 +106,27 @@ namespace Microsoft.Templates.Core.Test.Templates
                 });
         }
 
+
+        [Fact]
+        public void GetPages_PropertyBagFilter()
+        {
+            SetUpFixtureForTesting(ProgrammingLanguages.CSharp);
+
+            _context.ProjectType = "pt1";
+            _context.FrontEndFramework = "fx4";
+            _context.PropertyBag.Add("pb1", "value1");
+            _context.PropertyBag.Add("pb2", "value2");
+
+            var pages = _repo.GetTemplatesInfo(TemplateType.Page, _context);
+
+            Assert.Collection(
+                pages,
+                p1 =>
+                {
+                    Assert.Equal("PageTemplatePropertyBag", p1.Name);
+                });
+        }
+
         [Fact]
         public void GetPages_NoMatches()
         {
