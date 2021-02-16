@@ -10,7 +10,7 @@ This documents explains how templates are defined, composed and generated.
 
 Windows Template Studio and Web Template Studio both work as a shopping basket where a developer can choose one of the available Frameworks, one of the available projects Project Types, and then add the Pages and Features wanted for the target application. This leads to a complexity issue. Consider we have 3 frameworks (Fx) and 3 project types (Pj), then we will have 9 combinations, that is *Fx x Pj* app configurations. Now, consider we want to have 6 different types of Pages (P), all supported among the different app configurations, so we will need to maintain 9x6 = 54 pages, that is, *Fx x Pj x P* pages, with basically the same code. The same happens for Features (F), considering 6 types of features, we will have 9x6 = 54 features to maintain.
 
-Creating templates linearly is unmanageable, we would require to maintain Fx x Pj x (P + F) *[3 x 3 x (6 + 6) = 108]* different templates just to be able to combine all together under our preferences, but if the page types and/or features grow, then the number templates to maintain grow faster. This is what we call **The MxN issue**.
+Creating templates linearly is unmanageable, we would require to maintain Fx x Pj x (P + F) *[3 x 3 x (6 + 6) = 108]* different templates just to be able to combine all together under our preferences, but if the page types and/or features grow, then the number of templates to maintain grows faster. This is what we call **The MxN issue**.
 
 To avoid the MxN issue, we have designed the Templates as composable items, starting from the template definition from [dotnet Template Engine](https://github.com/dotnet/templating) and extending it to allow to define compositions and post-actions to reduce the template proliferation. The drawback is that the generation becomes more complex, but infinitely more maintainable in the long term.
 
@@ -92,7 +92,8 @@ The replacements are done based on the configuration established in the `templat
     "wts.type": "page",                             // Template type (project, page, feature, service, testing or composition)
     "wts.frontendframework": "MVVMBasic|MVVMLight", // Frameworks where this template can be used.
     "wts.projecttype": "",
-    "wts.platform": "Uwp",                          // Platform where this template can be used
+    "wts.platform": "Uwp",                          // Platform where this template can be used.
+    "wts.<propertyKey>" : "<propertyValue>",         // Addition filters defined in the UserSelections property bag
     "wts.version": "1.0.0",
     "wts.displayOrder": "1",                        // This tag is used to order the templates in the wizard.
     "wts.rightClickEnabled":"true",                 // If set to 'true' then this feature or page is available from right click on an existing project.
@@ -196,6 +197,13 @@ This is done by adding the tag `wts.requiredVsWorkload` and specifying the ID of
 This tag is optional. If specified, the template will be displayed as disabled if the required workload is not installed.
 This tag cannot be used with frameworks or project types.
 
+### Property bag
+
+With the addition of WinUI3 we need to filter templates based on the appmodel. AppModel is a special parameter for the WinUI3 platform that is not needed on other platforms. To support filtering templates by platform specific parameters we introduced the property bag on the user selection and the possibility to filter templates by the key-value pairs contained in the property bag.
+If the user selection specifies custom parameters in this property bag only templates that define this filters and match the specified value (or "all") are returned.
+Values from the property bag can also be used on composition queries as context parameters.
+Our intention is to gradually move other platform dependant values (as projecttype and projecttype) to the property bag to make CoreTS platform agnostic.
+
 ## Composable Templates
 
 As we already have mentioned, templates can be composed to maximize the code reusability. Consider, for example, the Blank page template, the page's source code will remain the same no matter the project type it is used in. Moreover, there will be very few changes in the page source code depending on which framework we rely on. The idea behind having composable templates is to reuse as much as possible the existing code for a certain page or feature no matter the project type or framework used.
@@ -246,10 +254,15 @@ Where
   - == -> Equals Equality
   - != -> Not equals
 - <context parameter>
-  - $framework -> current generation framework.
+  - $frontendframework -> current generation frontend framework.
+  - $backendframework -> current generation backend framework.
   - $projectType -> current generation project type.
+  - $<propertyBagKey> -> current generation property bag value.
   - $page -> current selection includes a page with the specified Id.
   - $feature -> current selection includes a feature with the specified Id.
+  - $service -> current selection includes a service with the specified Id.
+  - $testing -> current selection includes a testing project with the specified Id.
+
 
 ```
 
