@@ -179,6 +179,9 @@ namespace Microsoft.Templates.Core
                         case "KEBAB":
                             result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Kebab });
                             break;
+                        case "SNAKE":
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Snake });
+                            break;
                         case "PASCAL":
                             result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Pascal });
                             break;
