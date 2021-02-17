@@ -106,7 +106,6 @@ namespace Microsoft.Templates.Core.Test.Templates
                 });
         }
 
-
         [Fact]
         public void GetPages_PropertyBagFilter()
         {

@@ -8,7 +8,7 @@
   <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
     <DefineConstants>NOT_WINDOWS</DefineConstants>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <AdditionalFiles Include="..\..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
@@ -47,10 +47,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StringRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 
