@@ -23,7 +23,7 @@ namespace Microsoft.Templates.Core.Gen
     {
         public PostActionFactory PostactionFactory { get; internal set; }
 
-        internal async Task<Dictionary<string, TemplateCreationResult>> GenerateItemsAsync(IEnumerable<GenInfo> genItems, bool isTempGeneration)
+        internal async Task<Dictionary<string, TemplateCreationResult>> GenerateItemsAsync(IEnumerable<GenInfo> genItems)
         {
             var genResults = new Dictionary<string, TemplateCreationResult>();
 
@@ -153,7 +153,7 @@ namespace Microsoft.Templates.Core.Gen
                     }
                 }
 
-                var dependencies = GenContext.ToolBox.Repo.GetDependencies(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null, new List<ITemplateInfo>());
+                var dependencies = GenContext.ToolBox.Repo.GetDependencies(template, userSelection.Context, new List<ITemplateInfo>());
 
                 foreach (var dependency in dependencies)
                 {
@@ -163,14 +163,14 @@ namespace Microsoft.Templates.Core.Gen
                     }
                 }
 
-                var requirements = GenContext.ToolBox.Repo.GetRequirements(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null);
+                var requirements = GenContext.ToolBox.Repo.GetRequirements(template, userSelection.Context);
 
                 if (requirements.Count() > 0 && !userSelection.Items.Any(i => requirements.Select(r => r.Identity).Contains(i.TemplateId)))
                 {
                     throw new InvalidDataException(string.Format(StringRes.ErrorRequirementMissing, requirements.Select(r => r.Name).Aggregate((i, j) => $"{i},{j}")));
                 }
 
-                var exclusionTemplates = GenContext.ToolBox.Repo.GetExclusions(template, userSelection.Platform, userSelection.ProjectType, userSelection.FrontEndFramework, null);
+                var exclusionTemplates = GenContext.ToolBox.Repo.GetExclusions(template, userSelection.Context);
 
                 foreach (var exclusion in exclusionTemplates)
                 {

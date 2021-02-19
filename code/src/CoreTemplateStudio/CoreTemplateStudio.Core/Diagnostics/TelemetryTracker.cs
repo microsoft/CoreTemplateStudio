@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.TemplateEngine.Abstractions;
@@ -50,7 +51,7 @@ namespace Microsoft.Templates.Core.Diagnostics
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.Wizard, properties).ConfigureAwait(false);
         }
 
-        public async Task TrackProjectGenAsync(ITemplateInfo template, string appProjectType, string appFrontendFramework, string appBackendFramework, string appPlatform, TemplateCreationResult result, Guid vsProjectId, string language, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, Dictionary<ProjectMetricsEnum, double> performanceCounters = null)
+        public async Task TrackProjectGenAsync(ITemplateInfo template, UserSelectionContext context, TemplateCreationResult result, Guid vsProjectId, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, Dictionary<ProjectMetricsEnum, double> performanceCounters = null)
         {
             if (template == null)
             {
@@ -69,10 +70,10 @@ namespace Microsoft.Templates.Core.Diagnostics
 
             GenStatusEnum telemetryStatus = result.Status == CreationResultStatus.Success ? GenStatusEnum.Completed : GenStatusEnum.Error;
 
-            await TrackProjectAsync(telemetryStatus, template.GetTelemetryName(), appProjectType, appFrontendFramework, appBackendFramework, appPlatform, vsProjectId, language, genItemsTelemetryData, timeSpent, performanceCounters, result.Status, result.Message);
+            await TrackProjectAsync(telemetryStatus, template.GetTelemetryName(), context, vsProjectId, genItemsTelemetryData, timeSpent, performanceCounters, result.Status, result.Message);
         }
 
-        public async Task TrackItemGenAsync(ITemplateInfo template, GenSourceEnum genSource, string appProjectType, string appFrontendFramework, string appBackendFramework, string appPlatform, TemplateCreationResult result)
+        public async Task TrackItemGenAsync(ITemplateInfo template, GenSourceEnum genSource, UserSelectionContext context, TemplateCreationResult result)
         {
             if (template == null)
             {
@@ -89,16 +90,16 @@ namespace Microsoft.Templates.Core.Diagnostics
                 switch (template.GetTemplateType())
                 {
                     case TemplateType.Page:
-                        await TrackItemGenAsync(TelemetryEvents.PageGen, template, genSource, appProjectType, appFrontendFramework, appBackendFramework, appPlatform, result);
+                        await TrackItemGenAsync(TelemetryEvents.PageGen, template, genSource, context, result);
                         break;
                     case TemplateType.Feature:
-                        await TrackItemGenAsync(TelemetryEvents.FeatureGen, template, genSource, appProjectType, appFrontendFramework, appBackendFramework, appPlatform, result);
+                        await TrackItemGenAsync(TelemetryEvents.FeatureGen, template, genSource, context, result);
                         break;
                     case TemplateType.Service:
-                        await TrackItemGenAsync(TelemetryEvents.ServiceGen, template, genSource, appProjectType, appFrontendFramework, appBackendFramework, appPlatform, result);
+                        await TrackItemGenAsync(TelemetryEvents.ServiceGen, template, genSource, context, result);
                         break;
                     case TemplateType.Testing:
-                        await TrackItemGenAsync(TelemetryEvents.TestingGen, template, genSource, appProjectType, appFrontendFramework, appBackendFramework, appPlatform, result);
+                        await TrackItemGenAsync(TelemetryEvents.TestingGen, template, genSource, context, result);
                         break;
                     case TemplateType.Unspecified:
                         break;
@@ -106,7 +107,7 @@ namespace Microsoft.Templates.Core.Diagnostics
             }
         }
 
-        public async Task TrackNewItemAsync(TemplateType templateType, string appType, string appFrontendFramework, string appBackendFramework, string appPlatform, string language, Guid vsProjectId, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
+        public async Task TrackNewItemAsync(TemplateType templateType, UserSelectionContext context, Guid vsProjectId, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
         {
             var itemType = templateType.GetNewItemType();
             var itemTypeString = itemType != null ? itemType.ToString() : string.Empty;
@@ -114,18 +115,20 @@ namespace Microsoft.Templates.Core.Diagnostics
             // TODO: Remove TelemetryProperties.Framework and use TelemetryProperties.FrontendFramework
             var properties = new Dictionary<string, string>()
             {
-                { TelemetryProperties.ProjectType, appType },
-                { TelemetryProperties.Framework, appFrontendFramework },
-                { TelemetryProperties.FrontendFramework, appFrontendFramework },
-                { TelemetryProperties.BackendFramework, appBackendFramework },
+                { TelemetryProperties.ProjectType, context.ProjectType },
+                { TelemetryProperties.Framework, context.FrontEndFramework },
+                { TelemetryProperties.FrontendFramework, context.FrontEndFramework },
+                { TelemetryProperties.BackendFramework, context.BackEndFramework },
                 { TelemetryProperties.GenEngineStatus, genStatus.ToString() },
                 { TelemetryProperties.GenEngineMessage, message },
                 { TelemetryProperties.EventName, TelemetryEvents.NewItemGen },
                 { TelemetryProperties.VisualStudioActiveProjectGuid, vsProjectId.ToString() },
-                { TelemetryProperties.Language, language },
-                { TelemetryProperties.VsProjectCategory, appPlatform },
+                { TelemetryProperties.Language, context.Language },
+                { TelemetryProperties.VsProjectCategory, context.Platform },
                 { TelemetryProperties.NewItemType, itemTypeString },
             };
+
+            AddPropertiesFromPropertyBag(context, properties);
 
             var metrics = new Dictionary<string, double>();
 
@@ -170,24 +173,26 @@ namespace Microsoft.Templates.Core.Diagnostics
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.EditSummaryItem, properties).ConfigureAwait(false);
         }
 
-        private async Task TrackProjectAsync(GenStatusEnum status, string templateName, string appType, string appFrontendFramework, string appBackendFramework, string appPlatform, Guid vsProjectId, string language, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, Dictionary<ProjectMetricsEnum, double> performanceCounters = null, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
+        private async Task TrackProjectAsync(GenStatusEnum status, string templateName, UserSelectionContext context, Guid vsProjectId, GenItemsTelemetryData genItemsTelemetryData = null, double? timeSpent = null, Dictionary<ProjectMetricsEnum, double> performanceCounters = null, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
         {
             // TODO: Remove TelemetryProperties.Framework and use TelemetryProperties.FrontendFramework
             var properties = new Dictionary<string, string>()
             {
                 { TelemetryProperties.Status, status.ToString() },
-                { TelemetryProperties.ProjectType, appType },
-                { TelemetryProperties.Framework, appFrontendFramework },
-                { TelemetryProperties.FrontendFramework, appFrontendFramework },
-                { TelemetryProperties.BackendFramework, appBackendFramework },
+                { TelemetryProperties.ProjectType, context.ProjectType },
+                { TelemetryProperties.Framework, context.FrontEndFramework },
+                { TelemetryProperties.FrontendFramework,  context.FrontEndFramework },
+                { TelemetryProperties.BackendFramework, context.BackEndFramework },
                 { TelemetryProperties.TemplateName, templateName },
                 { TelemetryProperties.GenEngineStatus, genStatus.ToString() },
                 { TelemetryProperties.GenEngineMessage, message },
                 { TelemetryProperties.EventName, TelemetryEvents.ProjectGen },
-                { TelemetryProperties.Language, language },
+                { TelemetryProperties.Language, context.Language },
                 { TelemetryProperties.VisualStudioActiveProjectGuid, vsProjectId.ToString() },
-                { TelemetryProperties.VsProjectCategory, appPlatform },
+                { TelemetryProperties.VsProjectCategory, context.Platform },
             };
+
+            AddPropertiesFromPropertyBag(context, properties);
 
             var metrics = new Dictionary<string, double>();
 
@@ -229,32 +234,42 @@ namespace Microsoft.Templates.Core.Diagnostics
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.ProjectGen, properties, metrics).ConfigureAwait(false);
         }
 
-        private async Task TrackItemGenAsync(string eventToTrack, ITemplateInfo template, GenSourceEnum genSource, string appProjectType, string appFrontendFramework, string appBackendFramework, string appPlatform, TemplateCreationResult result)
+        private async Task TrackItemGenAsync(string eventToTrack, ITemplateInfo template, GenSourceEnum genSource, UserSelectionContext context, TemplateCreationResult result)
         {
             GenStatusEnum telemetryStatus = result.Status == CreationResultStatus.Success ? GenStatusEnum.Completed : GenStatusEnum.Error;
 
-            await TrackItemGenAsync(eventToTrack, telemetryStatus, appProjectType, appFrontendFramework, appBackendFramework, appPlatform, template.GetTelemetryName(), genSource, result.Status, result.Message);
+            await TrackItemGenAsync(eventToTrack, telemetryStatus, context, template.GetTelemetryName(), genSource, result.Status, result.Message);
         }
 
-        private async Task TrackItemGenAsync(string eventToTrack, GenStatusEnum status, string appType, string appFrontendFramework, string appBackendFramework, string appPlatform, string templateName, GenSourceEnum genSource, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
+        private async Task TrackItemGenAsync(string eventToTrack, GenStatusEnum status, UserSelectionContext context, string templateName, GenSourceEnum genSource, CreationResultStatus genStatus = CreationResultStatus.Success, string message = "")
         {
             // TODO: Remove TelemetryProperties.Framework and use TelemetryProperties.FrontendFramework
             var properties = new Dictionary<string, string>
             {
                 { TelemetryProperties.Status, status.ToString() },
-                { TelemetryProperties.Framework, appFrontendFramework },
-                { TelemetryProperties.FrontendFramework, appFrontendFramework },
-                { TelemetryProperties.BackendFramework, appBackendFramework },
+                { TelemetryProperties.Framework, context.FrontEndFramework },
+                { TelemetryProperties.FrontendFramework, context.FrontEndFramework },
+                { TelemetryProperties.BackendFramework, context.BackEndFramework },
                 { TelemetryProperties.TemplateName, templateName },
                 { TelemetryProperties.GenEngineStatus, genStatus.ToString() },
                 { TelemetryProperties.GenEngineMessage, message },
                 { TelemetryProperties.EventName, eventToTrack },
                 { TelemetryProperties.GenSource, genSource.ToString() },
-                { TelemetryProperties.ProjectType, appType },
-                { TelemetryProperties.VsProjectCategory, appPlatform },
+                { TelemetryProperties.ProjectType, context.ProjectType },
+                { TelemetryProperties.VsProjectCategory, context.Platform },
             };
 
+            AddPropertiesFromPropertyBag(context, properties);
+
             await TelemetryService.Current.TrackEventAsync(eventToTrack, properties).ConfigureAwait(false);
+        }
+
+        private static void AddPropertiesFromPropertyBag(UserSelectionContext context, Dictionary<string, string> properties)
+        {
+            foreach (var property in context.PropertyBag)
+            {
+                properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
+            }
         }
 
         ~TelemetryTracker()
