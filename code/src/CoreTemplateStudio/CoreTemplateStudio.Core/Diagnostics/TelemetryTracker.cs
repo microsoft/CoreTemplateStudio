@@ -128,10 +128,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.NewItemType, itemTypeString },
             };
 
-            foreach (var property in context.PropertyBag)
-            {
-                properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
-            }
+            AddPropertiesFromPropertyBag(context, properties);
 
             var metrics = new Dictionary<string, double>();
 
@@ -195,10 +192,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.VsProjectCategory, context.Platform },
             };
 
-            foreach (var property in context.PropertyBag)
-            {
-                properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
-            }
+            AddPropertiesFromPropertyBag(context, properties);
 
             var metrics = new Dictionary<string, double>();
 
@@ -265,12 +259,17 @@ namespace Microsoft.Templates.Core.Diagnostics
                 { TelemetryProperties.VsProjectCategory, context.Platform },
             };
 
+            AddPropertiesFromPropertyBag(context, properties);
+
+            await TelemetryService.Current.TrackEventAsync(eventToTrack, properties).ConfigureAwait(false);
+        }
+
+        private static void AddPropertiesFromPropertyBag(UserSelectionContext context, Dictionary<string, string> properties)
+        {
             foreach (var property in context.PropertyBag)
             {
                 properties.Add($"{TelemetryProperties.GenerationPropertiesPrefix}.{property.Key.ToLowerInvariant()}", property.Value);
             }
-
-            await TelemetryService.Current.TrackEventAsync(eventToTrack, properties).ConfigureAwait(false);
         }
 
         ~TelemetryTracker()
