@@ -33,7 +33,13 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var userSelection = new UserSelection("pt1", "fx1", string.Empty, "test", ProgrammingLanguages.CSharp)
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
+
+            var userSelection = new UserSelection(context)
             {
                 HomeName = "TestHome",
             };
@@ -41,7 +47,7 @@ namespace Microsoft.Templates.Core.Test.Gen
 
             var genQueue = GenComposer.Compose(userSelection);
 
-            AssertBasicParameters(genQueue);
+            AssertBasicParameters(genQueue, context);
         }
 
         [Fact]
@@ -53,7 +59,13 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var userSelection = new UserSelection("pt1", "fx1", string.Empty, "test", ProgrammingLanguages.CSharp)
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
+
+            var userSelection = new UserSelection(context)
             {
                 HomeName = "TestHome",
             };
@@ -64,7 +76,7 @@ namespace Microsoft.Templates.Core.Test.Gen
 
             var genQueue = GenComposer.Compose(userSelection);
 
-            AssertBasicParameters(genQueue);
+            AssertBasicParameters(genQueue, context);
 
             var dp1 = new KeyValuePair<string, string>("dp1", "d1");
             var dp2 = new KeyValuePair<string, string>("dp2", "d2");
@@ -82,7 +94,13 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var userSelection = new UserSelection("pt1", "fx1", string.Empty, "test", ProgrammingLanguages.CSharp)
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
+
+            var userSelection = new UserSelection(context)
             {
                 HomeName = "TestHome",
             };
@@ -92,7 +110,7 @@ namespace Microsoft.Templates.Core.Test.Gen
 
             var genQueue = GenComposer.Compose(userSelection);
 
-            AssertBasicParameters(genQueue);
+            AssertBasicParameters(genQueue, context);
         }
 
         [Fact]
@@ -104,7 +122,13 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var userSelection = new UserSelection("pt1", "fx1", string.Empty, "test", ProgrammingLanguages.CSharp)
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx1",
+            };
+
+            var userSelection = new UserSelection(context)
             {
                 HomeName = "TestHome",
             };
@@ -112,7 +136,7 @@ namespace Microsoft.Templates.Core.Test.Gen
 
             var genQueue = GenComposer.Compose(userSelection);
 
-            AssertBasicParameters(genQueue);
+            AssertBasicParameters(genQueue, context);
 
             var export = new KeyValuePair<string, string>("testKey", "testValue");
 
@@ -128,7 +152,13 @@ namespace Microsoft.Templates.Core.Test.Gen
                 ProjectName = "TestProject",
             };
 
-            var userSelection = new UserSelection("pt1", "fx1", string.Empty, "test", ProgrammingLanguages.CSharp)
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+               ProjectType = "pt1",
+               FrontEndFramework = "fx1",
+            };
+
+            var userSelection = new UserSelection(context)
             {
                 HomeName = "TestHome",
             };
@@ -136,7 +166,7 @@ namespace Microsoft.Templates.Core.Test.Gen
 
             var genQueue = GenComposer.Compose(userSelection);
 
-            AssertBasicParameters(genQueue);
+            AssertBasicParameters(genQueue, context);
 
             var kebabCase = new KeyValuePair<string, string>("wts.sourceName.casing.kebab", "main-page");
             var snakeCase = new KeyValuePair<string, string>("wts.sourceName.casing.snake", "main_page");
@@ -149,7 +179,39 @@ namespace Microsoft.Templates.Core.Test.Gen
             Assert.True(genQueue.Where(g => g.Name == "MainPage").All(g => g.Parameters.Contains(pascalCase)));
         }
 
-        private void AssertBasicParameters(IEnumerable<GenInfo> genQueue)
+        [Fact]
+        public void Compose_GenerationWithPropertyBag()
+        {
+            GenContext.Current = new TestContextProvider()
+            {
+                DestinationPath = string.Empty,
+                ProjectName = "TestProject",
+            };
+
+            var context = new UserSelectionContext(ProgrammingLanguages.CSharp, "test")
+            {
+                ProjectType = "pt1",
+                FrontEndFramework = "fx4",
+            };
+
+            context.PropertyBag.Add("pb1", "value1");
+
+            var userSelection = new UserSelection(context)
+            {
+                HomeName = "TestHome",
+            };
+            userSelection.Add(new UserSelectionItem() { Name = "MainPage", TemplateId = "Microsoft.Templates.Test.PageTemplatePropertyBag.CSharp" }, TemplateType.Page);
+
+            var genQueue = GenComposer.Compose(userSelection);
+
+            AssertBasicParameters(genQueue, context);
+
+            var property = new KeyValuePair<string, string>("wts.generation.pb1", "value1");
+
+            Assert.True(genQueue.Where(g => g.Name == "ProjectTemplatePropertyBag").All(g => g.Parameters.Contains(property)));
+        }
+
+        private void AssertBasicParameters(IEnumerable<GenInfo> genQueue, UserSelectionContext context)
         {
             // Check general params
             var homePageName = new KeyValuePair<string, string>(GenParams.HomePageName, "TestHome");
@@ -164,9 +226,9 @@ namespace Microsoft.Templates.Core.Test.Gen
             var userName = new KeyValuePair<string, string>(GenParams.Username, Environment.UserName);
             var wizardVersion = new KeyValuePair<string, string>(GenParams.WizardVersion, string.Concat("v", GenContext.ToolBox.WizardVersion));
             var templatesVersion = new KeyValuePair<string, string>(GenParams.TemplatesVersion, string.Concat("v", GenContext.ToolBox.TemplatesVersion));
-            var projectType = new KeyValuePair<string, string>(GenParams.ProjectType, "pt1");
-            var frontentFramework = new KeyValuePair<string, string>(GenParams.FrontEndFramework, "fx1");
-            var platform = new KeyValuePair<string, string>(GenParams.Platform, "test");
+            var projectType = new KeyValuePair<string, string>(GenParams.ProjectType, context.ProjectType);
+            var frontentFramework = new KeyValuePair<string, string>(GenParams.FrontEndFramework, context.FrontEndFramework);
+            var platform = new KeyValuePair<string, string>(GenParams.Platform, context.Platform);
 
             Assert.True(genQueue.Where(g => g.Template.GetTemplateOutputType() == TemplateOutputType.Project).All(g => g.Parameters.Contains(userName)));
             Assert.True(genQueue.Where(g => g.Template.GetTemplateOutputType() == TemplateOutputType.Item).All(g => !g.Parameters.Contains(userName)));

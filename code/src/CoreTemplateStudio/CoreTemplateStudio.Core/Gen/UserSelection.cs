@@ -21,31 +21,14 @@ namespace Microsoft.Templates.Core.Gen
 
     public class UserSelection
     {
-        public UserSelection(string projectType, string frontEndFramework, string backEndFramework, string platform, string language)
+        public UserSelection(UserSelectionContext context)
         {
-            if (string.IsNullOrWhiteSpace(language))
-            {
-                throw new ArgumentNullException(nameof(language));
-            }
-
-            ProjectType = projectType;
-            FrontEndFramework = frontEndFramework;
-            BackEndFramework = backEndFramework;
-            Platform = platform;
-            Language = language;
+            Context = context;
         }
 
-        public string ProjectType { get; set; }
-
-        public string FrontEndFramework { get; set; }
-
-        public string BackEndFramework { get; set; }
+        public UserSelectionContext Context { get; private set; }
 
         public string HomeName { get; set; }
-
-        public string Platform { get; private set; }
-
-        public string Language { get; private set; }
 
         public ItemGenerationType ItemGenerationType { get; set; } = ItemGenerationType.None;
 
@@ -87,27 +70,33 @@ namespace Microsoft.Templates.Core.Gen
         {
             StringBuilder sb = new StringBuilder();
 
-            if (!string.IsNullOrEmpty(Language))
+            if (!string.IsNullOrEmpty(Context.Language))
             {
-                sb.AppendFormat("Language: '{0}'", Language);
+                sb.AppendFormat("Language: '{0}'", Context.Language);
                 sb.AppendLine();
             }
 
-            if (!string.IsNullOrEmpty(ProjectType))
+            if (!string.IsNullOrEmpty(Context.ProjectType))
             {
-                sb.AppendFormat("ProjectType: '{0}'", ProjectType);
+                sb.AppendFormat("ProjectType: '{0}'", Context.ProjectType);
                 sb.AppendLine();
             }
 
-            if (!string.IsNullOrEmpty(FrontEndFramework))
+            if (!string.IsNullOrEmpty(Context.FrontEndFramework))
             {
-                sb.AppendFormat("Front End Framework: '{0}'", FrontEndFramework);
+                sb.AppendFormat("Front End Framework: '{0}'", Context.FrontEndFramework);
                 sb.AppendLine();
             }
 
-            if (!string.IsNullOrEmpty(BackEndFramework))
+            if (!string.IsNullOrEmpty(Context.BackEndFramework))
             {
-                sb.AppendFormat("Back End Framework: '{0}'", BackEndFramework);
+                sb.AppendFormat("Back End Framework: '{0}'", Context.BackEndFramework);
+                sb.AppendLine();
+            }
+
+            foreach (var property in Context.PropertyBag)
+            {
+                sb.AppendFormat($"{property.Key.ToLowerInvariant()}", property.Value);
                 sb.AppendLine();
             }
 
