@@ -228,6 +228,20 @@ namespace Microsoft.Templates.Core
             return result;
         }
 
+        public static List<string> GetPropertyBagValuesList(this ITemplateInfo ti, string propertyKey)
+        {
+            var propertyValues = GetValueFromTag(ti, TagPrefix + propertyKey);
+
+            var result = new List<string>();
+
+            if (!string.IsNullOrEmpty(propertyValues))
+            {
+                result.AddRange(propertyValues.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
         public static string GetPlatform(this ITemplateInfo ti)
         {
             return GetValueFromTag(ti, TagPrefix + "platform") ?? string.Empty;
