@@ -28,6 +28,12 @@
     <Content Include="TestData\Templates\test\Dependencies.FeatureTemplate.dp1\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Exclusions.FeatureTemplate\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Exclusions.FeatureTemplateVB\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\PageTemplate_PropertyBag\.template.config\en-US.template.json" />
+    <Content Include="TestData\Templates\test\PageTemplate_PropertyBag\.template.config\es-ES.template.json" />
+    <Content Include="TestData\Templates\test\PageTemplate_PropertyBag\.template.config\template.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplate_PropertyBag\.template.config\icon.png" />
+    <Content Include="TestData\Templates\test\ProjectTemplate_PropertyBag\.template.config\Layout.json" />
+    <Content Include="TestData\Templates\test\ProjectTemplate_PropertyBag\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Requirements.FeatureTemplate.r2\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Requirements.FeatureTemplate.r1\.template.config\template.json" />
     <Content Include="TestData\Templates\test\Requirements.FeatureTemplateVB\.template.config\template.json" />
@@ -317,6 +323,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestData\Templates\test\PageTemplate_PropertyBag\.template.config\description.md" />
+    <None Include="TestData\Templates\test\PageTemplate_PropertyBag\.template.config\en-US.description.md" />
+    <None Include="TestData\Templates\test\PageTemplate_PropertyBag\.template.config\es-ES.description.md" />
+    <None Include="TestData\Templates\test\ProjectTemplate_PropertyBag\.template.config\description.md" />
     <None Include="TestData\Templates\test\TestingTemplateVB\.template.config\es-ES.description.md" />
     <None Include="TestData\Templates\test\TestingTemplate\.template.config\description.md" />
     <None Include="TestData\Templates\test\TestingTemplate\.template.config\en-US.description.md" />

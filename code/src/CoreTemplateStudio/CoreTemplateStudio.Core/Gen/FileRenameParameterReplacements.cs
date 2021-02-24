@@ -18,6 +18,7 @@ namespace Microsoft.Templates.Core.Templates
             {
                 { "Param_ProjectName", genParameters.SafeGet(GenParams.ProjectName) },
                 { "Param_SourceName_Kebab", genParameters.SafeGet("wts.sourceName.casing.kebab") },
+                { "Param_SourceName_Snake", genParameters.SafeGet("wts.sourceName.casing.snake") },
                 { "Param_SourceName_Pascal", genParameters.SafeGet("wts.sourceName.casing.pascal") },
                 { "Param_SourceName_Camel", genParameters.SafeGet("wts.sourceName.casing.camel") },
             };

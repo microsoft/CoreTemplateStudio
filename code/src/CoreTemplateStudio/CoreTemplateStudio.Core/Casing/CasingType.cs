@@ -10,5 +10,6 @@ namespace Microsoft.Templates.Core.Casing
         Kebab,
         Pascal,
         Lower,
+        Snake,
     }
 }

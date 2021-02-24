@@ -743,8 +743,9 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("PageTemplate");
             var result = target.GetTextCasings();
 
-            Assert.Equal(3, result.Count);
+            Assert.Equal(4, result.Count);
             Assert.Contains(result, r => r.Type == CasingType.Kebab);
+            Assert.Contains(result, r => r.Type == CasingType.Snake);
             Assert.Contains(result, r => r.Type == CasingType.Camel);
             Assert.Contains(result, r => r.Type == CasingType.Pascal);
         }

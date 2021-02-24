@@ -179,6 +179,9 @@ namespace Microsoft.Templates.Core
                         case "KEBAB":
                             result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Kebab });
                             break;
+                        case "SNAKE":
+                            result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Snake });
+                            break;
                         case "PASCAL":
                             result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Pascal });
                             break;
@@ -220,6 +223,20 @@ namespace Microsoft.Templates.Core
             if (!string.IsNullOrEmpty(backEndFrameworks))
             {
                 result.AddRange(backEndFrameworks.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            return result;
+        }
+
+        public static List<string> GetPropertyBagValuesList(this ITemplateInfo ti, string propertyKey)
+        {
+            var propertyValues = GetValueFromTag(ti, TagPrefix + propertyKey);
+
+            var result = new List<string>();
+
+            if (!string.IsNullOrEmpty(propertyValues))
+            {
+                result.AddRange(propertyValues.Split(Separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             }
 
             return result;
