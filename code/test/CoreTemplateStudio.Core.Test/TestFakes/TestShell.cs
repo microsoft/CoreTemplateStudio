@@ -48,6 +48,11 @@ namespace Microsoft.Templates.Core.Test.TestFakes
             return string.Empty;
         }
 
+        public override string GetActiveProjectKind()
+        {
+            return string.Empty;
+        }
+
         public override string GetActiveProjectName()
         {
             return string.Empty;

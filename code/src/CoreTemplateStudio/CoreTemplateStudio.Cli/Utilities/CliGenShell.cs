@@ -49,6 +49,11 @@ namespace Microsoft.Templates.Cli.Utilities
             return string.Empty;
         }
 
+        public override string GetActiveProjectKind()
+        {
+            return string.Empty;
+        }
+
         public override string GetActiveProjectName()
         {
             return string.Empty;
