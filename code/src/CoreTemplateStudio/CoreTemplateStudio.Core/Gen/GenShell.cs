@@ -22,6 +22,8 @@ namespace Microsoft.Templates.Core.Gen
 
         public abstract string GetActiveProjectLanguage();
 
+        public abstract string GetActiveProjectKind();
+
         public abstract string GetActiveProjectTypeGuids();
 
         public abstract Guid GetProjectGuidByName(string projectName);
