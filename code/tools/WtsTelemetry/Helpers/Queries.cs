@@ -2,7 +2,7 @@ namespace WtsTelemetry.Helpers
 {
     public class Queries
     {
-        private readonly string DataQuery = @"
+        private readonly string DataByEventQuery = @"
 let startDatetime = startofmonth(datetime({0}-{1}-01));
 let endDatetime = endofmonth(datetime({0}-{1}-01));
 let queryTable = customEvents
@@ -46,27 +46,45 @@ queryTable
             this.appModel = appModel ?? string.Empty;
         }
 
-        public string Projects => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsProjectType", platform, appModel);
+        public string Projects => GetDataByPlatformQuery("WtsProjectGen", "WtsProjectType");
 
         // TODO: Remove WtsFramework and use WtsFrontendFramework
-        public string Frameworks => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFramework", platform, appModel);
+        public string Frameworks => GetDataByPlatformQuery("WtsProjectGen", "WtsFramework");
 
-        public string FrontendFrameworks => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsFrontendFramework", platform, appModel);
+        public string FrontendFrameworks => GetDataByPlatformQuery("WtsProjectGen", "WtsFrontendFramework");
 
-        public string BackendFrameworks => string.Format(DataByCategoryQuery, year, month, "WtsProjectGen", "WtsBackendFramework", platform, appModel);
+        public string BackendFrameworks => GetDataByPlatformQuery("WtsProjectGen", "WtsBackendFramework");
 
-        public string Pages => string.Format(DataByCategoryQuery, year, month, "WtsPageGen", "WtsTemplateName", platform, appModel);
+        public string Pages => GetDataByPlatformQuery("WtsPageGen", "WtsTemplateName");
 
-        public string Features => string.Format(DataByCategoryQuery, year, month, "WtsFeatureGen", "WtsTemplateName", platform, appModel);
+        public string Features => GetDataByPlatformQuery("WtsFeatureGen", "WtsTemplateName");
 
-        public string Services => string.Format(DataByCategoryQuery, year, month, "WtsServiceGen", "WtsTemplateName", platform, appModel);
+        public string Services => GetDataByPlatformQuery("WtsServiceGen", "WtsTemplateName");
 
-        public string Testing => string.Format(DataByCategoryQuery, year, month, "WtsTestingGen", "WtsTemplateName", platform, appModel);
+        public string Testing => GetDataByPlatformQuery("WtsTestingGen", "WtsTemplateName");
 
-        public string EntryPoints => string.Format(DataQuery, year, month, "WtsWizard", "WtsWizardType");
+        public string EntryPoints => GetDataByEventQuery("WtsWizard", "WtsWizardType");
 
-        public string Languages => string.Format(DataQuery, year, month, "WtsProjectGen", "WtsLanguage");
+        public string Languages => GetDataByEventQuery("WtsProjectGen", "WtsLanguage");
 
-        public string Platforms => string.Format(DataQuery, year, month, "WtsProjectGen", "WtsCategory");
+        public string Platforms => GetDataByEventQuery("WtsProjectGen", "WtsCategory");
+
+        public string AppModels(string[] appModels) => GetDataByPlatformQuery("WtsProjectGen", "WtsGenerationProperties.appmodel", appModels);
+
+        private string GetDataByPlatformQuery(string eventName, string itemName)
+        {
+            return string.Format(DataByCategoryQuery, year, month, eventName, itemName, platform, appModel);
+        }
+
+        private string GetDataByPlatformQuery(string eventName, string itemName, string[] appModels)
+        {
+            string appModel = string.Join("', '", appModels);
+            return string.Format(DataByCategoryQuery, year, month, eventName, itemName, platform, appModel);
+        }
+
+        private string GetDataByEventQuery(string eventName, string itemName)
+        {
+            return string.Format(DataByEventQuery, year, month, eventName, itemName);
+        }
     }
 }

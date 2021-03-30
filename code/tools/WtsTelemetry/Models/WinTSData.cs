@@ -6,7 +6,7 @@ namespace WtsTelemetry.Models
     {
         public WinTSPlatformData Uwp { get; set; }
         public WinTSPlatformData Wpf { get; set; }
-        public WinTSPlatformData WinUI { get; set; }
+        public WinUIPlatformData WinUI { get; set; }
         public string entryPoint { get; set; }
         public string Language { get; set; }
         public string Platform { get; set; }
@@ -19,17 +19,24 @@ namespace WtsTelemetry.Models
                         .AddHeader(Year, Month)
                         .AddTable("Category", "Type", Platform)
                         .AddTable("Project Type (Uwp)", "Project", Uwp.Project)
-                        .AddTable("Project Type (Wpf)", "Project", Wpf.Project)
                         .AddTable("Framework (Uwp)", "Framework Type", Uwp.Frameworks)
-                        .AddTable("Framework (Wpf)", "Framework Type", Wpf.Frameworks)
                         .AddTable("Pages (Uwp)", "Pages", Uwp.Pages)
-                        .AddTable("Pages (Wpf)", "Pages", Wpf.Pages)
                         .AddTable("Features (Uwp)", "Features", Uwp.Features)
-                        .AddTable("Features (Wpf)", "Features", Wpf.Features)
                         .AddTable("Services (Uwp)", "Services", Uwp.Services)
-                        .AddTable("Services (Wpf)", "Services", Wpf.Services)
                         .AddTable("Testing (Uwp)", "Testing", Uwp.Testing)
+                        .AddTable("Project Type (Wpf)", "Project", Wpf.Project)
+                        .AddTable("Framework (Wpf)", "Framework Type", Wpf.Frameworks)
+                        .AddTable("Pages (Wpf)", "Pages", Wpf.Pages)
+                        .AddTable("Features (Wpf)", "Features", Wpf.Features)
+                        .AddTable("Services (Wpf)", "Services", Wpf.Services)
                         .AddTable("Testing (Wpf)", "Services", Wpf.Testing)
+                        .AddTable("Project Type (WinUI)", "Project", WinUI.Project)
+                        .AddTable("Framework (WinUI)", "Framework Type", WinUI.Frameworks)
+                        .AddTable("Pages (WinUI)", "Pages", WinUI.Pages)
+                        .AddTable("Features (WinUI)", "Features", WinUI.Features)
+                        .AddTable("Services (WinUI)", "Services", WinUI.Services)
+                        .AddTable("Testing (WinUI)", "Services", WinUI.Testing)
+                        .AddTable("AppModels (WinUI)", "Services", WinUI.AppModels)
                         .AddTable("Windows Template Studio entry point (Common)", "Entry point", entryPoint)
                         .AddTable("Programming languages (Common)", "Languages", Language)
                         .GetText();
