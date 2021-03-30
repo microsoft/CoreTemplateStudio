@@ -6,6 +6,7 @@ namespace WtsTelemetry.Models
     {
         public WinTSPlatformData Uwp { get; set; }
         public WinTSPlatformData Wpf { get; set; }
+        public WinTSPlatformData WinUI { get; set; }
         public string entryPoint { get; set; }
         public string Language { get; set; }
         public string Platform { get; set; }

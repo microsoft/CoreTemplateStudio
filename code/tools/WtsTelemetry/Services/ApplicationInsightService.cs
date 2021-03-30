@@ -23,10 +23,12 @@ namespace WtsTelemetry.Services
         {
             var uwpQueries = new Queries(Platforms.Uwp, year, month);
             var wpfQueries = new Queries(Platforms.Wpf, year, month);
+            var winUIQueries = new Queries(Platforms.WinUI, year, month, "Desktop");
             return new WinTSData
             {
                 Uwp = GetWinTSPlatformData(uwpQueries),
                 Wpf = GetWinTSPlatformData(wpfQueries),
+                WinUI = GetWinTSPlatformData(winUIQueries),
                 entryPoint = GetData(uwpQueries.EntryPoints),
                 Language = GetData(uwpQueries.Languages),
                 Platform = GetData(uwpQueries.Platforms),
