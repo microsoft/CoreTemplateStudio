@@ -7,18 +7,20 @@ namespace WtsTelemetry.Helpers
     public class MarkdownBuilder
     {
         private StringBuilder stringBuilder = new StringBuilder();
-        private readonly string title;
 
-        public MarkdownBuilder(string title)
-        {
-            this.title = title;
-        }
-
-        public MarkdownBuilder AddHeader(int year, int month)
+        public MarkdownBuilder AddHeader(string title, int year, int month)
         {
             stringBuilder.AppendLine($"# Telemetry for {title} - {year}.{month.ToString("D2")}");
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("As new features and pages roll out, percentages  will adjust.");
+            stringBuilder.AppendLine();
+
+            return this;
+        }
+
+        public MarkdownBuilder AddSection(string title)
+        {
+            stringBuilder.AppendLine($"## {title}");
             stringBuilder.AppendLine();
 
             return this;
@@ -31,7 +33,7 @@ namespace WtsTelemetry.Helpers
                 var data = json.ToQueryData();
                 if (data.Any())
                 {
-                    stringBuilder.AppendLine($"## {title}");
+                    stringBuilder.AppendLine($"### {title}");
                     stringBuilder.AppendLine();
                     stringBuilder.AppendLine($"|{firstColumnName}|Percentage|");
                     stringBuilder.AppendLine("|:---|:---:|");
