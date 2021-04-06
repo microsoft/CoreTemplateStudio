@@ -11,10 +11,9 @@ namespace WtsTelemetry.Models
         public string Services { get; set; }
         public string Testing { get; set; }
 
-        public virtual string ToMarkdown(string title)
+        public virtual string ToMarkdown()
         {
             return new MarkdownBuilder()
-                .AddSection(title)
                 .AddTable("Project Type", "Project", Project)
                 .AddTable("Framework", "Framework Type", Frameworks)
                 .AddTable("Pages", "Pages", Pages)

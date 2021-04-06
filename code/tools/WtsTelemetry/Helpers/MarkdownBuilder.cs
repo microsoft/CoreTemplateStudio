@@ -18,9 +18,9 @@ namespace WtsTelemetry.Helpers
             return this;
         }
 
-        public MarkdownBuilder AddSection(string title)
+        public MarkdownBuilder AddSectionTitle(string title)
         {
-            stringBuilder.AppendLine($"## {title}");
+            stringBuilder.AppendLine($"### {title}");
             stringBuilder.AppendLine();
 
             return this;
@@ -33,8 +33,7 @@ namespace WtsTelemetry.Helpers
                 var data = json.ToQueryData();
                 if (data.Any())
                 {
-                    stringBuilder.AppendLine($"### {title}");
-                    stringBuilder.AppendLine();
+                    AddSectionTitle(title);
                     stringBuilder.AppendLine($"|{firstColumnName}|Percentage|");
                     stringBuilder.AppendLine("|:---|:---:|");
 
@@ -53,6 +52,17 @@ namespace WtsTelemetry.Helpers
                 stringBuilder.AppendLine();
             }
 
+            return this;
+        }
+
+        public MarkdownBuilder AddCollapsible(string summary, string data)
+        {
+            stringBuilder.AppendLine($"<details>");
+            stringBuilder.AppendLine($"<summary>{summary}</summary>");
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine($"{data}");
+            stringBuilder.AppendLine($"</details>");
+            stringBuilder.AppendLine();
             return this;
         }
 

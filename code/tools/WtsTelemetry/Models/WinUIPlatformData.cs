@@ -9,13 +9,17 @@ namespace WtsTelemetry.Models
     {
         public string AppModels { get; set; }
 
-        public override string ToMarkdown(string title)
+        public override string ToMarkdown()
         {
-            string winUIMarkdown = new MarkdownBuilder()
-                .AddTable("AppModels", "Services", AppModels)
+            return new MarkdownBuilder()
+                .AddTable("App Model", "App Model", AppModels)
+                .AddTable("Project Type", "Project", Project)
+                .AddTable("Framework", "Framework Type", Frameworks)
+                .AddTable("Pages", "Pages", Pages)
+                .AddTable("Features", "Features", Features)
+                .AddTable("Services", "Services", Services)
+                .AddTable("Testing", "Testing", Testing)
                 .GetText();
-
-            return string.Concat(base.ToMarkdown(title), winUIMarkdown);
         }
     }
 }

@@ -15,18 +15,16 @@ namespace WtsTelemetry.Models
 
         public string ToMarkdown()
         {
-            string baseMarkdown = new MarkdownBuilder()
+            return new MarkdownBuilder()
                         .AddHeader("Windows Template Studio", Year, Month)
                         .AddTable("Category", "Type", Platform)
-                        .AddTable("Windows Template Studio entry point (Common)", "Entry point", entryPoint)
-                        .AddTable("Programming languages (Common)", "Languages", Language)
+                        .AddSectionTitle("Project Generation by category")
+                        .AddCollapsible("Uwp Project Generation", Uwp.ToMarkdown())
+                        .AddCollapsible("Wpf Project Generation", Wpf.ToMarkdown())
+                        .AddCollapsible("Wpf Project Generation", WinUI.ToMarkdown())
+                        .AddTable("Windows Template Studio entry point", "Entry point", entryPoint)
+                        .AddTable("Programming languages", "Languages", Language)
                         .GetText();
-
-            return string.Concat(
-                baseMarkdown,
-                Uwp.ToMarkdown("Uwp"),
-                Wpf.ToMarkdown("Wpf"),
-                WinUI.ToMarkdown("WinUI"));
         }
     }
 }
