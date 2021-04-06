@@ -210,10 +210,10 @@ namespace Microsoft.Templates.Core.Locations
             {
                 var di = new DirectoryInfo(TemplatesFolder);
 
-                foreach (var sdi in di.EnumerateDirectories().Where(d => d.FullName != Current.Path))
+                foreach (var sdi in di.EnumerateDirectories().Where(d => d.FullName != Current?.Path))
                 {
                     Version.TryParse(sdi.Name, out Version v);
-                    if (!v.IsNull() && v < Current.Version)
+                    if (!v.IsNull() && v < Current?.Version)
                     {
                         Fs.SafeDeleteDirectory(sdi.FullName, false);
                     }

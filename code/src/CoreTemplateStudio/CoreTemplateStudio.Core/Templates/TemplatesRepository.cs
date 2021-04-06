@@ -522,43 +522,50 @@ namespace Microsoft.Templates.Core
 
         private IEnumerable<MetadataInfo> GetMetadataInfo(string type)
         {
-            var folderName = Path.Combine(Sync?.CurrentContent.Path, CurrentPlatform, Catalog);
-
-            if (!Directory.Exists(folderName))
+            if (Sync?.CurrentContent != null)
             {
-                return Enumerable.Empty<MetadataInfo>();
-            }
+                var folderName = Path.Combine(Sync?.CurrentContent.Path, CurrentPlatform, Catalog);
 
-            var metadataFile = Path.Combine(folderName, $"{type}.json");
-            var metadataFileLocalized = Path.Combine(folderName, $"{CultureInfo.CurrentUICulture.IetfLanguageTag}.{type}.json");
-            var metadata = JsonConvert.DeserializeObject<List<MetadataInfo>>(File.ReadAllText(metadataFile));
-
-            if (metadata.Any(m => m.Languages != null))
-            {
-                metadata.RemoveAll(m => !m.Languages.Contains(CurrentLanguage));
-            }
-
-            if (File.Exists(metadataFileLocalized))
-            {
-                var metadataLocalized = JsonConvert.DeserializeObject<List<MetadataLocalizedInfo>>(File.ReadAllText(metadataFileLocalized));
-                metadataLocalized.ForEach(ml =>
+                if (Directory.Exists(folderName))
                 {
-                    MetadataInfo cm = metadata.FirstOrDefault(m => m.Name == ml.Name);
-
-                    if (cm != null)
+                    var metadataFile = Path.Combine(folderName, $"{type}.json");
+                    var metadataFileLocalized = Path.Combine(folderName, $"{CultureInfo.CurrentUICulture.IetfLanguageTag}.{type}.json");
+                    if (File.Exists(metadataFile))
                     {
-                        cm.DisplayName = ml.DisplayName;
-                        cm.Summary = ml.Summary;
+                        var metadata = JsonConvert.DeserializeObject<List<MetadataInfo>>(File.ReadAllText(metadataFile));
+
+                        if (metadata.Any(m => m.Languages != null))
+                        {
+                            metadata.RemoveAll(m => !m.Languages.Contains(CurrentLanguage));
+                        }
+
+                        if (File.Exists(metadataFileLocalized))
+                        {
+                            var metadataLocalized = JsonConvert.DeserializeObject<List<MetadataLocalizedInfo>>(File.ReadAllText(metadataFileLocalized));
+                            metadataLocalized.ForEach(ml =>
+                            {
+                                MetadataInfo cm = metadata.FirstOrDefault(m => m.Name == ml.Name);
+
+                                if (cm != null)
+                                {
+                                    cm.DisplayName = ml.DisplayName;
+                                    cm.Summary = ml.Summary;
+                                }
+                            });
+                        }
+
+                        metadata.ForEach(m => SetMetadataDescription(m, folderName, type));
+                        metadata.ForEach(m => SetMetadataIcon(m, folderName, type));
+                        metadata.ForEach(m => m.MetadataType = type == "projectTypes" ? MetadataType.ProjectType : MetadataType.Framework);
+                        metadata.ForEach(m => SetLicenseTerms(m));
+                        metadata.ForEach(m => SetDefaultTags(m));
+
+                        return metadata.OrderBy(m => m.Order);
                     }
-                });
+                }
             }
 
-            metadata.ForEach(m => SetMetadataDescription(m, folderName, type));
-            metadata.ForEach(m => SetMetadataIcon(m, folderName, type));
-            metadata.ForEach(m => m.MetadataType = type == "projectTypes" ? MetadataType.ProjectType : MetadataType.Framework);
-            metadata.ForEach(m => SetLicenseTerms(m));
-            metadata.ForEach(m => SetDefaultTags(m));
-            return metadata.OrderBy(m => m.Order);
+            return Enumerable.Empty<MetadataInfo>();
         }
 
         private void SetDefaultTags(MetadataInfo metadataInfo)
