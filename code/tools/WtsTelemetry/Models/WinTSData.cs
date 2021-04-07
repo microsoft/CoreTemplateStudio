@@ -21,7 +21,7 @@ namespace WtsTelemetry.Models
                         .AddSectionTitle("Project Generation by category")
                         .AddCollapsible("Uwp Project Generation", Uwp.ToMarkdown())
                         .AddCollapsible("Wpf Project Generation", Wpf.ToMarkdown())
-                        .AddCollapsible("Wpf Project Generation", WinUI.ToMarkdown())
+                        .AddCollapsible("WinUI Project Generation", WinUI.ToMarkdown())
                         .AddTable("Windows Template Studio entry point", "Entry point", entryPoint)
                         .AddTable("Programming languages", "Languages", Language)
                         .GetText();
