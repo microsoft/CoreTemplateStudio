@@ -23,10 +23,12 @@ namespace WtsTelemetry.Services
         {
             var uwpQueries = new Queries(Platforms.Uwp, year, month);
             var wpfQueries = new Queries(Platforms.Wpf, year, month);
+            var winUIQueries = new Queries(Platforms.WinUI, year, month, "Desktop");
             return new WinTSData
             {
                 Uwp = GetWinTSPlatformData(uwpQueries),
                 Wpf = GetWinTSPlatformData(wpfQueries),
+                WinUI = GetWinUIPlatformData(winUIQueries),
                 entryPoint = GetData(uwpQueries.EntryPoints),
                 Language = GetData(uwpQueries.Languages),
                 Platform = GetData(uwpQueries.Platforms),
@@ -59,6 +61,21 @@ namespace WtsTelemetry.Services
                 Features = GetData(queries.Features),
                 Services = GetData(queries.Services),
                 Testing = GetData(queries.Testing),
+            };
+        }
+
+        private WinUIPlatformData GetWinUIPlatformData(Queries queries)
+        {
+            var appModels = new string[] { "Desktop", "Uwp" };
+            return new WinUIPlatformData
+            {
+                Project = GetData(queries.Projects),
+                Frameworks = GetData(queries.Frameworks),
+                Pages = GetData(queries.Pages),
+                Features = GetData(queries.Features),
+                Services = GetData(queries.Services),
+                Testing = GetData(queries.Testing),
+                AppModels = GetData(queries.AppModels(appModels)),
             };
         }
 

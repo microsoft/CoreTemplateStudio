@@ -7,18 +7,20 @@ namespace WtsTelemetry.Helpers
     public class MarkdownBuilder
     {
         private StringBuilder stringBuilder = new StringBuilder();
-        private readonly string title;
 
-        public MarkdownBuilder(string title)
-        {
-            this.title = title;
-        }
-
-        public MarkdownBuilder AddHeader(int year, int month)
+        public MarkdownBuilder AddHeader(string title, int year, int month)
         {
             stringBuilder.AppendLine($"# Telemetry for {title} - {year}.{month.ToString("D2")}");
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("As new features and pages roll out, percentages  will adjust.");
+            stringBuilder.AppendLine();
+
+            return this;
+        }
+
+        public MarkdownBuilder AddSectionTitle(string title)
+        {
+            stringBuilder.AppendLine($"### {title}");
             stringBuilder.AppendLine();
 
             return this;
@@ -31,8 +33,7 @@ namespace WtsTelemetry.Helpers
                 var data = json.ToQueryData();
                 if (data.Any())
                 {
-                    stringBuilder.AppendLine($"## {title}");
-                    stringBuilder.AppendLine();
+                    AddSectionTitle(title);
                     stringBuilder.AppendLine($"|{firstColumnName}|Percentage|");
                     stringBuilder.AppendLine("|:---|:---:|");
 
@@ -51,6 +52,17 @@ namespace WtsTelemetry.Helpers
                 stringBuilder.AppendLine();
             }
 
+            return this;
+        }
+
+        public MarkdownBuilder AddCollapsible(string summary, string data)
+        {
+            stringBuilder.AppendLine($"<details>");
+            stringBuilder.AppendLine($"<summary>{summary}</summary>");
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine($"{data}");
+            stringBuilder.AppendLine($"</details>");
+            stringBuilder.AppendLine();
             return this;
         }
 

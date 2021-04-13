@@ -13,8 +13,8 @@ namespace WtsTelemetry.Models
 
         public string ToMarkdown()
         {
-            return new MarkdownBuilder("Web Template Studio")
-                        .AddHeader(Year, Month)
+            return new MarkdownBuilder()
+                        .AddHeader("Web Template Studio", Year, Month)
                         .AddTable("Frontend Frameworks", "Framework Type", FrontendFrameworks)
                         .AddTable("Backend Frameworks", "Framework Type", BackendFrameworks)
                         .AddTable("Pages", "Pages", Pages)
