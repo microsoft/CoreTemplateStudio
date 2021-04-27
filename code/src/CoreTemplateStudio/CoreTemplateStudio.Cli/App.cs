@@ -23,6 +23,8 @@ namespace Microsoft.Templates.Cli
         private readonly ICommandDispatcher _dispatcher;
         private readonly IMessageService _messageService;
         private readonly Parser _parser;
+        private int _cathExceptionsCounter;
+        private const int ExceptionsAllowed = 50;
 
         public App(ICommandDispatcher dispatcher, IMessageService messageService)
         {
@@ -84,6 +86,8 @@ namespace Microsoft.Templates.Cli
                             return Task.FromResult(0);
                         });
 
+                _cathExceptionsCounter = 0;
+
                 // todo: use async task
                 return exitCode.Result == 0;
             }
@@ -92,6 +96,15 @@ namespace Microsoft.Templates.Cli
                 var errorMessage = string.Format(StringRes.ErrorExecutingCommand, command, ex.Message);
                 AppHealth.Current.Exception.TrackAsync(ex, errorMessage).FireAndForget();
                 _messageService.SendError(errorMessage);
+
+                _cathExceptionsCounter++;
+                if (_cathExceptionsCounter == ExceptionsAllowed)
+                {
+                    _messageService.SendError(StringRes.ErrorMaxExceptionAllowed);
+                    AppHealth.Current.Error.TrackAsync(StringRes.ErrorMaxExceptionAllowed).FireAndForget();
+                    return false;
+                }
+
                 return true;
             }
         }

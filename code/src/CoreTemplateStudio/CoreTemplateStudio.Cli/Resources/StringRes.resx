@@ -158,6 +158,9 @@
   <data name="ErrorGenerating" xml:space="preserve">
     <value>Error generating. {0}</value>
   </data>
+  <data name="ErrorMaxExceptionAllowed" xml:space="preserve">
+    <value>Error executing commands in CLI. The number of allowed exceptions has been exceeded.</value>
+  </data>
   <data name="ErrorParsingCommand" xml:space="preserve">
     <value>Error parsing Command: {0}.
 {1}</value>
