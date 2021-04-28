@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.TemplateEngine.Abstractions;
+using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Templates;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -48,33 +49,10 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.AddJsonDictionaryItem
 
             json[keyToDict] = JObject.FromObject(newContent);
 
-            var originalEncoding = GetEncoding(jsonPath);
+            var originalEncoding = FileHelper.GetEncoding(jsonPath);
+            var originalLineEnding = FileHelper.GetLineEnding(jsonPath);
 
-            File.WriteAllText(jsonPath, json.ToString(Formatting.Indented), originalEncoding);
-        }
-
-        private Encoding GetEncoding(string originalFilePath)
-        {
-            // Will read the file, and look at the BOM to check the encoding.
-            using (var reader = new StreamReader(File.OpenRead(originalFilePath), true))
-            {
-                var bytes = File.ReadAllBytes(originalFilePath);
-                var encoding = reader.CurrentEncoding;
-
-                // The preamble is the first couple of bytes that may be appended to define an encoding.
-                var preamble = encoding.GetPreamble();
-
-                // We preserve the read encoding unless there is no BOM, if it is UTF-8 we return the non BOM encoding.
-                if (preamble == null || preamble.Length == 0 || preamble.Where((p, i) => p != bytes[i]).Any())
-                {
-                    if (encoding.EncodingName == Encoding.UTF8.EncodingName)
-                    {
-                        return new UTF8Encoding(false);
-                    }
-                }
-
-                return encoding;
-            }
+            File.WriteAllText(jsonPath, string.Join(originalLineEnding, json.ToString(Formatting.Indented)) + originalLineEnding, originalEncoding);
         }
     }
 }

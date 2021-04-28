@@ -523,6 +523,10 @@ The following changes could not be integrated: {2}
     <value>File `{0}` has encoding &amp;apos;{1}&amp;apos; while file `{2}` has encoding &amp;apos;{3}&amp;apos; please ensure both encodings are the same.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
+  <data name="FailedMergePostActionMismatchedFileEnding" xml:space="preserve">
+    <value>File `{0}` has file ending &amp;apos;{1}&amp;apos; while file `{2}` has file ending &amp;apos;{3}&amp;apos; please ensure both file endings are the same.</value>
+    <comment>{0} first file name, {1} first file ending, {2} other file name, {3} other file ending </comment>
+  </data>
   <data name="ErrorRecursiveRequirement" xml:space="preserve">
     <value>Recursive requirement detected on template {0} with {1}.</value>
     <comment>Recursive requirement exception message. {0}:Template id, {1}: Requirement Template id</comment>

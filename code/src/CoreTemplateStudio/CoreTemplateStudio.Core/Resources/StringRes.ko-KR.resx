@@ -184,6 +184,10 @@
     <value>파일 `{0}`에는 인코딩 `{1}`(이)가 있으며 파일 `{2}`에는 인코딩 `{3}`(이)가 있습니다. 두 인코딩이 같은지 확인하십시오.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
+  <data name="FailedMergePostActionMismatchedFileEnding" xml:space="preserve">
+    <value>File `{0}` has file ending &amp;apos;{1}&amp;apos; while file `{2}` has file ending &amp;apos;{3}&amp;apos; please ensure both file endings are the same.</value>
+    <comment>{0} first file name, {1} first file ending, {2} other file name, {3} other file ending </comment>
+  </data>
   <data name="AdditionalMessageString" xml:space="preserve">
     <value>추가 메시지</value>
   </data>

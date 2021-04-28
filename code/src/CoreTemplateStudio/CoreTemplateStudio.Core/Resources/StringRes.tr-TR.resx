@@ -184,6 +184,10 @@
     <value>"{2}" dosyası "{3}" şifrelemesine ve "{0}" dosyası da "{1}" şifrelemesine sahip; lütfen her iki şifrelemenin de aynı olmasını sağlayın.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
+  <data name="FailedMergePostActionMismatchedFileEnding" xml:space="preserve">
+    <value>File `{0}` has file ending &amp;apos;{1}&amp;apos; while file `{2}` has file ending &amp;apos;{3}&amp;apos; please ensure both file endings are the same.</value>
+    <comment>{0} first file name, {1} first file ending, {2} other file name, {3} other file ending </comment>
+  </data>
   <data name="AdditionalMessageString" xml:space="preserve">
     <value>Ek İleti</value>
   </data>

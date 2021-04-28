@@ -184,6 +184,10 @@
     <value>L’encodage du fichier `{0}` est `{1}` alors que l’encodage du fichier `{2}` est `{3}`. Veuillez vous assurer que les deux encodages soient identiques.</value>
     <comment>{0} first file name, {1} first encoding name, {2} other file name, {3} other encoding name</comment>
   </data>
+  <data name="FailedMergePostActionMismatchedFileEnding" xml:space="preserve">
+    <value>File `{0}` has file ending &amp;apos;{1}&amp;apos; while file `{2}` has file ending &amp;apos;{3}&amp;apos; please ensure both file endings are the same.</value>
+    <comment>{0} first file name, {1} first file ending, {2} other file name, {3} other file ending </comment>
+  </data>
   <data name="AdditionalMessageString" xml:space="preserve">
     <value>Message supplémentaire</value>
   </data>

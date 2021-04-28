@@ -12,6 +12,7 @@ using System.Xml.Linq;
 
 using Microsoft.Templates.Core.Extensions;
 using Microsoft.Templates.Core.Gen;
+using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Resources;
 
 namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
@@ -40,12 +41,12 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                 var mergeRoot = XElement.Load(Config.FilePath);
                 var sourceRoot = XElement.Load(originalFilePath);
 
-                var originalEncoding = GetEncoding(originalFilePath);
+                var originalEncoding = FileHelper.GetEncoding(originalFilePath);
 
                 // Only check encoding on new project, might have changed on right click
                 if (GenContext.Current.GenerationOutputPath == GenContext.Current.DestinationPath)
                 {
-                    var otherEncoding = GetEncoding(Config.FilePath);
+                    var otherEncoding = FileHelper.GetEncoding(Config.FilePath);
 
                     if (originalEncoding.EncodingName != otherEncoding.EncodingName
                         || !Enumerable.SequenceEqual(originalEncoding.GetPreamble(), otherEncoding.GetPreamble()))

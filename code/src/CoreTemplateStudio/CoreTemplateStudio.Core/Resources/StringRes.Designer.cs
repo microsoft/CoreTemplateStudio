@@ -439,6 +439,15 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File `{0}` has file ending &amp;apos;{1}&amp;apos; while file `{2}` has file ending &amp;apos;{3}&amp;apos; please ensure both file endings are the same..
+        /// </summary>
+        public static string FailedMergePostActionMismatchedFileEnding {
+            get {
+                return ResourceManager.GetString("FailedMergePostActionMismatchedFileEnding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot remove readonly protection from file {0}.
         /// </summary>
         public static string FsEnsureFileEditableException {
