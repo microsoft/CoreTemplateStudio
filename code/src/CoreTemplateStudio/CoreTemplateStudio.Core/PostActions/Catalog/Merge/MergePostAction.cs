@@ -71,7 +71,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
             Fs.EnsureFileEditable(originalFilePath);
 
-            if (originalLineEnding == LineEnding.Windows.ToString())
+            if (originalLineEnding == LineEnding.Windows.GetDescription())
             {
                 File.WriteAllLines(originalFilePath, result.Result, originalEncoding);
             }

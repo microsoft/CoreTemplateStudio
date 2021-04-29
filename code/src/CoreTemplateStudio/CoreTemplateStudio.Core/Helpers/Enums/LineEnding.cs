@@ -12,7 +12,5 @@ namespace Microsoft.Templates.Core.Helpers.Enums
         Windows,
         [Description("\n")]
         Unix,
-        [Description("\r")]
-        Mac,
     }
 }

@@ -4,6 +4,9 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Templates.Core.Helpers
 {
@@ -23,6 +26,43 @@ namespace Microsoft.Templates.Core.Helpers
             catch (Exception)
             {
                 return string.Empty;
+            }
+        }
+
+        public static Encoding GetEncoding(string originalFilePath)
+        {
+            // Will read the file, and look at the BOM to check the encoding.
+            using (var reader = new StreamReader(File.OpenRead(originalFilePath), true))
+            {
+                var bytes = File.ReadAllBytes(originalFilePath);
+                var encoding = reader.CurrentEncoding;
+
+                // The preamble is the first couple of bytes that may be appended to define an encoding.
+                var preamble = encoding.GetPreamble();
+
+                // We preserve the read encoding unless there is no BOM, if it is UTF-8 we return the non BOM encoding.
+                if (preamble == null || preamble.Length == 0 || preamble.Where((p, i) => p != bytes[i]).Any())
+                {
+                    if (encoding.EncodingName == Encoding.UTF8.EncodingName)
+                    {
+                        return new UTF8Encoding(false);
+                    }
+                }
+
+                return encoding;
+            }
+        }
+
+        public static string GetLineEnding(string originalFilePath)
+        {
+            // Will read the file, and check last file ending.
+            using (var reader = new StreamReader(File.OpenRead(originalFilePath), true))
+            {
+                var fileContent = File.ReadAllText(originalFilePath);
+                string pattern = @"(\n)|(\r\n)";
+                var lineEnding = Regex.Match(fileContent, pattern, RegexOptions.RightToLeft);
+
+                return lineEnding.Value;
             }
         }
     }
