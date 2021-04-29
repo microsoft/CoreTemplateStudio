@@ -21,17 +21,5 @@ namespace WtsTelemetry.Services
                 AppKey = Environment.GetEnvironmentVariable($"{filter}-ApiKey"),
             };
         }
-
-        public SendGridConfig GetSendGridConfig()
-        {
-            return new SendGridConfig
-            {
-                Subject = Environment.GetEnvironmentVariable($"{filter}-SendGrid:Subject"),
-                From = Environment.GetEnvironmentVariable($"{filter}-SendGrid:From"),
-                To = Environment.GetEnvironmentVariable($"{filter}-SendGrid:To")
-                        .Split(';')
-                        .Select(email => email.Trim()),
-            };
-        }
     }
 }
