@@ -6,6 +6,10 @@
     "WinTS-ApiKey": "",
     "WebTS-AppId": "",
     "WebTS-ApiKey": "",
+    "Github-AccessToken": "",
+    "Github-RepositoryOwner": "",
+    "WinTS-RepositoryName": "",
+    "WebTS-RepositoryName": "",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet"
   }
 }

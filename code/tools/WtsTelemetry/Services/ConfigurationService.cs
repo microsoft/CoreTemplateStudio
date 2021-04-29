@@ -21,5 +21,15 @@ namespace WtsTelemetry.Services
                 AppKey = Environment.GetEnvironmentVariable($"{filter}-ApiKey"),
             };
         }
+
+        public GithubConfig GetGithubConfig()
+        {
+            return new GithubConfig
+            {
+                AccessToken = Environment.GetEnvironmentVariable("Github-AccessToken"),
+                Owner = Environment.GetEnvironmentVariable("Github-RepositoryOwner"),
+                RepositoryName = Environment.GetEnvironmentVariable($"{filter}-RepositoryName"),
+            };
+        }
     }
 }
