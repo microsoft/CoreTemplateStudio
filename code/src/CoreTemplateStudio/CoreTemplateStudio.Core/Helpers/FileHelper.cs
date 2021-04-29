@@ -53,6 +53,9 @@ namespace Microsoft.Templates.Core.Helpers
             }
         }
 
+        public const string LineEndingWindows = "\r\n";
+        public const string LineEndingUnix = "\n";
+
         public static string GetLineEnding(string originalFilePath)
         {
             // Will read the file, and check last file ending.
