@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -12,9 +13,11 @@ namespace WtsTelemetry.Services
 {
     public class GithubService
     {
+        private readonly ILogger log;
         private readonly string accessToken;
         private readonly string repoOwner;
         private readonly string repoName;
+        private readonly string productHeaderValue = "wtsTelemetry";
 
         private readonly string getBranchUrl = "https://api.github.com/repos/%%OWNER%%/%%REPO%%/git/refs/heads/%%BRANCH%%";
         private readonly string createBranchUrl = "https://api.github.com/repos/%%OWNER%%/%%REPO%%/git/refs";
@@ -24,12 +27,13 @@ namespace WtsTelemetry.Services
 
         private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, PropertyNameCaseInsensitive = true };
 
-        public GithubService(ConfigurationService configService)
+        public GithubService(ConfigurationService configService, ILogger log)
         {
             var config = configService.GetGithubConfig();
             accessToken = config.AccessToken;
             repoOwner = config.Owner;
             repoName = config.RepositoryName;
+            this.log = log;
         }
 
         public async Task CreateTelemetryPullRequest(string telemetryData, int year, int month)
@@ -37,32 +41,52 @@ namespace WtsTelemetry.Services
             string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
 
             var baseBranchName = "dev";
-            var newBranchName = $"UpdateTelemetryData-{month}-{year}";
+            var newBranchName = $"UpdateTelemetryData-{monthName}-{year}";
             var telemetryFilePath = "docs/telemetryData.md";
-            var commitMessage = $"Update telemetry with Data from {monthName}";
+            var commitMessage = $"Update telemetry with data from {monthName}";
             var pullRequestTitle = $"Update telemetry data with data from {monthName}";
 
-            var baseBrachSha = await GetBranchSha(baseBranchName);
-            var isNewBranchCreated = await CreateNewBranch(baseBrachSha, newBranchName);
-            var telemetryFileSha = await GetFileSha(telemetryFilePath, newBranchName);
-            var isTelemetryFileUpdated = await UpdateFile(telemetryFilePath, telemetryFileSha, newBranchName, telemetryData, commitMessage);
-            var isPullRequestCreated = await CreatePullRequest(newBranchName, baseBranchName, pullRequestTitle);
+            try
+            {
+                if ((await GetBranch(newBranchName)) is null) {
+
+                    var baseBrach = await GetBranch(baseBranchName);
+                    await CreateNewBranch(baseBrach.Object.Sha, newBranchName);
+                }
+
+                var telemetryFile = await GetFile(telemetryFilePath, newBranchName);
+                await UpdateFile(telemetryFilePath, telemetryFile.Sha, newBranchName, telemetryData, commitMessage);
+                await CreatePullRequest(newBranchName, baseBranchName, pullRequestTitle);
+            }
+            catch (HttpRequestException ex)
+            {
+                log.LogError(ex, ex.Message);
+                throw;
+            }
+
         }
 
-        private async Task<string> GetBranchSha(string branchName)
+        private async Task<BranchData> GetBranch(string branchName)
         {
-            string url = getBranchUrl
-                .Replace("%%REPO%%", repoName)
-                .Replace("%%OWNER%%", repoOwner)
-                .Replace("%%BRANCH%%", branchName);
+            try
+            {
+                string url = getBranchUrl
+                    .Replace("%%REPO%%", repoName)
+                    .Replace("%%OWNER%%", repoOwner)
+                    .Replace("%%BRANCH%%", branchName);
 
-            using HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", accessToken);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue("MyAmazingApp")));
+                using HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", accessToken);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue(productHeaderValue)));
 
-            var resp = await client.GetFromJsonAsync<BranchData>(url, jsonSerializerOptions);
-            return resp.Object.Sha;
+                var branch = await client.GetFromJsonAsync<BranchData>(url, jsonSerializerOptions);
+                return branch;
+            }
+            catch (HttpRequestException ex)
+            {
+                return null;
+            }
         }
 
         private async Task<bool> CreateNewBranch(string baseBranchSha, string newBranchName)
@@ -74,7 +98,7 @@ namespace WtsTelemetry.Services
             using HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", accessToken);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue("MyAmazingApp")));
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue(productHeaderValue)));
 
             var newBranchData = new { 
                 Ref = $"refs/heads/{newBranchName}",
@@ -85,7 +109,7 @@ namespace WtsTelemetry.Services
             return resp.StatusCode == HttpStatusCode.Created;
         }
 
-        private async Task<string> GetFileSha(string filePath, string branch)
+        private async Task<FileData> GetFile(string filePath, string branch)
         {
             string url = getFileUrl
                 .Replace("%%REPO%%", repoName)
@@ -96,21 +120,10 @@ namespace WtsTelemetry.Services
             using HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", accessToken);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue("MyAmazingApp")));
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue(productHeaderValue)));
 
             var fileData = await client.GetFromJsonAsync<FileData>(url, jsonSerializerOptions);
-            return fileData.Sha;
-            
-            /*
-            var resp = await client.GetAsync(url);
-            if(resp.StatusCode == HttpStatusCode.OK)
-            {
-                string data = await resp.Content.ReadAsStringAsync();
-                var branchObject = JsonSerializer.Deserialize<FileData>(data, jsonSerializerOptions);
-                return branchObject.Sha;
-            }
-
-            return string.Empty;*/
+            return fileData;
         }
 
         private async Task<bool> UpdateFile(string filePath, string fileSha, string branchName, string fileContent, string commitMessage)
@@ -124,7 +137,7 @@ namespace WtsTelemetry.Services
             using HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", accessToken);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue("MyAmazingApp")));
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue(productHeaderValue)));
 
             var newFileData = new
             {
@@ -138,7 +151,7 @@ namespace WtsTelemetry.Services
             return resp.StatusCode == HttpStatusCode.OK;
         }
 
-        private async Task<bool> CreatePullRequest(string headBranch, string baseBranch, string titlePR, string description = null)
+        private async Task<bool> CreatePullRequest(string headBranch, string baseBranch, string titlePR)
         {
             string url = createPullRequestUrl
                 .Replace("%%REPO%%", repoName)
@@ -147,14 +160,13 @@ namespace WtsTelemetry.Services
             using HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", accessToken);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue("MyAmazingApp")));
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue(productHeaderValue)));
 
             var newPRData = new
             {
                 Title = titlePR,
-                HeadBranch = headBranch,
-                BaseBranch = baseBranch,
-                Description = description ?? string.Empty
+                Head = headBranch,
+                Base = baseBranch,
             };
 
             var resp = await client.PostAsJsonAsync(url, newPRData, jsonSerializerOptions);

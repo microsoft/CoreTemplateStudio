@@ -25,7 +25,7 @@ namespace WtsTelemetry
 
             var configService = new ConfigurationService("WinTS");
             var dataService = new ApplicationInsightService(configService);
-            var githubService = new GithubService(configService);
+            var githubService = new GithubService(configService, log);
 
             log.LogInformation($"WinTS: Get Application Insight data from {stringDate}");
             var winTSData = dataService.GetWinTSData(year, month);
