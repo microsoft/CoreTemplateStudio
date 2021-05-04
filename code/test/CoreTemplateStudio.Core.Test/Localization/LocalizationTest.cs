@@ -14,7 +14,7 @@ namespace Microsoft.Templates.Core.Test
 {
     [Collection("Unit Test Templates")]
     [Trait("ExecutionSet", "Minimum")]
-    public class LocalizationTest : IDisposable
+    public sealed class LocalizationTest : IDisposable
     {
         private TemplatesFixture _fixture;
         private const string _platform = "test";

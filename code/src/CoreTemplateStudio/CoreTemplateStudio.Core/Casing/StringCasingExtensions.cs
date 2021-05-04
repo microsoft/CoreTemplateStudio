@@ -48,11 +48,11 @@ namespace Microsoft.Templates.Core.Casing
         {
             if (i == 0)
             {
-                return char.ToLower(c);
+                return char.ToLowerInvariant(c);
             }
             else
             {
-                return char.ToUpper(c);
+                return char.ToUpperInvariant(c);
             }
         }
 

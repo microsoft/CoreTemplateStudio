@@ -69,10 +69,5 @@ namespace Microsoft.Templates.Core
                 return string.Concat(new string(' ', triviaCount), statement);
             }
         }
-
-        public static bool Is(this string line, string character)
-        {
-            return line.Trim().Equals(character);
-        }
     }
 }

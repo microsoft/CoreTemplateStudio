@@ -17,7 +17,7 @@ using Xunit;
 namespace Microsoft.Templates.Core.Test.PostActions.Catalog
 {
     [Trait("ExecutionSet", "Minimum")]
-    public class CreateSummaryPostActionTest : IDisposable
+    public sealed class CreateSummaryPostActionTest : IDisposable
     {
         private CultureInfo cultureInfo;
 

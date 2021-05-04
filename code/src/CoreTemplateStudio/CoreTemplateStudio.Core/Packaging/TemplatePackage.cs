@@ -350,7 +350,7 @@ namespace Microsoft.Templates.Core.Packaging
             AppHealth.Current.Verbose.TrackAsync($"Key: {pubKeyCert}").FireAndForget();
             AppHealth.Current.Verbose.TrackAsync($"Pin: {pubKeyPin}").FireAndForget();
 
-            bool pinAllowed = Configuration.Current.AllowedPublicKeysPins.Where(allowedPin => allowedPin.Equals(pubKeyPin)).Any();
+            bool pinAllowed = Configuration.Current.AllowedPublicKeysPins.Where(allowedPin => allowedPin.Equals(pubKeyPin, StringComparison.Ordinal)).Any();
             AppHealth.Current.Verbose.TrackAsync($"Pin is allowed: {pinAllowed}").FireAndForget();
 
             return pinAllowed;

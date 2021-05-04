@@ -50,7 +50,7 @@ namespace Microsoft.Templates.Core.Test.Templates
             Assert.Collection(frameworks, e1 =>
             {
                 Assert.Equal("TestFramework", e1.Name);
-                Assert.Equal(FrameworkTypes.FrontEnd.ToString().ToLower(), e1.Tags["type"]);
+                Assert.Equal(FrameworkTypes.FrontEnd.ToString().ToLowerInvariant(), e1.Tags["type"]);
             });
         }
 
@@ -65,7 +65,7 @@ namespace Microsoft.Templates.Core.Test.Templates
             Assert.Collection(frameworks, e1 =>
             {
                 Assert.Equal("TestFramework", e1.Name);
-                Assert.Equal(FrameworkTypes.BackEnd.ToString().ToLower(), e1.Tags["type"]);
+                Assert.Equal(FrameworkTypes.BackEnd.ToString().ToLowerInvariant(), e1.Tags["type"]);
             });
         }
 

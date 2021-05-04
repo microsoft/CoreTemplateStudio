@@ -36,7 +36,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
 
         private void EnsureWhiteLineBeforeComment(List<string> insertionBuffer, string nextContextLine)
         {
-            if (nextContextLine.Trim().StartsWith(CommentSymbol + string.Empty) && insertionBuffer.Last().Trim() != string.Empty)
+            if (nextContextLine.Trim().StartsWith(CommentSymbol + string.Empty, StringComparison.Ordinal) && insertionBuffer.Last().Trim() != string.Empty)
             {
                 insertionBuffer.Add(string.Empty);
             }
@@ -46,7 +46,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
         {
             if (contextStart.Contains(OpeningParentesis) && contextEnd.Contains(ClosingParentesis) && !contextStart.Last().Equals(OpeningParentesis))
             {
-                if (!addition.StartsWith(", "))
+                if (!addition.StartsWith(", ", StringComparison.Ordinal))
                 {
                     return addition = $", {addition}";
                 }

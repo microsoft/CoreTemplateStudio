@@ -25,7 +25,7 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Templates.Core
 {
-    public class TemplatesRepository
+    public class TemplatesRepository : IDisposable
     {
         private const string Separator = "|";
 
@@ -660,6 +660,20 @@ namespace Microsoft.Templates.Core
                 {
                     AppHealth.Current.Error.TrackAsync(string.Format(StringRes.NamingErrorConfigFileNotFound, itemNameValidationConfigFile)).FireAndForget();
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _cts.Dispose();
             }
         }
 

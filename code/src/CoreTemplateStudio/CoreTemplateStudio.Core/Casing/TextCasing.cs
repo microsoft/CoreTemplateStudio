@@ -10,7 +10,7 @@ namespace Microsoft.Templates.Core.Casing
 
         public CasingType Type { get; set; }
 
-        public string ParameterName => $"wts.{Key}.casing.{Type.ToString().ToLower()}";
+        public string ParameterName => $"wts.{Key}.casing.{Type.ToString().ToLowerInvariant()}";
 
         public string Transform(string value)
         {
