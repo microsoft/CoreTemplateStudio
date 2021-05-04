@@ -15,7 +15,7 @@ namespace WtsTelemetry
         // every monday at 09:00:00: 0 0 9 * * MON
         // every 1st of month (monthly): 0 0 0 1 * *
         [FunctionName("WinTSTelemetry")]
-        public static async Task Run([TimerTrigger("0 * * * * *")] TimerInfo myTimer, ILogger log)
+        public static async Task Run([TimerTrigger("0 0 0 1 * *")] TimerInfo myTimer, ILogger log)
         {
             CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
 
