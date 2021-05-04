@@ -27,13 +27,13 @@ namespace WtsTelemetry.Services
 
         private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, PropertyNameCaseInsensitive = true };
 
-        public GithubService(ConfigurationService configService, ILogger log)
+        public GithubService(ConfigurationService configService, ILogger logger)
         {
             var config = configService.GetGithubConfig();
             accessToken = config.AccessToken;
             repoOwner = config.Owner;
             repoName = config.RepositoryName;
-            this.log = log;
+            log = logger;
         }
 
         public async Task CreateTelemetryPullRequest(string telemetryData, int year, int month)
