@@ -122,7 +122,6 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\WtsRulesTests.ruleset</CodeAnalysisRuleSet>
     <AssemblyName>Microsoft.Templates.Core.Test</AssemblyName>
     <RootNamespace>Microsoft.Templates.Core.Test</RootNamespace>
   </PropertyGroup>

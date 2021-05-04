@@ -5,7 +5,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Microsoft.Templates.Cli</RootNamespace>
     <AssemblyName>Microsoft.Templates.Cli</AssemblyName>
-    <CodeAnalysisRuleSet>..\..\..\WtsRules.ruleset</CodeAnalysisRuleSet>
     <Configurations>Debug;Release;Analyze</Configurations>
     <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
