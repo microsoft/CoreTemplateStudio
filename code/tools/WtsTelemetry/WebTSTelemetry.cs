@@ -33,7 +33,7 @@ namespace WtsTelemetry
             log.LogInformation($"WebTS: Create Md File");
             var mdText = WebTSData.ToMarkdown();
 
-            log.LogInformation($"WinTS: Create Pull Request");
+            log.LogInformation($"WebTS: Create Pull Request");
             await githubService.CreateTelemetryPullRequest(mdText, year, month);
 
             log.LogInformation($"WebTS: Finish");
