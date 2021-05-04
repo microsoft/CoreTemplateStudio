@@ -28,7 +28,7 @@ namespace WtsTelemetry
             var githubService = new GithubService(configService, log);
 
             log.LogInformation($"WebTS: Get Application Insight data from {stringDate}");
-            var WebTSData = dataService.GetWebTSData(year, month);
+            var WebTSData = await dataService.GetWebTSData(year, month);
 
             log.LogInformation($"WebTS: Create Md File");
             var mdText = WebTSData.ToMarkdown();
