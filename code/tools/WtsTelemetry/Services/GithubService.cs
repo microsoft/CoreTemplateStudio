@@ -50,8 +50,9 @@ namespace WtsTelemetry.Services
             {
                 if ((await GetBranch(newBranchName)) is null) {
 
-                    var baseBrach = await GetBranch(baseBranchName);
-                    await CreateNewBranch(baseBrach.Object.Sha, newBranchName);
+                    var baseBranch = await GetBranch(baseBranchName);
+                    await CreateNewBranch(baseBranch.Object.Sha, newBranchName);
+
                 }
 
                 var telemetryFile = await GetFile(telemetryFilePath, newBranchName);
