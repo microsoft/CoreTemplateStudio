@@ -1,19 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using WtsTelemetry.Helpers;
 
 namespace WtsTelemetry.Models
 {
-    public class WinTSPlatformData
+    public class WinUIPlatformData: WinTSPlatformData
     {
-        public string Project { get; set; }
-        public string Frameworks { get; set; }
-        public string Pages { get; set; }
-        public string Features { get; set; }
-        public string Services { get; set; }
-        public string Testing { get; set; }
+        public string AppModels { get; set; }
 
-        public virtual string ToMarkdown()
+        public override string ToMarkdown()
         {
             return new MarkdownBuilder()
+                .AddTable("App Model", "App Model", AppModels)
                 .AddTable("Project Type", "Project", Project)
                 .AddTable("Framework", "Framework Type", Frameworks)
                 .AddTable("Pages", "Pages", Pages)
