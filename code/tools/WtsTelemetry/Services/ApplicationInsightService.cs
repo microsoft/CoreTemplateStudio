@@ -94,7 +94,7 @@ namespace WtsTelemetry.Services
                 return await response.Content.ReadAsStringAsync();
             }
 
-            return response.ReasonPhrase;
+            throw new Exception($"Error getting Application Insights data: {response.ReasonPhrase}");
         }
     }
 }
