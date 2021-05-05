@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Templates;
@@ -49,10 +50,13 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.AddJsonDictionaryItem
 
             json[keyToDict] = JObject.FromObject(newContent);
 
+            string lineEndingPattern = @"(\n)|(\r\n)";
             var originalEncoding = FileHelper.GetEncoding(jsonPath);
             var originalLineEnding = FileHelper.GetLineEnding(jsonPath);
 
-            File.WriteAllText(jsonPath, string.Join(originalLineEnding, json.ToString(Formatting.Indented)) + originalLineEnding, originalEncoding);
+            var jsonString = Regex.Replace(json.ToString(Formatting.Indented), lineEndingPattern, originalLineEnding);
+
+            File.WriteAllText(jsonPath, jsonString, originalEncoding);
         }
     }
 }
