@@ -1,7 +1,8 @@
 using System;
+using System.Globalization;
+using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using SendGrid.Helpers.Mail;
 using WtsTelemetry.Services;
 
 namespace WtsTelemetry
@@ -14,24 +15,26 @@ namespace WtsTelemetry
         // every monday at 09:00:00: 0 0 9 * * MON
         // every 1st of month (monthly): 0 0 0 1 * *
         [FunctionName("WebTSTelemetry")]
-        public static void Run([TimerTrigger("0 0 0 1 * *")] TimerInfo myTimer, ILogger log, [SendGrid] out SendGridMessage message)
+        public static async Task Run([TimerTrigger("0 0 0 1 * *")] TimerInfo myTimer, ILogger log)
         {
+            CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
+
             var year = DateTime.Today.AddMonths(-1).Year;
             var month = DateTime.Today.AddMonths(-1).Month;
             var stringDate = $"{year}.{month.ToString("D2")}";
 
             var configService = new ConfigurationService("WebTS");
             var dataService = new ApplicationInsightService(configService);
-            var emailService = new EmailService(configService);
+            var githubService = new GithubService(configService, log);
 
             log.LogInformation($"WebTS: Get Application Insight data from {stringDate}");
-            var WebTSData = dataService.GetWebTSData(year, month);
+            var WebTSData = await dataService.GetWebTSData(year, month);
 
             log.LogInformation($"WebTS: Create Md File");
             var mdText = WebTSData.ToMarkdown();
 
-            log.LogInformation($"WebTS: send data mail");
-            message = emailService.CreateMail(mdText, stringDate);
+            log.LogInformation($"WebTS: Create Pull Request");
+            await githubService.CreateTelemetryPullRequest(mdText, year, month);
 
             log.LogInformation($"WebTS: Finish");
         }

@@ -22,15 +22,13 @@ namespace WtsTelemetry.Services
             };
         }
 
-        public SendGridConfig GetSendGridConfig()
+        public GithubConfig GetGithubConfig()
         {
-            return new SendGridConfig
+            return new GithubConfig
             {
-                Subject = Environment.GetEnvironmentVariable($"{filter}-SendGrid:Subject"),
-                From = Environment.GetEnvironmentVariable($"{filter}-SendGrid:From"),
-                To = Environment.GetEnvironmentVariable($"{filter}-SendGrid:To")
-                        .Split(';')
-                        .Select(email => email.Trim()),
+                AccessToken = Environment.GetEnvironmentVariable("Github-AccessToken"),
+                Owner = Environment.GetEnvironmentVariable("Github-RepositoryOwner"),
+                RepositoryName = Environment.GetEnvironmentVariable($"{filter}-RepositoryName"),
             };
         }
     }
