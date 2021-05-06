@@ -179,6 +179,15 @@ namespace Microsoft.Templates.Cli.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error executing commands in CLI. The number of allowed exceptions has been exceeded..
+        /// </summary>
+        public static string ErrorMaxExceptionAllowed {
+            get {
+                return ResourceManager.GetString("ErrorMaxExceptionAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error parsing Command: {0}.
         ///{1}.
         /// </summary>
