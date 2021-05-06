@@ -62,8 +62,8 @@ namespace Microsoft.Templates.Core.Helpers
             using (var reader = new StreamReader(File.OpenRead(originalFilePath), true))
             {
                 var fileContent = File.ReadAllText(originalFilePath);
-                string pattern = @"(\n)|(\r\n)";
-                var lineEnding = Regex.Match(fileContent, pattern, RegexOptions.RightToLeft);
+                string pattern = $"({LineEndingUnix})|({LineEndingWindows})";
+                var lineEnding = Regex.Match(fileContent, @pattern, RegexOptions.RightToLeft);
 
                 return lineEnding.Value;
             }

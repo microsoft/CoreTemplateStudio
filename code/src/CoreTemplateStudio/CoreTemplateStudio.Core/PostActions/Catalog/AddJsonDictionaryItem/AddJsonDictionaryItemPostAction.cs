@@ -56,7 +56,15 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.AddJsonDictionaryItem
 
             var jsonString = Regex.Replace(json.ToString(Formatting.Indented), lineEndingPattern, originalLineEnding);
 
-            File.WriteAllText(jsonPath, jsonString, originalEncoding);
+            // TODO keep it as before for Windows
+            if (originalLineEnding == FileHelper.LineEndingWindows)
+            {
+                File.WriteAllText(jsonPath, jsonString, originalEncoding);
+            }
+            else
+            {
+                File.WriteAllText(jsonPath, jsonString + originalLineEnding, originalEncoding);
+            }
         }
     }
 }
