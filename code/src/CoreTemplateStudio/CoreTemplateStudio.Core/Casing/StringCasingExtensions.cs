@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -15,12 +16,12 @@ namespace Microsoft.Templates.Core.Casing
 
         public static string ToKebabCase(this string name)
         {
-            return Transform(name, '-').ToLower();
+            return Transform(name, '-').ToLowerInvariant();
         }
 
         public static string ToSnakeCase(this string name)
         {
-            return Transform(name, '_').ToLower();
+            return Transform(name, '_').ToLowerInvariant();
         }
 
         public static string ToPascalCase(this string name)
@@ -35,23 +36,23 @@ namespace Microsoft.Templates.Core.Casing
 
         public static string ToLowerCase(this string name)
         {
-            return Transform(name, null).ToLower();
+            return Transform(name, null).ToLowerInvariant();
         }
 
         private static char ToUpperCase(char c, int i)
         {
-            return char.ToUpper(c);
+            return char.ToUpperInvariant(c);
         }
 
         private static char ToUpperCaseExceptFirstLetter(char c, int i)
         {
             if (i == 0)
             {
-                return char.ToLower(c);
+                return char.ToLowerInvariant(c);
             }
             else
             {
-                return char.ToUpper(c);
+                return char.ToUpperInvariant(c);
             }
         }
 

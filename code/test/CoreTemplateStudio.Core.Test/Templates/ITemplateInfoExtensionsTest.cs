@@ -250,7 +250,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("ProjectTemplate");
 
             var result = target.GetFrontEndFrameworkList();
-            Assert.Collection(result, e1 => e1.Equals("fx1"), e2 => e2.Equals("TestFramework"));
+            Assert.Collection(result, e1 => e1.Equals("fx1", StringComparison.Ordinal), e2 => e2.Equals("TestFramework", StringComparison.Ordinal));
         }
 
         [Theory]
@@ -274,7 +274,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("ProjectTemplate");
 
             var result = target.GetProjectTypeList();
-            Assert.Collection(result,  e1 => e1.Equals("pt1"), e2 => e2.Equals("pt2"), e3 => e3.Equals("TestProjectType"));
+            Assert.Collection(result,  e1 => e1.Equals("pt1", StringComparison.Ordinal), e2 => e2.Equals("pt2", StringComparison.Ordinal), e3 => e3.Equals("TestProjectType", StringComparison.Ordinal));
         }
 
         [Theory]
@@ -298,7 +298,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("DependenciesTemplate");
 
             var result = target.GetDependencyList();
-            Assert.Collection(result, e1 => e1.Equals("dp1"), e2 => e2.Equals("dp2"));
+            Assert.Collection(result, e1 => e1.Equals("dp1", StringComparison.Ordinal), e2 => e2.Equals("dp2", StringComparison.Ordinal));
         }
 
         [Theory]
@@ -310,7 +310,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("RequirementsTemplate");
 
             var result = target.GetRequirementsList();
-            Assert.Collection(result, e1 => e1.Equals("r1"), e2 => e2.Equals("r2"));
+            Assert.Collection(result, e1 => e1.Equals("r1", StringComparison.Ordinal), e2 => e2.Equals("r2", StringComparison.Ordinal));
         }
 
         [Theory]
@@ -322,7 +322,7 @@ namespace Microsoft.Templates.Core.Test
             var target = GetTargetByName("ExclusionsTemplate");
 
             var result = target.GetExclusionsList();
-            Assert.Collection(result, e1 => e1.Equals("e1"), e2 => e2.Equals("e2"));
+            Assert.Collection(result, e1 => e1.Equals("e1", StringComparison.Ordinal), e2 => e2.Equals("e2", StringComparison.Ordinal));
         }
 
         [Theory]

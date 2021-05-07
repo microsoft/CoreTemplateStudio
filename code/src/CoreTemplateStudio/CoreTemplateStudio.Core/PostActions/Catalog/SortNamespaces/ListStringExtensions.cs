@@ -60,7 +60,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.SortNamespaces
             foreach (var key in orderedKeys)
             {
                 var usingsGroup = usings
-                                    .FirstOrDefault(u => u.Key.Equals(key))
+                                    .FirstOrDefault(u => u.Key.Equals(key, StringComparison.Ordinal))
                                     .Distinct()
                                     .ToList();
 
@@ -118,7 +118,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.SortNamespaces
             }
 
             var filtered = usingGroups
-                                .Where(u => !u.Equals(SystemNs))
+                                .Where(u => !u.Equals(SystemNs, StringComparison.Ordinal))
                                 .OrderBy(u => u)
                                 .ToList();
 

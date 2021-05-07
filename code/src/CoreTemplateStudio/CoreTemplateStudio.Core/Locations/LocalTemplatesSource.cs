@@ -109,7 +109,7 @@ namespace Microsoft.Templates.Core.Locations
 
             await Task.Run(() =>
             {
-                JunctionNativeMethods.CreateJunction(Origin, targetFolder, true);
+                NativeMethods.CreateJunction(Origin, targetFolder, true);
             });
 
             return new TemplatesContentInfo()

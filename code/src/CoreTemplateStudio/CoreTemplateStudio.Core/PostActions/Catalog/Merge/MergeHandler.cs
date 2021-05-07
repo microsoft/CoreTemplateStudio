@@ -170,11 +170,11 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
         private MergeMode GetMergeMode(string mergeLine, MergeMode current, string commentSymbol)
         {
-            if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroBeforeMode))
+            if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroBeforeMode, StringComparison.Ordinal))
             {
                 return MergeMode.InsertBefore;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartGroup))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartGroup, StringComparison.Ordinal))
             {
                 if (current == MergeMode.InsertBefore)
                 {
@@ -186,31 +186,31 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
                     return MergeMode.Insert;
                 }
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndGroup))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndGroup, StringComparison.Ordinal))
             {
                 return MergeMode.Context;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartDocumentation))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartDocumentation, StringComparison.Ordinal))
             {
                 return MergeMode.Documentation;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndDocumentation))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndDocumentation, StringComparison.Ordinal))
             {
                 return MergeMode.Context;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartDelete))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartDelete, StringComparison.Ordinal))
             {
                 return MergeMode.Remove;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndDelete))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndDelete, StringComparison.Ordinal))
             {
                 return MergeMode.Context;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartOptionalContext))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroStartOptionalContext, StringComparison.Ordinal))
             {
                 return MergeMode.OptionalContext;
             }
-            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndOptionalContext))
+            else if (mergeLine.Trim().StartsWith(commentSymbol + MergeMacros.MacroEndOptionalContext, StringComparison.Ordinal))
             {
                 return MergeMode.Context;
             }
@@ -240,11 +240,11 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             var macroInlineAdditionStart = _codeStyleProvider.InlineCommentStart + MergeMacros.MacroStartGroup + _codeStyleProvider.InlineCommentEnd;
             var macroInlineAdditionEnd = _codeStyleProvider.InlineCommentStart + MergeMacros.MacroEndGroup + _codeStyleProvider.InlineCommentEnd;
 
-            var mergeLineStart = mergeLine.Substring(0, mergeLine.IndexOf(macroInlineAdditionStart));
-            var mergeLineEnd = mergeLine.Substring(mergeLine.IndexOf(macroInlineAdditionEnd) + macroInlineAdditionEnd.Length, mergeLine.Length - mergeLine.IndexOf(macroInlineAdditionEnd) - macroInlineAdditionEnd.Length);
+            var mergeLineStart = mergeLine.Substring(0, mergeLine.IndexOf(macroInlineAdditionStart, StringComparison.Ordinal));
+            var mergeLineEnd = mergeLine.Substring(mergeLine.IndexOf(macroInlineAdditionEnd, StringComparison.Ordinal) + macroInlineAdditionEnd.Length, mergeLine.Length - mergeLine.IndexOf(macroInlineAdditionEnd, StringComparison.Ordinal) - macroInlineAdditionEnd.Length);
 
-            var additionStartIndex = mergeLine.IndexOf(macroInlineAdditionStart) + macroInlineAdditionStart.Length;
-            var additionEndIndex = mergeLine.IndexOf(macroInlineAdditionEnd);
+            var additionStartIndex = mergeLine.IndexOf(macroInlineAdditionStart, StringComparison.Ordinal) + macroInlineAdditionStart.Length;
+            var additionEndIndex = mergeLine.IndexOf(macroInlineAdditionEnd, StringComparison.Ordinal);
 
             var addition = mergeLine.Substring(additionStartIndex, additionEndIndex - additionStartIndex);
             var lineIndex = _result.SafeIndexOf(mergeLineStart.WithLeadingTrivia(diffTrivia), _lastContextLineIndex, true, true);
@@ -258,7 +258,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
 
                     if (mergeLineEnd != string.Empty)
                     {
-                        insertIndex = _result[lineIndex].IndexOf(mergeLineEnd);
+                        insertIndex = _result[lineIndex].IndexOf(mergeLineEnd, StringComparison.Ordinal);
                         nextChar = mergeLineEnd.Substring(1);
                     }
 
@@ -292,7 +292,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge
             string firstTarget = null;
             if (LineHasInlineAdditions(firstMerge))
             {
-                var contextStart = firstMerge.Substring(0, firstMerge.IndexOf(_codeStyleProvider.InlineCommentStart));
+                var contextStart = firstMerge.Substring(0, firstMerge.IndexOf(_codeStyleProvider.InlineCommentStart, StringComparison.Ordinal));
                 firstTarget = target.FirstOrDefault(t => t.Trim().StartsWith(contextStart.Trim(), StringComparison.OrdinalIgnoreCase));
             }
             else

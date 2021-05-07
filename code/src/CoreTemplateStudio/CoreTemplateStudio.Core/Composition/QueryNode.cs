@@ -28,7 +28,7 @@ namespace Microsoft.Templates.Core.Composition
 
         private QueryOperator ParseOperator(string @operator)
         {
-            if (@operator?.Equals("==") == true)
+            if (@operator?.Equals("==", StringComparison.Ordinal) == true)
             {
                 return QueryOperator.Equals;
             }
