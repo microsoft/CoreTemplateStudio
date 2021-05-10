@@ -174,7 +174,7 @@ namespace Microsoft.Templates.Core
             {
                 foreach (var casing in casingTag.Value)
                 {
-                    switch (casing.ToUpper())
+                    switch (casing.ToUpperInvariant())
                     {
                         case "KEBAB":
                             result.Add(new TextCasing() { Key = casingTag.Key, Type = CasingType.Kebab });

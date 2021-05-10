@@ -25,7 +25,7 @@ namespace Microsoft.Templates.Cli.Commands.Validators
                 .WithMessage(StringRes.BadReqInvalidPath);
 
             RuleFor(c => c.FullPath)
-                    .Must(f => !f.EndsWith("mstx") || IsPackageHashValid(f))
+                    .Must(f => !f.EndsWith("mstx", StringComparison.Ordinal) || IsPackageHashValid(f))
                     .WithMessage(StringRes.BadReqInvalidPackage);
 
             RuleFor(c => c.Platform)

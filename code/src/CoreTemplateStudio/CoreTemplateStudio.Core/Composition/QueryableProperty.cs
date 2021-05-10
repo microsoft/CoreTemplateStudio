@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Linq;
 
 namespace Microsoft.Templates.Core.Composition
@@ -47,15 +48,15 @@ namespace Microsoft.Templates.Core.Composition
             }
             else if (Value.IsMultiValue() && !toCompare.IsMultiValue())
             {
-                return Value.GetMultiValue().Any(v => v.Equals(toCompare));
+                return Value.GetMultiValue().Any(v => v.Equals(toCompare, StringComparison.Ordinal));
             }
             else if (!Value.IsMultiValue() && toCompare.IsMultiValue())
             {
-                return toCompare.GetMultiValue().Any(v => v.Equals(Value));
+                return toCompare.GetMultiValue().Any(v => v.Equals(Value, StringComparison.Ordinal));
             }
             else
             {
-                return Value.Equals(toCompare);
+                return Value.Equals(toCompare, StringComparison.Ordinal);
             }
         }
     }

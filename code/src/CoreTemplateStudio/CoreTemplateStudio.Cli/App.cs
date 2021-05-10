@@ -17,7 +17,7 @@ using Microsoft.Templates.Core.Diagnostics;
 
 namespace Microsoft.Templates.Cli
 {
-    public class App
+    public class App : IDisposable
     {
         private readonly string splitPattern = "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
         private readonly ICommandDispatcher _dispatcher;
@@ -106,6 +106,20 @@ namespace Microsoft.Templates.Cli
                 }
 
                 return true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _parser.Dispose();
             }
         }
     }

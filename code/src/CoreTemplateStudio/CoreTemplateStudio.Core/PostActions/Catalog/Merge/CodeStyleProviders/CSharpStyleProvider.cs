@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,17 +58,17 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
 
         private static bool InsertionEndsWithClosingBraces(List<string> insertionBuffer)
         {
-            return insertionBuffer.Last().Trim().Equals(ClosingBrace);
+            return insertionBuffer.Last().Trim().Equals(ClosingBrace, StringComparison.Ordinal);
         }
 
         private static bool NextLineIsEmpty(string nextContextLine)
         {
-            return nextContextLine.Trim().Equals(string.Empty);
+            return nextContextLine.Trim().Equals(string.Empty, StringComparison.Ordinal);
         }
 
         private static bool NextLineHasClosingBraces(string nextContextLine)
         {
-            return nextContextLine.Trim().Equals(ClosingBrace);
+            return nextContextLine.Trim().Equals(ClosingBrace, StringComparison.Ordinal);
         }
 
         private static bool InsertionEndsWithBlankLine(List<string> insertionBuffer)
@@ -77,7 +78,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
 
         private static bool LastLineHasClosingBrace(string lastContextLine)
         {
-            return lastContextLine.Trim().Equals(ClosingBrace);
+            return lastContextLine.Trim().Equals(ClosingBrace, StringComparison.Ordinal);
         }
 
         private static bool InsertionStartsWithBlankLine(List<string> insertionBuffer)
@@ -87,12 +88,12 @@ namespace Microsoft.Templates.Core.PostActions.Catalog.Merge.CodeStyleProviders
 
         private static bool InsertionStartsWithElseLine(List<string> insertionBuffer)
         {
-            return insertionBuffer.First().Trim().StartsWith("else");
+            return insertionBuffer.First().Trim().StartsWith("else", StringComparison.Ordinal);
         }
 
         private static bool LastLineHasOpeningBrace(string lastContextLine)
         {
-            return lastContextLine.Trim().Equals(OpeningBrace);
+            return lastContextLine.Trim().Equals(OpeningBrace, StringComparison.Ordinal);
         }
 
         private string EnsureInterfaceSeparation(string addition, string contextStart, string contextEnd)
