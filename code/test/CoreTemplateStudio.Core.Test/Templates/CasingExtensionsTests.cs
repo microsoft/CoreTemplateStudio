@@ -18,17 +18,17 @@ namespace Microsoft.Templates.Core.Test
         {
             var kebabCasingService = new TextCasing() { Type = CasingType.Kebab };
 
-            Assert.Equal("master-detail", kebabCasingService.Transform("MasterDetail"));
-            Assert.Equal("master-detail", kebabCasingService.Transform("Master_Detail"));
-            Assert.Equal("master-detail", kebabCasingService.Transform("Master Detail"));
-            Assert.Equal("master-detail", kebabCasingService.Transform(" Master Detail "));
-            Assert.Equal("master-detail", kebabCasingService.Transform("master detail"));
-            Assert.Equal("master-detail-123-abc", kebabCasingService.Transform("master   -  detail 123 abc"));
+            Assert.Equal("list-detail", kebabCasingService.Transform("ListDetail"));
+            Assert.Equal("list-detail", kebabCasingService.Transform("List_Detail"));
+            Assert.Equal("list-detail", kebabCasingService.Transform("List Detail"));
+            Assert.Equal("list-detail", kebabCasingService.Transform(" List Detail "));
+            Assert.Equal("list-detail", kebabCasingService.Transform("list detail"));
+            Assert.Equal("list-detail-123-abc", kebabCasingService.Transform("list   -  detail 123 abc"));
 
-            Assert.Equal("master-detail-1", kebabCasingService.Transform("MasterDetail1"));
-            Assert.Equal("master-ui", kebabCasingService.Transform("MasterUI"));
-            Assert.Equal("master-ui", kebabCasingService.Transform("Master UI"));
-            Assert.Equal("master-ui", kebabCasingService.Transform("Master_UI"));
+            Assert.Equal("list-detail-1", kebabCasingService.Transform("ListDetail1"));
+            Assert.Equal("list-ui", kebabCasingService.Transform("ListUI"));
+            Assert.Equal("list-ui", kebabCasingService.Transform("List UI"));
+            Assert.Equal("list-ui", kebabCasingService.Transform("List_UI"));
         }
 
         [Fact]
@@ -36,17 +36,17 @@ namespace Microsoft.Templates.Core.Test
         {
             var snakeCasingService = new TextCasing() { Type = CasingType.Snake };
 
-            Assert.Equal("master_detail", snakeCasingService.Transform("MasterDetail"));
-            Assert.Equal("master_detail", snakeCasingService.Transform("Master_Detail"));
-            Assert.Equal("master_detail", snakeCasingService.Transform("Master Detail"));
-            Assert.Equal("master_detail", snakeCasingService.Transform(" Master Detail "));
-            Assert.Equal("master_detail", snakeCasingService.Transform("master detail"));
-            Assert.Equal("master_detail_123_abc", snakeCasingService.Transform("master   -  detail 123 abc"));
+            Assert.Equal("list_detail", snakeCasingService.Transform("ListDetail"));
+            Assert.Equal("list_detail", snakeCasingService.Transform("List_Detail"));
+            Assert.Equal("list_detail", snakeCasingService.Transform("List Detail"));
+            Assert.Equal("list_detail", snakeCasingService.Transform(" List Detail "));
+            Assert.Equal("list_detail", snakeCasingService.Transform("list detail"));
+            Assert.Equal("list_detail_123_abc", snakeCasingService.Transform("list   -  detail 123 abc"));
 
-            Assert.Equal("master_detail_1", snakeCasingService.Transform("MasterDetail1"));
-            Assert.Equal("master_ui", snakeCasingService.Transform("MasterUI"));
-            Assert.Equal("master_ui", snakeCasingService.Transform("Master UI"));
-            Assert.Equal("master_ui", snakeCasingService.Transform("Master_UI"));
+            Assert.Equal("list_detail_1", snakeCasingService.Transform("ListDetail1"));
+            Assert.Equal("list_ui", snakeCasingService.Transform("ListUI"));
+            Assert.Equal("list_ui", snakeCasingService.Transform("List UI"));
+            Assert.Equal("list_ui", snakeCasingService.Transform("List_UI"));
         }
 
         [Fact]
@@ -54,15 +54,15 @@ namespace Microsoft.Templates.Core.Test
         {
             var pascalCasingService = new TextCasing() { Type = CasingType.Pascal };
 
-            Assert.Equal("MasterDetail", pascalCasingService.Transform("MasterDetail"));
-            Assert.Equal("MasterDetail", pascalCasingService.Transform("Master_Detail"));
-            Assert.Equal("MasterDetail", pascalCasingService.Transform("Master Detail"));
-            Assert.Equal("MasterDetail", pascalCasingService.Transform(" Master Detail "));
-            Assert.Equal("MasterDetail1", pascalCasingService.Transform("master detail 1"));
+            Assert.Equal("ListDetail", pascalCasingService.Transform("ListDetail"));
+            Assert.Equal("ListDetail", pascalCasingService.Transform("List_Detail"));
+            Assert.Equal("ListDetail", pascalCasingService.Transform("List Detail"));
+            Assert.Equal("ListDetail", pascalCasingService.Transform(" List Detail "));
+            Assert.Equal("ListDetail1", pascalCasingService.Transform("list detail 1"));
 
-            Assert.Equal("MasterUI", pascalCasingService.Transform("MasterUI"));
-            Assert.Equal("MasterUI", pascalCasingService.Transform("master UI"));
-            Assert.Equal("MasterUI", pascalCasingService.Transform("Master_UI"));
+            Assert.Equal("ListUI", pascalCasingService.Transform("ListUI"));
+            Assert.Equal("ListUI", pascalCasingService.Transform("list UI"));
+            Assert.Equal("ListUI", pascalCasingService.Transform("List_UI"));
         }
 
         [Fact]
@@ -70,14 +70,14 @@ namespace Microsoft.Templates.Core.Test
         {
             var camelCasingService = new TextCasing() { Type = CasingType.Camel };
 
-            Assert.Equal("masterDetail", camelCasingService.Transform("MasterDetail"));
-            Assert.Equal("masterDetail", camelCasingService.Transform("Master_Detail"));
-            Assert.Equal("masterDetail", camelCasingService.Transform("Master Detail"));
-            Assert.Equal("masterDetail", camelCasingService.Transform(" Master Detail "));
-            Assert.Equal("masterDetail1", camelCasingService.Transform("master detail 1"));
-            Assert.Equal("masterUI", camelCasingService.Transform("MasterUI"));
-            Assert.Equal("masterUI", camelCasingService.Transform("master UI"));
-            Assert.Equal("masterUI", camelCasingService.Transform("Master_UI"));
+            Assert.Equal("listDetail", camelCasingService.Transform("ListDetail"));
+            Assert.Equal("listDetail", camelCasingService.Transform("List_Detail"));
+            Assert.Equal("listDetail", camelCasingService.Transform("List Detail"));
+            Assert.Equal("listDetail", camelCasingService.Transform(" List Detail "));
+            Assert.Equal("listDetail1", camelCasingService.Transform("list detail 1"));
+            Assert.Equal("listUI", camelCasingService.Transform("ListUI"));
+            Assert.Equal("listUI", camelCasingService.Transform("list UI"));
+            Assert.Equal("listUI", camelCasingService.Transform("List_UI"));
         }
 
         [Fact]
@@ -85,14 +85,14 @@ namespace Microsoft.Templates.Core.Test
         {
             var lowerCasingService = new TextCasing() { Type = CasingType.Lower };
 
-            Assert.Equal("masterdetail", lowerCasingService.Transform("MasterDetail"));
-            Assert.Equal("masterdetail", lowerCasingService.Transform("Master_Detail"));
-            Assert.Equal("masterdetail", lowerCasingService.Transform("Master Detail"));
-            Assert.Equal("masterdetail", lowerCasingService.Transform(" Master Detail "));
-            Assert.Equal("masterdetail1", lowerCasingService.Transform("master detail 1"));
-            Assert.Equal("masterui", lowerCasingService.Transform("MasterUI"));
-            Assert.Equal("masterui", lowerCasingService.Transform("master UI"));
-            Assert.Equal("masterui", lowerCasingService.Transform("Master_UI"));
+            Assert.Equal("listdetail", lowerCasingService.Transform("ListDetail"));
+            Assert.Equal("listdetail", lowerCasingService.Transform("List_Detail"));
+            Assert.Equal("listdetail", lowerCasingService.Transform("List Detail"));
+            Assert.Equal("listdetail", lowerCasingService.Transform(" List Detail "));
+            Assert.Equal("listdetail1", lowerCasingService.Transform("list detail 1"));
+            Assert.Equal("listui", lowerCasingService.Transform("ListUI"));
+            Assert.Equal("listui", lowerCasingService.Transform("list UI"));
+            Assert.Equal("listui", lowerCasingService.Transform("List_UI"));
         }
     }
 }
