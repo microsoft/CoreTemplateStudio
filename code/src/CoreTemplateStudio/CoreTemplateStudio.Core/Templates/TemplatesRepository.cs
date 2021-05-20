@@ -317,7 +317,7 @@ namespace Microsoft.Templates.Core
         {
             var filtered = GetAll()
                           .Where(t => t.GetTemplateType() == TemplateType.Project
-                          && t.GetProjectTypeList().Contains(context.ProjectType)
+                          && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
                           && IsMatchPropertyBag(t, context.PropertyBag)
                           && t.GetPlatform().Equals(context.Platform, StringComparison.OrdinalIgnoreCase)).ToList();
 
