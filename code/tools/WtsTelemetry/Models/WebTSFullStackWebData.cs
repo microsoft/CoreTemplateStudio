@@ -2,7 +2,7 @@ using WtsTelemetry.Helpers;
 
 namespace WtsTelemetry.Models
 {
-    public class WebTSFullStackData
+    public class WebTSFullStackWebData
     {
         public string FrontendFrameworks { get; set; }
         public string BackendFrameworks { get; set; }
