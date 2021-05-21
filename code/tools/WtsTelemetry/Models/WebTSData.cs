@@ -4,10 +4,9 @@ namespace WtsTelemetry.Models
 {
     public class WebTSData
     {
-        public string FrontendFrameworks { get; set; }
-        public string BackendFrameworks { get; set; }
-        public string Pages { get; set; }
-        public string Services { get; set; }
+        public WebTSFullStackData WebFullStack { get; set; }
+        public WebTSReactNativeData ReactNative { get; set; }
+        public string Platform { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
 
@@ -15,10 +14,10 @@ namespace WtsTelemetry.Models
         {
             return new MarkdownBuilder()
                         .AddHeader("Web Template Studio", Year, Month)
-                        .AddTable("Frontend Frameworks", "Framework Type", FrontendFrameworks)
-                        .AddTable("Backend Frameworks", "Framework Type", BackendFrameworks)
-                        .AddTable("Pages", "Pages", Pages)
-                        .AddTable("Services", "Services", Services)
+                        .AddTable("Category", "Type", Platform)
+                        .AddSectionTitle("Project Generation by category")
+                        .AddCollapsible("Web Full Stack Generation", WebFullStack.ToMarkdown())
+                        .AddCollapsible("React Native Generation", ReactNative.ToMarkdown())
                         .GetText();
         }
     }

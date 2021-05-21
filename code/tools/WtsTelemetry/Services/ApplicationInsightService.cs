@@ -40,15 +40,37 @@ namespace WtsTelemetry.Services
 
         public async Task<WebTSData> GetWebTSData(int year, int month)
         {
-            var queries = new Queries(Platforms.Web, year, month);
+            var webQueries = new Queries(Platforms.Web, year, month);
+            var reactNativeQueries = new Queries(Platforms.ReactNative, year, month);
+
             return new WebTSData
             {
-                FrontendFrameworks = await GetData(queries.FrontendFrameworks),
-                BackendFrameworks = await GetData(queries.BackendFrameworks),
-                Pages = await GetData(queries.Pages),
-                Services = await GetData(queries.Features),
+                WebFullStack = await GetWebTSFullStackData(webQueries),
+                ReactNative = await GetReactNativeData(reactNativeQueries),
+                Platform = await GetData(webQueries.Platforms),
                 Year = year,
                 Month = month
+            };
+        }
+
+        //TODO extract to class, same for WinTS
+        private async Task<WebTSFullStackData> GetWebTSFullStackData(Queries queries)
+        {
+            return new WebTSFullStackData
+            {                
+                FrontendFrameworks= await GetData(queries.FrontendFrameworks),
+                BackendFrameworks= await GetData(queries.BackendFrameworks),
+                Pages = await GetData(queries.Pages),
+                Services = await GetData(queries.Services),
+            };
+        }
+
+        private async Task<WebTSReactNativeData> GetReactNativeData(Queries queries)
+        {
+            return new WebTSReactNativeData
+            {
+                ProjectTypes = await GetData(queries.Projects),
+                Pages = await GetData(queries.Pages),
             };
         }
 
