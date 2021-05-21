@@ -138,7 +138,7 @@ namespace Microsoft.Templates.Core
         public IEnumerable<MetadataInfo> GetProjectTypes(UserSelectionContext context)
         {
             var projectTypes = GetSupportedProjectTypes(context);
-            return GetMetadataInfo("projectTypes").Where(m => m.Platform == context.Platform && projectTypes.Contains(m.Name));
+            return GetMetadataInfo("projectTypes").Where(m => m.Platform == context.Platform && (projectTypes.Contains(m.Name) || projectTypes.Contains(All)));
         }
 
         public IEnumerable<MetadataInfo> GetFrontEndFrameworks(UserSelectionContext context)
@@ -317,7 +317,7 @@ namespace Microsoft.Templates.Core
         {
             var filtered = GetAll()
                           .Where(t => t.GetTemplateType() == TemplateType.Project
-                          && t.GetProjectTypeList().Contains(context.ProjectType)
+                          && (t.GetProjectTypeList().Contains(context.ProjectType) || t.GetProjectTypeList().Contains(All))
                           && IsMatchPropertyBag(t, context.PropertyBag)
                           && t.GetPlatform().Equals(context.Platform, StringComparison.OrdinalIgnoreCase)).ToList();
 
