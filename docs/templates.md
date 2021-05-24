@@ -312,7 +312,7 @@ For example, consider a SplitView project type with MVVM Basic framework, and ad
             -->
             <NavigationViewItem x:Uid="Shell_Main" Icon="Document" helpers:NavHelper.NavigateTo="views:MainPage" />
             <NavigationViewItem x:Uid="Shell_Map" Icon="Document" helpers:NavHelper.NavigateTo="views:MapPage" />
-            <NavigationViewItem x:Uid="Shell_MasterDetail" Icon="Document" helpers:NavHelper.NavigateTo="views:MasterDetailPage" />
+            <NavigationViewItem x:Uid="Shell_ListDetail" Icon="Document" helpers:NavHelper.NavigateTo="views:ListDetailPage" />
             <NavigationViewItem x:Uid="Shell_WebView" Icon="Document" helpers:NavHelper.NavigateTo="views:WebViewPage" />
             <NavigationViewItem x:Uid="Shell_Tabbed" Icon="Document" helpers:NavHelper.NavigateTo="views:TabbedPage" />
         </NavigationView.MenuItems>
