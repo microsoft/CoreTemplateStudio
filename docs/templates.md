@@ -155,9 +155,9 @@ Further documentation on the contents of the `template.json` file can be found o
 
 ### Template Layouts
 
-Project templates can define a default layout of pages to be considered in the wizard. To do so, you need to add a `Layout.json` file within the `.template.config` folder.
+Project templates can define a default layout of pages/features to be added to the wizard. To do so, you need to add a `Layout.json` file within the `.template.config` folder.
 
-By using template layouts, you can determine what pages are automatically added to a certain project type and if those pages are mandatory or can be removed. In other words, layout definition provides a way to pre-configure pages associated to a certain project type.
+By using template layouts, you can determine what templates are automatically added to a certain project type and if those templates are mandatory or can be removed. In other words, layout definition provides a way to pre-configure templates associated to a certain project type.
 
 Layout.json
 
@@ -314,7 +314,7 @@ For example, consider a SplitView project type with MVVM Basic framework, and ad
             <NavigationViewItem x:Uid="Shell_Map" Icon="Document" helpers:NavHelper.NavigateTo="views:MapPage" />
             <NavigationViewItem x:Uid="Shell_ListDetail" Icon="Document" helpers:NavHelper.NavigateTo="views:ListDetailPage" />
             <NavigationViewItem x:Uid="Shell_WebView" Icon="Document" helpers:NavHelper.NavigateTo="views:WebViewPage" />
-            <NavigationViewItem x:Uid="Shell_Tabbed" Icon="Document" helpers:NavHelper.NavigateTo="views:TabbedPage" />
+            <NavigationViewItem x:Uid="Shell_TabView" Icon="Document" helpers:NavHelper.NavigateTo="views:TabViewPage" />
         </NavigationView.MenuItems>
 ...
 
