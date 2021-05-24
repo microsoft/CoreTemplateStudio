@@ -6,5 +6,6 @@ namespace WtsTelemetry.Models
         public static string Wpf { get; private set; } = "Wpf";
         public static string WinUI { get; private set; } = "WinUI";
         public static string Web { get; private set; } = "Web";
+        public static string ReactNative { get; private set; } = "RN";
     }
 }
