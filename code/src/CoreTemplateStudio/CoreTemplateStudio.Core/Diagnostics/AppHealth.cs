@@ -6,7 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 
-using Microsoft.Templates.Core.Gen;
+using Microsoft.Templates.Core.Gen.Shell;
 
 namespace Microsoft.Templates.Core.Diagnostics
 {
@@ -67,7 +67,7 @@ namespace Microsoft.Templates.Core.Diagnostics
             }
         }
 
-        public void IntializeTelemetryClient(GenShell shell)
+        public void IntializeTelemetryClient(IGenShell shell)
         {
             TelemetryService.Current.IntializeTelemetryClient(shell);
             HealthWriters.Available.Add(TelemetryService.Current);

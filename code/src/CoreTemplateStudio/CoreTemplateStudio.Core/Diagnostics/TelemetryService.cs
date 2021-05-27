@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Templates.Core.Gen;
+using Microsoft.Templates.Core.Gen.Shell;
 
 namespace Microsoft.Templates.Core.Diagnostics
 {
@@ -79,7 +79,7 @@ namespace Microsoft.Templates.Core.Diagnostics
             return false;
         }
 
-        public void IntializeTelemetryClient(GenShell genShell)
+        public void IntializeTelemetryClient(IGenShell genShell)
         {
             if (_client != null)
             {
@@ -92,7 +92,7 @@ namespace Microsoft.Templates.Core.Diagnostics
             {
                 config.InstrumentationKey = _currentConfig.RemoteTelemetryKey;
 
-                var vstelemetryInfo = genShell.GetVSTelemetryInfo();
+                var vstelemetryInfo = genShell.Telemetry.GetVSTelemetryInfo();
                 if (vstelemetryInfo.OptedIn && RemoteKeyAvailable())
                 {
                     if (!string.IsNullOrEmpty(_currentConfig.CustomTelemetryEndpoint))

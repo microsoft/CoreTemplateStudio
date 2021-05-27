@@ -52,7 +52,7 @@ namespace Microsoft.Templates.Core.Gen
 
                     if (genInfo.Template.GetTemplateType() == TemplateType.Project)
                     {
-                        AppHealth.Current.Telemetry.TrackProjectGenAsync(genInfo.Template, context, genResults[resultsKey], GenContext.ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName), genItemsTelemetryData, timeSpent, GenContext.Current.ProjectMetrics).FireAndForget();
+                        AppHealth.Current.Telemetry.TrackProjectGenAsync(genInfo.Template, context, genResults[resultsKey], GenContext.ToolBox.Shell.Project.GetProjectGuidByName(GenContext.Current.ProjectName), genItemsTelemetryData, timeSpent, GenContext.Current.ProjectMetrics).FireAndForget();
                     }
                     else
                     {
