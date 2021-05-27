@@ -7,15 +7,15 @@ using System.Collections.Generic;
 using Microsoft.Templates.Core.Composition;
 using Xunit;
 
-namespace Microsoft.Templates.Core
+namespace Microsoft.Templates.Core.Test.Extensions
 {
     [Trait("ExecutionSet", "Minimum")]
     public class DictionaryExtensionsTests
     {
+        private const int MAX = 100;
         private readonly Random random;
         private readonly Dictionary<string, string> dictionaryOfStrings;
         private readonly Dictionary<string, QueryableProperty> dictionaryOfQueryable;
-        private const int MAX = 100;
 
         public DictionaryExtensionsTests()
         {
@@ -33,7 +33,7 @@ namespace Microsoft.Templates.Core
         }
 
         [Fact]
-        public void SafeGet_DictionaryOfStrings_NotFound_ReturnsDefault()
+        public void SafeGet_DictionaryOfStrings_NotFound_ShouldReturnDefault()
         {
             string expected = null;
 
@@ -43,7 +43,7 @@ namespace Microsoft.Templates.Core
         }
 
         [Fact]
-        public void SafeGet_DictionaryOfStrings_NotFound_ReturnsConfiguredDefault()
+        public void SafeGet_DictionaryOfStrings_NotFound_ShouldReturnConfiguredDefault()
         {
             string expected = "default";
 
@@ -53,7 +53,7 @@ namespace Microsoft.Templates.Core
         }
 
         [Fact]
-        public void SafeGet_DictionaryOfStrings_Found_ReturnsItem()
+        public void SafeGet_DictionaryOfStrings_Found_ShouldReturnItem()
         {
             var randomItemsNumber = random.Next(MAX);
             SetUpStringData(randomItemsNumber);
@@ -74,7 +74,7 @@ namespace Microsoft.Templates.Core
         }
 
         [Fact]
-        public void SafeGet_DictionaryOfQueryable_NotFound_ReturnsDefault()
+        public void SafeGet_DictionaryOfQueryable_NotFound_ShouldReturnDefault()
         {
             QueryableProperty expected = null;
 
@@ -84,7 +84,7 @@ namespace Microsoft.Templates.Core
         }
 
         [Fact]
-        public void SafeGet_DictionaryOfQueryable_NotFound_ReturnsConfiguredDefault()
+        public void SafeGet_DictionaryOfQueryable_NotFound_ShouldReturnConfiguredDefault()
         {
             QueryableProperty expected = QueryableProperty.Empty;
 
@@ -95,7 +95,7 @@ namespace Microsoft.Templates.Core
         }
 
         [Fact]
-        public void SafeGet_DictionaryOfQueryable_Found_ReturnsItem()
+        public void SafeGet_DictionaryOfQueryable_Found_ShouldReturnItem()
         {
             var randomItemsNumber = random.Next(MAX);
             SetUpQueryableData(randomItemsNumber);

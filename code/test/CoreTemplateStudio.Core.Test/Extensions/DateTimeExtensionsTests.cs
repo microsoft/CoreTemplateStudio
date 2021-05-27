@@ -14,15 +14,15 @@ namespace Microsoft.Templates.Core.Test.Extensions
 
         public DateTimeExtensionsTests()
         {
-            date = DateTime.Now;
+            date = new DateTime(2000, 1, 2, 3, 4, 5, 6);
         }
 
         [Fact]
-        public void FormatAsDateForFilePath_ReturnsCorrectStringDate()
+        public void FormatAsDateForFilePath_ShouldReturnCorrectStringDate()
         {
             var factData = date;
 
-            var expected = date.ToString("yyyyMMdd");
+            var expected = "20000102";
 
             var result = factData.FormatAsDateForFilePath();
 
@@ -30,11 +30,11 @@ namespace Microsoft.Templates.Core.Test.Extensions
         }
 
         [Fact]
-        public void FormatAsFullDateTime_ReturnsCorrectStringDate()
+        public void FormatAsFullDateTime_ShouldReturnCorrectStringDate()
         {
             var factData = date;
 
-            var expected = date.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var expected = "2000-01-02 03:04:05.006";
 
             var result = factData.FormatAsFullDateTime();
 
@@ -42,11 +42,11 @@ namespace Microsoft.Templates.Core.Test.Extensions
         }
 
         [Fact]
-        public void FormatAsTime_ReturnsCorrectStringDate()
+        public void FormatAsTime_ShouldReturnCorrectStringDate()
         {
             var factData = date;
 
-            var expected = date.ToString("HH:mm:ss.fff");
+            var expected = "03:04:05.006";
 
             var result = factData.FormatAsTime();
 
@@ -54,11 +54,11 @@ namespace Microsoft.Templates.Core.Test.Extensions
         }
 
         [Fact]
-        public void FormatAsShortDateTime_ReturnsCorrectStringDate()
+        public void FormatAsShortDateTime_ShouldReturnCorrectStringDate()
         {
             var factData = date;
 
-            var expected = date.ToString("yyyyMMdd_HHmmss");
+            var expected = "20000102_030405";
 
             var result = factData.FormatAsShortDateTime();
 
@@ -66,11 +66,11 @@ namespace Microsoft.Templates.Core.Test.Extensions
         }
 
         [Fact]
-        public void FormatAsDateHoursMinutes_ReturnsCorrectStringDate()
+        public void FormatAsDateHoursMinutes_ShouldReturnCorrectStringDate()
         {
             var factData = date;
 
-            var expected = date.ToString("ddHHmmss");
+            var expected = "02030405";
 
             var result = factData.FormatAsDateHoursMinutes();
 
