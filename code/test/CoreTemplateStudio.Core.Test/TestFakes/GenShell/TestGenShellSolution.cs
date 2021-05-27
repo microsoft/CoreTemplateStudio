@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Gen.Shell;
 
-namespace Microsoft.Templates.Cli.Utilities.GenShell
+namespace Microsoft.Templates.Core.Test.TestFakes.GenShell
 {
-    public class CliGenShellSolution : IGenShellSolution
+    public class TestGenShellSolution : IGenShellSolution
     {
         public void AddContextItemsToSolution(ProjectInfo projectInfo)
         {

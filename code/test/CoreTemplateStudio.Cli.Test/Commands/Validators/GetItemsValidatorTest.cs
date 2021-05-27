@@ -11,7 +11,7 @@ using Microsoft.Templates.Cli.Commands;
 using Microsoft.Templates.Cli.Commands.Validators;
 using Microsoft.Templates.Cli.Resources;
 using Microsoft.Templates.Cli.Services.Contracts;
-using Microsoft.Templates.Cli.Utilities;
+using Microsoft.Templates.Cli.Utilities.GenShell;
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Locations;
 using Moq;
