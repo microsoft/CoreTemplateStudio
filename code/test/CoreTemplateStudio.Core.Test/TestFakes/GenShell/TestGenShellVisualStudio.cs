@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Templates.Core.Gen.Shell;
 
 namespace Microsoft.Templates.Core.Test.TestFakes.GenShell
@@ -18,5 +20,7 @@ namespace Microsoft.Templates.Core.Test.TestFakes.GenShell
         public bool IsDebuggerEnabled() => false;
 
         public bool IsSdkInstalled(string version) => false;
+
+        public List<string> GetInstalledPackageIds() => Enumerable.Empty<string>().ToList();
     }
 }
