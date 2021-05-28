@@ -11,10 +11,54 @@ namespace Microsoft.Templates.Core.Test.Extensions
     public class StringExtensionsTests
     {
         [Theory]
+        [InlineData("string")]
+        [InlineData("string23TEST")]
+        public void ObfuscateSHA_ShouldNotBeEmpty(string value)
+        {
+            var actual = value.ObfuscateSHA();
+
+            Assert.NotEmpty(actual);
+        }
+
+        [Theory]
+        [InlineData("string")]
+        [InlineData("string23TEST")]
+        public void ObfuscateSHA_ShouldNotBeEqualsToTheValue(string value)
+        {
+            var actual = value.ObfuscateSHA();
+
+            Assert.False(value.Equals(actual, StringComparison.Ordinal));
+        }
+
+        [Theory]
+        [InlineData("string")]
+        [InlineData("string23TEST")]
+        public void ObfuscateSHA_ShouldNotContainLowercase(string value)
+        {
+            var actual = value.ObfuscateSHA();
+
+            Assert.DoesNotContain(actual, c => char.IsLower(c));
+        }
+
+        [Theory(Skip = "Control null and empty scenarios")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void ObfuscateSHA_Null_ShouldBeControlled(string value)
+        {
+            var actual = value.ObfuscateSHA();
+
+            // control these scenarios.
+            // used from PackagePackage > VerifyAllowedPublicKey
+            // used from PackagePackage > GetCertsInfo
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public void GetMultiValue_EmptyOrNull_ShouldReturnEmptyArray(string value)
+        [InlineData("||")]
+        public void GetMultiValue_NoValue_ShouldReturnEmptyArray(string value)
         {
             var expected = Array.Empty<string>();
 
@@ -27,8 +71,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         [InlineData("One|", new string[] { "One" })]
         [InlineData("One|Two", new string[] { "One", "Two" })]
         [InlineData("One|Two||Three", new string[] { "One", "Two", "Three" })]
-        [InlineData("||", new string[] { })]
-        public void GetMultiValue_Multivalue_ShouldReturnExpected(string value, string[] expected)
+        public void GetMultiValue_HasValue_ShouldReturnExpected(string value, string[] expected)
         {
             var actual = value.GetMultiValue();
 
@@ -40,7 +83,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         [InlineData("|One|Two|")]
         [InlineData("One||Two|Three")]
         [InlineData("One|  | Two|Three")]
-        public void IsMultiValue_SeveralValues_ShouldReturnTrue(string value)
+        public void IsMultiValue_IfSeveralValues_ShouldReturnTrue(string value)
         {
             var actual = value.IsMultiValue();
 
@@ -54,7 +97,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         [InlineData("||")]
         [InlineData("One")]
         [InlineData("One|")]
-        public void IsMultiValue_Empty_NoValues_OneValue_ShouldReturnFalse(string value)
+        public void IsMultiValue_SingleOrNoValue_ShouldReturnFalse(string value)
         {
             var actual = value.IsMultiValue();
 
@@ -62,12 +105,23 @@ namespace Microsoft.Templates.Core.Test.Extensions
         }
 
         [Theory]
-        [InlineData("hello this is a sentence", 0)]
-        [InlineData(" hello this is a sentence", 1)]
-        [InlineData("   hello this is a sentence", 3)]
+        [InlineData("hello this is a statement", 0)]
+        [InlineData(" hello this is a statement", 1)]
+        [InlineData("   hello this is a statement", 3)]
         public void GetLeadingTrivia_ShouldCountInitialWhitespacesCorrectly(string value, int expected)
         {
             var actual = value.GetLeadingTrivia();
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("hello this is a statement", 0, "hello this is a statement")]
+        [InlineData("hello this is a statement", 1, " hello this is a statement")]
+        [InlineData("hello this is a statement", 3, "   hello this is a statement")]
+        public void WithLeadingTrivia_Should(string value, int triviaCount, string expected)
+        {
+            var actual = value.WithLeadingTrivia(triviaCount);
 
             Assert.Equal(expected, actual);
         }
