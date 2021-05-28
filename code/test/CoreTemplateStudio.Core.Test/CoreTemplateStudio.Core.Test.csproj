@@ -166,9 +166,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Extensions\DateTimeExtensionsTests.cs" />
-    <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
-    <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
-    <Compile Include="Extensions\PathExtensionsTests.cs" />    
+    <Compile Include="Extensions\DictionaryExtensionsTests.cs" />    
     <Compile Include="Gen\GenComposerTests.cs" />
     <Compile Include="Naming\ItemNameServiceTests.cs" />
     <Compile Include="Naming\ProjectNameServiceTests.cs" />
