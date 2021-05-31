@@ -23,7 +23,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         [Theory]
         [InlineData("string")]
         [InlineData("string23TEST")]
-        public void ObfuscateSHA_ShouldNotBeEqualsToTheValue(string value)
+        public void ObfuscateSHA_ShouldNotEqualTheOriginalValue(string value)
         {
             var actual = value.ObfuscateSHA();
 
