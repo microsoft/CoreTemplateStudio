@@ -84,7 +84,7 @@ namespace Microsoft.Templates.Cli.Test.Commands.Validators
 
             validator
                 .TestValidate(command)
-                .ShouldNotHaveError();
+                .ShouldNotHaveAnyValidationErrors();
         }
 
         [Theory]
@@ -134,7 +134,7 @@ namespace Microsoft.Templates.Cli.Test.Commands.Validators
 
             validator
                 .TestValidate(command)
-                .ShouldHaveError()
+                .ShouldHaveAnyValidationError()
                 .WithErrorMessage(StringRes.BadReqNoBackendOrFrontend);
         }
 
@@ -206,7 +206,7 @@ namespace Microsoft.Templates.Cli.Test.Commands.Validators
 
             validator
                 .TestValidate(command)
-                .ShouldHaveError()
+                .ShouldHaveAnyValidationError()
                 .WithErrorMessage(StringRes.BadReqNoBackendOrFrontend);
         }
 
@@ -278,7 +278,7 @@ namespace Microsoft.Templates.Cli.Test.Commands.Validators
 
             validator
                 .TestValidate(command)
-                .ShouldHaveError()
+                .ShouldHaveAnyValidationError()
                 .WithErrorMessage(StringRes.BadReqNoBackendOrFrontend);
         }
 
@@ -350,7 +350,7 @@ namespace Microsoft.Templates.Cli.Test.Commands.Validators
 
             validator
                 .TestValidate(command)
-                .ShouldHaveError()
+                .ShouldHaveAnyValidationError()
                 .WithErrorMessage(StringRes.BadReqNoBackendOrFrontend);
         }
 
