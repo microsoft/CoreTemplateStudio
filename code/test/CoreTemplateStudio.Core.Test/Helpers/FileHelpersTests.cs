@@ -35,7 +35,7 @@ namespace Microsoft.Templates.Core.Test.Helpers
         }
 
         [Fact]
-        public void GetFileContent_Errors_ShouldReturnEmpty()
+        public void GetFileContent_DirectoryPathRatherThanFilePath_ShouldReturnEmpty()
         {
             var sourceFile = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject\\");
 
