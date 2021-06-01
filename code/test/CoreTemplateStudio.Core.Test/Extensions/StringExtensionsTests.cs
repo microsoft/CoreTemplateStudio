@@ -30,7 +30,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         [InlineData(" string23TEST")]
         [InlineData("string23TEST ")]
         [InlineData("str ing23TEST")]
-        public void Obfuscate_ShouldNotBeEqualsToTheValue(string value)
+        public void Obfuscate_ShouldNotEqualTheOriginalValue(string value)
         {
             var actual = value.Obfuscate();
 
