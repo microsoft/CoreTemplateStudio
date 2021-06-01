@@ -24,11 +24,10 @@ namespace Microsoft.Templates.Core.Test.Helpers
             Assert.Empty(actual);
         }
 
-        [Theory]
-        [InlineData("TestNotExisting.csproj")]
-        public void GetFileContent_FileNotExists_ShouldReturnEmpty(string projectFile)
+        [Fact]
+        public void GetFileContent_FileNotExists_ShouldReturnEmpty()
         {
-            var sourceFile = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject\\{projectFile}");
+            var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\TestNotExisting.csproj");
 
             var actual = FileHelper.GetFileContent(sourceFile);
 
