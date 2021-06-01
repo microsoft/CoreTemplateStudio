@@ -164,7 +164,6 @@
     <Compile Include="Diagnostics\TelemetryServiceTest.cs" />
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
-    <Compile Include="Extensions\PathExtensionsTests.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Extensions\DateTimeExtensionsTests.cs" />
