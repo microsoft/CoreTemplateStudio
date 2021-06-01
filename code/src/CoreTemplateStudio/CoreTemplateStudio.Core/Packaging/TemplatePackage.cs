@@ -262,7 +262,7 @@ namespace Microsoft.Templates.Core.Packaging
                     var certInfo = new CertInfo()
                     {
                            Cert = new X509Certificate2(cert),
-                           Pin = cert.GetPublicKeyString().ObfuscateSHA(),
+                           Pin = cert.GetPublicKeyString().Obfuscate(),
                            Status = _digitalSignatureService.VerifyCertificate(cert),
                     };
 
@@ -344,7 +344,7 @@ namespace Microsoft.Templates.Core.Packaging
         {
             var pubKeyCert = cert.GetPublicKeyString();
 
-            var pubKeyPin = pubKeyCert.ObfuscateSHA();
+            var pubKeyPin = pubKeyCert.Obfuscate();
 
             AppHealth.Current.Verbose.TrackAsync($"{StringRes.PackageCertificateString} {cert.Subject}").FireAndForget();
             AppHealth.Current.Verbose.TrackAsync($"Key: {pubKeyCert}").FireAndForget();

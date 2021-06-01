@@ -12,7 +12,7 @@ namespace Microsoft.Templates.Core
     {
         public static int SafeIndexOf(this IEnumerable<string> source, string item, int skip, bool ignoreWhiteLines = true, bool compareUpToItemLength = false)
         {
-            if (string.IsNullOrWhiteSpace(item) && ignoreWhiteLines)
+            if (source == null || (string.IsNullOrWhiteSpace(item) && ignoreWhiteLines))
             {
                 return -1;
             }

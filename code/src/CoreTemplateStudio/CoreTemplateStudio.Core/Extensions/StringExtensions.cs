@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Microsoft.Templates.Core
 {
     public static class StringExtensions
     {
-        public static string ObfuscateSHA(this string data)
+        public static string Obfuscate(this string data)
         {
             string result = data;
             byte[] b64data = Encoding.UTF8.GetBytes(data);
@@ -40,12 +41,18 @@ namespace Microsoft.Templates.Core
 
         public static string[] GetMultiValue(this string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value.Trim()))
             {
                 return new string[0];
             }
 
-            return value.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var values = value.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            if (values.Any(v => v != v.Trim()))
+            {
+                throw new InvalidDataException($"Multivalue field: {value} contains trailing or leading whitespaces.");
+            }
+
+            return values;
         }
 
         public static bool IsMultiValue(this string value)
