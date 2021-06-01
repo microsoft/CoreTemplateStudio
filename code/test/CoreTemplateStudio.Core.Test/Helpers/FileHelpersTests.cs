@@ -35,7 +35,6 @@ namespace Microsoft.Templates.Core.Test.Helpers
             Assert.Empty(actual);
         }
 
-
         [Fact]
         public void GetFileContent_Errors_ShouldReturnEmpty()
         {

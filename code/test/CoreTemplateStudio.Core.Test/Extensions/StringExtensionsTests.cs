@@ -50,13 +50,10 @@ namespace Microsoft.Templates.Core.Test.Extensions
             Assert.DoesNotContain(actual, c => char.IsLower(c));
         }
 
-        [Theory(Skip = "Control null and empty scenarios")]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void Obfuscate_Null_ShouldBeControlled(string value)
+        [Fact(Skip = "Control null and empty scenarios")]
+        public void Obfuscate_Null_ShouldBeControlled()
         {
-            var actual = value.Obfuscate();
+            // var actual = value.Obfuscate();
 
             // control these scenarios.
             // used from PackagePackage > VerifyAllowedPublicKey
@@ -114,7 +111,6 @@ namespace Microsoft.Templates.Core.Test.Extensions
         {
             Assert.Throws<InvalidDataException>(() => { value.GetMultiValue(); });
         }
-
 
         [Theory]
         [InlineData("One|Two")]
