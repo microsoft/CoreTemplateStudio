@@ -169,7 +169,8 @@
     <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Extensions\DateTimeExtensionsTests.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />    
-    <Compile Include="Gen\GenComposerTests.cs" />
+    <Compile Include="Gen\GenComposerTests.cs" />    
+    <Compile Include="Helpers\FileHelpersTests.cs" />
     <Compile Include="Naming\ItemNameServiceTests.cs" />
     <Compile Include="Naming\ProjectNameServiceTests.cs" />
     <Compile Include="Naming\Validators\DefaultNamesValidatorTests.cs" />
