@@ -48,9 +48,7 @@ namespace Microsoft.Templates.Core.Test.Helpers
         [Fact]
         public void GetFileContent_FileExists_ShouldReturnsCorrectly()
         {
-            var projectName = "Test";
-            var projectFile = $"{projectName}.csproj";
-            var sourceFile = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject\\{projectFile}");
+            var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
 
             var actual = FileHelper.GetFileContent(sourceFile);
 
