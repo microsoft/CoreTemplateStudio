@@ -59,6 +59,5 @@ namespace Microsoft.Templates.Core.Test.Helpers
                 file.Close();
             }
         }
-
     }
 }
