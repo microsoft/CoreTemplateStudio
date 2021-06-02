@@ -89,6 +89,9 @@
     <Content Include="TestData\Templates\test\_catalog\frontendframeworks\en-US.TestFramework.md" />
     <Content Include="TestData\Templates\test\_catalog\frontendframeworks\es-ES.TestFramework.md" />
     <Content Include="TestData\Templates\test\_catalog\frontendframeworks\TestFramework.md" />
+    <Content Include="TestData\TestProject\EditingTest.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\TestProject\Test.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -165,10 +168,13 @@
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TemplateTypeExtensionsTests.cs" />
+    <Compile Include="Extensions\VersionExtensionsTests.cs" />
     <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Extensions\DateTimeExtensionsTests.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />    
     <Compile Include="Gen\GenComposerTests.cs" />    
+    <Compile Include="Helpers\FsTests.cs" />    
     <Compile Include="Helpers\FileHelpersTests.cs" />
     <Compile Include="Naming\ItemNameServiceTests.cs" />
     <Compile Include="Naming\ProjectNameServiceTests.cs" />
