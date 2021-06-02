@@ -37,6 +37,20 @@ namespace Microsoft.Templates.Core.Test.Helpers
         }
 
         [Fact]
+        public void GetFileContent_WithFileOpened_ShouldReturnEmpty()
+        {
+            var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
+
+            using (StreamWriter file = new StreamWriter(sourceFile))
+            {
+                var actual = FileHelper.GetFileContent(sourceFile);
+
+                Assert.Empty(actual);
+                file.Close();
+            }
+        }
+
+        [Fact]
         public void GetFileContent_FileExists_ShouldReturnsCorrectly()
         {
             var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
