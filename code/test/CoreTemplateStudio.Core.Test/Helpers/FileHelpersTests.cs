@@ -37,6 +37,16 @@ namespace Microsoft.Templates.Core.Test.Helpers
         }
 
         [Fact]
+        public void GetFileContent_FileExists_ShouldReturnsCorrectly()
+        {
+            var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
+
+            var actual = FileHelper.GetFileContent(sourceFile);
+
+            Assert.NotEmpty(actual);
+        }
+
+        [Fact]
         public void GetFileContent_WithFileOpened_ShouldReturnEmpty()
         {
             var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
@@ -50,14 +60,5 @@ namespace Microsoft.Templates.Core.Test.Helpers
             }
         }
 
-        [Fact]
-        public void GetFileContent_FileExists_ShouldReturnsCorrectly()
-        {
-            var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
-
-            var actual = FileHelper.GetFileContent(sourceFile);
-
-            Assert.NotEmpty(actual);
-        }
     }
 }
