@@ -12,7 +12,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
     public class VersionExtensionsTests
     {
         [Fact]
-        public void IsZero_IsNullVersion_ShouldReturnTrue()
+        public void IsNull_IsNullVersion_ShouldReturnTrue()
         {
             Version factData = null;
             var actual = factData.IsNull();
@@ -21,7 +21,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         }
 
         [Fact]
-        public void IsZero_NotNullVersion_ShouldReturnFalse()
+        public void IsNull_NotNullVersion_ShouldReturnFalse()
         {
             Version factData = new Version();
             var actual = factData.IsNull();
@@ -30,21 +30,21 @@ namespace Microsoft.Templates.Core.Test.Extensions
         }
 
         [Fact]
-        public void IsZero_VersionIsZero_WithMajorMinorBuildAndRevision_ShouldReturnTrue()
+        public void IsZero_IsNullVersion_ShouldReturnFalse()
         {
-            var factData = new Version(0, 0, 0, 0);
+            Version factData = null;
             var actual = factData.IsZero();
 
-            Assert.True(actual);
+            Assert.False(actual);
         }
 
         [Theory]
-        [MemberData(nameof(EmptyOrIncompleteData))]
-        public void IsZero_EmptyOrIncompleteVersion_ShouldReturnFalse(Version version)
+        [MemberData(nameof(ZeroData))]
+        public void IsZero_ZeroVersion_ShouldReturnTrue(Version version)
         {
             var actual = version.IsZero();
 
-            Assert.False(actual);
+            Assert.True(actual);
         }
 
         [Theory]
@@ -56,12 +56,8 @@ namespace Microsoft.Templates.Core.Test.Extensions
             Assert.False(actual);
         }
 
-        public static IEnumerable<object[]> EmptyOrIncompleteData => new List<object[]>()
+        public static IEnumerable<object[]> ZeroData => new List<object[]>()
         {
-            new object[]
-            {
-                null,
-            },
             new object[]
             {
                 new Version(),
@@ -77,6 +73,10 @@ namespace Microsoft.Templates.Core.Test.Extensions
             new object[]
             {
                 new Version(0, 0, 0),
+            },
+            new object[]
+            {
+                new Version(0, 0, 0, 0),
             },
         };
 

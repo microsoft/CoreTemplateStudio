@@ -18,9 +18,16 @@ namespace Microsoft.Templates.Core.Helpers
     {
         public static void EnsureFolder(string folder)
         {
-            if (!Directory.Exists(folder))
+            try
             {
-                Directory.CreateDirectory(folder);
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppHealth.Current.Error.TrackAsync($"Error creating folder {folder}: {ex.Message}", ex).FireAndForget();
             }
         }
 

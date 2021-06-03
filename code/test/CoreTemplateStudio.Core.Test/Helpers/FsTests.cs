@@ -26,6 +26,14 @@ namespace Microsoft.Templates.Core.Test.Helpers
         }
 
         [Fact]
+        public void EnsureFolder_ErrorCreatingDirectory_ShouldNotError()
+        {
+            var sourceFolder = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject\\Test.csproj");
+
+            Fs.EnsureFolder(sourceFolder);
+        }
+
+        [Fact]
         public void EnsureFolder_DirectoryDoesNotExists_ShouldCreateDirectory()
         {
             var sourceFolder = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject2\\");
@@ -38,7 +46,7 @@ namespace Microsoft.Templates.Core.Test.Helpers
             Assert.False(originalDirectoryExists);
             Assert.True(newlyCreatedDirectoryExists);
 
-            // TODO HERE Is this the right way to test this and tidy up testing data
+            // tidy up testing data
             Directory.Delete(sourceFolder);
         }
     }

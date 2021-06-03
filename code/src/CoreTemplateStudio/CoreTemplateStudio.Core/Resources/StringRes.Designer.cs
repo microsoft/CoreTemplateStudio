@@ -115,6 +115,15 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error creating folder {0}: {1}.
+        /// </summary>
+        public static string ErrorCreatingFolder {
+            get {
+                return ResourceManager.GetString("ErrorCreatingFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Circular dependency detected on template {0} with {1}..
         /// </summary>
         public static string ErrorDependencyCircularReference {
