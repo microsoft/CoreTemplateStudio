@@ -115,7 +115,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error creating folder {0}: {1}.
+        ///   Looks up a localized string similar to Error creating folder &apos;{0}&apos;: {1}.
         /// </summary>
         public static string ErrorCreatingFolder {
             get {
@@ -219,6 +219,15 @@ namespace Microsoft.Templates.Core.Resources {
         public static string ErrorExclusionType {
             get {
                 return ResourceManager.GetString("ErrorExclusionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multivalue field: &apos;{0}&apos; contains trailing or leading whitespaces..
+        /// </summary>
+        public static string ErrorExtraWhitespacesInMultiValues {
+            get {
+                return ResourceManager.GetString("ErrorExtraWhitespacesInMultiValues", resourceCulture);
             }
         }
         

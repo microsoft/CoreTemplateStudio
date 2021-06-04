@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Templates.Core.Resources;
 
 namespace Microsoft.Templates.Core
 {
@@ -49,7 +50,7 @@ namespace Microsoft.Templates.Core
             var values = value.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (values.Any(v => v != v.Trim()))
             {
-                throw new InvalidDataException($"Multivalue field: {value} contains trailing or leading whitespaces.");
+                throw new InvalidDataException(string.Format(StringRes.ErrorExtraWhitespacesInMultiValues, value));
             }
 
             return values;
