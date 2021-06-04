@@ -6,10 +6,10 @@ namespace Microsoft.Templates.Core.Diagnostics
 {
     public enum WizardTypeEnum
     {
-        NewProject,
-        AddPage,
-        AddFeature,
-        AddService,
-        AddTesting,
+        NewProject = 0,
+        AddPage = 1,
+        AddFeature = 2,
+        AddService = 3,
+        AddTesting = 4,
     }
 }
