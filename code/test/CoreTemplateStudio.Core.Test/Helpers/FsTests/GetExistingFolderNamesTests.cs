@@ -17,7 +17,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void GetExistingFolderNames_RootExists_ShouldReturnAllExpectedFolderNamesInAlphabeticalOrder()
         {
-            var rootDirectory = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject\\Fs_GetExistingFolderNames");
+            var rootDirectory = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Fs_GetExistingFolderNames");
 
             try
             {

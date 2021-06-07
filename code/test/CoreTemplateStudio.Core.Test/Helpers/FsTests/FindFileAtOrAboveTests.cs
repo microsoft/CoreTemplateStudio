@@ -17,8 +17,8 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 
         public FindFileAtOrAboveTests()
         {
-            _sourceFile = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject\\Test.csproj");
-            _destFolder = Path.Combine(Environment.CurrentDirectory, $"TestData\\FindFileAtOrAbove_Dest\\");
+            _sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
+            _destFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\FindFileAtOrAbove_Dest\\");
         }
     }
 }

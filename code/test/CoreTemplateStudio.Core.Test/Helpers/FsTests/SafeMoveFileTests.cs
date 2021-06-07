@@ -17,8 +17,8 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 
         public SafeMoveFileTests()
         {
-            _sourceFile = Path.Combine(Environment.CurrentDirectory, $"TestData\\TestProject\\Test.csproj");
-            _destFolder = Path.Combine(Environment.CurrentDirectory, $"TestData\\SafeMoveFile_Dest\\");
+            _sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
+            _destFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\SafeMoveFile_Dest\\");
         }
     }
 }
