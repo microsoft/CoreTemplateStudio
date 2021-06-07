@@ -84,7 +84,6 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
             Assert.False(File.Exists(_logFile));
         }
 
-
         // TODO Move to shared place
         private void SetupLogData()
         {

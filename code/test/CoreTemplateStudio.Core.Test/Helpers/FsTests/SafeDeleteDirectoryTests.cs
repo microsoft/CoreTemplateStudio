@@ -13,7 +13,6 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
     public class SafeDeleteDirectoryTests
     {
         private string _logFile;
-        private DateTime _logDate;
 
         [Fact]
         public void SafeDeleteDirectory_DirectoryExists_ShouldDeleteDirectory()
@@ -71,15 +70,6 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
             {
                 File.Delete(_logFile);
             }
-        }
-
-        private void CheckLoggingDataIsExpected(string errorLevel)
-        {
-            var logFileLines = File.ReadAllText(_logFile);
-
-            // [2021-06-07 20:51:30.557]...  Warning Error creating folder 'C:\...\bin\Debug\netcoreapp3.1\TestData\EnsureFolderExists\Test_EnsureFolderExists': ..... because a file or directory with the same name already exists.
-            Assert.Contains(errorLevel, logFileLines);
-            Assert.Contains($"{_logDate.Date:yyyy-MM-dd}", logFileLines, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
