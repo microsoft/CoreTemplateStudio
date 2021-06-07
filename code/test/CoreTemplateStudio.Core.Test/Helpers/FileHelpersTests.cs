@@ -50,13 +50,17 @@ namespace Microsoft.Templates.Core.Test.Helpers
         public void GetFileContent_WithFileOpened_ShouldReturnEmpty()
         {
             var sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\EditingTest.csproj");
-
-            using (StreamWriter file = new StreamWriter(sourceFile))
+            try
             {
+                using var file = File.Create(sourceFile);
                 var actual = FileHelper.GetFileContent(sourceFile);
 
                 Assert.Empty(actual);
                 file.Close();
+            }
+            finally
+            {
+                File.Delete(sourceFile);
             }
         }
     }
