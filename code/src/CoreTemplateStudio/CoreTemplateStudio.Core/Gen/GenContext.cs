@@ -107,7 +107,7 @@ namespace Microsoft.Templates.Core.Gen
             string projectGuid = ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName).ToString();
             var projectTempFolder = Path.Combine(_tempGenerationFolder, projectGuid);
 
-            Fs.EnsureFolder(projectTempFolder);
+            Fs.EnsureFolderExists(projectTempFolder);
             var tempGenerationName = $"{projectName}_{DateTime.Now.FormatAsShortDateTime()}";
             var inferredName = NamingService.Infer(tempGenerationName, new List<Validator> { new FolderNameValidator(projectTempFolder) }, "_");
 
