@@ -4,10 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.Templates.Core.Diagnostics;
 using Microsoft.Templates.Core.Resources;
@@ -16,7 +14,7 @@ namespace Microsoft.Templates.Core.Helpers
 {
     public static class Fs
     {
-        public static void EnsureFolder(string folder)
+        public static void EnsureFolderExists(string folder)
         {
             try
             {
@@ -27,61 +25,16 @@ namespace Microsoft.Templates.Core.Helpers
             }
             catch (Exception ex)
             {
-                AppHealth.Current.Error.TrackAsync($"Error creating folder {folder}: {ex.Message}", ex).FireAndForget();
+                var message = string.Format(StringRes.ErrorCreatingFolder, folder, ex.Message);
+                AppHealth.Current.Warning.TrackAsync(message, ex).FireAndForget();
             }
-        }
-
-        public static void CopyRecursive(string sourceDir, string targetDir, bool overwrite = false)
-        {
-            Directory.CreateDirectory(targetDir);
-
-            foreach (var file in Directory.GetFiles(sourceDir))
-            {
-                File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)), overwrite);
-            }
-
-            foreach (var directory in Directory.GetDirectories(sourceDir))
-            {
-                CopyRecursive(directory, Path.Combine(targetDir, Path.GetFileName(directory)), overwrite);
-            }
-        }
-
-        public static async Task<int> CopyRecursiveAsync(string sourceDir, string targetDir, int totalNumber, int counter, int latestProgress, bool overwrite = false, Action<int> reportProgress = null)
-        {
-            Directory.CreateDirectory(targetDir);
-
-            foreach (var file in Directory.GetFiles(sourceDir))
-            {
-                counter++;
-                var progress = Convert.ToInt32((counter * 100) / totalNumber);
-                if (progress != latestProgress)
-                {
-                    reportProgress?.Invoke(progress);
-                    latestProgress = progress;
-                }
-
-                await Task.Run(() =>
-                {
-                    File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)), overwrite);
-                });
-            }
-
-            foreach (var directory in Directory.GetDirectories(sourceDir))
-            {
-                counter = await CopyRecursiveAsync(directory, Path.Combine(targetDir, Path.GetFileName(directory)), totalNumber, counter, latestProgress, overwrite, reportProgress);
-            }
-
-            return counter;
         }
 
         public static void SafeCopyFile(string sourceFile, string destFolder, bool overwrite)
         {
             try
             {
-                if (!Directory.Exists(destFolder))
-                {
-                    Directory.CreateDirectory(destFolder);
-                }
+                EnsureFolderExists(destFolder);
 
                 var destFile = Path.Combine(destFolder, Path.GetFileName(sourceFile));
 
@@ -138,23 +91,6 @@ namespace Microsoft.Templates.Core.Helpers
             }
         }
 
-        public static async Task SafeMoveDirectoryAsync(string sourceDir, string targetDir, bool overwrite = false, Action<int> reportProgress = null)
-        {
-            try
-            {
-                if (Directory.Exists(sourceDir))
-                {
-                    var totalFiles = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories).Length;
-                    await CopyRecursiveAsync(sourceDir, targetDir, totalFiles, 0, 0, overwrite, reportProgress);
-                    SafeDeleteDirectory(sourceDir);
-                }
-            }
-            catch (Exception ex)
-            {
-                AppHealth.Current.Warning.TrackAsync(string.Format(StringRes.FsSafeMoveDirectoryMessage, sourceDir, targetDir, ex.Message), ex).FireAndForget();
-            }
-        }
-
         public static void EnsureFileEditable(string filePath)
         {
             try
@@ -167,8 +103,8 @@ namespace Microsoft.Templates.Core.Helpers
             }
             catch (Exception ex)
             {
-                var msg = string.Format(StringRes.FsEnsureFileEditableException, filePath);
-                AppHealth.Current.Warning.TrackAsync(msg, ex).FireAndForget();
+                var message = string.Format(StringRes.FsEnsureFileEditableException, filePath);
+                AppHealth.Current.Warning.TrackAsync(message, ex).FireAndForget();
             }
         }
 
