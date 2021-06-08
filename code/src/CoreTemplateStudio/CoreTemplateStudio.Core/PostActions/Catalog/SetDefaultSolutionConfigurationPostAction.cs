@@ -15,7 +15,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
 
         internal override void ExecuteInternal()
         {
-            GenContext.ToolBox.Shell.SetDefaultSolutionConfiguration(Configuration, Platform, GenContext.Current.ProjectName);
+            GenContext.ToolBox.Shell.Solution.SetDefaultSolutionConfiguration(Configuration, Platform, GenContext.Current.ProjectName);
         }
     }
 }

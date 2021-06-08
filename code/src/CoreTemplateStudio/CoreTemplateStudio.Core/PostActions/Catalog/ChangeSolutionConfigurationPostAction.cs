@@ -15,7 +15,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
         {
             if (GenContext.Current.ProjectInfo.ProjectConfigurations.Any())
             {
-                GenContext.ToolBox.Shell.ChangeSolutionConfiguration(GenContext.Current.ProjectInfo.ProjectConfigurations);
+                GenContext.ToolBox.Shell.Solution.ChangeSolutionConfiguration(GenContext.Current.ProjectInfo.ProjectConfigurations);
             }
         }
     }

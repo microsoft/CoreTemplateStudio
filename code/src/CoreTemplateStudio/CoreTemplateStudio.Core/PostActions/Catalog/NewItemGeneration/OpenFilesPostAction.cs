@@ -13,8 +13,8 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
     {
         internal override void ExecuteInternal()
         {
-            GenContext.ToolBox.Shell.ShowStatusBarMessage(StringRes.StatusOpeningItems);
-            GenContext.ToolBox.Shell.OpenItems(GenContext.Current.FilesToOpen.ToArray());
+            GenContext.ToolBox.Shell.UI.ShowStatusBarMessage(StringRes.StatusOpeningItems);
+            GenContext.ToolBox.Shell.UI.OpenItems(GenContext.Current.FilesToOpen.ToArray());
             GenContext.Current.FilesToOpen.Clear();
         }
     }
