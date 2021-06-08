@@ -71,7 +71,7 @@ namespace Microsoft.Templates.Cli.Test.Commands.Validators
 
             _validator
                 .TestValidate(command)
-                .ShouldNotHaveError();
+                .ShouldNotHaveAnyValidationErrors();
         }
 
         private void InitFakeGenContext()
