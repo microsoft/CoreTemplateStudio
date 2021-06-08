@@ -53,7 +53,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
             var projectFile = _primaryOutputs[targetProjectIndex].Path;
             string projectFileWithoutExtension = projectFile.Replace(Path.GetExtension(projectFile), string.Empty);
 
-            var pfx = GenContext.ToolBox.Shell.CreateCertificate(_publisherName);
+            var pfx = GenContext.ToolBox.Shell.Certificate.CreateCertificate(_publisherName);
 
             AddToProject(pfx, projectFileWithoutExtension);
             RemoveFromStore(pfx);

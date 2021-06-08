@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 
-using Microsoft.Templates.Core.Gen;
+using Microsoft.Templates.Core.Gen.Shell;
 using Microsoft.Templates.Core.Resources;
 
 using SystemTasks = System.Threading.Tasks;
@@ -14,9 +14,9 @@ namespace Microsoft.Templates.Core.Diagnostics
 {
     public class ShellHealthWriter : IHealthWriter
     {
-        private GenShell _shell;
+        private readonly IGenShell _shell;
 
-        public ShellHealthWriter(GenShell shell)
+        public ShellHealthWriter(IGenShell shell)
         {
             _shell = shell;
         }
@@ -28,17 +28,17 @@ namespace Microsoft.Templates.Core.Diagnostics
                 await SafeTrackAsync(() =>
                 {
                     string header = $"========== {StringRes.ExceptionTrackedString} [{DateTime.Now.FormatAsFullDateTime()}] ==========\n";
-                    _shell.WriteOutput(header);
+                    _shell.UI.WriteOutput(header);
 
                     if (message != null)
                     {
-                        _shell.WriteOutput($"{StringRes.AdditionalMessageString}: {message}\n");
+                        _shell.UI.WriteOutput($"{StringRes.AdditionalMessageString}: {message}\n");
                     }
 
-                    _shell.WriteOutput($"{ex.ToString()}\n");
+                    _shell.UI.WriteOutput($"{ex.ToString()}\n");
 
                     string footer = $"{new string('-', header.Length - 2)}\n";
-                    _shell.WriteOutput(footer);
+                    _shell.UI.WriteOutput(footer);
                 });
             }
         }
@@ -50,14 +50,14 @@ namespace Microsoft.Templates.Core.Diagnostics
                 await SafeTrackAsync(() =>
                 {
                     string eventMessage = $"[{DateTime.Now.FormatAsTime()} - {eventType}]::{message}\n";
-                    _shell.WriteOutput(eventMessage);
+                    _shell.UI.WriteOutput(eventMessage);
 
                     if (ex != null)
                     {
                         string header = $"----------- {StringRes.AddtionalExceptionInfoString} -----------\n";
                         string footer = $"{new string('-', header.Length - 2)}\n";
                         string exceptionInfo = header + $"{ex}\n" + footer;
-                        _shell.WriteOutput(exceptionInfo);
+                        _shell.UI.WriteOutput(exceptionInfo);
                     }
                 });
             }
