@@ -15,7 +15,7 @@ namespace Microsoft.Templates.Core.PostActions.Catalog
     {
         internal override void ExecuteInternal()
         {
-            GenContext.ToolBox.Shell.AddContextItemsToSolution(GenContext.Current.ProjectInfo);
+            GenContext.ToolBox.Shell.Solution.AddContextItemsToSolution(GenContext.Current.ProjectInfo);
         }
     }
 }
