@@ -208,7 +208,7 @@ namespace Microsoft.Templates.Core.Gen
             try
             {
                 var genItemsTelemetryData = new GenItemsTelemetryData(genItems);
-                AppHealth.Current.Telemetry.TrackNewItemAsync(templateType, context, GenContext.ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName), genItemsTelemetryData, timeSpent).FireAndForget();
+                AppHealth.Current.Telemetry.TrackNewItemAsync(templateType, context, GenContext.ToolBox.Shell.Project.GetProjectGuidByName(GenContext.Current.ProjectName), genItemsTelemetryData, timeSpent).FireAndForget();
 
                 foreach (var genInfo in genItems.Where(g => g.Template != null))
                 {

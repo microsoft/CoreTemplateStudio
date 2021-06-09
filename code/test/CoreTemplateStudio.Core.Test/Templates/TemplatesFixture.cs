@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.Templates.Core.Gen;
 using Microsoft.Templates.Core.Test.Locations;
-using Microsoft.Templates.Core.Test.TestFakes;
+using Microsoft.Templates.Core.Test.TestFakes.GenShell;
 
 using Xunit;
 
@@ -26,7 +26,7 @@ namespace Microsoft.Templates.Core.Test
         {
             var source = new UnitTestsTemplatesSource(null);
 
-            GenContext.Bootstrap(source, new TestShell(platform, language), platform, language);
+            GenContext.Bootstrap(source, new TestGenShell(), platform, language);
             if (!_syncExecuted)
             {
                 GenContext.ToolBox.Repo.SynchronizeAsync(true).Wait();

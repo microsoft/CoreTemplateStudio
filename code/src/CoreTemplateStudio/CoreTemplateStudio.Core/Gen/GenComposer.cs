@@ -269,7 +269,7 @@ namespace Microsoft.Templates.Core.Gen
 
             if (newItemGeneration)
             {
-                ns = GenContext.ToolBox.Shell.GetActiveProjectNamespace();
+                ns = GenContext.ToolBox.Shell.Project.GetActiveProjectNamespace();
             }
 
             if (string.IsNullOrEmpty(ns))

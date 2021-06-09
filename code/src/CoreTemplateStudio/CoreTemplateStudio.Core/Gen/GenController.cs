@@ -39,7 +39,7 @@ namespace Microsoft.Templates.Core.Gen
 
                 if (!string.IsNullOrEmpty(statusText))
                 {
-                    GenContext.ToolBox.Shell.ShowStatusBarMessage(statusText);
+                    GenContext.ToolBox.Shell.UI.ShowStatusBarMessage(statusText);
                 }
 
                 AppHealth.Current.Info.TrackAsync($"Generating the template {genInfo.Template.Name} to {genInfo.GenerationPath}.").FireAndForget();

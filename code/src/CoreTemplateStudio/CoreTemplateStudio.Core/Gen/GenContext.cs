@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 
 using Microsoft.Templates.Core.Diagnostics;
+using Microsoft.Templates.Core.Gen.Shell;
 using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Locations;
 using Microsoft.Templates.Core.Naming;
@@ -49,7 +50,7 @@ namespace Microsoft.Templates.Core.Gen
             }
         }
 
-        public static void Bootstrap(TemplatesSource source, GenShell shell, string platform, string language)
+        public static void Bootstrap(TemplatesSource source, IGenShell shell, string platform, string language)
         {
             Bootstrap(source, shell, GetWizardVersionFromAssembly(), platform, language);
         }
@@ -66,7 +67,7 @@ namespace Microsoft.Templates.Core.Gen
             ToolBox.Repo.CurrentPlatform = platform;
         }
 
-        public static void Bootstrap(TemplatesSource source, GenShell shell, Version wizardVersion, string platform, string language)
+        public static void Bootstrap(TemplatesSource source, IGenShell shell, Version wizardVersion, string platform, string language)
         {
             try
             {
@@ -75,7 +76,7 @@ namespace Microsoft.Templates.Core.Gen
 
                 AppHealth.Current.Info.TrackAsync($"{StringRes.ConfigurationFileLoadedString}: {Configuration.LoadedConfigFile}").FireAndForget();
 
-                string hostVersion = $"{shell.GetVsVersionAndInstance()}-{wizardVersion.Major}.{wizardVersion.Minor}";
+                string hostVersion = $"{shell.VisualStudio.GetVsVersionAndInstance()}-{wizardVersion.Major}.{wizardVersion.Minor}";
 
                 if (source is RemoteTemplatesSource)
                 {
@@ -104,7 +105,7 @@ namespace Microsoft.Templates.Core.Gen
 
         public static string GetTempGenerationPath(string projectName)
         {
-            string projectGuid = ToolBox.Shell.GetProjectGuidByName(GenContext.Current.ProjectName).ToString();
+            string projectGuid = ToolBox.Shell.Project.GetProjectGuidByName(GenContext.Current.ProjectName).ToString();
             var projectTempFolder = Path.Combine(_tempGenerationFolder, projectGuid);
 
             Fs.EnsureFolderExists(projectTempFolder);

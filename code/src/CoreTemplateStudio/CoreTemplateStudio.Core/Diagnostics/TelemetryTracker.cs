@@ -46,7 +46,7 @@ namespace Microsoft.Templates.Core.Diagnostics
 
             TelemetryService.Current.SetContentVsProductVersionToContext(vsProductVersion);
 
-            GenContext.ToolBox.Shell.SafeTrackWizardCancelledVsTelemetry(properties);
+            GenContext.ToolBox.Shell.Telemetry.SafeTrackWizardCancelledVsTelemetry(properties);
 
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.Wizard, properties).ConfigureAwait(false);
         }
@@ -157,7 +157,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 metrics.Add(TelemetryMetrics.TestingCount, genItemsTelemetryData.TestingCount.Value);
             }
 
-            GenContext.ToolBox.Shell.SafeTrackNewItemVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, genItemsTelemetryData.ServiceIdentities, genItemsTelemetryData.TestingIdentities, metrics);
+            GenContext.ToolBox.Shell.Telemetry.SafeTrackNewItemVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, genItemsTelemetryData.ServiceIdentities, genItemsTelemetryData.TestingIdentities, metrics);
 
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.NewItemGen, properties, metrics).ConfigureAwait(false);
         }
@@ -229,7 +229,7 @@ namespace Microsoft.Templates.Core.Diagnostics
                 }
             }
 
-            GenContext.ToolBox.Shell.SafeTrackProjectVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, genItemsTelemetryData.ServiceIdentities, genItemsTelemetryData.TestingIdentities, metrics, status == GenStatusEnum.Completed);
+            GenContext.ToolBox.Shell.Telemetry.SafeTrackProjectVsTelemetry(properties, genItemsTelemetryData.PageIdentities, genItemsTelemetryData.FeatureIdentities, genItemsTelemetryData.ServiceIdentities, genItemsTelemetryData.TestingIdentities, metrics, status == GenStatusEnum.Completed);
 
             await TelemetryService.Current.TrackEventAsync(TelemetryEvents.ProjectGen, properties, metrics).ConfigureAwait(false);
         }
