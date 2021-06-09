@@ -34,12 +34,10 @@ namespace Microsoft.Templates.Core.Helpers
         {
             try
             {
-                // TODO: check source file to copy exists
                 EnsureFolderExists(destFolder);
 
                 var destFile = Path.Combine(destFolder, Path.GetFileName(sourceFile));
 
-                // move this check inside EnsureFileEditable ?
                 if (File.Exists(destFile))
                 {
                     EnsureFileEditable(destFile);

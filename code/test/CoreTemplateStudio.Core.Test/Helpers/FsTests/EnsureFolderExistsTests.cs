@@ -3,17 +3,26 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Trait("ExecutionSet", "Minimum")]
-    public class EnsureFolderExistsTests
+    public class EnsureFolderExistsTests : IClassFixture<LogFixture>
     {
-        private string _logFile;
         private DateTime _logDate;
+        private LogFixture _logFixture;
+
+        public EnsureFolderExistsTests(LogFixture logFixture)
+        {
+            _logFixture = logFixture;
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+        }
 
         [Fact]
         public void EnsureFolderExists_DirectoryDoesNotExists_ShouldCreateDirectory()
@@ -62,16 +71,14 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void EnsureFolderExists_ErrorCreatingDirectory_ShouldLogException()
         {
-            SetupLogData();
-
             // To force an error creating a Directory
             // we create a file with the name of the folder that we want to create
             var sourceFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\EnsureFolderExists");
             Directory.CreateDirectory(sourceFolder);
             var folderPath = Path.Combine(Environment.CurrentDirectory, sourceFolder, "Test_EnsureFolderExists");
-            if (File.Exists(_logFile))
+            if (File.Exists(_logFixture.LogFile))
             {
-                File.Delete(_logFile);
+                File.Delete(_logFixture.LogFile);
             }
 
             try
@@ -80,40 +87,17 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
                 _logDate = DateTime.Now;
                 Fs.EnsureFolderExists(folderPath);
 
-                Assert.True(File.Exists(_logFile));
+                Assert.True(File.Exists(_logFixture.LogFile));
 
-                var logFileLines = File.ReadAllText(_logFile);
+                var logFileLines = File.ReadAllText(_logFixture.LogFile);
 
-                CheckLoggingDataIsExpected("Warning");
+                _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", "Error creating folder");
             }
             finally
             {
                 // tidy up testing data
                 File.Delete(folderPath);
             }
-        }
-
-        // TODO: Move to shared place
-        private void SetupLogData()
-        {
-            _logFile = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                Configuration.Current.LogFileFolderPath,
-                $"WTS_{Configuration.Current.Environment}_{DateTime.Now:yyyyMMdd}.log");
-
-            if (File.Exists(_logFile))
-            {
-                File.Delete(_logFile);
-            }
-        }
-
-        private void CheckLoggingDataIsExpected(string errorLevel)
-        {
-            var logFileLines = File.ReadAllText(_logFile);
-
-            // [2021-06-07 20:51:30.557]...  Warning Error creating folder 'C:\...\bin\Debug\netcoreapp3.1\TestData\EnsureFolderExists\Test_EnsureFolderExists': ..... because a file or directory with the same name already exists.
-            Assert.Contains(errorLevel, logFileLines);
-            Assert.Contains($"{_logDate.Date:yyyy-MM-dd}", logFileLines, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

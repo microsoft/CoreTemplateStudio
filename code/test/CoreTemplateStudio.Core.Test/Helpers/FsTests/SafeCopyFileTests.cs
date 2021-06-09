@@ -3,22 +3,30 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Trait("ExecutionSet", "Minimum")]
-    public class SafeCopyFileTests
+    public class SafeCopyFileTests : IClassFixture<LogFixture>
     {
+        private LogFixture _logFixture;
+
         private string _sourceFile;
         private DateTime _logDate;
         private string _destFolder;
-        private string _logFile;
+        private const string ErrorMessage = "can't be copied to";
 
-        public SafeCopyFileTests()
+        public SafeCopyFileTests(LogFixture logFixture)
         {
+            _logFixture = logFixture;
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
             _sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
             _destFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject_Dest");
         }
@@ -106,91 +114,54 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [InlineData("")]
         public void SafeCopyFile_SourceFileNullOrEmpty_ShouldLogException(string filePath)
         {
-            SetupLogData();
-
             _sourceFile = filePath;
             _logDate = DateTime.Now;
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, true);
 
-            // TODO: review this is the expected behaviour.
-            // Maybe we want to check first if the origin file exists before trying to do anything else.
-            // log it as a warning?
-            Assert.True(File.Exists(_logFile));
+            Assert.True(File.Exists(_logFixture.LogFile));
 
-            CheckLoggingDataIsExpected("Warning");
+            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
         }
 
         [Fact]
         public void SafeCopyFile_CouldNotFindFile_ShouldLogException()
         {
-            SetupLogData();
-
             _sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\FileDoNotExists.csproj");
             _logDate = DateTime.Now;
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, true);
 
-            // TODO: review this is the expected behaviour.
-            // Maybe we want to check first if the origin file exists before trying to do anything else.
-            // log it as a warning?
-            Assert.True(File.Exists(_logFile));
+            Assert.True(File.Exists(_logFixture.LogFile));
 
-            CheckLoggingDataIsExpected("Warning");
+            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
         }
 
         [Fact]
         public void SafeCopyFile_AccessToPathDenied_ShouldLogException()
         {
-            SetupLogData();
-
             // to force an exception while trying to copy a file. File without permissions instead of valid folder
             _sourceFile = Environment.CurrentDirectory;
             _logDate = DateTime.Now;
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, true);
 
-            Assert.True(File.Exists(_logFile));
+            Assert.True(File.Exists(_logFixture.LogFile));
 
-            CheckLoggingDataIsExpected("Warning");
+            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
         }
 
         [Fact]
-        public void SafeCopyFile_OverrideFalse_ShouldLogException()
+        public void SafeCopyFile_AccessToPathDenied_OvewriteFalse_ShouldLogException()
         {
-            SetupLogData();
-
             _sourceFile = Environment.CurrentDirectory;
             _logDate = DateTime.Now;
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, false);
 
-            Assert.True(File.Exists(_logFile));
+            Assert.True(File.Exists(_logFixture.LogFile));
 
-            CheckLoggingDataIsExpected("Warning");
-        }
-
-        // TODO: Moved to shared place
-        private void SetupLogData()
-        {
-            _logFile = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                Configuration.Current.LogFileFolderPath,
-                $"WTS_{Configuration.Current.Environment}_{DateTime.Now:yyyyMMdd}.log");
-
-            if (File.Exists(_logFile))
-            {
-                File.Delete(_logFile);
-            }
-        }
-
-        private void CheckLoggingDataIsExpected(string errorLevel)
-        {
-            var logFileLines = File.ReadAllText(_logFile);
-
-            // [2021-06-07 20:51:30.557]...  Warning Error creating folder 'C:\...\bin\Debug\netcoreapp3.1\TestData\EnsureFolderExists\Test_EnsureFolderExists': ..... because a file or directory with the same name already exists.
-            Assert.Contains(errorLevel, logFileLines);
-            Assert.Contains($"{_logDate.Date:yyyy-MM-dd}", logFileLines, StringComparison.InvariantCultureIgnoreCase);
+            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
         }
     }
 }
