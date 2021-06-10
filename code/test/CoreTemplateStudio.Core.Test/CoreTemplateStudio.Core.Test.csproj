@@ -168,7 +168,6 @@
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />    
     <Compile Include="Gen\GenComposerTests.cs" />    
     <Compile Include="Helpers\FsTests\GetExistingFolderNamesTests.cs" />    
-    <Compile Include="Helpers\FsTests\FindFileAtOrAboveTests.cs" />    
     <Compile Include="Helpers\LogFixture.cs" />    
     <Compile Include="Helpers\FsTests\SafeMoveFileTests.cs" />    
     <Compile Include="Helpers\FsTests\SafeDeleteFileTests.cs" />    
