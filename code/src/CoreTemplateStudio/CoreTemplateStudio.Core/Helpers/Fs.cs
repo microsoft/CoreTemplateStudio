@@ -30,6 +30,21 @@ namespace Microsoft.Templates.Core.Helpers
             }
         }
 
+        public static void CopyRecursive(string sourceDir, string targetDir, bool overwrite = false)
+        {
+            Directory.CreateDirectory(targetDir);
+
+            foreach (var file in Directory.GetFiles(sourceDir))
+            {
+                File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)), overwrite);
+            }
+
+            foreach (var directory in Directory.GetDirectories(sourceDir))
+            {
+                CopyRecursive(directory, Path.Combine(targetDir, Path.GetFileName(directory)), overwrite);
+            }
+        }
+
         public static void SafeCopyFile(string sourceFile, string destFolder, bool overwrite)
         {
             try
