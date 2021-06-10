@@ -25,7 +25,7 @@ namespace Microsoft.Templates.Core.Test.Helpers
         }
 
         [Theory]
-        [InlineData("TestData\\TestProject\\")]
+        [InlineData("TestData\\TestProject")]
         [InlineData("TestData\\TestProject\\TestNotExisting.csproj")]
         public void GetFileContent_WrongFilePath_ShouldReturnEmpty(string file)
         {
