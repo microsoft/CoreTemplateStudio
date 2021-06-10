@@ -17,7 +17,6 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
     public class SafeRenameDirectoryTests
     {
         private readonly LogFixture _logFixture;
-        private DateTime _logDate;
 
         private const string ErrorMessage = " can't be rename";
         private const string ErrorLevel = "Warning";
