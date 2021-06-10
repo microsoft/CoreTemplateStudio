@@ -3,21 +3,31 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
+    [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
     public class SafeDeleteDirectoryTests
     {
-        private string _logFile;
+        private readonly LogFixture _logFixture;
+
+        public SafeDeleteDirectoryTests(LogFixture logFixture)
+        {
+            _logFixture = logFixture;
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+        }
 
         [Fact]
         public void SafeDeleteDirectory_DirectoryExists_ShouldDeleteDirectory()
         {
-            var sourceFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\SafeDelete");
+            var sourceFolder = $"{_logFixture.TestFolderPath}\\SafeDelete";
 
             Directory.CreateDirectory(sourceFolder);
 
@@ -37,39 +47,17 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void SafeDeleteDirectory_DoesNotExist_ShouldNotError(string rootDir)
+        public void SafeDeleteDirectory_DoesNotExist_ShouldNotThrowException(string rootDir)
         {
-            SetupLogData();
-
             Fs.SafeDeleteDirectory(rootDir);
-
-            Assert.False(File.Exists(_logFile));
         }
 
         [Fact]
-        public void SafeDeleteDirectory_WrongFolder_ShouldNotError()
+        public void SafeDeleteDirectory_WrongFolder_ShouldNotThrowException()
         {
-            SetupLogData();
-
-            var rootDir = Path.Combine(Environment.CurrentDirectory, "TestData\\SafeDeleteDirectory");
+            var rootDir = $"{_logFixture.TestFolderPath}\\SafeDeleteDirectory";
 
             Fs.SafeDeleteDirectory(rootDir, false);
-
-            Assert.False(File.Exists(_logFile));
-        }
-
-        // TODO: Shared somewhere.
-        private void SetupLogData()
-        {
-            _logFile = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                Configuration.Current.LogFileFolderPath,
-                $"WTS_{Configuration.Current.Environment}_{DateTime.Now:yyyyMMdd}.log");
-
-            if (File.Exists(_logFile))
-            {
-                File.Delete(_logFile);
-            }
         }
     }
 }

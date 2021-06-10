@@ -4,20 +4,32 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
+    [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
     public class GetExistingFolderNamesTests
     {
+        private readonly LogFixture _logFixture;
+
+        public GetExistingFolderNamesTests(LogFixture logFixture)
+        {
+            _logFixture = logFixture;
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+        }
+
         [Fact]
         public void GetExistingFolderNames_RootExists_ShouldReturnAllExpectedFolderNamesInAlphabeticalOrder()
         {
-            var rootDirectory = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Fs_GetExistingFolderNames");
+            var rootDirectory = $"{_logFixture.TestFolderPath}\\TestProject\\Fs_GetExistingFolderNames";
 
             try
             {

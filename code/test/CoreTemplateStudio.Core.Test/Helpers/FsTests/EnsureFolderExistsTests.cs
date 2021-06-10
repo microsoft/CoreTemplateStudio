@@ -12,11 +12,12 @@ using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
+    [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class EnsureFolderExistsTests : IClassFixture<LogFixture>
+    public class EnsureFolderExistsTests
     {
+        private readonly LogFixture _logFixture;
         private DateTime _logDate;
-        private LogFixture _logFixture;
 
         public EnsureFolderExistsTests(LogFixture logFixture)
         {
@@ -27,7 +28,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void EnsureFolderExists_DirectoryDoesNotExists_ShouldCreateDirectory()
         {
-            var sourceFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject_EnsureFolderExists");
+            var sourceFolder = $"{_logFixture.TestFolderPath}\\TestProject_EnsureFolderExists";
             try
             {
                 var totalOriginalDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
@@ -48,7 +49,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void EnsureFolderExists_DirectoryAlreadyExists_ShouldNotCreateDirectory()
         {
-            var sourceFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\EnsureFolderExists");
+            var sourceFolder = $"{_logFixture.TestFolderPath}\\EnsureFolderExists_DirectoryAlreadyExists";
 
             try
             {
@@ -73,13 +74,9 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         {
             // To force an error creating a Directory
             // we create a file with the name of the folder that we want to create
-            var sourceFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\EnsureFolderExists");
+            var sourceFolder = $"{_logFixture.TestFolderPath}\\EnsureFolderExists_Error";
             Directory.CreateDirectory(sourceFolder);
             var folderPath = Path.Combine(Environment.CurrentDirectory, sourceFolder, "Test_EnsureFolderExists");
-            if (File.Exists(_logFixture.LogFile))
-            {
-                File.Delete(_logFixture.LogFile);
-            }
 
             try
             {
@@ -87,16 +84,12 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
                 _logDate = DateTime.Now;
                 Fs.EnsureFolderExists(folderPath);
 
-                Assert.True(File.Exists(_logFixture.LogFile));
-
-                var logFileLines = File.ReadAllText(_logFixture.LogFile);
-
-                _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", "Error creating folder");
+                Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, "Warning", "Error creating folder"));
             }
             finally
             {
                 // tidy up testing data
-                File.Delete(folderPath);
+                Directory.Delete(sourceFolder, true);
             }
         }
     }

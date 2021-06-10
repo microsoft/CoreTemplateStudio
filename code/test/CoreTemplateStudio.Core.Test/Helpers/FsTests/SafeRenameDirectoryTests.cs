@@ -3,23 +3,36 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
+    [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
     public class SafeRenameDirectoryTests
     {
+        private readonly LogFixture _logFixture;
         private DateTime _logDate;
-        private string _logFile;
+
+        private const string ErrorMessage = " can't be rename";
+        private const string ErrorLevel = "Warning";
+
+        public SafeRenameDirectoryTests(LogFixture logFixture)
+        {
+            _logFixture = logFixture;
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+        }
 
         [Fact]
         public void SafeRenameDirectory_ValidData_ShouldMoveDirectory()
         {
-            var sourceFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\SafeRenameDirectory");
-            var newFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject_Copy");
+            var sourceFolder = $"{_logFixture.TestFolderPath}\\SafeRenameDirectory";
+            var newFolder = $"{_logFixture.TestFolderPath}\\TestProject_Copy";
             Directory.CreateDirectory(sourceFolder);
             try
             {
@@ -44,67 +57,10 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Theory]
         [InlineData("", "anything")]
         [InlineData(null, "anything")]
-        public void SafeRenameDirectory_DoesNotExist_ShouldHandleException(string rootDir, string newRootDir)
+        public void SafeRenameDirectory_DoesNotExist_ShouldNotThrowException(string rootDir, string newRootDir)
         {
-            SetupLogData();
-
-            _logDate = DateTime.Now;
+            // TODO HERE: this doesn´t check anything!!
             Fs.SafeRenameDirectory(rootDir, newRootDir);
-
-            Assert.False(File.Exists(_logFile));
-        }
-
-        [Fact]
-        public void SafeRenameDirectory_WrongFolder_ShouldLogException()
-        {
-            SetupLogData();
-
-            var rootDir = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\");
-            var newDir = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
-
-            _logDate = DateTime.Now;
-            Fs.SafeRenameDirectory(rootDir, newDir);
-
-            Assert.True(File.Exists(_logFile));
-
-            CheckLoggingDataIsExpected("Warning");
-        }
-
-        [Fact]
-        public void SafeRenameDirectory_WrongFolder_WarnOnFailureFalse_ShouldNotLogError()
-        {
-            SetupLogData();
-
-            var rootDir = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\");
-            var newDir = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
-
-            _logDate = DateTime.Now;
-            Fs.SafeRenameDirectory(rootDir, newDir, false);
-
-            Assert.False(File.Exists(_logFile));
-        }
-
-        // TODO Move to shared place
-        private void SetupLogData()
-        {
-            _logFile = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                Configuration.Current.LogFileFolderPath,
-                $"WTS_{Configuration.Current.Environment}_{DateTime.Now:yyyyMMdd}.log");
-
-            if (File.Exists(_logFile))
-            {
-                File.Delete(_logFile);
-            }
-        }
-
-        private void CheckLoggingDataIsExpected(string errorLevel)
-        {
-            var logFileLines = File.ReadAllText(_logFile);
-
-            // [2021-06-07 20:51:30.557]...  Warning Error creating folder 'C:\...\bin\Debug\netcoreapp3.1\TestData\EnsureFolderExists\Test_EnsureFolderExists': ..... because a file or directory with the same name already exists.
-            Assert.Contains(errorLevel, logFileLines);
-            Assert.Contains($"{_logDate.Date:yyyy-MM-dd}", logFileLines, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

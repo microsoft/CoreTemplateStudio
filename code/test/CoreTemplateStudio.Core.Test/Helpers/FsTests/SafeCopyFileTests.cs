@@ -12,29 +12,31 @@ using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
+    [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class SafeCopyFileTests : IClassFixture<LogFixture>
+    public class SafeCopyFileTests
     {
-        private LogFixture _logFixture;
+        private readonly LogFixture _logFixture;
 
         private string _sourceFile;
         private DateTime _logDate;
         private string _destFolder;
         private const string ErrorMessage = "can't be copied to";
+        private const string ErrorLevel = "Warning";
 
         public SafeCopyFileTests(LogFixture logFixture)
         {
             _logFixture = logFixture;
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
 
-            _sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
-            _destFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject_Dest");
+            _sourceFile = $"TestData\\TestProject\\Test.csproj";
+            _destFolder = $"{_logFixture.TestFolderPath}\\TestProject_Dest";
         }
 
         [Fact]
         public void SafeCopyFile_DestinationDirectoryDoesNotExist_ShouldCreateDirectory()
         {
-            _destFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\SafeCopyFile_DirectoryTest_Dest");
+            _destFolder = $"{_logFixture.TestFolderPath}\\SafeCopyFile_DirectoryTest_Dest";
 
             try
             {
@@ -58,7 +60,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void SafeCopyFile_FileDoesNotExist_ShouldCreateNewFileWhileCopying()
         {
-            _destFolder = Path.Combine(Environment.CurrentDirectory, "TestData\\SafeCopyFile_FileTest_Dest");
+            _destFolder = $"{_logFixture.TestFolderPath}\\SafeCopyFile_FileTest_Dest";
             var expectedDestinationFile = Path.Combine(_destFolder, Path.GetFileName(_sourceFile));
             Directory.CreateDirectory(_destFolder);
 
@@ -84,11 +86,11 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void SafeCopyFile_DestinationDirectoryAlreadyExists_ShouldNotCreateDirectory()
         {
-            var totalOriginalDirectories = Directory.GetParent(_destFolder).Parent.GetDirectories().Length;
+            var totalOriginalDirectories = Directory.GetParent(_destFolder).GetDirectories().Length;
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, true);
 
-            var totalNewDirectories = Directory.GetParent(_destFolder).Parent.GetDirectories().Length;
+            var totalNewDirectories = Directory.GetParent(_destFolder).GetDirectories().Length;
 
             var noDirectoryHasBeenCreated = totalOriginalDirectories == totalNewDirectories;
 
@@ -119,22 +121,18 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, true);
 
-            Assert.True(File.Exists(_logFixture.LogFile));
-
-            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
+            Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
         }
 
         [Fact]
         public void SafeCopyFile_CouldNotFindFile_ShouldLogException()
         {
-            _sourceFile = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\FileDoNotExists.csproj");
+            _sourceFile = $"{_logFixture.TestFolderPath}\\TestProject\\FileDoNotExists.csproj";
             _logDate = DateTime.Now;
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, true);
 
-            Assert.True(File.Exists(_logFixture.LogFile));
-
-            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
+            Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
         }
 
         [Fact]
@@ -146,9 +144,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, true);
 
-            Assert.True(File.Exists(_logFixture.LogFile));
-
-            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
+            Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
         }
 
         [Fact]
@@ -159,9 +155,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 
             Fs.SafeCopyFile(_sourceFile, _destFolder, false);
 
-            Assert.True(File.Exists(_logFixture.LogFile));
-
-            _logFixture.CheckLoggingDataIsExpected(_logDate, "Warning", ErrorMessage);
+            Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
         }
     }
 }

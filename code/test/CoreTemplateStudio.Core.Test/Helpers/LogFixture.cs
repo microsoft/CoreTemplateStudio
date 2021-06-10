@@ -4,20 +4,24 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
-using System.Threading;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers
 {
-    [SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Dispose used for test purposes.")]
+    [SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes")]
     public class LogFixture : IDisposable
     {
         public string LogFile { get; private set; }
 
+        public string TestFolderPath { get; private set; }
+
         public LogFixture()
         {
+            TestFolderPath = Path.Combine(Environment.CurrentDirectory, "TestFolderPath");
+            Directory.CreateDirectory(TestFolderPath);
+
             LogFile = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 Configuration.Current.LogFileFolderPath,
@@ -29,22 +33,46 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers
             }
         }
 
-        public void CheckLoggingDataIsExpected(DateTime logDate, string errorLevel, string errorMessage)
+        private bool CheckLoggingDataIsExpected(DateTime logDate, string errorLevel, string errorMessage)
         {
+            // Sample of Logging line: [2021-06-07 20:51:30.557]...  Warning Error creating folder 'C:\...\bin\Debug\netcoreapp3.1\TestData\EnsureFolderExists\Test_EnsureFolderExists': ..... because a file or directory with the same name already exists.
             var logFileLines = File.ReadAllText(LogFile);
 
-            // [2021-06-07 20:51:30.557]...  Warning Error creating folder 'C:\...\bin\Debug\netcoreapp3.1\TestData\EnsureFolderExists\Test_EnsureFolderExists': ..... because a file or directory with the same name already exists.
-            Assert.Contains(errorLevel, logFileLines);
-            Assert.Contains($"{logDate.Date:yyyy-MM-dd}", logFileLines, StringComparison.InvariantCultureIgnoreCase);
-            Assert.Contains(errorMessage, logFileLines);
+            var errorDateFormat = $"{logDate:yyyy\\-MM\\-dd}";
+            var errorMatchPattern = $"^\\[({errorDateFormat}.*)({errorLevel}).*({errorMessage})";
+            var errorRegex = new Regex(errorMatchPattern, RegexOptions.Compiled | RegexOptions.Multiline);
+
+            return errorRegex.IsMatch(logFileLines);
+        }
+
+        public bool IsErrorMessageInLogFile(DateTime logDate, string errorLevel, string errorMessage)
+        {
+            if (File.Exists(LogFile))
+            {
+                var lastModifiedWriteTime = File.GetLastWriteTime(LogFile);
+
+                var timeSinceLastEdit = logDate - lastModifiedWriteTime;
+                if (timeSinceLastEdit.Seconds < 30)
+                {
+                    return CheckLoggingDataIsExpected(logDate, errorLevel, errorMessage);
+                }
+            }
+
+            return false;
         }
 
         public void Dispose()
         {
-            if (File.Exists(LogFile))
+            if (Directory.Exists(TestFolderPath))
             {
-                File.Delete(LogFile);
+                Directory.Delete(TestFolderPath, true);
             }
         }
+    }
+
+    [SuppressMessage("StyleCop", "SA1402", Justification = "This class does not have implementation")]
+    [CollectionDefinition("Unit Test Logs")]
+    public class LogCollection : ICollectionFixture<LogFixture>
+    {
     }
 }

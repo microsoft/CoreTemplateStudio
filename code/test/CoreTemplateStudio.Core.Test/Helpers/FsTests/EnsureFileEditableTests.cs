@@ -3,50 +3,78 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using Microsoft.Templates.Core.Helpers;
+using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
+    [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
     public class EnsureFileEditableTests
     {
+        private readonly LogFixture _logFixture;
+
+        private DateTime _logDate;
+        private const string ErrorMessage = "Cannot remove readonly protection from file";
+        private const string ErrorLevel = "Warning";
+
+        public EnsureFileEditableTests(LogFixture logFixture)
+        {
+            _logFixture = logFixture;
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+        }
+
         [Fact]
         public void EnsureFileEditable_FileIsReadOnly_ShouldChangeToReadOnly()
         {
-            var filePath = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\ProtectedTest.csproj");
+            var folderPath = $"{_logFixture.TestFolderPath}\\TestProject";
+            var filePath = $"{folderPath}\\ProtectedTest.csproj";
+            Directory.CreateDirectory(folderPath);
+
             var fileInfo = new FileInfo(filePath);
+            FileInfo newFileInfo;
             try
             {
                 using var stream = File.Create(filePath);
                 fileInfo.IsReadOnly = true;
 
                 Fs.EnsureFileEditable(filePath);
-                var newFileInfo = new FileInfo(filePath);
+                newFileInfo = new FileInfo(filePath);
 
                 Assert.False(newFileInfo.IsReadOnly);
             }
             finally
             {
                 // tidy up testing data
-                fileInfo.Delete();
+                newFileInfo = new FileInfo(filePath)
+                {
+                    IsReadOnly = false,
+                };
+
+                Directory.Delete(folderPath, true);
             }
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void EnsureFileEditable_FileDoesntExist_ShouldHandleException(string filePath)
+        public void EnsureFileEditable_PathNotFound_ShouldLogError(string filePath)
         {
+            _logDate = DateTime.Now;
+
             Fs.EnsureFileEditable(filePath);
+
+            Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
         }
 
         [Fact]
         public void EnsureFileEditable_FileIsNotReadOnly_ShouldNotModifyIsReadOnly()
         {
-            var filePath = Path.Combine(Environment.CurrentDirectory, "TestData\\TestProject\\Test.csproj");
+            var filePath = $"{_logFixture.TestFolderPath}\\TestProject\\Test.csproj";
             var originalFileInfo = new FileInfo(filePath);
             Fs.EnsureFileEditable(filePath);
             var newFileInfo = new FileInfo(filePath);
