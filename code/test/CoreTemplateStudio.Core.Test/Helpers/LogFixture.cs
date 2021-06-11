@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers
 {
-    [SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes")]
+    [SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes only")]
     public class LogFixture : IDisposable
     {
         public string LogFile { get; private set; }
@@ -19,7 +19,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers
 
         public LogFixture()
         {
-            TestFolderPath = Path.Combine(Environment.CurrentDirectory, "TestFolderPath");
+            TestFolderPath = Path.Combine(Environment.CurrentDirectory, "TempTestData");
             Directory.CreateDirectory(TestFolderPath);
 
             LogFile = Path.Combine(
@@ -61,6 +61,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers
             return false;
         }
 
+        [SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
         public void Dispose()
         {
             if (Directory.Exists(TestFolderPath))

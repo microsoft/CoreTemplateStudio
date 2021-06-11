@@ -12,55 +12,6 @@ namespace Microsoft.Templates.Core.Test.Extensions
     public class StringExtensionsTests
     {
         [Theory]
-        [InlineData("string")]
-        [InlineData("string23TEST")]
-        [InlineData(" string23TEST")]
-        [InlineData("string23TEST ")]
-        [InlineData("str ing23TEST")]
-        public void Obfuscate_ShouldNotBeEmpty(string value)
-        {
-            var actual = value.Obfuscate();
-
-            Assert.NotEmpty(actual);
-        }
-
-        [Theory]
-        [InlineData("string")]
-        [InlineData("string23TEST")]
-        [InlineData(" string23TEST")]
-        [InlineData("string23TEST ")]
-        [InlineData("str ing23TEST")]
-        public void Obfuscate_ShouldNotEqualTheOriginalValue(string value)
-        {
-            var actual = value.Obfuscate();
-
-            Assert.False(value.Equals(actual, StringComparison.Ordinal));
-        }
-
-        [Theory]
-        [InlineData("string")]
-        [InlineData("string23TEST")]
-        [InlineData(" string23TEST")]
-        [InlineData("string23TEST ")]
-        [InlineData("str ing23TEST")]
-        public void Obfuscate_ShouldHaveBeenConvertedToUppercase(string value)
-        {
-            var actual = value.Obfuscate();
-
-            Assert.DoesNotContain(actual, c => char.IsLower(c));
-        }
-
-        [Fact(Skip = "Control null and empty scenarios")]
-        public void Obfuscate_Null_ShouldBeControlled()
-        {
-            // var actual = value.Obfuscate();
-
-            // control these scenarios.
-            // used from PackagePackage > VerifyAllowedPublicKey
-            // used from PackagePackage > GetCertsInfo
-        }
-
-        [Theory]
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]

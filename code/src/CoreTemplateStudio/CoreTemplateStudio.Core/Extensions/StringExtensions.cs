@@ -13,33 +13,6 @@ namespace Microsoft.Templates.Core
 {
     public static class StringExtensions
     {
-        public static string Obfuscate(this string data)
-        {
-            string result = data;
-            byte[] b64data = Encoding.UTF8.GetBytes(data);
-
-            using (SHA512 sha2 = SHA512.Create())
-            {
-                result = GetHash(sha2, b64data);
-            }
-
-            return result.ToUpperInvariant();
-        }
-
-        private static string GetHash(HashAlgorithm md5Hash, byte[] inputData)
-        {
-            byte[] data = md5Hash.ComputeHash(inputData);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                sb.Append(data[i].ToString("x2"));
-            }
-
-            return sb.ToString();
-        }
-
         public static string[] GetMultiValue(this string value)
         {
             if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value.Trim()))
