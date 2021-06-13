@@ -61,7 +61,6 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
             var testScenarioName = "NoPermissions";
             var directoryToCreate = $"{_testFolder}\\{testScenarioName}";
             var fileToDelete = $"{directoryToCreate}\\{testScenarioName}.csproj";
-            FileInfo fileInfo;
             try
             {
                 FSTestsFixture.CreateFolders(_testFolder, new List<string>() { testScenarioName });
