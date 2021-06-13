@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Microsoft.Templates.Core.Helpers;
@@ -14,45 +14,43 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class SafeRenameDirectoryTests
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes only")]
+    public class SafeRenameDirectoryTests : IDisposable
     {
-        private readonly LogFixture _logFixture;
+        private readonly FSTestsFixture _fixture;
+        private readonly string _testFolder;
+
         private DateTime _logDate;
 
         private const string ErrorMessage = "can't be rename";
         private const string ErrorLevel = "Warning";
 
-        public SafeRenameDirectoryTests(LogFixture logFixture)
+        public SafeRenameDirectoryTests(FSTestsFixture fixture)
         {
-            _logFixture = logFixture;
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            _fixture = fixture;
+            Thread.CurrentThread.CurrentUICulture = fixture.CultureInfo;
+            _testFolder = _fixture.CreateTempFolderForTest("SafeRenameDirectory");
         }
 
         [Fact]
         public void SafeRenameDirectory_ValidData_ShouldMoveDirectory()
         {
-            var sourceFolder = $"{_logFixture.TestFolderPath}\\SafeRenameDirectory";
-            var newFolder = $"{_logFixture.TestFolderPath}\\TestProject_Copy";
-            try
-            {
-                Directory.CreateDirectory(sourceFolder);
+            var testScenarioName = "ValidData";
+            var originalDirectory = $"{_testFolder}\\{testScenarioName}_Original";
+            var renamedDirectory = $"{_testFolder}\\{testScenarioName}_Renamed";
 
-                var totalOriginalDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            FSTestsFixture.CreateFolders(_testFolder, new List<string> { $"{testScenarioName}_Original" });
 
-                Fs.SafeRenameDirectory(sourceFolder, newFolder);
+            var totalOriginalDirectories = Directory.GetParent(originalDirectory).GetDirectories().Length;
 
-                var totalNewDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            Fs.SafeRenameDirectory(originalDirectory, renamedDirectory);
 
-                var sameNumberOfDirectories = totalNewDirectories == totalOriginalDirectories;
-                Assert.True(sameNumberOfDirectories);
-                var oldDirectoryHasBeenMovedToNewDirectory = Directory.Exists(newFolder) && !Directory.Exists(sourceFolder);
-                Assert.True(oldDirectoryHasBeenMovedToNewDirectory);
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(newFolder, true);
-            }
+            var totalNewDirectories = Directory.GetParent(originalDirectory).GetDirectories().Length;
+
+            var sameNumberOfDirectories = totalNewDirectories == totalOriginalDirectories;
+            Assert.True(sameNumberOfDirectories);
+            var oldDirectoryHasBeenMovedToNewDirectory = Directory.Exists(renamedDirectory) && !Directory.Exists(originalDirectory);
+            Assert.True(oldDirectoryHasBeenMovedToNewDirectory);
         }
 
         [Theory]
@@ -64,57 +62,63 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         }
 
         [Fact]
+        public void SafeRenameDirectory_DirectoryAlreadyExists_ShouldLogException()
+        {
+            var testScenarioName = "ValidData";
+            var originalDirectory = $"{_testFolder}\\{testScenarioName}_Original";
+            var renamedDirectory = $"{_testFolder}\\{testScenarioName}_Renamed";
+
+            FSTestsFixture.CreateFolders(_testFolder, new List<string> { $"{testScenarioName}_Original", $"{testScenarioName}_Renamed" });
+
+            var totalOriginalDirectories = Directory.GetParent(originalDirectory).GetDirectories().Length;
+
+            Fs.SafeRenameDirectory(originalDirectory, renamedDirectory);
+
+            var totalNewDirectories = Directory.GetParent(originalDirectory).GetDirectories().Length;
+
+            var sameNumberOfDirectories = totalNewDirectories == totalOriginalDirectories;
+            Assert.True(sameNumberOfDirectories);
+            Assert.True(_fixture.IsErrorAddedRecentlyInLogFile(_logDate));
+        }
+
+        [Fact]
         public void SafeRenameDirectory_WrongDestinationFolder_ShouldLogException()
         {
-            var folderName = "TestProject_WrongFolder_Log";
-            var rootDir = $"{_logFixture.TestFolderPath}\\{folderName}";
-            var rootDestFolder = $"{_logFixture.TestFolderPath}\\TestProject_Dest_WrongFolder_Log";
-            var wrongDir = $"{rootDestFolder}\\Test.csproj";
+            // to throw the exception we create a file with the same name we try to create the new directory
+            var testScenarioName = "WrongDestinationFolder";
+            var originalDirectory = $"{_testFolder}\\{testScenarioName}_Original";
+            var wrongDirectory = $"{_testFolder}\\{testScenarioName}_WrongFolder.cs";
 
-            try
-            {
-                Directory.CreateDirectory(rootDir);
-                Directory.CreateDirectory(rootDestFolder);
-                using var stream = File.Create(wrongDir);
+            FSTestsFixture.CreateFolders(_testFolder, new List<string> { $"{testScenarioName}_Original", $"{testScenarioName}_Renamed" });
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { $"{testScenarioName}_WrongFolder.cs" });
 
-                _logDate = DateTime.Now;
-                Fs.SafeRenameDirectory(rootDir, wrongDir);
+            _logDate = DateTime.Now;
+            Fs.SafeRenameDirectory(originalDirectory, wrongDirectory);
 
-                Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{folderName} {ErrorMessage}"));
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(rootDir, true);
-                Directory.Delete(rootDestFolder, true);
-            }
+            Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{testScenarioName}_Original {ErrorMessage}"));
         }
 
         [Fact]
         public void SafeRenameDirectory_WrongDestinationFolder_WarnOnFailureFalse_ShouldNotLogError()
         {
-            var folderName = "TestProject_WrongFolderLog_NoLog";
-            var rootDir = $"{_logFixture.TestFolderPath}\\{folderName}";
-            var rootDestFolder = $"{_logFixture.TestFolderPath}\\TestProject_Dest_WrongFolder_NoLog";
-            var wrongDir = $"{rootDestFolder}\\Test.csproj";
+            // to throw the exception we create a file with the same name we try to create the new directory
+            var testScenarioName = "WrongDestinationFolder_WarnOnFailureFalse";
+            var originalDirectory = $"{_testFolder}\\{testScenarioName}_Original";
+            var wrongDirectory = $"{_testFolder}\\{testScenarioName}_WrongFolder.cs";
 
-            try
-            {
-                Directory.CreateDirectory(rootDir);
-                Directory.CreateDirectory(rootDestFolder);
-                using var stream = File.Create(wrongDir);
+            FSTestsFixture.CreateFolders(_testFolder, new List<string> { $"{testScenarioName}_Original", $"{testScenarioName}_Renamed" });
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { $"{testScenarioName}_WrongFolder.cs" });
 
-                _logDate = DateTime.Now;
-                Fs.SafeRenameDirectory(rootDir, wrongDir, false);
+            _logDate = DateTime.Now;
+            Fs.SafeRenameDirectory(originalDirectory, wrongDirectory, false);
 
-                Assert.False(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{folderName} {ErrorMessage}"));
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(rootDir, true);
-                Directory.Delete(rootDestFolder, true);
-            }
+            Assert.False(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{testScenarioName}_Original {ErrorMessage}"));
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
+        public void Dispose()
+        {
+            FSTestsFixture.DeleteTempFolderForTest(_testFolder);
         }
     }
 }

@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Microsoft.Templates.Core.Helpers;
@@ -14,59 +14,60 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class EnsureFolderExistsTests
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes only")]
+    public class EnsureFolderExistsTests : IDisposable
     {
-        private readonly LogFixture _logFixture;
+        private readonly FSTestsFixture _fixture;
+        private readonly string _testFolder;
+
         private DateTime _logDate;
 
-        public EnsureFolderExistsTests(LogFixture logFixture)
+        private const string ErrorMessage = "Error creating folder";
+        private const string ErrorLevel = "Warning";
+
+        public EnsureFolderExistsTests(FSTestsFixture fixture)
         {
-            _logFixture = logFixture;
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            _fixture = fixture;
+            Thread.CurrentThread.CurrentUICulture = fixture.CultureInfo;
+            _testFolder = _fixture.CreateTempFolderForTest("EnsureFolderExists");
         }
 
         [Fact]
         public void EnsureFolderExists_DirectoryDoesNotExists_ShouldCreateDirectory()
         {
-            var sourceFolder = $"{_logFixture.TestFolderPath}\\TestProject_EnsureFolderExists";
-            try
-            {
-                var totalOriginalDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            var testScenarioName = "DirectoryDoesNotExists";
+            var directoryToCreate = $"{_testFolder}\\{testScenarioName}";
 
-                Fs.EnsureFolderExists(sourceFolder);
+            var directoryExistsAtStart = Directory.Exists(directoryToCreate);
+            var totalOriginalDirectories = Directory.GetParent(directoryToCreate).GetDirectories().Length;
 
-                var totalNewDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            Fs.EnsureFolderExists(directoryToCreate);
 
-                Assert.True(totalNewDirectories > totalOriginalDirectories);
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(sourceFolder);
-            }
+            var totalNewDirectories = Directory.GetParent(directoryToCreate).GetDirectories().Length;
+
+            Assert.True(totalNewDirectories > totalOriginalDirectories);
+            Assert.False(directoryExistsAtStart);
+            Assert.True(Directory.Exists(directoryToCreate));
         }
 
         [Fact]
         public void EnsureFolderExists_DirectoryAlreadyExists_ShouldNotCreateDirectory()
         {
-            var sourceFolder = $"{_logFixture.TestFolderPath}\\EnsureFolderExists_DirectoryAlreadyExists";
+            var testScenarioName = "DirectoryAlreadyExists";
+            var directoryToCreate = $"{_testFolder}\\{testScenarioName}";
 
-            try
-            {
-                Directory.CreateDirectory(sourceFolder);
-                var totalOriginalDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            FSTestsFixture.CreateFolders(_testFolder, new List<string> { testScenarioName });
 
-                Fs.EnsureFolderExists(sourceFolder);
+            var directoryExistsAtStart = Directory.Exists(directoryToCreate);
+            var totalOriginalDirectories = Directory.GetParent(directoryToCreate).GetDirectories().Length;
 
-                var totalNewDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            Fs.EnsureFolderExists(directoryToCreate);
 
-                Assert.True(totalOriginalDirectories == totalNewDirectories);
-            }
-            finally
-            {
-                // tidy up test data
-                Directory.Delete(sourceFolder);
-            }
+            var totalNewDirectories = Directory.GetParent(directoryToCreate).GetDirectories().Length;
+
+            Assert.True(totalOriginalDirectories == totalNewDirectories);
+            Assert.True(directoryExistsAtStart);
+            Assert.True(Directory.Exists(directoryToCreate));
         }
 
         [Fact]
@@ -74,23 +75,21 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         {
             // To force an error creating a Directory
             // we create a file with the name of the folder that we want to create
-            var sourceFolder = $"{_logFixture.TestFolderPath}\\EnsureFolderExists_Error";
-            Directory.CreateDirectory(sourceFolder);
-            var folderPath = Path.Combine(Environment.CurrentDirectory, sourceFolder, "Test_EnsureFolderExists");
+            var testScenarioName = "ErrorCreatingDirectory";
+            var wrongDirectoryToCreate = $"{testScenarioName}\\{testScenarioName}.cs";
+            FSTestsFixture.CreateFolders(_testFolder, new List<string> { testScenarioName });
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { wrongDirectoryToCreate });
 
-            try
-            {
-                using var stream = File.Create(folderPath);
-                _logDate = DateTime.Now;
-                Fs.EnsureFolderExists(folderPath);
+            _logDate = DateTime.Now;
+            Fs.EnsureFolderExists($"{_testFolder}\\{wrongDirectoryToCreate}");
 
-                Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, "Warning", "Error creating folder"));
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(sourceFolder, true);
-            }
+            Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
+        public void Dispose()
+        {
+            FSTestsFixture.DeleteTempFolderForTest(_testFolder);
         }
     }
 }

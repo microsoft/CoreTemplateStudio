@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Microsoft.Templates.Core.Helpers;
@@ -14,48 +14,37 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class SafeDeleteFileTests
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes only")]
+    public class SafeDeleteFileTests : IDisposable
     {
-        private readonly LogFixture _logFixture;
-        private readonly string _dirPath;
-        private string _filePath;
+        private readonly FSTestsFixture _fixture;
+        private readonly string _testFolder;
 
         private DateTime _logDate;
         private const string ErrorMessage = "can't be delete";
         private const string ErrorLevel = "Warning";
 
-        public SafeDeleteFileTests(LogFixture logFixture)
+        public SafeDeleteFileTests(FSTestsFixture fixture)
         {
-            _logFixture = logFixture;
-            _dirPath = $"{_logFixture.TestFolderPath}\\SafeDelete";
-            _filePath = Path.Combine(Environment.CurrentDirectory, _dirPath, "Test.csproj");
-
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            _fixture = fixture;
+            Thread.CurrentThread.CurrentUICulture = fixture.CultureInfo;
+            _testFolder = _fixture.CreateTempFolderForTest("SafeDeleteFile");
         }
 
         [Fact]
         public void SafeDeleteFile_ExistingFile_ShouldHaveDeletedFile()
         {
-            var testDir = $"{_dirPath}ExistingFile";
-            try
-            {
-                Directory.CreateDirectory(testDir);
+            var testScenarioName = "ExistingFile";
+            var directoryToCreate = $"{_testFolder}\\{testScenarioName}";
+            var fileToDelete = $"{directoryToCreate}\\{testScenarioName}.csproj";
 
-                _filePath = Path.Combine(testDir, "Test.csproj");
+            FSTestsFixture.CreateFolders(_testFolder, new List<string>() { testScenarioName });
+            FSTestsFixture.CreateFiles(_testFolder, new List<string>() { $"{testScenarioName}\\{testScenarioName}.csproj" });
+            var fileExistsBefore = File.Exists(fileToDelete);
+            Fs.SafeDeleteFile(fileToDelete);
 
-                using (var stream = File.Create(_filePath))
-                {
-                }
-
-                Fs.SafeDeleteFile(_filePath);
-
-                Assert.False(File.Exists(_filePath));
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(testDir, true);
-            }
+            Assert.True(fileExistsBefore);
+            Assert.False(File.Exists(fileToDelete));
         }
 
         [Theory]
@@ -69,25 +58,33 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void SafeDeleteFile_NoPermissions_ShouldHandleException()
         {
-            var testDir = $"{_dirPath}NoPermissions";
-            Directory.CreateDirectory(testDir);
-            _filePath = Path.Combine(Environment.CurrentDirectory, testDir, "FileWitehNoPermissions.csproj");
-
-            using (var stream = File.Create(_filePath))
+            var testScenarioName = "NoPermissions";
+            var directoryToCreate = $"{_testFolder}\\{testScenarioName}";
+            var fileToDelete = $"{directoryToCreate}\\{testScenarioName}.csproj";
+            FileInfo fileInfo;
+            try
             {
+                FSTestsFixture.CreateFolders(_testFolder, new List<string>() { testScenarioName });
+                FSTestsFixture.CreateFiles(_testFolder, new List<string>() { $"{testScenarioName}\\{testScenarioName}.csproj" }, true);
+
+                _logDate = DateTime.Now;
+                Fs.SafeDeleteFile(fileToDelete);
+
+                Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
             }
-
-            var fileInfo = new FileInfo(_filePath)
+            finally
             {
-                IsReadOnly = true,
-            };
+                _ = new FileInfo(fileToDelete)
+                {
+                    IsReadOnly = false,
+                };
+            }
+        }
 
-            _logDate = DateTime.Now;
-            Fs.SafeDeleteFile(_filePath);
-
-            Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
-            fileInfo.IsReadOnly = false;
-            Directory.Delete(testDir, true);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
+        public void Dispose()
+        {
+            FSTestsFixture.DeleteTempFolderForTest(_testFolder);
         }
     }
 }

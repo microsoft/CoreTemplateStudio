@@ -3,9 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
@@ -14,40 +13,41 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class SafeDeleteDirectoryTests
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes only")]
+    public class SafeDeleteDirectoryTests : IDisposable
     {
-        private readonly LogFixture _logFixture;
+        private readonly FSTestsFixture _fixture;
+        private readonly string _testFolder;
 
-        public SafeDeleteDirectoryTests(LogFixture logFixture)
+        public SafeDeleteDirectoryTests(FSTestsFixture fixture)
         {
-            _logFixture = logFixture;
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            _fixture = fixture;
+            _testFolder = _fixture.CreateTempFolderForTest("SafeDeleteDirectory");
         }
 
         [Fact]
         public void SafeDeleteDirectory_DirectoryExists_ShouldDeleteDirectory()
         {
-            var sourceFolder = $"{_logFixture.TestFolderPath}\\SafeDelete";
+            var testScenarioName = "DirectoryExists";
+            var directoryToCreate = $"{_testFolder}\\{testScenarioName}";
 
-            Directory.CreateDirectory(sourceFolder);
+            FSTestsFixture.CreateFolders(_testFolder, new List<string>() { testScenarioName });
 
-            var totalOriginalDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            var totalOriginalDirectories = Directory.GetParent(directoryToCreate).GetDirectories().Length;
 
-            Fs.SafeDeleteDirectory(sourceFolder, false);
+            Fs.SafeDeleteDirectory(directoryToCreate, false);
 
-            var totalNewDirectories = Directory.GetParent(sourceFolder).GetDirectories().Length;
+            var totalNewDirectories = Directory.GetParent(directoryToCreate).GetDirectories().Length;
 
             var directoryHasBeenDeleted = totalNewDirectories < totalOriginalDirectories;
 
             Assert.True(directoryHasBeenDeleted);
-
-            // Note: no need to tidy up test as this is already removed
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void SafeDeleteDirectory_DoesNotExist_ShouldNotThrowException(string rootDir)
+        public void SafeDeleteDirectory_DirectoryPathIsNullOrEmpty_ShouldNotThrowException(string rootDir)
         {
             Fs.SafeDeleteDirectory(rootDir);
         }
@@ -55,9 +55,16 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void SafeDeleteDirectory_WrongFolder_ShouldNotThrowException()
         {
-            var rootDir = $"{_logFixture.TestFolderPath}\\SafeDeleteDirectory";
+            var testScenarioName = "WrongFolder";
+            var wrongDirectoryToDelete = $"{_testFolder}\\{testScenarioName}";
 
-            Fs.SafeDeleteDirectory(rootDir, false);
+            Fs.SafeDeleteDirectory(wrongDirectoryToDelete, false);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
+        public void Dispose()
+        {
+            FSTestsFixture.DeleteTempFolderForTest(_testFolder);
         }
     }
 }

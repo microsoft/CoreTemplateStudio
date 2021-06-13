@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Microsoft.Templates.Core.Helpers;
@@ -14,49 +14,42 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class SafeMoveFileTests
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes only")]
+    public class SafeMoveFileTests : IDisposable
     {
-        private readonly LogFixture _logFixture;
+        private readonly FSTestsFixture _fixture;
+        private readonly string _testFolder;
+
         private DateTime _logDate;
 
         private const string ErrorMessage = "can't be moved to";
         private const string ErrorLevel = "Warning";
 
-        public SafeMoveFileTests(LogFixture logFixture)
+        public SafeMoveFileTests(FSTestsFixture fixture)
         {
-            _logFixture = logFixture;
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            _fixture = fixture;
+            Thread.CurrentThread.CurrentUICulture = fixture.CultureInfo;
+            _testFolder = _fixture.CreateTempFolderForTest("SafeMoveFile");
         }
 
         [Fact]
-        public void SafeMoveFile_ValidData_ShouldMoveDirectory()
+        public void SafeMoveFile_ValidData_ShouldMove()
         {
-            var folderPath = $"{_logFixture.TestFolderPath}\\SafeMoveFile";
-            var filePath = $"{folderPath}\\OriginalFile.cs";
-            var newFilePath = $"{folderPath}\\MovedFile.cs";
+            var testScenarioName = "ValidData";
+            var originalFile = $"{_testFolder}\\{testScenarioName}_Original.cs";
+            var movedFile = $"{_testFolder}\\{testScenarioName}_Moved.cs";
 
-            try
-            {
-                Directory.CreateDirectory(folderPath);
-                using (var stream = File.Create(filePath))
-                {
-                }
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { Path.GetFileName(originalFile) });
 
-                var originFolderTotalFiles = Directory.GetFiles(folderPath).Length;
+            var originFolderTotalFiles = Directory.GetFiles(_testFolder).Length;
 
-                Fs.SafeMoveFile(filePath, newFilePath);
+            Fs.SafeMoveFile(originalFile, movedFile);
 
-                var destinationFolderTotalFiles = Directory.GetFiles(folderPath).Length;
+            var destinationFolderTotalFiles = Directory.GetFiles(_testFolder).Length;
 
-                Assert.True(originFolderTotalFiles == destinationFolderTotalFiles);
-                Assert.False(File.Exists(filePath));
-                Assert.True(File.Exists(newFilePath));
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(folderPath, true);
-            }
+            Assert.True(originFolderTotalFiles == destinationFolderTotalFiles);
+            Assert.False(File.Exists(originalFile));
+            Assert.True(File.Exists(movedFile));
         }
 
         [Theory]
@@ -70,163 +63,97 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         [Fact]
         public void SafeMoveFile_DestFileExists_Overwrite_MovesFileSuccessfully()
         {
-            var folderPath = $"{_logFixture.TestFolderPath}\\DestExists_Overwrite";
-            var fileRelativePath = $"{folderPath}\\Test_Overwrite.csproj";
-            var newFileRelativePath = $"{folderPath}\\Test_Overwrite_Dest.csproj";
-            var sourceFilePath = Path.Combine(Environment.CurrentDirectory, fileRelativePath);
-            var newFilePath = Path.Combine(Environment.CurrentDirectory, newFileRelativePath);
+            var testScenarioName = "DestFileExists_Overwrite";
+            var originalFile = $"{_testFolder}\\{testScenarioName}_Original.cs";
+            var movedFile = $"{_testFolder}\\{testScenarioName}_Moved.cs";
 
-            try
-            {
-                Directory.CreateDirectory(folderPath);
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { Path.GetFileName(originalFile), Path.GetFileName(movedFile) });
 
-                using (var stream = File.Create(sourceFilePath))
-                {
-                }
+            var originFolderTotalFiles = Directory.GetFiles(_testFolder).Length;
 
-                using (var stream = File.Create(newFilePath))
-                {
-                }
+            Fs.SafeMoveFile(originalFile, movedFile);
 
-                var originFolderTotalFiles = Directory.GetFiles(folderPath).Length;
+            var destinationFolderTotalFiles = Directory.GetFiles(_testFolder).Length;
 
-                Fs.SafeMoveFile(sourceFilePath, newFilePath);
-
-                var destinationFolderTotalFiles = Directory.GetFiles(folderPath).Length;
-
-                Assert.True(originFolderTotalFiles > destinationFolderTotalFiles);
-                Assert.False(File.Exists(sourceFilePath));
-                Assert.True(File.Exists(newFilePath));
-            }
-            finally
-            {
-                // tidy up test data
-                Directory.Delete(folderPath, true);
-            }
+            Assert.True(originFolderTotalFiles > destinationFolderTotalFiles);
+            Assert.False(File.Exists(originalFile));
+            Assert.True(File.Exists(movedFile));
         }
 
         [Fact]
         public void SafeMoveFile_DestFileExists_NoOverwrite_JustReturns()
         {
-            var folderPath = $"{_logFixture.TestFolderPath}\\DestFileExists";
-            var fileRelativePath = $"{folderPath}\\Test.csproj";
-            var newFileRelativePath = $"{folderPath}\\Test_Dest.csproj";
-            var sourceFilePath = Path.Combine(Environment.CurrentDirectory, fileRelativePath);
-            var newFilePath = Path.Combine(Environment.CurrentDirectory, newFileRelativePath);
+            var testScenarioName = "DestFileExists_NoOverwrite";
+            var originalFile = $"{_testFolder}\\{testScenarioName}_Original.cs";
+            var movedFile = $"{_testFolder}\\{testScenarioName}_Moved.cs";
 
-            try
-            {
-                Directory.CreateDirectory(folderPath);
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { Path.GetFileName(originalFile), Path.GetFileName(movedFile) });
 
-                using (var stream = File.Create(sourceFilePath))
-                {
-                }
+            var originFolderTotalFiles = Directory.GetFiles(_testFolder).Length;
 
-                using (var stream = File.Create(newFilePath))
-                {
-                }
+            Fs.SafeMoveFile(originalFile, movedFile, false);
 
-                var originFolderTotalFiles = Directory.GetFiles(folderPath).Length;
+            var destinationFolderTotalFiles = Directory.GetFiles(_testFolder).Length;
 
-                Fs.SafeMoveFile(sourceFilePath, newFileRelativePath, false);
-
-                var destinationFolderTotalFiles = Directory.GetFiles(folderPath).Length;
-
-                Assert.True(originFolderTotalFiles == destinationFolderTotalFiles);
-                Assert.True(File.Exists(sourceFilePath));
-                Assert.True(File.Exists(newFilePath));
-            }
-            finally
-            {
-                // tidy up test data
-                Directory.Delete(folderPath, true);
-            }
+            Assert.True(originFolderTotalFiles == destinationFolderTotalFiles);
+            Assert.True(File.Exists(originalFile));
+            Assert.True(File.Exists(movedFile));
         }
 
         [Fact]
         public void SafeMoveFile_DestFileExists_Overwrite_NoPermissions_ShouldLogException()
         {
-            var fileName = "Test.csproj";
-            var folderPath = $"{_logFixture.TestFolderPath}\\DestFileExists_Overwrite_NoPermissions";
-            var fileRelativePath = $"{folderPath}\\{fileName}";
-            var newFileRelativePath = $"{folderPath}\\Test_Dest.csproj";
-            var sourceFilePath = Path.Combine(Environment.CurrentDirectory, fileRelativePath);
-            var newFilePath = Path.Combine(Environment.CurrentDirectory, newFileRelativePath);
-            FileInfo newFileInfo;
+            var testScenarioName = "DestFileExists_Overwrite_NoPermissions";
+            var originalFile = $"{_testFolder}\\{testScenarioName}_Original.cs";
+            var movedFile = $"{_testFolder}\\{testScenarioName}_Moved.cs";
+
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { Path.GetFileName(originalFile), Path.GetFileName(movedFile) }, true);
+
             try
             {
-                Directory.CreateDirectory(folderPath);
-
-                using (var stream = File.Create(sourceFilePath))
-                {
-                }
-
-                using (var stream = File.Create(newFilePath))
-                {
-                }
-
-                newFileInfo = new FileInfo(newFilePath)
-                {
-                    IsReadOnly = true,
-                };
-
                 _logDate = DateTime.Now;
-                Fs.SafeMoveFile(sourceFilePath, newFilePath);
+                Fs.SafeMoveFile(originalFile, movedFile);
 
-                Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{fileName} {ErrorMessage}"));
+                Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
             }
             finally
             {
-                // tidy up test data
-                newFileInfo = new FileInfo(newFilePath)
+                _ = new FileInfo(movedFile)
                 {
                     IsReadOnly = false,
                 };
-                Directory.Delete(folderPath, true);
             }
         }
 
         [Fact]
         public void SafeMoveFile_DestFileExists_Overwrite_NoPermissions_NoWarnOnFailure_ShouldNotLogException()
         {
-            var fileName = "NoPermissions_NoWarnOnFailure.csproj";
-            var folderPath = $"{_logFixture.TestFolderPath}\\DestFileExists_Overwrite_NoPermissions_NoWarnOnFailure";
-            var fileRelativePath = $"{folderPath}\\Test.csproj";
-            var newFileRelativePath = $"{folderPath}\\{fileName}";
-            var sourceFilePath = Path.Combine(Environment.CurrentDirectory, fileRelativePath);
-            var newFilePath = Path.Combine(Environment.CurrentDirectory, newFileRelativePath);
-            FileInfo newFileInfo;
+            var testScenarioName = "DestFileExists_Overwrite_NoPermissions_NoWarnOnFailure";
+            var originalFile = $"{_testFolder}\\{testScenarioName}_Original.cs";
+            var movedFile = $"{_testFolder}\\{testScenarioName}_Moved.cs";
+
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { Path.GetFileName(originalFile), Path.GetFileName(movedFile) }, true);
+
             try
             {
-                Directory.CreateDirectory(folderPath);
-
-                using (var stream = File.Create(sourceFilePath))
-                {
-                }
-
-                using (var stream = File.Create(newFilePath))
-                {
-                }
-
-                newFileInfo = new FileInfo(newFilePath)
-                {
-                    IsReadOnly = true,
-                };
-
                 _logDate = DateTime.Now;
-                Fs.SafeMoveFile(sourceFilePath, newFilePath, true, false);
+                Fs.SafeMoveFile(originalFile, movedFile, true, false);
 
-                Assert.False(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{fileName} {ErrorMessage}"));
+                Assert.False(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{Path.GetFileName(movedFile)} {ErrorMessage}"));
             }
             finally
             {
-                // tidy up test data
-                newFileInfo = new FileInfo(newFilePath)
+                _ = new FileInfo(movedFile)
                 {
                     IsReadOnly = false,
                 };
-                Directory.Delete(folderPath, true);
             }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
+        public void Dispose()
+        {
+            FSTestsFixture.DeleteTempFolderForTest(_testFolder);
         }
     }
 }

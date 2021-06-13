@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Microsoft.Templates.Core.Helpers;
@@ -14,72 +14,89 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 {
     [Collection("Unit Test Logs")]
     [Trait("ExecutionSet", "Minimum")]
-    public class EnsureFileEditableTests
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Testing purposes only")]
+    public class EnsureFileEditableTests : IDisposable
     {
-        private readonly LogFixture _logFixture;
+        private readonly FSTestsFixture _fixture;
+        private readonly string _testFolder;
 
         private DateTime _logDate;
+
         private const string ErrorMessage = "Cannot remove readonly protection from file";
         private const string ErrorLevel = "Warning";
 
-        public EnsureFileEditableTests(LogFixture logFixture)
+        public EnsureFileEditableTests(FSTestsFixture fixture)
         {
-            _logFixture = logFixture;
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            _fixture = fixture;
+            Thread.CurrentThread.CurrentUICulture = fixture.CultureInfo;
+            _testFolder = _fixture.CreateTempFolderForTest("EnsureFolderExists");
         }
 
         [Fact]
         public void EnsureFileEditable_FileIsReadOnly_ShouldChangeToReadOnly()
         {
-            var folderPath = $"{_logFixture.TestFolderPath}\\TestProject";
-            var filePath = $"{folderPath}\\ProtectedTest.csproj";
-            Directory.CreateDirectory(folderPath);
-
-            var fileInfo = new FileInfo(filePath);
-            FileInfo newFileInfo;
+            var testScenarioName = "FileIsReadOnly";
+            var fileToEdit = $"{_testFolder}\\{testScenarioName}";
             try
             {
-                using var stream = File.Create(filePath);
-                fileInfo.IsReadOnly = true;
+                FSTestsFixture.CreateFiles(_testFolder, new List<string> { testScenarioName }, true);
 
-                Fs.EnsureFileEditable(filePath);
-                newFileInfo = new FileInfo(filePath);
+                Fs.EnsureFileEditable(fileToEdit);
+                var newFileInfo = new FileInfo(fileToEdit);
 
                 Assert.False(newFileInfo.IsReadOnly);
             }
             finally
             {
-                // tidy up testing data
-                newFileInfo = new FileInfo(filePath)
+                _ = new FileInfo(fileToEdit)
                 {
                     IsReadOnly = false,
                 };
-
-                Directory.Delete(folderPath, true);
             }
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void EnsureFileEditable_PathNotFound_ShouldLogError(string filePath)
+        public void EnsureFileEditable_FilePathNullOrEmpty_ShouldLogError(string filePath)
         {
             _logDate = DateTime.Now;
 
             Fs.EnsureFileEditable(filePath);
 
-            Assert.True(_logFixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
+            Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
+        }
+
+        [Fact]
+        public void EnsureFileEditable_FileDoesNotExist_ShouldLogError()
+        {
+            var testScenarioName = "FileDoesNotExist";
+            string filePath = $"{_testFolder}\\{testScenarioName}";
+            _logDate = DateTime.Now;
+
+            Fs.EnsureFileEditable(filePath);
+
+            Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
         }
 
         [Fact]
         public void EnsureFileEditable_FileIsNotReadOnly_ShouldNotModifyIsReadOnly()
         {
-            var filePath = $"{_logFixture.TestFolderPath}\\TestProject\\Test.csproj";
+            var testScenarioName = "FileIsNotReadOnly";
+            string filePath = $"{_testFolder}\\{testScenarioName}";
+            FSTestsFixture.CreateFiles(_testFolder, new List<string> { testScenarioName });
+
             var originalFileInfo = new FileInfo(filePath);
             Fs.EnsureFileEditable(filePath);
             var newFileInfo = new FileInfo(filePath);
 
             Assert.Equal(newFileInfo.IsReadOnly, originalFileInfo.IsReadOnly);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
+        public void Dispose()
+        {
+            FSTestsFixture.DeleteTempFolderForTest(_testFolder);
         }
     }
 }

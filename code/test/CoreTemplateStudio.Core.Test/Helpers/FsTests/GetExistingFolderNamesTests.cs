@@ -2,12 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using Microsoft.Templates.Core.Helpers;
 using Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers;
 using Xunit;
@@ -18,49 +14,48 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
     [Trait("ExecutionSet", "Minimum")]
     public class GetExistingFolderNamesTests
     {
-        private readonly LogFixture _logFixture;
+        private readonly FSTestsFixture _fixture;
+        private readonly string _testFolder;
 
-        public GetExistingFolderNamesTests(LogFixture logFixture)
+        public GetExistingFolderNamesTests(FSTestsFixture fixture)
         {
-            _logFixture = logFixture;
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            _fixture = fixture;
+            _testFolder = _fixture.CreateTempFolderForTest("GetExistingFolderNames");
         }
 
         [Fact]
         public void GetExistingFolderNames_RootExists_ShouldReturnAllExpectedFolderNamesInAlphabeticalOrder()
         {
-            var rootDirectory = $"{_logFixture.TestFolderPath}\\TestProject\\Fs_GetExistingFolderNames";
+            var testScenarioName = "RootExists";
+            var directoryExists = $"{_testFolder}\\{testScenarioName}";
 
-            try
-            {
-                var directoryInfo = Directory.CreateDirectory(rootDirectory);
-                for (var i = 0; i < 3; i++)
-                {
-                    Directory.CreateDirectory($"{rootDirectory}\\One");
-                    Directory.CreateDirectory($"{rootDirectory}\\Two");
-                    Directory.CreateDirectory($"{rootDirectory}\\Three");
-                }
+            FSTestsFixture.CreateFolders(_testFolder, new List<string> { testScenarioName, $"{testScenarioName}\\One", $"{testScenarioName}\\Two", $"{testScenarioName}\\Three" });
 
-                var expected = new List<string>() { "One", "Three", "Two" };
+            var expected = new List<string>() { "One", "Three", "Two" };
 
-                var actual = Fs.GetExistingFolderNames(rootDirectory);
+            var actual = Fs.GetExistingFolderNames(directoryExists);
 
-                Assert.Equal(3, actual.Count());
-                Assert.Equal(expected, actual);
-            }
-            finally
-            {
-                // tidy up testing data
-                Directory.Delete(rootDirectory, true);
-            }
+            Assert.Equal(3, actual.Count());
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void GetExistingFolderNames_RootDirectoryDoesNotExist_ShouldReturnEmptyList(string rootDirectory)
+        public void GetExistingFolderNames_RootDirectoryEmptyOrNull_ShouldReturnEmptyList(string rootDirectory)
         {
             var actual = Fs.GetExistingFolderNames(rootDirectory);
+
+            Assert.Empty(actual);
+        }
+
+        [Fact]
+        public void GetExistingFolderNames_RootDirectoryDoesNotExist_ShouldReturnEmptyList()
+        {
+            var testScenarioName = "RootDirectoryDoesNotExist";
+            var directoryDoesNotExist = $"{_testFolder}\\{testScenarioName}";
+
+            var actual = Fs.GetExistingFolderNames(directoryDoesNotExist);
 
             Assert.Empty(actual);
         }
