@@ -90,7 +90,8 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
             Fs.EnsureFileEditable(filePath);
             var newFileInfo = new FileInfo(filePath);
 
-            Assert.Equal(newFileInfo.IsReadOnly, originalFileInfo.IsReadOnly);
+            Assert.False(originalFileInfo.IsReadOnly);
+            Assert.False(newFileInfo.IsReadOnly);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]

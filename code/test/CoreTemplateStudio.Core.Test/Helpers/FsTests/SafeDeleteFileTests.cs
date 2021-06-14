@@ -21,7 +21,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
         private readonly string _testFolder;
 
         private DateTime _logDate;
-        private const string ErrorMessage = "can't be delete";
+        private const string ErrorMessage = "can't be deleted";
         private const string ErrorLevel = "Warning";
 
         public SafeDeleteFileTests(FSTestsFixture fixture)

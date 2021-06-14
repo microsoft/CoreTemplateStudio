@@ -18,6 +18,10 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
     {
         private readonly FSTestsFixture _fixture;
         private readonly string _testFolder;
+        private DateTime _logDate;
+
+        private const string ErrorMessage = "can't be deleted";
+        private const string ErrorLevel = "Warning";
 
         public SafeDeleteDirectoryTests(FSTestsFixture fixture)
         {
@@ -59,6 +63,28 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
             var wrongDirectoryToDelete = $"{_testFolder}\\{testScenarioName}";
 
             Fs.SafeDeleteDirectory(wrongDirectoryToDelete, false);
+        }
+
+        [Fact]
+        public void SafeDeleteDirectory_NoPermissions_ShouldLogException()
+        {
+            var noPermissionsDirectory = Environment.CurrentDirectory;
+
+            _logDate = DateTime.Now;
+            Fs.SafeDeleteDirectory(noPermissionsDirectory);
+
+            Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
+        }
+
+        [Fact]
+        public void SafeDeleteDirectory_NoPermissions_NotWarnOnFailure_ShouldNotThrowException()
+        {
+            var noPermissionsDirectory = Environment.CurrentDirectory;
+
+            _logDate = DateTime.Now;
+            Fs.SafeDeleteDirectory(noPermissionsDirectory, false);
+
+            Assert.False(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, ErrorMessage));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]

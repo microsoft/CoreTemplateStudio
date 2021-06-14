@@ -117,22 +117,6 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests.Helpers
             return false;
         }
 
-        public bool IsErrorAddedRecentlyInLogFile(DateTime logDate)
-        {
-            if (File.Exists(LogFile))
-            {
-                var lastModifiedWriteTime = File.GetLastWriteTime(LogFile);
-
-                var timeSinceLastEdit = logDate - lastModifiedWriteTime;
-                if (timeSinceLastEdit.Seconds < 30)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         [SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Testing purposes only")]
         public void Dispose()
         {

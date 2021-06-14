@@ -475,7 +475,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The folder {0} can&apos;t be delete. Error: {1}.
+        ///   Looks up a localized string similar to The folder {0} can&apos;t be deleted. Error: {1}.
         /// </summary>
         public static string FsSafeDeleteDirectoryMessage {
             get {
@@ -484,7 +484,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file {0} can&apos;t be delete. Error: {1}.
+        ///   Looks up a localized string similar to The file {0} can&apos;t be deleted. Error: {1}.
         /// </summary>
         public static string FsSafeDeleteFileMessage {
             get {
@@ -511,7 +511,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The folder {0} can&apos;t be rename. Error: {1}.
+        ///   Looks up a localized string similar to The folder {0} can&apos;t be renamed. Error: {1}.
         /// </summary>
         public static string FsSafeRenameDirectoryMessage {
             get {

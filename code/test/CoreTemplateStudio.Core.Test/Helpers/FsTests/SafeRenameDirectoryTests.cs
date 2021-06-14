@@ -22,7 +22,7 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 
         private DateTime _logDate;
 
-        private const string ErrorMessage = "can't be rename";
+        private const string ErrorMessage = "can't be renamed";
         private const string ErrorLevel = "Warning";
 
         public SafeRenameDirectoryTests(FSTestsFixture fixture)
@@ -72,13 +72,14 @@ namespace Microsoft.Templates.Core.Test.Helpers.FsTests
 
             var totalOriginalDirectories = Directory.GetParent(originalDirectory).GetDirectories().Length;
 
+            _logDate = DateTime.Now;
             Fs.SafeRenameDirectory(originalDirectory, renamedDirectory);
 
             var totalNewDirectories = Directory.GetParent(originalDirectory).GetDirectories().Length;
 
             var sameNumberOfDirectories = totalNewDirectories == totalOriginalDirectories;
             Assert.True(sameNumberOfDirectories);
-            Assert.True(_fixture.IsErrorAddedRecentlyInLogFile(_logDate));
+            Assert.True(_fixture.IsErrorMessageInLogFile(_logDate, ErrorLevel, $"{testScenarioName}_Original {ErrorMessage}"));
         }
 
         [Fact]
