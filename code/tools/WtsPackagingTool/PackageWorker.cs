@@ -127,7 +127,7 @@ namespace WtsPackagingTool
                         destinationDir = System.Environment.CurrentDirectory;
                     }
 
-                    Fs.EnsureFolder(destinationDir);
+                    Fs.EnsureFolderExists(destinationDir);
 
                     output.WriteCommandHeader($"Extracting {inputFile} to {destinationDir}...");
                     await templatePackage.ExtractAsync(inputFile, destinationDir).ConfigureAwait(false);
@@ -306,7 +306,7 @@ namespace WtsPackagingTool
             }
             else
             {
-                Fs.EnsureFolder(resultDir);
+                Fs.EnsureFolderExists(resultDir);
             }
 
             return resultDir;

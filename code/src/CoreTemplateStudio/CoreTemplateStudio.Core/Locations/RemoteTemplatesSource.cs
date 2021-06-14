@@ -75,7 +75,7 @@ namespace Microsoft.Templates.Core.Locations
                 var tempFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
                 var sourceUrl = $"{_cdnUrl}/{packageInfo.Name}";
                 var fileTarget = Path.Combine(tempFolder, packageInfo.Name);
-                Fs.EnsureFolder(tempFolder);
+                Fs.EnsureFolderExists(tempFolder);
 
                 await DownloadContentAsync(sourceUrl, fileTarget, ct);
                 packageInfo.LocalPath = fileTarget;
@@ -87,7 +87,7 @@ namespace Microsoft.Templates.Core.Locations
             var tempFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var sourceUrl = $"{_cdnUrl}/config.json";
             var fileTarget = Path.Combine(tempFolder, "config.json");
-            Fs.EnsureFolder(tempFolder);
+            Fs.EnsureFolderExists(tempFolder);
 
             await DownloadContentAsync(sourceUrl, fileTarget, ct);
 

@@ -3,49 +3,30 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Templates.Core.Resources;
 
 namespace Microsoft.Templates.Core
 {
     public static class StringExtensions
     {
-        public static string ObfuscateSHA(this string data)
-        {
-            string result = data;
-            byte[] b64data = Encoding.UTF8.GetBytes(data);
-
-            using (SHA512 sha2 = SHA512.Create())
-            {
-                result = GetHash(sha2, b64data);
-            }
-
-            return result.ToUpperInvariant();
-        }
-
-        private static string GetHash(HashAlgorithm md5Hash, byte[] inputData)
-        {
-            byte[] data = md5Hash.ComputeHash(inputData);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                sb.Append(data[i].ToString("x2"));
-            }
-
-            return sb.ToString();
-        }
-
         public static string[] GetMultiValue(this string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value.Trim()))
             {
                 return new string[0];
             }
 
-            return value.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var values = value.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            if (values.Any(v => v != v.Trim()))
+            {
+                throw new InvalidDataException(string.Format(StringRes.ErrorExtraWhitespacesInMultiValues, value));
+            }
+
+            return values;
         }
 
         public static bool IsMultiValue(this string value)

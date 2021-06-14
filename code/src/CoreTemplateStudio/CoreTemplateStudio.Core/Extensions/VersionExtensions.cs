@@ -10,17 +10,12 @@ namespace Microsoft.Templates.Core
     {
         public static bool IsZero(this Version v)
         {
-            return !v.IsNull() && (v.Major + v.Minor + v.Build + v.Revision) == 0;
+            return !v.IsNull() && v.Major <= 0 && v.Minor <= 0 && v.Build <= 0 && v.Revision <= 0;
         }
 
         public static bool IsNull(this Version v)
         {
             return v is null;
-        }
-
-        public static bool IsNullOrZero(this Version v)
-        {
-            return v.IsNull() || (v.Major + v.Minor + v.Build + v.Revision) == 0;
         }
     }
 }

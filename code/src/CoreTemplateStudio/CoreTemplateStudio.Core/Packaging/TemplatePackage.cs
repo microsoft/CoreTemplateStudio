@@ -11,6 +11,7 @@ using System.Net.Mime;
 using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -262,7 +263,7 @@ namespace Microsoft.Templates.Core.Packaging
                     var certInfo = new CertInfo()
                     {
                            Cert = new X509Certificate2(cert),
-                           Pin = cert.GetPublicKeyString().ObfuscateSHA(),
+                           Pin = Obfuscate(cert.GetPublicKeyString()),
                            Status = _digitalSignatureService.VerifyCertificate(cert),
                     };
 
@@ -340,11 +341,43 @@ namespace Microsoft.Templates.Core.Packaging
             return status == X509ChainStatusFlags.NoError;
         }
 
+        private static string GetHash(HashAlgorithm md5Hash, byte[] inputData)
+        {
+            byte[] data = md5Hash.ComputeHash(inputData);
+
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sb.Append(data[i].ToString("x2"));
+            }
+
+            return sb.ToString();
+        }
+
+        private static string Obfuscate(string data)
+        {
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                return string.Empty;
+            }
+
+            string result = data;
+            byte[] b64data = Encoding.UTF8.GetBytes(data);
+
+            using (SHA512 sha2 = SHA512.Create())
+            {
+                result = GetHash(sha2, b64data);
+            }
+
+            return result.ToUpperInvariant();
+        }
+
         private bool VerifyAllowedPublicKey(X509Certificate cert)
         {
             var pubKeyCert = cert.GetPublicKeyString();
 
-            var pubKeyPin = pubKeyCert.ObfuscateSHA();
+            var pubKeyPin = Obfuscate(pubKeyCert);
 
             AppHealth.Current.Verbose.TrackAsync($"{StringRes.PackageCertificateString} {cert.Subject}").FireAndForget();
             AppHealth.Current.Verbose.TrackAsync($"Key: {pubKeyCert}").FireAndForget();
