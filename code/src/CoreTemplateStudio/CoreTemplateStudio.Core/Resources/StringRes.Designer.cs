@@ -115,6 +115,15 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error creating folder &apos;{0}&apos;: {1}.
+        /// </summary>
+        public static string ErrorCreatingFolder {
+            get {
+                return ResourceManager.GetString("ErrorCreatingFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Circular dependency detected on template {0} with {1}..
         /// </summary>
         public static string ErrorDependencyCircularReference {
@@ -210,6 +219,15 @@ namespace Microsoft.Templates.Core.Resources {
         public static string ErrorExclusionType {
             get {
                 return ResourceManager.GetString("ErrorExclusionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multivalue field: &apos;{0}&apos; contains trailing or leading whitespaces..
+        /// </summary>
+        public static string ErrorExtraWhitespacesInMultiValues {
+            get {
+                return ResourceManager.GetString("ErrorExtraWhitespacesInMultiValues", resourceCulture);
             }
         }
         
@@ -457,7 +475,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The folder {0} can&apos;t be delete. Error: {1}.
+        ///   Looks up a localized string similar to The folder {0} can&apos;t be deleted. Error: {1}.
         /// </summary>
         public static string FsSafeDeleteDirectoryMessage {
             get {
@@ -466,7 +484,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file {0} can&apos;t be delete. Error: {1}.
+        ///   Looks up a localized string similar to The file {0} can&apos;t be deleted. Error: {1}.
         /// </summary>
         public static string FsSafeDeleteFileMessage {
             get {
@@ -493,7 +511,7 @@ namespace Microsoft.Templates.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The folder {0} can&apos;t be rename. Error: {1}.
+        ///   Looks up a localized string similar to The folder {0} can&apos;t be renamed. Error: {1}.
         /// </summary>
         public static string FsSafeRenameDirectoryMessage {
             get {

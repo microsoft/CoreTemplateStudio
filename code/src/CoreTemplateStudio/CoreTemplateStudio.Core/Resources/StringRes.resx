@@ -158,11 +158,11 @@
     <comment>{0}: Source File Path, {1}: Destination folder name, {2}: Error</comment>
   </data>
   <data name="FsSafeDeleteDirectoryMessage" xml:space="preserve">
-    <value>The folder {0} can't be delete. Error: {1}</value>
+    <value>The folder {0} can't be deleted. Error: {1}</value>
     <comment>{0}: Folder Name, {1}: Error</comment>
   </data>
   <data name="FsSafeDeleteFileMessage" xml:space="preserve">
-    <value>The file {0} can't be delete. Error: {1}</value>
+    <value>The file {0} can't be deleted. Error: {1}</value>
     <comment>{0}: File Path, {1}: Error</comment>
   </data>
   <data name="FsSafeMoveDirectoryMessage" xml:space="preserve">
@@ -438,7 +438,7 @@ The following changes could not be integrated: {2}
     <value>Templates local path is empty.</value>
   </data>
   <data name="FsSafeRenameDirectoryMessage" xml:space="preserve">
-    <value>The folder {0} can't be rename. Error: {1}</value>
+    <value>The folder {0} can't be renamed. Error: {1}</value>
     <comment>{0}: Folder Name, {1}: Error</comment>
   </data>
   <data name="TemplatesSynchronizationErrorDownloadingConfig" xml:space="preserve">
@@ -580,5 +580,13 @@ The following changes could not be integrated: {2}
   </data>
   <data name="TemplatesSynchronizationError" xml:space="preserve">
     <value>Error synchronizing templates.</value>
+  </data>
+  <data name="ErrorCreatingFolder" xml:space="preserve">
+    <value>Error creating folder '{0}': {1}</value>
+    <comment>{0} Name of the folder, {1} exception message</comment>
+  </data>
+  <data name="ErrorExtraWhitespacesInMultiValues" xml:space="preserve">
+    <value>Multivalue field: '{0}' contains trailing or leading whitespaces.</value>
+    <comment>{0}: multivalue string</comment>
   </data>
 </root>

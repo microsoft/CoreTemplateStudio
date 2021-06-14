@@ -106,7 +106,7 @@ namespace WtsPackagingTool
 
                 if (package != null)
                 {
-                    Fs.EnsureFolder(options.Destination);
+                    Fs.EnsureFolderExists(options.Destination);
 
                     var result = RemoteSource.DownloadCdnElement(Environments.CdnUrls[options.Env], package.Name, options.Destination);
                     output.WriteLine();

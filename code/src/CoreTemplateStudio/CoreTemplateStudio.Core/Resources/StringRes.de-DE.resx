@@ -581,4 +581,12 @@ Die folgenden Änderungen konnten nicht integriert werden: {2}
   <data name="TemplatesSynchronizationError" xml:space="preserve">
     <value>Error synchronizing templates.</value>
   </data>
+  <data name="ErrorCreatingFolder" xml:space="preserve">
+    <value>Error creating folder '{0}': {1}</value>
+    <comment>{0} Name of the folder, {1} exception message</comment>
+  </data>
+  <data name="ErrorExtraWhitespacesInMultiValues" xml:space="preserve">
+    <value>Multivalue field: '{0}' contains trailing or leading whitespaces.</value>
+    <comment>{0}: multivalue string</comment>
+  </data>
 </root>

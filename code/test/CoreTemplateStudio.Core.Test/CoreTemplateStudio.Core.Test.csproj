@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="TestData\NewFolder\**" />
-    <None Remove="TestData\NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="TestData\Templates\test\itemNameValidation.config.json" />
     <None Remove="TestData\Templates\test\projectNameValidation.config.json" />
     <None Remove="TestData\Templates\test\_catalog\backendframeworks.json" />
@@ -99,7 +94,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
@@ -163,8 +158,24 @@
     <Compile Include="Diagnostics\TelemetryFixture.cs" />
     <Compile Include="Diagnostics\TelemetryServiceTest.cs" />
     <Compile Include="Diagnostics\TestHealthWriter.cs" />
+    <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Gen\GenComposerTests.cs" />
+    <Compile Include="Extensions\TemplateTypeExtensionsTests.cs" />
+    <Compile Include="Extensions\VersionExtensionsTests.cs" />
+    <Compile Include="Extensions\StringExtensionsTests.cs" />
+    <Compile Include="Extensions\DateTimeExtensionsTests.cs" />
+    <Compile Include="Extensions\DictionaryExtensionsTests.cs" />    
+    <Compile Include="Gen\GenComposerTests.cs" />    
+    <Compile Include="Helpers\FsTests\GetExistingFolderNamesTests.cs" />    
+    <Compile Include="Helpers\FSTestsFixture.cs" />    
+    <Compile Include="Helpers\FsTests\SafeMoveFileTests.cs" />    
+    <Compile Include="Helpers\FsTests\SafeDeleteFileTests.cs" />    
+    <Compile Include="Helpers\FsTests\SafeRenameDirectoryTests.cs" />    
+    <Compile Include="Helpers\FsTests\SafeDeleteDirectoryTests.cs" />    
+    <Compile Include="Helpers\FsTests\SafeCopyFileTests.cs" />    
+    <Compile Include="Helpers\FsTests\EnsureFileEditableTests.cs" />    
+    <Compile Include="Helpers\FsTests\EnsureFolderExistsTests.cs" />    
+    <Compile Include="Helpers\FileHelpersTests.cs" />
     <Compile Include="Naming\ItemNameServiceTests.cs" />
     <Compile Include="Naming\ProjectNameServiceTests.cs" />
     <Compile Include="Naming\Validators\DefaultNamesValidatorTests.cs" />
