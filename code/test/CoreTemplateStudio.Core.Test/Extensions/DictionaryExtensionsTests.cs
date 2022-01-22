@@ -26,6 +26,8 @@ namespace Microsoft.Templates.Core.Test.Extensions
 
         private void SetUpStringData(int items)
         {
+            Assert.True(items > 0);
+
             for (var i = 0; i < items; i++)
             {
                 dictionaryOfStrings.Add($"key{i + 1}", $"value{i + 1}");
@@ -55,7 +57,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         [Fact]
         public void SafeGet_DictionaryOfStrings_Found_ShouldReturnItem()
         {
-            var randomItemsNumber = random.Next(MAX);
+            var randomItemsNumber = random.Next(MAX) + 1;
             SetUpStringData(randomItemsNumber);
 
             var expected = $"value{randomItemsNumber}";
@@ -67,6 +69,8 @@ namespace Microsoft.Templates.Core.Test.Extensions
 
         private void SetUpQueryableData(int items)
         {
+            Assert.True(items > 0);
+
             for (var i = 0; i < items; i++)
             {
                 dictionaryOfQueryable.Add($"key{i + 1}", new QueryableProperty($"name{i + 1}", $"value{i + 1}"));
@@ -97,7 +101,7 @@ namespace Microsoft.Templates.Core.Test.Extensions
         [Fact]
         public void SafeGet_DictionaryOfQueryable_Found_ShouldReturnItem()
         {
-            var randomItemsNumber = random.Next(MAX);
+            var randomItemsNumber = random.Next(MAX) + 1;
             SetUpQueryableData(randomItemsNumber);
 
             var expected = new QueryableProperty($"name{randomItemsNumber}", $"value{randomItemsNumber}");
