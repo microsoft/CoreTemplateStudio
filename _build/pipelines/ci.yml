@@ -1,5 +1,12 @@
 name: $(date:yyyyMMdd)$(rev:.r)
 
+trigger:
+  branches:
+    include:
+    - dev
+    - release
+  batch: true
+
 resources:
   repositories:
   - repository: self
