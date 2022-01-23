@@ -56,8 +56,9 @@ steps:
     filename: $(UserProfile)\.nuget\packages\xunit.runner.console\2.4.1\tools\net47\xunit.console.exe
     arguments: 'code\test\Utilities.Test\bin\$(BuildConfiguration)\Utilities.Test.dll  -xml $(Build.SourcesDirectory)\TEST-Utilities-Result.xml  -parallel none'
 
+# https://github.com/dotnet/roslyn-analyzers/issues/4593
 - task: RoslynAnalyzers@2
-  displayName: Run Roslyn An alyzers
+  displayName: Run Roslyn Analyzers
 
 - task: PostAnalysis@1
   displayName: Post Roslyn Analysis
