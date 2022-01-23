@@ -1,0 +1,68 @@
+name: $(date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/dev
+
+strategy:
+  matrix:
+    Analyze:
+      BuildConfiguration: Analyze
+      BuildPlatform: Any CPU
+    Release:
+      BuildConfiguration: Release
+      BuildPlatform: Any CPU
+
+pool:
+  vmImage: windows-2019
+
+steps:
+- checkout: self
+  clean: true
+
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet'
+  inputs:
+    checkLatest: true
+
+- task: NuGetCommand@2
+  displayName: nuget restore
+  inputs:
+    solution: code/Big.sln
+    selectOrConfig: config
+    nugetConfigPath: code/Nuget.Config
+
+- task: VSBuild@1
+  displayName: Build code/Big.sln
+  inputs:
+    solution: code/Big.sln
+    vsVersion: 16.0
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    clean: true
+
+- task: DotNetCoreCLI@2
+  displayName: Run Core Tests
+  inputs:
+    command: test
+    projects: '**\code\test\CoreTemplateStudio.Core.Test'
+    arguments: --logger:trx --configuration Debug
+
+- task: CmdLine@1
+  displayName: Run Utilities Tests
+  inputs:
+    filename: $(UserProfile)\.nuget\packages\xunit.runner.console\2.4.1\tools\net47\xunit.console.exe
+    arguments: 'code\test\Utilities.Test\bin\$(BuildConfiguration)\Utilities.Test.dll  -xml $(Build.SourcesDirectory)\TEST-Utilities-Result.xml  -parallel none'
+
+- task: RoslynAnalyzers@2
+  displayName: Run Roslyn An alyzers
+
+- task: PostAnalysis@1
+  displayName: Post Roslyn Analysis
+  inputs:
+    RoslynAnalyzers: true
+
+- task: ComponentGovernanceComponentDetection@0
+  displayName: Run Component Detection
