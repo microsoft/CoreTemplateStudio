@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WtsPackagingTool.CommandOptions;
-
+code/tools/WtsPackagingTool/RunCommand.cs
 namespace WtsPackagingTool
 {
     public static class RunCommand
@@ -23,7 +23,7 @@ namespace WtsPackagingTool
             {
                 case PackageTask.Create:
                     PackageWorker.CreateAsync(options.CreateNew, options.OutFile, options.CertThumbprint, output, error).Wait();
-
+code/tools/WtsPackagingTool/TextWriterExtensions.cs
                     break;
                 case PackageTask.Extract:
                     PackageWorker.ExtractAsync(options.Extract, options.DestionationDir, output, error).Wait();
